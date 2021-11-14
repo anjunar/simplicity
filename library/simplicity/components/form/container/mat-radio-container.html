@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    mat-radio-container {
+      display: block;
+    }
+
+    mat-radio-container input[type=radio] {
+      -webkit-appearance: none;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Material Icons', fantasy;
+      font-size: large;
+      margin: 0;
+      display: inline;
+      outline: 0;
+    }
+
+    mat-radio-container input[type=radio]::before {
+      content: "radio_button_unchecked";
+      color: var(--main-font-color);
+    }
+
+    mat-radio-container input[type=radio]:checked::before {
+      content: "radio_button_checked";
+      color: var(--main-selected-color);
+    }
+
+  </style>
+</head>
+<body>
+<template>
+  <div style="display: flex">
+    <slot is="dom-slot"></slot>
+    <div style="line-height: 18px"><span >${placeholder}</span></div>
+  </div>
+</template>
+</body>
+</html>

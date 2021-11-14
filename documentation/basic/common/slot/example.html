@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>Common Repeat</title>
+</head>
+<body>
+<template>
+    <template is="dom-repeat" bind:items="items" item="item">
+        <div>
+            <slot is="dom-slot" implicit="item"></slot>
+        </div>
+    </template>
+</template>
+</body>
+</html>

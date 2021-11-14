@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>If</title>
+    <style>
+        common-if {
+            display: block;
+        }
+
+        common-if .content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Custom Component</h2>
+            <hr class="line">
+
+            <h3>Introduction</h3>
+<!--
+            <p>
+                Bei der Erstellung von Komponenten gibt es mehrere Methoden die implementiert werden müssen. Die initialize
+                Methode wird ausgeführt, wenn das Template angewendet wurde und als children der Komponente zur Verfügung
+                stehen. Dabei ist zu beachten, dass die Kind-Elemente noch nicht initialisiert sind, somit muss eine Methode
+                wie, z.B. register am Eltern-Element vom Kind-Element aufgerufen werden.
+                Die Methode attributeChangedCallback wird ausgeführt, wenn das Attribut mit oder ohne Binding sich
+                ändert. Es wurde hier Rücksicht auf die Web-Component Spezifikation genommen und mit Bindings erweitert.
+                Die statische Methode observedAttributes wurde ebenfalls aus der Web-Component Spezifikation genommen und
+                um die Property type erweitert. Mögliche Werte sind input für eingehende Bindings und two-way für Bindings
+                die in beide Richtungen funktionieren. Es gibt die statische Methode template wo direkt der String als
+                HTML-Template angehängt werden kann, oder der loader benutzt werden kann, um das Template aus einer HTML
+                Datei zu laden. Die Methode render wird aufgerufen, wenn sich ein Attribut ändert und die Methode update
+                wird aufgerufen, wenn der LifeCycle durchlaufen wird.
+            </p>
+-->
+
+            <p>
+                When creating components, there are several methods that must be implemented. The initialize
+                Method is executed when the template has been applied and is available as children of the component
+                stand. It should be noted that the child elements have not yet been initialized, so a method
+                how, e.g. register on the parent element are called by the child element.
+            </p>
+            <p>
+                The method attributeChangedCallback is executed when the attribute with or without binding is
+                changes. The Web Component specification was taken into account and extended with bindings.
+                The static method observedAttributes was also taken from the web component specification and
+                extended by the property type. Possible values are input for incoming bindings and two-way for bindings
+                that work both ways.
+            </p>
+            <p>
+                There is the static method template where the string is sent directly as a
+                HTML template can be attached, or the loader can be used to extract the template from an HTML
+                File to load. The render method is called when an attribute changes and the update
+                is called when the LifeCycle is run through.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>input</td>
+                    <td>model</td>
+                    <td>The model property with two-way binding</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <input type="text" is="dom-input" bind:model="text"/>
+                <div>${text}</div>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <input type="text" is="dom-input" bind:model="text"/>
+                        <div>${text}</div>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        import {customComponents} from "../simplicity.js";
+
+                        class DomInput extends HTMLInputElement {
+
+                            model;
+
+                            initialize() {
+                                let valueChangeHandler = () => {
+                                    this.model = this.value
+                                    this.dispatchEvent(new CustomEvent("model"))
+                                }
+
+                                this.addEventListener("input", valueChangeHandler)
+                            }
+
+                            attributeChangedCallback(name, oldValue, newValue) {
+                                switch (name) {
+                                    case "model" : {
+                                        this.model = newValue;
+                                        this.value = newValue;
+                                    }
+                                        break;
+                                }
+                            }
+
+                            static get observedAttributes() {
+                                return [
+                                    {
+                                        name: "model",
+                                        type: "two-way"
+                                    }
+                                ]
+                            }
+
+                        }
+
+                        export default customComponents.define("dom-input", DomInput, {extends: "input"})
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

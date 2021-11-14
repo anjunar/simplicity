@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Mat Progress Bar</h2>
+            <hr>
+
+            <h3>Introduction</h3>
+            <p>
+                A Progress Bar
+            </p>
+
+            <div style="margin: 20px;">
+                <mat-progress-bar></mat-progress-bar>
+            </div>
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr>
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <mat-progress-bar></mat-progress-bar>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        import {customViews} from "../../library/simplicity/simplicity.js";
+                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                        import MatProgressBar from "../../library/simplicity/components/indicators/mat-progress-bar.js";
+
+                        class Spinner extends HTMLElement {
+
+                            static get components() {
+                                return [MatProgressBar]
+                            }
+
+                            static get template() {
+                                return loader("documentation/indicators/progress.html")
+                            }
+
+                        }
+
+                        export default customViews.define({
+                            name: "indicators-progress",
+                            class: Spinner
+                        })
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

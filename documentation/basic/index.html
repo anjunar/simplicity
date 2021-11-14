@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Index Components</title>
+    <style>
+        app-basic {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <mat-toolbar style="z-index: 8000; position:relative;">
+            <div slot="left">
+                <button class="material-icons" type="button" bind:onclick="open = ! open">menu</button>
+            </div>
+        </mat-toolbar>
+
+        <mat-drawer-container>
+            <mat-drawer bind:open="open">
+                <div style="width: 300px">
+                    <div style="padding-top: 20px">
+                        <h2>Content</h2>
+                    </div>
+
+                    <hr class="line">
+
+                    <nav>
+                        <ul>
+                            <li>
+                                <a href="#/documentation/basic/index#/documentation/basic/introduction">
+                                    <div class="row">
+                                        <h4>Introduction</h4>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#/documentation/basic/index#/documentation/basic/started">
+                                    <div class="row">
+                                        <h4>Getting Started</h4>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <div>
+                                    <div class="row">
+                                        <h4>Common</h4>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/common/bindings">
+                                            <div class="row">
+                                                <span>Bindings</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/common/if">
+                                            <div class="row">
+                                                <span>If</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/common/repeat">
+                                            <div class="row">
+                                                <span>Repeat</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/common/slot">
+                                            <div class="row">
+                                                <span>Slot</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div>
+                                    <div class="row">
+                                        <h4>Form</h4>
+
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/form/editor">
+                                            <div class="row">
+                                                <span>Editor</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/form/checkbox">
+                                            <div class="row">
+                                                <span>Checkbox</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/form/select">
+                                            <div class="row">
+                                                <span>Select</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/form/lazy-select">
+                                            <div class="row">
+                                                <span>lazy Select</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/form/input">
+                                            <div class="row">
+                                                <span>Text Input</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/form/upload">
+                                            <div class="row">
+                                                <span>Image Upload</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/form/radio">
+                                            <div class="row">
+                                                <span>Radio</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/form/form">
+                                            <div class="row">
+                                                <span>Form</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <div class="row">
+                                        <h4>Modals</h4>
+
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/modals/dialog">
+                                            <div class="row">
+                                                <span>Dialog</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/modals/window">
+                                            <div class="row">
+                                                <span>Window</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <h4>Tables</h4>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/tables/table">
+                                            <div class="row">
+                                                <span>Table</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <div class="row">
+                                        <h4>Indicators</h4>
+
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/indicators/spinner">
+                                            <div class="row">
+                                                <span>Spinner</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/indicators/progress">
+                                            <div class="row">
+                                                <span>Progress</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <div class="row">
+                                        <h4>Navigation</h4>
+
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/navigation/drawer">
+                                            <div class="row">
+                                                <span>Drawer</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/navigation/router#/documentation/basic/navigation/router/example">
+                                            <div class="row">
+                                                <span>Router</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#/documentation/basic/index#/documentation/basic/navigation/tabs">
+                                            <div class="row">
+                                                <span>Tabs</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </nav>
+                </div>
+            </mat-drawer>
+            <mat-drawer-content>
+                <viewport style="display: block; position: relative">
+                    <dom-router level="1"></dom-router>
+                </viewport>
+            </mat-drawer-content>
+        </mat-drawer-container>
+    </template>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        form-lazy-select {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div style="margin: auto; flex-wrap: wrap; display: flex; width: 100%">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Lazy Select</h2>
+            <hr class="line">
+
+            <h3>Introduction</h3>
+<!--
+            <p>
+                Dies ist ein lazy Select das die Werte aus einen Callback erhält. Es werden immer nur 5 Elemente zur Zeit
+                angezeigt. Das Model besteht aus einen der gewählten Records wenn der Record ausgewählt wurde. Im Gegensatz
+                besteht das Model des nativen Selects aus dem value des option Elementes. Zusätzlich zum lazy Select gibt es
+                den mat-input-container um aus dem lazy Select ein Material Design Select zu machen.
+            </p>
+-->
+
+            <p>
+                This is a lazy select that receives the values from a callback. There are only 5 items at a time
+                displayed. The model consists of one of the selected records when the record was selected. In contrast
+                the model of the native select consists of the value of the option element. In addition to the lazy Select there is
+                the mat-input-container to turn the lazy Select into a Material Design Select.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>mat-input-container</td>
+                    <td>placeholder</td>
+                    <td>The Placeholder text</td>
+                </tr>
+                <tr>
+                    <td>dom-select</td>
+                    <td>items</td>
+                    <td>The items data source</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <mat-input-container placeholder="Materials">
+                    <dom-lazy-select bind:items="materials">
+                        <div let="material">${material.position} ${material.name}</div>
+                    </dom-lazy-select>
+                </mat-input-container>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <mat-input-container placeholder="Materials">
+                            <dom-lazy-select bind:items="materials">
+                                <div let="material">${material.position} ${material.name}</div>
+                            </dom-lazy-select>
+                        </mat-input-container>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        import {customViews} from "../../library/simplicity/simplicity.js";
+                        import {jsonClient} from "../../library/simplicity/services/client.js";
+                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                        import DomLazySelect from "../../library/simplicity/directives/dom-lazy-select.js";
+                        import MatDomSelectContainer from "../../library/simplicity/components/form/container/mat-dom-select-container.js";
+
+                        class LazySelect extends HTMLElement {
+
+                            materials(query, callback) {
+                                jsonClient.get("materials.json")
+                                .then((response) => {
+                                    let result = response.slice(query.index, query.index + query.limit);
+                                    callback(result, response.length)
+                                })
+                            }
+
+                            static get components() {
+                                return [DomLazySelect, MatDomSelectContainer]
+                            }
+
+                            static get template() {
+                                return loader("documentation/form/lazy-select.html")
+                            }
+
+                        }
+
+                        export default customViews.define({
+                            name: "form-lazy-select",
+                            class: LazySelect
+                        })
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

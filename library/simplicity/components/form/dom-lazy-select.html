@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        dom-lazy-select {
+            display: block;
+            width: 100%;
+        }
+
+        dom-lazy-select div.overlay {
+            position: absolute;
+            top: 14px;
+            background-color: var(--main-background-color);
+            width: 100%;
+            box-shadow: 0 3px 1px -2px rgba(255, 255, 255, .2),
+            0 2px 2px 0 rgba(255, 255, 255, .14),
+            0 1px 5px 0 rgba(255, 255, 255, .12);
+            z-index: 10;
+        }
+
+        dom-lazy-select div.overlay div.item :hover {
+            background-color: var(--main-grey-color);
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <input is="dom-input" type="text" bind:onclick="openOverlay($event)">
+        <div style="position: relative">
+            <template is="dom-if" bind:predicate="open">
+                <div class="overlay" bind:style="width : inputWidth() + 'px'">
+                    <button class="material-icons" type="button" bind:style="display : 0 < index ? 'block' : 'none'" bind:onclick="up()" style="width: 100%">arrow_drop_up</button>
+                    <div>
+                        <template is="dom-repeat" bind:items="window" item="item">
+                            <div bind:onclick="onItemClicked($event, item)" class="item">
+                                <slot is="dom-slot" implicit="item"></slot>
+                            </div>
+                        </template>
+                    </div>
+                    <button class="material-icons" type="button" bind:style="display : (index + limit) < size ? 'block' : 'none'" bind:onclick="down()" style="width: 100%">arrow_drop_down</button>
+                </div>
+            </template>
+        </div>
+    </template>
+</body>
+</html>

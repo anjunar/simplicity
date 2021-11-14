@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Mat Radio</h2>
+            <hr class="line">
+
+            <h3>Introduction</h3>
+<!--
+            <p>
+                Eine native Radio Implementierung mit zugehörigen mat-radio-container um auf Material Design zu wechseln.
+                Mit dem Attribut bind:model lässt sich der Attributwert value auf den gewählten Property binden.
+            </p>
+-->
+
+            <p>
+                A native radio implementation with associated mat radio container to switch to material design.
+                With the attribute bind: model, the attribute value value can be linked to the selected property.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>input</td>
+                    <td>model</td>
+                    <td>Two-way data bound to a Property</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br/>
+
+            <div style="margin: auto;">
+                <mat-radio-container placeholder="Male">
+                    <input bind:model="gender" is="dom-input" name="gender" type="radio" value="male">
+                </mat-radio-container>
+                <mat-radio-container placeholder="Female">
+                    <input bind:model="gender" is="dom-input" name="gender" type="radio" value="female">
+                </mat-radio-container>
+                <mat-radio-container placeholder="Other">
+                    <input bind:model="gender" is="dom-input" name="gender" type="radio" value="other">
+                </mat-radio-container>
+
+                <div style="margin-top: 20px;">Selected Gender:
+                    <span>${gender}</span>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <mat-radio-container placeholder="Male">
+                            <input bind:model="gender" is="dom-input" name="gender" type="radio" value="male">
+                        </mat-radio-container>
+                        <mat-radio-container placeholder="Female">
+                            <input bind:model="gender" is="dom-input" name="gender" type="radio" value="female">
+                        </mat-radio-container>
+                        <mat-radio-container placeholder="Other">
+                            <input bind:model="gender" is="dom-input" name="gender" type="radio" value="other">
+                        </mat-radio-container>
+
+                        <div style="margin-top: 20px;">Selected Gender:
+                            <span>${gender}</span>
+                        </div>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        import {customViews} from "../../library/simplicity/simplicity.js";
+                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                        import MatRadioContainer from "../../library/simplicity/components/form/container/mat-radio-container.js";
+                        import DomInput from "../../library/simplicity/directives/dom-input.js";
+
+                        class Radio extends HTMLElement {
+
+                            gender = "male"
+
+                            static get components() {
+                                return [DomInput, MatRadioContainer]
+                            }
+
+                            static get template() {
+                                return loader("documentation/form/radio.html")
+                            }
+
+                        }
+
+                        export default customViews.define({
+                            name: "form-radio",
+                            class: Radio
+                        })
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

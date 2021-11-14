@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>If</title>
+    <style>
+        common-if {
+            display: block;
+        }
+
+        common-if .content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Dom Form Validation</h2>
+            <hr class="line">
+
+            <h3>Introduction</h3>
+            <p>
+                This is a Dom IF where the result is rendered and not hidden with display:none. The result is rendered
+                as a next Element Sibling to the template
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>form</td>
+                    <td>model</td>
+                    <td>Points to the Object model</td>
+                </tr>
+                <tr>
+                    <td>*</td>
+                    <td>variable</td>
+                    <td>Makes the form in the View available</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <form is="dom-form" bind:model="person" bind:variable="form">
+                    <mat-input-container placeholder="First Name">
+                        <input type="text" is="dom-input" name="firstName">
+                        <div slot="error" >
+                            <span name="naturalId">Name already exists</span>
+                        </div>
+                    </mat-input-container>
+                    <mat-input-container placeholder="Last Name">
+                        <input type="text" is="dom-input" name="lastName">
+                        <div slot="error" >
+                            <span name="naturalId">Name already exists</span>
+                        </div>
+                    </mat-input-container>
+                </form>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <form is="dom-form" bind:model="person" bind:variable="form">
+                            <mat-input-container placeholder="First Name">
+                                <input type="text" is="dom-input" name="firstName">
+                                <div slot="error" >
+                                    <span name="naturalId">Name already exists</span>
+                                </div>
+                            </mat-input-container>
+                            <mat-input-container placeholder="Last Name">
+                                <input type="text" is="dom-input" name="lastName">
+                                <div slot="error" >
+                                    <span name="naturalId">Name already exists</span>
+                                </div>
+                            </mat-input-container>
+                        </form>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        import {customViews} from "../../../library/simplicity/simplicity.js";
+                        import DomCode from "../../../library/simplicity/directives/dom-code.js";
+                        import DomInput from "../../../library/simplicity/directives/dom-input.js";
+                        import DomForm from "../../../library/simplicity/directives/dom-form.js";
+                        import MatInputContainer from "../../../library/simplicity/components/form/container/mat-input-container.js";
+                        import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+
+                        class ValidationForm extends HTMLElement {
+
+                            person = {
+                                firstName : "Max",
+                                lastName:  "Mustermann"
+                            }
+
+                            form;
+
+                            initialize() {
+                                this.form.addValidator({
+                                    validate: (element) => {
+                                        let executor = (resolve, reject) => {
+                                            if (this.person.firstName === "Max" && this.person.lastName === "Mustermann") {
+                                                reject("naturalId");
+                                            } else {
+                                                resolve("naturalId");
+                                            }
+                                        };
+                                        return new Promise(executor);
+                                    }
+                                })
+                            }
+
+                            static get components() {
+                                return [DomInput, DomForm, MatInputContainer]
+                            }
+
+                            static get template() {
+                                return loader("documentation/advanced/form/validation-form.html")
+                            }
+
+                        }
+
+                        export default customViews.define({
+                            name : "form-validation-form",
+                            class : ValidationForm
+                        })
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>
+</body>
+</html>

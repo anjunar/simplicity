@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Dom Repeat</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+<!--
+                <p>
+                    Ein For Loop für Elemente des DOM. Dieser For Loop iteriert über die ihm gegebenen items eines
+                    Arrays mit dem items Attribut. Das DOM-Element erhält das item über das item Attribut. Zusätzlich
+                    erhält das Dom-Element den Index der iteration, der Index ist über die Property index des Dom-Elements
+                    verfügbar.
+                </p>
+-->
+
+                <p>
+                    A for loop for elements of the DOM. This for loop iterates over the items given to it
+                    Arrays with the items attribute. The DOM element receives the item via the item attribute. Additionally
+                    the dom element receives the index of the iteration, the index is via the property index of the dom element
+                    available.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>template</td>
+                        <td>items</td>
+                        <td>The array to be looped</td>
+                    </tr>
+                    <tr>
+                        <td>template</td>
+                        <td>item</td>
+                        <td>The property in which the data is stored</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;">
+                    <template is="dom-repeat" bind:items="materials" item="material">
+                        <div>${material.position} ${material.name}</div>
+                    </template>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <template is="dom-repeat" bind:items="materials" item="material">
+                                <div>${material.position} ${material.name}</div>
+                            </template>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {customViews} from "../../library/simplicity/simplicity.js";
+                            import {jsonClient} from "../../library/simplicity/services/client.js";
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import DomRepeat from "../../library/simplicity/directives/dom-repeat.js";
+
+                            class Repeat extends HTMLElement {
+
+                                materials = [];
+
+                                static get components() {
+                                    return [DomRepeat]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/common/repeat.html")
+                                }
+
+                            }
+
+                            export default customViews.define({
+                                name: "common-repeat",
+                                class: Repeat,
+                                header : "Repeat",
+                                guard(activeRoute) {
+                                    return {
+                                        materials: jsonClient.get("materials.json")
+                                    }
+                                }
+                            })
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

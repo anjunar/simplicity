@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-toolbar {
+            display: block;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            background-color: var(--main-dark1-color);
+        }
+
+        mat-toolbar table tr td {
+            width: 33%;
+        }
+
+        mat-toolbar table {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <table>
+            <tr>
+                <td style="text-align: left">
+                    <slot is="dom-slot" name="left"></slot>
+                </td>
+                <td style="text-align: center">
+                    <slot is="dom-slot" name="middle"></slot>
+                </td>
+                <td style="text-align: right">
+                    <slot is="dom-slot" name="right"></slot>
+                </td>
+            </tr>
+        </table>
+    </template>
+</body>
+</html>

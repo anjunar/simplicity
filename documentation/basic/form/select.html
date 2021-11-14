@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Dom Select</title>
+</head>
+<body>
+    <template>
+        <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Dom Select</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+<!--
+                <p>
+                    Eine native implementierung des select Elements. Über bind:model kann im two-way modus auf den Wert
+                    vom option Element genommen werden. Natives select lässt sich gut anwenden, wenn es nur wenige Werte
+                    über das options Element gibt. Überschreiten die Werte eine bestimmte Anzahl von Möglichkeiten, dann
+                    ist es ratsam das lazy select zu benutzen.
+                </p>
+-->
+
+                <p>
+                    A native implementation of the select element. Via bind: model you can access the value in two-way mode
+                    be taken from the option element. Native select works well when there are only a few values
+                    about the options element there. If the values exceed a certain number of possibilities, then
+                    it is advisable to use the lazy select.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>select</td>
+                        <td>model</td>
+                        <td>The two-way model of the component</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;">
+                    <select is="dom-select" bind:model="car">
+                        <option value="fiat">Fiat</option>
+                        <option value="audi">Audi</option>
+                        <option value="bmw">BMW</option>
+                        <option value="mercedes">Mercedes</option>
+                    </select>
+                    <div>${car}</div>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <select is="dom-select" bind:model="car">
+                                <option value="fiat">Fiat</option>
+                                <option value="audi">Audi</option>
+                                <option value="bmw">BMW</option>
+                                <option value="mercedes">Mercedes</option>
+                            </select>
+                            <div>${car}</div>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import {customViews} from "../../library/simplicity/simplicity.js";
+                            import DomSelect from "../../library/simplicity/directives/dom-select.js";
+
+                            class Select extends HTMLElement {
+
+                                car = "bmw"
+
+                                static get components() {
+                                    return [DomSelect]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/form/select.html")
+                                }
+
+                            }
+
+                            export default customViews.define({
+                                name : "form-select",
+                                class : Select
+                            })
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

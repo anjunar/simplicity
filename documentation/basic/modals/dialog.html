@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Mat Dialog</h2>
+            <hr>
+
+            <h3>Introduction</h3>
+<!--
+            <p>
+                Dies ist ein Dialog, der in den viewport gerendert wird. Der Dialog kann entweder mit dem action Attribut,
+                oder mit dem windowManager erzeugt werden. Wichtig ist nur das Flag modal in der View die den Dialog darstellt.
+                Es kann ebenso Width und Height mitgegeben werden, ansonsten wird die Größe des Dialogs durch den Inhalt berechnet.
+            </p>
+-->
+
+            <p>
+                This is a dialog that is rendered into the viewport. The dialog can be started either with the action attribute,
+                or generated with the windowManager. The only important thing is the modal flag in the view that represents the dialog.
+                Width and Height can also be given, otherwise the size of the dialog is calculated from the content.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>template</td>
+                    <td>predicate</td>
+                    <td>The predicate to eval</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <button class="thin" type="button" action="/documentation/basic/modals/dialog/example">Show Dialog</button>
+
+                <button class="thin" type="button" bind:onclick="open()">Show Dialog</button>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr>
+            <mat-tabs bind:page="page">
+                <mat-tab>
+                    <span>View</span>
+                </mat-tab>
+                <mat-tab>
+                    <span>Example</span>
+                </mat-tab>
+            </mat-tabs>
+            <mat-pages bind:page="page">
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p>The rest of the HTML file is not displayed</p>
+                        <div style="margin-top: 20px;">
+                            <div>
+                                <code is="dom-code" lang="html5">
+                                    <button class="thin" type="button" action="/documentation/basic/modals/dialog/example">Show Dialog</button>
+
+                                    <button class="thin" type="button" bind:onclick="open()">Show Dialog</button>
+                                </code>
+                            </div>
+                        </div>
+                        <h3>Javascript</h3>
+                        <div>
+                            <div>
+                                <code is="dom-code" lang="javascript">
+                                    import {customViews} from "../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import DomCode from "../../library/simplicity/directives/dom-code.js";
+
+                                    class Dialog extends HTMLElement {
+
+                                        open() {
+                                            windowManager.openWindow("/documentation/basic/modals/dialog/example")
+                                        }
+
+                                        static get components() {
+                                            return [DomCode]
+                                        }
+
+                                        static get template() {
+                                            return loader("documentation/modals/dialog.html")
+                                        }
+                                    }
+
+                                    export default customViews.define({
+                                        name: "modals-dialog",
+                                        class: Dialog
+                                    })
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </mat-page>
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p>The rest of the HTML file is not displayed</p>
+                        <div style="margin-top: 20px;">
+                            <div>
+                                <code is="dom-code" lang="html5">
+                                    <div>Content...</div>
+                                </code>
+                            </div>
+                        </div>
+                        <h3>Javascript</h3>
+                        <div>
+                            <div>
+                                <code is="dom-code" lang="javascript">
+                                    import {customViews} from "../../../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../../../library/simplicity/processors/loader-processor.js";
+
+                                    class Example extends HTMLElement {
+
+                                        static get components() {
+                                            return []
+                                        }
+
+                                        static get template() {
+                                            return loader("documentation/basic/modals/dialog/example.html")
+                                        }
+
+                                    }
+
+                                    export default customViews.define({
+                                        name: "dialog-example",
+                                        class: Example,
+                                        header: "Example",
+                                        width : "320px",
+                                        height : "200px",
+                                        modal : true
+                                    });
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </mat-page>
+            </mat-pages>
+        </div>
+    </div>
+</template>
+</body>
+</html>

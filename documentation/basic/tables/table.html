@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Table</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+<!--
+                <p>
+                    Eine Table implementierung mit Sorting, Paging und Column resorting. Die einzelnen Spalten können
+                    sortiert werden, wichtig ist dabei nur, das mit colgroup der path übergeben wird. Das Query object
+                    beinhaltet dann die sort Property nach der sortiert werden muss.
+                </p>
+-->
+
+                <p>
+                    A table implementation with sorting, paging and column resorting. The individual columns can
+                    The only important thing is that the path is passed with colgroup. The query object
+                    then contains the sort property according to which sorting must be carried out.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>table</td>
+                        <td>items</td>
+                        <td>An array of items to be displayed</td>
+                    </tr>
+                    <tr>
+                        <td>col</td>
+                        <td>path</td>
+                        <td>The property of the model</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;">
+                    <table style="margin-top: 30px" is="mat-table" bind:items="materials">
+                        <colgroup>
+                            <col path="position">
+                            <col path="name">
+                            <col path="weight">
+                            <col path="symbol">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <td><span>Number</span></td>
+                            <td><span>Name</span></td>
+                            <td><span>Weight</span></td>
+                            <td><span>Symbol</span></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><span let="material">${material.position}</span></td>
+                            <td><span let="material">${material.name}</span></td>
+                            <td><span let="material">${material.weight}</span></td>
+                            <td><span let="material">${material.symbol}</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <table is="mat-table" bind:items="materials">
+                                <colgroup>
+                                    <col path="position">
+                                    <col path="name">
+                                    <col path="weight">
+                                    <col path="symbol">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <td><span>Number</span></td>
+                                    <td><span>Name</span></td>
+                                    <td><span>Weight</span></td>
+                                    <td><span>Symbol</span></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><span let="material">${material.position}</span></td>
+                                    <td><span let="material">${material.name}</span></td>
+                                    <td><span let="material">${material.weight}</span></td>
+                                    <td><span let="material">${material.symbol}</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {customViews} from "../../library/simplicity/simplicity.js";
+                            import {jsonClient} from "../../library/simplicity/services/client.js";
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import MatTable from "../../library/simplicity/components/table/mat-table.js";
+
+                            class Table extends HTMLElement {
+
+                                materials(query, callback) {
+                                    jsonClient.get("materials.json")
+                                        .then((response) => {
+                                        let filter;
+
+                                        if (query.search) {
+                                            filter = response.filter(row => String(row[query.search.path]).startsWith(query.search.value));
+                                        } else {
+                                            filter = response;
+                                        }
+
+                                        let result = filter.slice(query.index, query.index + query.limit);
+                                        callback(result, response.length)
+                                    })
+                                }
+
+                                static get components() {
+                                    return [MatTable]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/tables/table.html")
+                                }
+
+                            }
+
+                            export default customViews.define({
+                                name: "documentation-table",
+                                class: Table
+                            })
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

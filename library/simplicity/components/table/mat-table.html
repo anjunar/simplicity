@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table[is=mat-table] {
+            width: 100%;
+            border-spacing: 0;
+            font-size: 14px;
+        }
+
+        table[is=mat-table] tr td {
+            height: 48px;
+        }
+
+        table[is=mat-table] tbody td {
+            border-top: 1px solid var(--main-dark1-color);
+        }
+
+        table[is=mat-table] tbody tr:hover {
+            background-color: var(--main-selected-color);
+            color: var(--main-background-color);
+        }
+
+        table[is=mat-table] td:first-of-type,
+        table[is=mat-table] th:first-of-type {
+            padding-left: 12px;
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <template is="dom-if" bind:predicate="header.length > 0">
+            <thead>
+                <tr>
+                    <template is="dom-repeat" bind:items="configuration(columns)" item="td">
+                        <td >
+                            <div style="display: flex; align-items: center;">
+                                <div bind:onclick="showConfiguration()">
+                                    <strong>
+                                        <slot is="dom-slot" selector="thead tr td *" bind:index="td.index"></slot>
+                                    </strong>
+                                </div>
+                                <div style="flex: 1"></div>
+                                <button bind:style="display : td.sort === undefined ? 'block' : 'none'" class="material-icons" bind:onclick="asc(td)" style="width: 32px;">sort</button>
+                                <button bind:style="display : td.sort === 'asc' ? 'block' : 'none'" class="material-icons" bind:onclick="desc(td)" style="width: 32px;">expand_more</button>
+                                <button bind:style="display : td.sort === 'desc' ? 'block' : 'none'" class="material-icons" bind:onclick="none(td)" style="width: 32px;">expand_less</button>
+                                <div style="flex: 1"></div>
+                            </div>
+                        </td>
+                    </template>
+                </tr>
+            </thead>
+        </template>
+        <tbody>
+            <template is="dom-repeat" bind:items="window" item="tr">
+                <tr>
+                    <template is="dom-repeat" bind:items="configuration(columns)" item="td">
+                        <td>
+                            <slot is="dom-slot" implicit="tr" selector="tbody tr td *" bind:index="td.index"></slot>
+                        </td>
+                    </template>
+                </tr>
+            </template>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td bind:colspan="body.length - 1">
+                <div style="display: flex">
+                    <div  style="line-height: 42px;">${index} - ${index + limit} of ${size}</div>
+
+                    <button class="material-icons"
+                            style="color: var(--main-font-color)"
+                            bind:onclick="skipPrevious()">
+                        skip_previous
+                    </button>
+
+                    <button class="material-icons"
+                            style="color: var(--main-font-color)"
+                            bind:onclick="arrowLeft()"
+                            bind:disabled="! canArrowLeft()">
+                        keyboard_arrow_left
+                    </button>
+
+                    <button class="material-icons"
+                            style="color: var(--main-font-color)"
+                            bind:onclick="arrowRight()"
+                            bind:disabled="! canArrowRight()">
+                        keyboard_arrow_right
+                    </button>
+
+                    <button class="material-icons"
+                            style="color: var(--main-font-color)"
+                            bind:onclick="skipNext()">
+                        skip_next
+                    </button>
+                </div>
+            </td>
+            <td style="text-align: right"><button type="button" bind:onclick="createClick()">Create</button></td>
+        </tr>
+        </tfoot>
+    </template>
+</body>
+</html>

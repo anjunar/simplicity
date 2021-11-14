@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Dom Router</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+                <p>
+                    A Router implementation for a View that is displayed as a route.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>dom-router</td>
+                        <td>level</td>
+                        <td>For nested Routers. The nest level</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;">
+                    <dom-router level="2"></dom-router>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <dom-router level="0"></dom-router>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {customComponent} from "../../library/simplicity/simplicity.js";
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import DomRouter from "../../library/simplicity/directives/dom-router.js";
+
+                            class AppDocumentation extends HTMLElement {
+
+                                static get components() {
+                                    return [DomRouter]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/app.html")
+                                }
+
+                            }
+
+                            export default customComponent.define("app-documentation", AppDocumentation)
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

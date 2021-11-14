@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload</title>
+</head>
+<body>
+    <template>
+        <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Mat Image Upload</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+<!--
+                <p>
+                    Dies ist eine Image Upload Komponente um Images hochzuladen. Das Object das über bind:model gebunden
+                    wird, beinhaltet den name, lastModified und data. Data ist eine base64 repräsentation des Images.
+                </p>
+-->
+
+                <p>
+                    This is an image upload component to upload images. The object that is bound via bind: model
+                    contains the name, lastModified and data. Data is a base64 representation of the image.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>mat-image-upload</td>
+                        <td>model</td>
+                        <td>The value object</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;">
+                    <div>
+                        <mat-image-upload placeholder="click" bind:model="image" style="width: 320px; height: 200px"></mat-image-upload>
+                        <div>
+                            <span>${image.name}</span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <mat-image-upload placeholder="click" bind:model="image" style="width: 320px; height: 200px"></mat-image-upload>
+                            <div>
+                                <span>${image.name}</span>
+                            </div>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {customViews} from "../../library/simplicity/simplicity.js";
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import MatImageUpload from "../../library/simplicity/components/form/mat-image-upload.js";
+
+                            class Upload extends HTMLElement {
+
+                                image = {
+                                    data : ""
+                                }
+
+                                static get components() {
+                                    return [MatImageUpload]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/form/upload.html")
+                                }
+
+                            }
+
+                            export default customViews.define({
+                                name : "form-upload",
+                                    class : Upload
+                            })
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

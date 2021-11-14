@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        toolbar-justify {
+            display: block;
+        }
+
+
+        toolbar-justify * {
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<template>
+    <div style="display: flex">
+        <button bind:variable="justify"  type="button" class="material-icons" title="Justify Full"
+                bind:onclick="justifyFullClick()">format_align_justify
+        </button>
+        <button bind:variable="justifyLeft"  type="button" class="material-icons" title="Justify Left"
+                bind:onclick="justifyLeftClick()">format_align_left
+        </button>
+        <button bind:variable="justifyRight"  type="button" class="material-icons" title="Justify Right"
+                bind:onclick="justifyRightClick()">format_align_right
+        </button>
+        <button  bind:variable="justifyCenter" type="button" class="material-icons" title="Justify Center"
+                 bind:onclick="justifyCenterClick()">format_align_center
+        </button>
+    </div>
+    <div style="display: flex">
+        <button bind:variable="indent"  type="button" class="material-icons" title="Indent"
+                bind:onclick="indentClick()">format_indent_increase
+        </button>
+        <button bind:variable="outdent"  type="button" class="material-icons" title="Outdent"
+                bind:onclick="outdentClick()">format_indent_decrease
+        </button>
+        <button bind:variable="floatLeft"  type="button" class="material-icons" title="Float Left"
+                bind:onclick="floatLeftClick()">
+            view_sidebar
+        </button>
+        <button bind:variable="floatRight"  type="button" class="material-icons" title="Float Right"
+                bind:onclick="floatRightClick()">
+            vertical_split
+        </button>
+
+    </div>
+</template>
+</body>
+</html>

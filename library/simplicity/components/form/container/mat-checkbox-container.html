@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>
+    mat-checkbox-container {
+      display: block;
+      font-size: 14px;
+      color: var(--main-font-color);
+    }
+
+    mat-checkbox-container input[type=checkbox] {
+      -webkit-appearance: none;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Material Icons', fantasy;
+      font-size: medium;
+      margin: 0;
+      outline: 0;
+    }
+
+    mat-checkbox-container input[type=checkbox]::before {
+      content: "check_box_outline_blank";
+      color: var(--main-font-color);
+    }
+
+    mat-checkbox-container input[type=checkbox]:checked::before {
+      content: "check_box";
+      color: var(--main-selected-color);
+    }
+
+    mat-checkbox-container input[type=checkbox][toggle]::before {
+      content: "toggle_off";
+      color: var(--main-font-color);
+    }
+
+    mat-checkbox-container input[type=checkbox][toggle]:checked::before {
+      content: "toggle_on";
+      color: var(--main-selected-color);
+    }
+
+
+  </style>
+</head>
+<body>
+<template>
+    <div style="display: flex">
+        <slot is="dom-slot" selector="input"></slot>
+        <div style="line-height: 18px">${placeholder}</div>
+    </div>
+</template>
+</body>
+</html>

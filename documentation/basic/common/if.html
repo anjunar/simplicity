@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>If</title>
+    <style>
+        common-if {
+            display: block;
+        }
+
+        common-if .content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Dom If</h2>
+            <hr class="line">
+
+            <h3>Introduction</h3>
+<!--
+            <p>
+                Ein If-Statement ist essenziell in der Programmierung und somit auch in diesen Framework als template
+                vorhanden. Der Unterschied zu display:none oder display:block ist, dass das entsprechende Element erst
+                gerendert wird, wenn das Predicate zu true evaluiert. Das Element wird als nextElementSibling zum Template
+                gerendert.
+            </p>
+-->
+
+            <p>
+                An If-Statement is essential in programming and therefore also in this framework as a template
+                available. The difference to display:none or display:block is that the corresponding element is only
+                is rendered when the Predicate evaluates to true. The element becomes the template as a nextElementSibling
+                rendered.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>template</td>
+                    <td>predicate</td>
+                    <td>The predicate to eval</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <button class="thin" bind:onclick="show = ! show">Toggle</button>
+
+                <template is="dom-if" bind:predicate="show">
+                    <div>
+                        Text to be shown
+                    </div>
+                </template>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <button class="thin" bind:onclick="show = ! show">Toggle</button>
+
+                        <template is="dom-if" bind:predicate="show">
+                            <div>
+                                Text to be shown
+                            </div>
+                        </template>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        import {customViews} from "../../library/simplicity/simplicity.js";
+                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                        import DomIf from "../../library/simplicity/directives/dom-if.js";
+
+                        class If extends HTMLElement {
+
+                            show = true;
+
+                            static get components() {
+                                return [DomIf];
+                            }
+
+                            static get template() {
+                                return loader("documentation/common/if.html");
+                            }
+
+                        }
+
+                        export default customViews.define({
+                            name: "common-if",
+                            class: If
+                        });
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

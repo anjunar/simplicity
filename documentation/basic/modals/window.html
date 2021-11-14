@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Mat Window</h2>
+            <hr>
+
+            <h3>Introduction</h3>
+<!--
+            <p>
+                Dies ist ein Window, das in das viewport Element gerendert wird. Das Window kann mit dem action Attribut,
+                oder mit dem windowManager erzeugt werden. In der Definition der View kann Height und Width angeben werden,
+                ansonsten berechnet sich die Größe des Window durch dessen Inhalt.
+            </p>
+-->
+
+            <p>
+                This is a window that is rendered into the viewport element. The window can be set with the action attribute,
+                or generated with the windowManager. Height and Width can be specified in the definition of the view,
+                otherwise the size of the window is calculated based on its content.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>template</td>
+                    <td>predicate</td>
+                    <td>The predicate to eval</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <button class="normal" type="button" action="/documentation/basic/modals/window/example">Show Window</button>
+
+                <button class="normal" type="button" bind:onclick="open()">Show Window</button>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr>
+            <mat-tabs bind:page="page">
+                <mat-tab>
+                    <span>View</span>
+                </mat-tab>
+                <mat-tab>
+                    <span>Example</span>
+                </mat-tab>
+            </mat-tabs>
+            <mat-pages bind:page="page">
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p>The rest of the HTML file is not displayed</p>
+                        <div style="margin-top: 20px;">
+                            <div>
+                                <code is="dom-code" lang="html5">
+                                    <button class="thin" type="button" action="/documentation/basic/modals/window/example">Show Window</button>
+
+                                    <button class="thin" type="button" bind:onclick="open()">Show Window</button>
+                                </code>
+                            </div>
+                        </div>
+                        <h3>Javascript</h3>
+                        <div>
+                            <div>
+                                <code is="dom-code" lang="javascript">
+                                    import {customViews} from "../../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                                    import {windowManager} from "../../../library/simplicity/services/window-manager.js";
+
+                                    class Window extends HTMLElement {
+
+                                        open() {
+                                            windowManager.openWindow("/documentation/basic/modals/window/example")
+                                        }
+
+                                        static get components() {
+                                            return []
+                                        }
+
+                                        static get template() {
+                                            return loader("documentation/basic/modals/window.html")
+                                        }
+                                    }
+
+                                    export default customViews.define({
+                                        name: "modals-window",
+                                        class: Window
+                                    })
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </mat-page>
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p>The rest of the HTML file is not displayed</p>
+                        <div style="margin-top: 20px;">
+                            <div>
+                                <code is="dom-code" lang="html5">
+                                    <div>Content...</div>
+                                </code>
+                            </div>
+                        </div>
+                        <h3>Javascript</h3>
+                        <div>
+                            <div>
+                                <code is="dom-code" lang="javascript">
+                                    import {customViews} from "../../../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../../../library/simplicity/processors/loader-processor.js";
+
+                                    class Example extends HTMLElement {
+
+                                        static get components() {
+                                            return []
+                                        }
+
+                                        static get template() {
+                                            return loader("documentation/basic/modals/dialog/example.html")
+                                        }
+
+                                    }
+
+                                    export default customViews.define({
+                                        name: "window-example",
+                                        class: Example,
+                                        header: "Example",
+                                        width : "320px",
+                                        height : "200px"
+                                    });
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </mat-page>
+            </mat-pages>
+        </div>
+    </div>
+</template>
+</body>
+</html>

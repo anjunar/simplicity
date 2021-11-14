@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        app-documentation {
+            display: block;
+            height: 100%;
+        }
+
+        app-documentation ul {
+            list-style: none;
+        }
+
+        app-documentation ul li .row {
+            display: flex;
+            justify-content: space-between
+        }
+
+        app-documentation h4 {
+            margin: 5px;
+        }
+
+        app-documentation .row span {
+            margin: 3px;
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div style="height: 38px"></div>
+    <mat-toolbar style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+        <div slot="left">
+            <div style="display: flex">
+                <a class="normal" href="#/documentation/basic/index#/documentation/basic/introduction" bind:class="active('basic') ? 'normal active' : 'normal'">Basic</a>
+                <a class="normal" href="#/documentation/advanced/index#/documentation/advanced/introduction" bind:class="active('advanced') ? 'normal active' : 'normal'">Advanced</a>
+            </div>
+        </div>
+        <div slot="middle">
+            Simplicity 1.0 beta
+        </div>
+        <div slot="right">
+            <a href="https://www.google.de/chrome" target="_blank  ">
+                <img src="images/chrome_logo.png" style="height: 32px; width: 32px; margin-right: 5px; vertical-align: bottom"/>
+            </a>
+            <a href="https://www.microsoft.com/de-de/edge" target="_blank">
+                <img src="images/edge.png" style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
+            </a>
+            <a href="https://www.mozilla.org" target="_blank">
+                <img src="images/firefox_logo.png" style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
+            </a>
+            <a href="https://github.com/anjunar/simplicity" target="_blank">
+                <img src="images/github-circle-white-transparent.svg"/>
+            </a>
+        </div>
+    </mat-toolbar>
+    <dom-router level="0" style="overflow: auto; height: 100%; width: 100%"></dom-router>
+</template>
+</body>
+</html>

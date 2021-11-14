@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-drawer {
+            display: block;
+            height: 100%;
+        }
+
+        mat-drawer div.drawer {
+            position: relative;
+            padding: 1px;
+            display: block;
+            top: 0;
+            background-color: var(--main-dark2-color);
+            border-right: 1px var(--main-dark1-color) solid;
+            width: 300px;
+            z-index: 20;
+        }
+
+        @media only screen and (max-width: 800px) {
+            .nav .drawer {
+                position: absolute !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <template>
+        <div bind:style="display : open ? 'block' : 'none'" class="nav drawer">
+            <slot is="dom-slot"></slot>
+        </div>
+    </template>
+</body>
+</html>

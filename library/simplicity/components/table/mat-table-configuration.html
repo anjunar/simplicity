@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>Mat Table Window</title>
+</head>
+<body>
+    <template>
+        <mat-tabs bind:page="page">
+            <template is="dom-repeat" template bind:items="table.configuration(table.columns, true)" item="td">
+                <mat-tab>
+                    <div>
+                        <slot is="dom-slot" bind:source="table" selector="thead tr td *" bind:index="td.index"></slot>
+                    </div>
+                </mat-tab>
+            </template>
+        </mat-tabs>
+        <mat-pages bind:page="page">
+            <template is="dom-repeat" template bind:items="table.configuration(table.columns, true)" item="td">
+                <mat-page>
+                    <div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px">
+                            <mat-checkbox-container placeholder="Visible">
+                                <input is="dom-input" type="checkbox" bind:model="td.visible">
+                            </mat-checkbox-container>
+                            <input is="dom-input" type="text" bind:onvalue="table.load(td.path, $event)" placeholder="Search" style="margin-left: 5px; margin-right: 5px">
+                            <div style="display: flex">
+                                <button type="button" class="material-icons" bind:onclick="left(index)" bind:disabled="index === 0">chevron_left</button>
+                                <button type="button" class="material-icons" bind:onclick="right(index)" bind:disabled="index === length - 1">chevron_right</button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-page>
+            </template>
+        </mat-pages>
+    </template>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simplicity 1.0 beta</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+    <link rel="stylesheet" href="library/highlight/androidstudio.min.css">
+    <script src="library/highlight/highlight.js"></script>
+    <script src="library/highlight/languages/javascript.min.js"></script>
+    <script src="library/highlight/languages/xml.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="documentation/app.js"></script>
+    <script>
+        if (window.location.hash === "") {
+            window.location.hash = "#/documentation/basic/index#/documentation/basic/introduction"
+        }
+    </script>
+</head>
+<body style="height: calc(100vh - 40px); overflow: hidden">
+    <app-documentation></app-documentation>
+</body>
+</html>

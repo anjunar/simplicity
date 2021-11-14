@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        toolbar-tools {
+            display: block;
+        }
+
+        toolbar-tools * {
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<template>
+    <div style="display: flex">
+        <button  type="button" class="material-icons" title="Copy"
+                 bind:onclick="copyClick()">file_copy
+        </button>
+        <button  type="button" class="material-icons" title="Cut"
+                 bind:onclick="cutClick()">content_cut
+        </button>
+        <button  type="button" class="material-icons" title="Undo"
+                 bind:onclick="undoClick()">undo
+        </button>
+    </div>
+    <div style="display: flex">
+        <button  type="button" class="material-icons" title="Delete"
+                 bind:onclick="deleteClick()">delete
+        </button>
+        <button  type="button" class="material-icons" title="Select All"
+                 bind:onclick="selectAllClick()">select_all
+        </button>
+        <button  type="button" class="material-icons" title="Redo"
+                 bind:onclick="redoClick()">redo
+        </button>
+    </div>
+</template>
+</body>
+</html>

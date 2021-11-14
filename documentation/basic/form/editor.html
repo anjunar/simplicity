@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Mat Editor</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+<!--
+                <p>
+                    Ein nativer Wysiwyg Editor. Es lassen sich Bilder, Links, Tabellen und ein Flexbox Container einbinden.
+                    Auf der Server Seite wird empfohlen auf Scripte innerhalb des Dokumentes zu suchen und zu deaktivieren,
+                    da ohne Probleme auch Scripte eingefügt werden können.
+                </p>
+-->
+
+                <p>
+                    A native Wysiwyg editor. Images, links, tables and a flexbox container can be integrated.
+                    On the server side it is recommended to search for scripts within the document and to deactivate them,
+                    since scripts can also be inserted without any problems.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>mat-editor</td>
+                        <td>model</td>
+                        <td>The value object with properties html and text</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;position: relative; border: 1px solid var(--main-dark1-color); height: 300px   ">
+
+                    <mat-editor bind:model="value"></mat-editor>
+
+                    <div style="margin-top: 20px" bind:innerHTML="value.html"></div>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <mat-editor bind:model="value"></mat-editor>
+
+                            <div bind:innerHTML="value.text"></div>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {customViews} from "../../library/simplicity/simplicity.js";
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import MatEditor from "../../library/simplicity/components/form/mat-editor.js";
+
+                            class Editor extends HTMLElement {
+
+                                value = {
+                                    html : "",
+                                    text : ""
+                                }
+
+                                static get components() {
+                                    return [MatEditor]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/form/editor.html")
+                                }
+
+                            }
+
+                            export default customViews.define({
+                                name: "form-editor",
+                                class: Editor
+                            })
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

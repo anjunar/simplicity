@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Dom Slot</h2>
+            <hr class="line">
+
+            <h3>Introduction</h3>
+<!--
+            <p>
+                Diese Erweiterung des Slot-Elements kann zusätzlich den Tag, Selektor oder Name als Selektor verwenden.
+                Wird keines dieser Selektoren angegeben, wird automatisch ein Wildcard Selektor gewählt.
+
+                Mit dem index Attribut kann auf die Collection zugegriffen werden, falls mehrere Elemente existieren
+
+                Das Attribut implicit zusammen mit let lässt eine Variable deklarieren, mit der über das let Attribut
+                zugegriffen werden kann.
+
+                Normalerweise verweist source auf die ContentChildren der Komponente, dies lässt sich ändern mit diesen
+                Attribut. So können ContentChildren einer anderen Komponente gewählt werden.
+            </p>
+-->
+
+            <p>
+                This extension of the slot element can also use the tag, selector or name as a selector.
+                If none of these selectors is specified, a wildcard selector is selected automatically.
+
+                The collection can be accessed with the index attribute if several elements exist
+
+                The attribute implicit together with let can be used to declare a variable with which the let attribute
+                can be accessed.
+
+                Usually source refers to the ContentChildren of the component, this can be changed with these
+                Attribute. So ContentChildren of another component can be selected.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>slot</td>
+                    <td>implicit</td>
+                    <td>The implicit Variable</td>
+                </tr>
+                <tr>
+                    <td>slot</td>
+                    <td>index</td>
+                    <td>When there are multiply elements</td>
+                </tr>
+                <tr>
+                    <td>slot</td>
+                    <td>source</td>
+                    <td>Change the source of the templating element</td>
+                </tr>
+                <tr>
+                    <td>slot</td>
+                    <td>tag</td>
+                    <td>Select by element property</td>
+                </tr>
+                <tr>
+                    <td>slot</td>
+                    <td>selector</td>
+                    <td>Select by a selector</td>
+                </tr>
+                <tr>
+                    <td>slot</td>
+                    <td>name</td>
+                    <td>Select by slot name</td>
+                </tr>
+                <tr>
+                    <td>*</td>
+                    <td>let</td>
+                    <td>The implicit Variable defined</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <common-example bind:items="materials">
+                    <div let="material">
+                        ${material.position} ${material.name}
+                    </div>
+                </common-example>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+            <h2>Source Code</h2>
+            <hr>
+            <mat-tabs bind:page="page">
+                <mat-tab>
+                    <span>View</span>
+                </mat-tab>
+                <mat-tab>
+                    <span>Example</span>
+                </mat-tab>
+            </mat-tabs>
+            <mat-pages bind:page="page">
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p>The rest of the HTML file is not displayed</p>
+                        <div style="margin-top: 20px;">
+                            <div>
+                                <code is="dom-code" lang="html5">
+                                    <common-example bind:items="materials">
+                                        <div let="material">
+                                            ${material.position} ${material.name}
+                                        </div>
+                                    </common-example>
+                                </code>
+                            </div>
+                        </div>
+                        <h3>Javascript</h3>
+                        <div>
+                            <div>
+                                <code is="dom-code" lang="javascript">
+                                    import {customViews} from "../../library/simplicity/simplicity.js";
+                                    import {jsonClient} from "../../library/simplicity/services/client.js";
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import Repeat from "./example.js";
+
+                                    class CommonImplicit extends HTMLElement {
+
+                                        materials = [];
+
+                                        static get components() {
+                                            return [Repeat]
+                                        }
+
+                                        static get template() {
+                                            return loader("documentation/common/implicit.html")
+                                        }
+                                    }
+
+                                    export default customViews.define({
+                                        name : "common-implicit",
+                                        class : CommonImplicit,
+                                        guard(activeRoute) {
+                                            return {
+                                                materials : jsonClient.get("materials.json")
+                                            }
+                                        }
+                                    })
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </mat-page>
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p>The rest of the HTML file is not displayed</p>
+                        <div style="margin-top: 20px;">
+                            <div>
+                                <code is="dom-code" lang="html5">
+                                    <template is="dom-repeat" bind:items="items" item="item">
+                                        <div>
+                                            <slot is="dom-slot" implicit="item"></slot>
+                                        </div>
+                                    </template>
+                                </code>
+                            </div>
+                        </div>
+                        <h3>Javascript</h3>
+                        <div>
+                            <div>
+                                <code is="dom-code" lang="javascript">
+                                    import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                                    import {customComponents} from "../../../library/simplicity/simplicity.js";
+                                    import DomRepeat from "../../../library/simplicity/directives/dom-repeat.js";
+                                    import DomSlot from "../../../library/simplicity/directives/dom-slot.js";
+
+                                    class CommonExample extends HTMLElement {
+
+                                        items = [];
+
+                                        attributeChangedCallback(name, oldValue, newValue) {
+                                            switch (name) {
+                                                case "items" : {
+                                                    this.items = newValue;
+                                                } break;
+                                            }
+                                        }
+
+                                        static get components() {
+                                            return [DomRepeat, DomSlot]
+                                        }
+
+                                        static get observedAttributes() {
+                                            return [
+                                                {
+                                                    name: "items",
+                                                    type: "input"
+                                                }
+                                            ]
+                                        }
+
+                                        static get template() {
+                                            return loader("documentation/basic/examples/example.html");
+                                        }
+
+                                    }
+
+                                    export default customComponents.define("common-example", CommonExample)
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </mat-page>
+            </mat-pages>
+        </div>
+    </div>
+</template>
+</body>
+</html>

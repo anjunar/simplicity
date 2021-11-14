@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Mat Tabs and Mat Pages</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+<!--
+                <p>
+                    Eine Tab implementierung mit Pages. Das bind:page Attribut von mat-tabs ist two-way bound, das bind:page
+                    Attribut von mat-pages ist nur input bounded.
+                </p>
+-->
+
+                <p>
+                    A tab implementation with Pages. The bind: page attribute of mat-tabs is two-way bound, the bind: page
+                    The attribute of mat-pages is only input bounded.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>mat-tabs</td>
+                        <td>page</td>
+                        <td>The tab page</td>
+                    </tr>
+                    <tr>
+                        <td>mat-pages</td>
+                        <td>page</td>
+                        <td>The Page to be displayed</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;">
+                    <mat-tabs bind:page="page">
+                        <mat-tab>
+                            <div>Tab 1</div>
+                        </mat-tab>
+                        <mat-tab>
+                            <div>Tab 2</div>
+                        </mat-tab>
+                        <mat-tab>
+                            <div>Tab 3</div>
+                        </mat-tab>
+                    </mat-tabs>
+                    <mat-pages bind:page="page">
+                        <mat-page>
+                            <div>Page 1</div>
+                        </mat-page>
+                        <mat-page>
+                            <div>Page 2</div>
+                        </mat-page>
+                        <mat-page>
+                            <div>Page 3</div>
+                        </mat-page>
+                    </mat-pages>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <mat-tabs bind:page="page">
+                                <mat-tab>
+                                    <div>Tab 1</div>
+                                </mat-tab>
+                                <mat-tab>
+                                    <div>Tab 2</div>
+                                </mat-tab>
+                                <mat-tab>
+                                    <div>Tab 3</div>
+                                </mat-tab>
+                            </mat-tabs>
+                            <mat-pages bind:page="page">
+                                <mat-page>
+                                    <div>Page 1</div>
+                                </mat-page>
+                                <mat-page>
+                                    <div>Page 2</div>
+                                </mat-page>
+                                <mat-page>
+                                    <div>Page 3</div>
+                                </mat-page>
+                            </mat-pages>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {customViews} from "../../library/simplicity/simplicity.js";
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import MatTabs from "../../library/simplicity/components/navigation/mat-tabs.js";
+                            import MatPages from "../../library/simplicity/components/navigation/mat-pages.js";
+                            import MatTab from "../../library/simplicity/components/navigation/mat-tab.js";
+                            import MatPage from "../../../library/simplicity/components/navigation/mat-page.js";
+
+                            class Tabs extends HTMLElement {
+
+                                page = 0;
+
+                                static get components() {
+                                    return [MatTabs, MatTab, MatPages, MatPage]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/navigation/tabs.html")
+                                }
+                            }
+
+                            export default customViews.define({
+                                name : "navigation-tabs",
+                                class : Tabs
+                            })
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

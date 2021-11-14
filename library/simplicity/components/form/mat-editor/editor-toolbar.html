@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        editor-toolbar {
+            display: block;
+            width: 100%;
+        }
+
+        editor-toolbar * {
+            font-size: 14px;
+        }
+
+        editor-toolbar .row {
+            margin: 2px;
+            border: var(--main-dark1-color) solid 1px;
+            align-items: stretch;
+            vertical-align: top;
+        }
+
+    </style>
+</head>
+<body>
+<template>
+    <div style="display: flex; align-items : stretch; justify-content: flex-start;">
+        <toolbar-font class="row"
+                      bind:content="content"
+                      bind:onfontname="fontNameClick($event)"
+                      bind:onfontsize="fontSizeClick($event)"
+                      bind:onformatblock="formatBlockClick($event)"
+                      bind:onbold="boldClick()"
+                      bind:onitalic="italicClick()"
+                      bind:onstrikethrough="strikethroughClick()"
+                      bind:onsubscript="subscriptClick()"
+                      bind:onsupscript="superscriptClick()"
+        ></toolbar-font>
+        <toolbar-colors class="row"
+                        bind:content="content"
+                        bind:onbackgroundcolor="backGroundColorClick($event)"
+                        bind:oncolor="colorClick($event)"
+        ></toolbar-colors>
+        <toolbar-justify class="row"
+                         bind:content="content"
+                         bind:onjustifyfull="justifyFullClick()"
+                         bind:onjustifyleft="justifyLeftClick()"
+                         bind:onjustifyright="justifyRightClick()"
+                         bind:onjustifycenter="justifyCenterClick()"
+                         bind:onindent="indentClick()"
+                         bind:onoutdent="outdentClick()"
+                         bind:onfloatleft="floatLeftClick()"
+                         bind:onfloatright="floatRightClick()"
+        ></toolbar-justify>
+        <toolbar-tools class="row"
+                       bind:content="content"
+                       bind:oncopy="copyClick()"
+                       bind:oncut="cutClick()"
+                       bind:onundo="undoClick()"
+                       bind:ondelete="deleteClick()"
+                       bind:onselectall="selectAllClick()"
+                       bind:onredo="redoClick()"
+        ></toolbar-tools>
+        <toolbar-inserts class="row"
+                         bind:content="content"
+                         bind:oninsertlink="insertLinkClick()"
+                         bind:oninsertunlink="insertUnLinkClick()"
+                         bind:oninsertimage="insertImageClick()"
+                         bind:oninserthorizontalrule="insertHorizontalRuleClick()"
+                         bind:oninserttext="insertTextClick()"
+                         bind:oninserttable="insertTableClick()"
+                         bind:oninsertorderedlist="insertOrderedListClick()"
+                         bind:oninsertunorderedlist="insertUnorderedListClick()"
+                         bind:oninsertdivflex="insertDivFlexClick()"
+                         bind:oninsertparagraph="insertParagraphClick()"
+                         bind:oninserttext="insertTextClick()"
+        ></toolbar-inserts>
+        <div class="row" style="flex: 1"></div>
+    </div>
+    </div>
+</template>
+</body>
+</html>

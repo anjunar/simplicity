@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-scrollbar-horizontal {
+            display: block;
+            width: 100%;
+        }
+
+        mat-scrollbar-horizontal .bar {
+            position: relative;
+            height: 16px;
+            width: calc(100% - 16px);
+            background-color: var(--main-dark2-color);
+        }
+
+        mat-scrollbar-horizontal .cursor {
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            background-color: var(--main-dark1-color);
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div class="bar">
+        <div class="cursor" bind:onmousedown="sliderHorizontal($event)"></div>
+    </div>
+</template>
+</body>
+</html>

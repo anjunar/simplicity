@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Introduction</h2>
+            <hr class="line">
+
+            <h3>About this Framework</h3>
+            <p>
+                This Framework is used to be without NPM or other libraries, because of performance issues. It is
+                kept simple to be as most performant as it can be. It has no compiler, all is used natively direct
+                from the Browser. This way it is as performant as the Browser can be.
+            </p>
+
+            <div style="position: relative">
+                <advanced-hello-world text="Hello World!"></advanced-hello-world>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <code is="dom-code" lang="html5">
+                <advanced-hello-world text="Hello World!"></advanced-hello-world>
+            </code>
+            <pre><code id="html"></code></pre>
+            <h3>Javascript</h3>
+            <pre><code id="script"></code></pre>
+        </div>
+    </div>
+</template>
+</body>
+</html>

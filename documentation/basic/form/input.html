@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Dom Form</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+                <p>
+                    The input HTML element is used to create interactive controls for web-based forms in order to accept
+                    data from the user; a wide variety of types of input data and control widgets are available, depending
+                    on the device and user agent. The input element is one of the most powerful and complex in all of HTML
+                    due to the sheer number of combinations of input types and attributes.
+                </p>
+
+                <p>
+                    How an input works varies considerably depending on the value of its type attribute, hence the
+                    different types are covered in their own separate reference pages. If this attribute is not specified,
+                    the default type adopted is text.
+                </p>
+
+                <p>
+                    With the Attribute bind:model you can bind two-way the value of the input Element to your model in your
+                    View or Component.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>input</td>
+                        <td>model</td>
+                        <td>The model to work with</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;">
+                    <mat-input-container placeholder="FirstName">
+                        <input is="dom-input" type="text" bind:model="firstName"/>
+                    </mat-input-container>
+                    <div>${firstName}</div>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <mat-input-container placeholder="FirstName">
+                                <input is="dom-input" type="text" bind:model="firstName"/>
+                            </mat-input-container>
+                            <div>${firstName}</div>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {customViews} from "../../library/simplicity/simplicity.js";
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import MatInputContainer from "../../library/simplicity/components/form/container/mat-input-container.js"
+                            import DomInput from "../../library/simplicity/directives/dom-input.js";
+
+                            class Input extends HTMLElement {
+
+                                firstName = "Max";
+
+                                static get components() {
+                                    return [MatInputContainer, DomInput]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/form/input.html")
+                                }
+
+                            }
+
+                            export default customViews.define({
+                                name : "form-input",
+                                class : Input
+                            })
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

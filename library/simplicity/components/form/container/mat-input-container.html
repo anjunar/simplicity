@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-input-container {
+            display: block;
+        }
+
+        mat-input-container hr {
+            margin: 0;
+            background-color: var(--main-dark1-color);
+            color: var(--main-dark1-color)
+        }
+
+        mat-input-container ::placeholder {
+            color: var(--main-grey-color);
+            opacity: 1;
+        }
+
+        mat-input-container hr.focus {
+            background-color: var(--main-selected-color);
+            color: var(--main-selected-color)
+        }
+
+        mat-input-container span.focus {
+            color: var(--main-selected-color)
+        }
+
+        mat-input-container hr.error {
+            background-color: var(--main-error-color);
+            color: var(--main-error-color)
+        }
+
+        mat-input-container span.error {
+            color: var(--main-error-color);
+        }
+
+        mat-input-container div.focus {
+            color: var(--main-selected-color);
+        }
+
+        mat-input-container div.error {
+            margin-top: -1px;
+            font-size: xx-small;
+            color: var(--main-error-color);
+            height: 9px;
+        }
+
+        mat-input-container div.placeholder {
+            font-size: xx-small;
+            height: 10px;
+            color: var(--main-grey-color);
+        }
+
+        mat-input-container input:-internal-autofill-selected {
+            color: var(--main-font-color) !important;
+            background-color: inherit;
+        }
+
+        mat-input-container input {
+            width: 100%;
+            border: 0;
+            color: var(--main-font-color);
+            background-color: inherit;
+        }
+
+        mat-input-container input:focus {
+            outline: 0;
+            color: var(--main-font-color);
+            background-color: inherit;
+        }
+
+        mat-input-container input:-webkit-autofill,
+        mat-input-container input:-webkit-autofill:hover,
+        mat-input-container input:-webkit-autofill:focus,
+        mat-input-container textarea:-webkit-autofill,
+        mat-input-container textarea:-webkit-autofill:hover,
+        mat-input-container textarea:-webkit-autofill:focus,
+        mat-input-container select:-webkit-autofill,
+        mat-input-container select:-webkit-autofill:hover,
+        mat-input-container select:-webkit-autofill:focus {
+            -webkit-text-fill-color: var(--main-font-color);
+            -webkit-box-shadow: 0 0 0 1000px var(--main-background-color) inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <div>
+            <div class="placeholder">
+            <span bind:style="display: inputEmpty() ? 'none' : 'inline'"
+                  bind:class="hasFocus() ? 'focus' : ''; hasErrors() ? 'error' : ''">${placeholder}</span>
+            </div>
+            <div style="display: flex">
+                <slot is="dom-slot" name="prefix"></slot>
+                <slot is="dom-slot" tag="isInput"></slot>
+                <slot is="dom-slot" name="suffix"></slot>
+            </div>
+            <hr bind:class="hasFocus() ? 'focus' : ''; hasErrors() ? 'error' : ''"/>
+            <div class="error">
+                <slot is="dom-slot" class="errorContainer" name="error"></slot>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

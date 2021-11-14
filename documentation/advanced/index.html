@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Index Components</title>
+    <style>
+        app-basic {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<template>
+    <mat-toolbar style="z-index: 8000; position:relative;">
+        <div slot="left">
+            <button class="material-icons" type="button" bind:onclick="open = ! open">menu</button>
+        </div>
+    </mat-toolbar>
+
+    <mat-drawer-container>
+        <mat-drawer bind:open="open">
+            <div style="width: 300px">
+                <div style="padding-top: 20px">
+                    <h2>Content</h2>
+                </div>
+
+                <hr class="line">
+
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="#/documentation/advanced/index#/documentation/advanced/introduction">
+                                <div class="row">
+                                    <h4>Introduction</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="row">
+                                    <h4>Common</h4>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/advanced/index#/documentation/advanced/common/custom-component">
+                                        <div class="row">
+                                            <span>Custom Component</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/advanced/index#/documentation/advanced/common/custom-view">
+                                        <div class="row">
+                                            <span>Custom View</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="row">
+                                    <h4>Forms</h4>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/advanced/index#/documentation/advanced/form/nested-forms">
+                                        <div class="row">
+                                            <span>Nested Forms</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/advanced/index#/documentation/advanced/form/validation-form">
+                                        <div class="row">
+                                            <span>Form Validation</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/advanced/index#/documentation/advanced/form/validation-input">
+                                        <div class="row">
+                                            <span>Input Validation</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content>
+            <viewport style="display: block; position: relative">
+                <dom-router level="1"></dom-router>
+            </viewport>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</template>
+</body>
+</html>

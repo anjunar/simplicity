@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="flex-wrap: wrap; display: flex">
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2 style="margin-left: 0;">Mat Drawer</h2>
+                <hr class="line">
+
+                <h3>Introduction</h3>
+<!--
+                <p>
+                    Eine Mat Drawer implementation um Navigation zu bewerkstelligen. Wenn die Auflösung 800px unterschreitet,
+                    dann legt sich der Drawer über den Content. Ansonsten wird der Drawer eingeschoben von links.
+                </p>
+-->
+
+                <p>
+                    A mat drawer implementation to manage navigation. If the resolution falls below 800px,
+                    then the drawer is placed over the content. Otherwise the drawer is inserted from the left.
+                </p>
+
+                <h3>DOM-API</h3>
+                <table style="width: 100%">
+                    <thead>
+                    <tr>
+                        <td><strong>Element</strong></td>
+                        <td><strong>Attribute</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>mat-drawer</td>
+                        <td>open</td>
+                        <td>The Flag if the Drawer is open or not</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin: 20px;">
+                    <button type="button" class="material-icons" bind:onclick="open = ! open">menu</button>
+
+                    <mat-drawer-container>
+                        <mat-drawer bind:open="open">
+                            <nav>
+                                <ul>
+                                    <li>Link 1</li>
+                                    <li>Link 2</li>
+                                    <li>Link 3</li>
+                                </ul>
+                            </nav>
+                        </mat-drawer>
+                        <mat-drawer-content>
+                            <div>
+                                Content goes here...
+                            </div>
+                        </mat-drawer-content>
+                    </mat-drawer-container>
+                </div>
+
+
+            </div>
+
+            <div style="flex: 1; padding: 20px;">
+
+                <h2>Source Code</h2>
+                <hr class="line">
+                <h3>HTML5</h3>
+                <p>The rest of the HTML file is not displayed</p>
+                <div style="margin-top: 20px;">
+                    <div>
+                        <code is="dom-code" lang="html5">
+                            <button type="button" class="material-icons" bind:onclick="open = ! open">menu</button>
+
+                            <mat-drawer-container>
+                                <mat-drawer bind:open="open">
+                                    <nav>
+                                        <ul>
+                                            <li>Link 1</li>
+                                            <li>Link 2</li>
+                                            <li>Link 3</li>
+                                        </ul>
+                                    </nav>
+                                </mat-drawer>
+                                <mat-drawer-content>
+                                    <div>
+                                        Content goes here...
+                                    </div>
+                                </mat-drawer-content>
+                            </mat-drawer-container>
+                        </code>
+                    </div>
+                </div>
+                <h3>Javascript</h3>
+                <div>
+                    <div>
+                        <code is="dom-code" lang="javascript">
+                            import {customViews} from "../../library/simplicity/simplicity.js";
+                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                            import MatDrawer from "../../library/simplicity/components/navigation/mat-drawer.js";
+                            import MatDrawerContent from "../../library/simplicity/components/navigation/mat-drawer-content.js";
+                            import MatDrawerContainer from "../../library/simplicity/components/navigation/mat-drawer-container.js";
+
+                            class Drawer extends HTMLElement {
+
+                                open = false
+
+                                static get components() {
+                                    return [MatDrawer, MatDrawerContent, MatDrawerContainer]
+                                }
+
+                                static get template() {
+                                    return loader("documentation/navigation/drawer.html")
+                                }
+                            }
+
+                            export default customViews.define({
+                                name: "navigation-drawer",
+                                class: Drawer
+                            })
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

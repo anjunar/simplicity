@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Box</title>
+</head>
+<body>
+<template>
+    <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Dom If</h2>
+            <hr class="line">
+
+            <h3>Introduction</h3>
+            <p>
+                input elements of type checkbox are rendered by default as boxes that are checked (ticked) when
+                activated, like you might see in an official government paper form. A checkbox allows you to select
+                single values for submission in a form (or not).
+            </p>
+            <p>
+                A DOMString representing the value of the checkbox. This is not displayed on the client-side, but on
+                the server this is the value given to the data submitted with the checkbox's name.
+            </p>
+            <p>
+                With the bind:model Attribute you can bind the value of the Checkbox to a property of your choice.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong>Element</strong></td>
+                    <td><strong>Attribute</strong></td>
+                    <td><strong>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>mat-checkbox-container</td>
+                    <td>placeholder</td>
+                    <td>The Placeholder text</td>
+                </tr>
+                <tr>
+                    <td>input</td>
+                    <td>model</td>
+                    <td>The Bind variable that can be binded</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <mat-checkbox-container placeholder="Checkbox">
+                    <input is="dom-input" type="checkbox" bind:model="checked"/>
+                </mat-checkbox-container>
+                <template is="dom-if" bind:predicate="checked">
+                    <div>
+                        Checked
+                    </div>
+                </template>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <mat-checkbox-container placeholder="Checkbox">
+                            <input is="dom-input" type="checkbox" bind:model="checked"/>
+                        </mat-checkbox-container>
+
+                        <template is="dom-if" bind:predicate="checked">
+                            <div>
+                                Checked
+                            </div>
+                        </template>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        import {customViews} from "../../library/simplicity/simplicity.js";
+                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                        import DomInput from "../../library/simplicity/directives/dom-input.js";
+                        import MatCheckboxContainer from "../../library/simplicity/components/form/container/mat-checkbox-container.js";
+                        import DomIf from "../../library/simplicity/directives/dom-if.js";
+
+                        class Checkbox extends HTMLElement {
+
+                            checked = false;
+
+                            static get components() {
+                                return [DomInput, DomIf, MatCheckboxContainer]
+                            }
+
+                            static get template() {
+                                return loader("documentation/form/checkbox.html")
+                            }
+                        }
+
+                        export default customViews.define({
+                            name: "form-checkbox",
+                            class: Checkbox
+                        })
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

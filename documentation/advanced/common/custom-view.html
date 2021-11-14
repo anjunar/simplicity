@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>If</title>
+    <style>
+        common-if {
+            display: block;
+        }
+
+        common-if .content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Custom View with query parameters</h2>
+            <hr class="line">
+
+            <h3>Introduction</h3>
+            <p>
+                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the server.
+                You don't have to put a .js at the end of the path, it is automatically added to the path.
+            </p>
+
+            <div style="margin: 20px;">
+                <a href="#/documentation/advanced/index#/documentation/advanced/common/custom-view/example?id=4">Click Me!</a>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <code is="dom-code" lang="html5">
+                    <div>${material.position} ${material.name}</div>
+                </code>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        import {customViews} from "../../../library/simplicity/simplicity.js";
+                        import {jsonClient} from "../../../library/simplicity/services/client.js";
+                        import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+
+                        class Example extends HTMLElement {
+
+                            material;
+
+                            static get template() {
+                                return loader("documentation/advanced/examples/custom-page.html");
+                            }
+
+                        }
+
+                        export default customViews.define({
+                            name : "examples-custom-page",
+                            class : Example,
+                            guard(activeRoute) {
+                                return {
+                                    material : jsonClient.get("materials.json")
+                                            .then((materials) => {
+                                                return materials.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))
+                                            })
+                                }
+                            }
+                        })
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>
