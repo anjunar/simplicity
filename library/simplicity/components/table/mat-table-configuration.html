@@ -10,7 +10,7 @@
             <template is="dom-repeat" template bind:items="table.configuration(table.columns, true)" item="td">
                 <mat-tab>
                     <div>
-                        <slot is="dom-slot" bind:source="table" selector="thead tr td *" bind:index="td.index"></slot>
+                        <slot is="dom-slot" bind:source="table" selector="thead tr td *" bind:index="td.index" import="true"></slot>
                     </div>
                 </mat-tab>
             </template>

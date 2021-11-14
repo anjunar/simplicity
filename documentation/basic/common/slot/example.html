@@ -8,7 +8,7 @@
 <template>
     <template is="dom-repeat" bind:items="items" item="item">
         <div>
-            <slot is="dom-slot" implicit="item"></slot>
+            <slot is="dom-slot" implicit="item" import="true"></slot>
         </div>
     </template>
 </template>

@@ -18,7 +18,7 @@
     <template>
         <div class="container">
             <template is="dom-repeat" bind:items="tabs" item="tab" bind:onrepeat="render()">
-                <slot is="dom-slot" selector="mat-tab" bind:index="index" resilient="true"></slot>
+                <slot is="dom-slot" selector="mat-tab" bind:index="index" resilient="true" import="true"></slot>
             </template>
             <div style="flex: 1; border-bottom: 2px solid var(--main-dark1-color)"></div>
         </div>

@@ -7,6 +7,7 @@ import MatTabs from "../../../library/simplicity/components/navigation/mat-tabs.
 import MatTab from "../../../library/simplicity/components/navigation/mat-tab.js";
 import MatPages from "../../../library/simplicity/components/navigation/mat-pages.js";
 import MatPage from "../../../library/simplicity/components/navigation/mat-page.js";
+import CommonExample from "./slot/example.js";
 
 class CommonImplicit extends HTMLElement {
 
@@ -15,7 +16,7 @@ class CommonImplicit extends HTMLElement {
     materials = [];
 
     static get components() {
-        return [Repeat, DomCode, MatTabs, MatTab, MatPages, MatPage]
+        return [Repeat, DomCode, MatTabs, MatTab, MatPages, MatPage, CommonExample]
     }
 
     static get template() {

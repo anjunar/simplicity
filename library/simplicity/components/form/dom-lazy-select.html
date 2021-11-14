@@ -35,7 +35,7 @@
                     <div>
                         <template is="dom-repeat" bind:items="window" item="item">
                             <div bind:onclick="onItemClicked($event, item)" class="item">
-                                <slot is="dom-slot" implicit="item"></slot>
+                                <slot is="dom-slot" implicit="item" import="true"></slot>
                             </div>
                         </template>
                     </div>

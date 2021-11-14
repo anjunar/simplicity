@@ -29,7 +29,7 @@ class CommonExample extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/examples/example.html");
+        return loader("documentation/basic/common/slot/example.html");
     }
 
 }

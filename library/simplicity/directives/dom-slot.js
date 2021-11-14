@@ -9,7 +9,7 @@ class DomSlot extends HTMLSlotElement {
     implicit;
     index = 0;
     resilient = "false";
-    import = "true";
+    import = "false";
 
     initialize() {
         this.render();
