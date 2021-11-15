@@ -64,9 +64,16 @@ export function createProcessors(element) {
     element.hydrated = true;
 }
 
-export default function createProcessorsTree(element, root) {
+function createProcessorsTree(element) {
+    if (element.localName.indexOf("-") > -1) {
+        return;
+    }
+
     let iterator = document.createNodeIterator(element, NodeFilter.SHOW_ELEMENT, {
         acceptNode(node) {
+            if (node.localName.indexOf("-") > -1) {
+                return NodeFilter.FILTER_REJECT;
+            }
             if (node.preventHydration) {
                 return NodeFilter.FILTER_SKIP;
             }
@@ -76,7 +83,7 @@ export default function createProcessorsTree(element, root) {
             if (node.isConnected) {
                 return NodeFilter.FILTER_ACCEPT;
             } else {
-                if (node.localName === "template" && node.hasAttribute("template")) {
+                if (node.localName === "template") {
                     return NodeFilter.FILTER_ACCEPT;
                 } else {
                     return NodeFilter.FILTER_SKIP;
@@ -292,8 +299,7 @@ function buildContent() {
         }
         for (const child of Array.from(this.children)) {
             this.content.root = this;
-            this.content.appendChild(child);
-            // createProcessorsTree(child, this.content)
+            this.content.appendChild(child, false);
         }
     }
 }
@@ -419,6 +425,10 @@ export const customComponents = new class CustomComponents {
                             variableBinding(this, template);
 
                             this.appendChild(template.content);
+
+                            for (const child of this.content.children) {
+                                createProcessorsTree(child);
+                            }
 
                             createProcessors(this)
                         } else {

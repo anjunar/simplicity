@@ -16,8 +16,10 @@ class MatTabs extends HTMLElement {
         for (const tab of tabs) {
             tab.selected = false;
         }
-        let tab = tabs[this.page];
-        tab.selected = true;
+        if (tabs.length > 0) {
+            let tab = tabs[this.page];
+            tab.selected = true;
+        }
     }
 
     register(tab) {

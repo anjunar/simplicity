@@ -7,7 +7,7 @@
 <body>
     <template>
         <mat-tabs bind:page="page">
-            <template is="dom-repeat" template bind:items="table.configuration(table.columns, true)" item="td">
+            <template is="dom-repeat" bind:items="table.configuration(table.columns, true)" item="td">
                 <mat-tab>
                     <div>
                         <slot is="dom-slot" bind:source="table" selector="thead tr td *" bind:index="td.index" import="true"></slot>
@@ -16,7 +16,7 @@
             </template>
         </mat-tabs>
         <mat-pages bind:page="page">
-            <template is="dom-repeat" template bind:items="table.configuration(table.columns, true)" item="td">
+            <template is="dom-repeat" bind:items="table.configuration(table.columns, true)" item="td">
                 <mat-page>
                     <div>
                         <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px">

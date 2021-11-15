@@ -1,6 +1,7 @@
 import MatWindow from "../components/modal/mat-window.js";
 import {get, viewManager} from "./view-manager.js";
 import MatModal from "../components/modal/mat-modal.js";
+import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 const windowsRegistry = [];
 
@@ -67,6 +68,8 @@ export const windowManager = new class WindowManager {
                 matWindow.style.left = matWindow.parentElement.offsetWidth / 2 - matWindow.offsetWidth / 2 + "px"
 
                 this.clickWindow(matWindow);
+
+                lifeCycle();
 
                 resolve(matWindow);
             })
