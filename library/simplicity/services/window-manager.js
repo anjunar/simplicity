@@ -69,8 +69,6 @@ export const windowManager = new class WindowManager {
 
                 this.clickWindow(matWindow);
 
-                lifeCycle();
-
                 resolve(matWindow);
             })
         }

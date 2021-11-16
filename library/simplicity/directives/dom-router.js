@@ -16,7 +16,6 @@ class DomRouter extends HTMLElement {
                         child.remove();
                     }
                     this.appendChild(view);
-                    lifeCycle();
                 })
         }.bind(this);
     }

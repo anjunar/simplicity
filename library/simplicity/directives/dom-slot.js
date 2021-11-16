@@ -1,4 +1,5 @@
 import {customComponents} from "../simplicity.js";
+import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 class DomSlot extends HTMLSlotElement {
 
@@ -22,6 +23,7 @@ class DomSlot extends HTMLSlotElement {
 
         let mutationObserver = new MutationObserver(() => {
             this.render();
+            lifeCycle();
         })
 
         mutationObserver.observe(content, {subtree : true, childList : true})

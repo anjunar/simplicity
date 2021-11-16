@@ -144,7 +144,7 @@ Node.prototype.replaceChild = (function (_super) {
     return function (newChild, oldChild, createProcessors = true) {
         let result = _super.apply(this, [newChild, oldChild]);
         if (createProcessors) {
-            createProcessorsTree(result, this);
+            createProcessorsTree(newChild, this);
         }
         return result;
     }
