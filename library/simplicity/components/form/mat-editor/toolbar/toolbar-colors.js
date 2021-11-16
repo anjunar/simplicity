@@ -5,13 +5,13 @@ import DomSelect from "../../../../directives/dom-select.js";
 
 class ToolbarColors extends HTMLElement {
 
-    content;
+    contents;
     color = "none";
     backGroundColor = "none";
 
     initialize() {
 
-        this.content.addEventListener("click", (event) => {
+        this.contents.addEventListener("click", (event) => {
             function rgbToHex(color) {
                 color = ""+ color;
                 if (!color || color.indexOf("rgb") < 0) {
@@ -54,8 +54,8 @@ class ToolbarColors extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "content" : {
-                this.content = newValue;
+            case "contents" : {
+                this.contents = newValue;
             }
         }
     }
@@ -66,7 +66,7 @@ class ToolbarColors extends HTMLElement {
 
     static get observedAttributes() {
         return [{
-            name : "content",
+            name : "contents",
             type : "input"
         }]
     }

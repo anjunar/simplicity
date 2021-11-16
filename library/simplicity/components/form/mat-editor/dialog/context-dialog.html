@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        context-dialog {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <mat-tabs bind:page="page">
+            <template is="dom-repeat" bind:items="path" item="segment">
+                <mat-tab>
+                    <div>
+                        ${segment.localName}
+                    </div>
+                </mat-tab>
+            </template>
+        </mat-tabs>
+        <mat-pages bind:page="page">
+            <template is="dom-repeat" bind:items="path" item="segment">
+                <mat-page>
+                    <div>
+                        <margins-node bind:node="segment"></margins-node>
+                        <padding-node bind:node="segment"></padding-node>
+                    </div>
+                </mat-page>
+            </template>
+        </mat-pages>
+    </template>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="display: flex">
+            <mat-input-container placeholder="Padding Left">
+                <input type="number" is="dom-input" bind:model="paddingLeft" bind:onmodel="paddingLeftChange($event)"/>
+            </mat-input-container>
+            <mat-input-container placeholder="Padding Right">
+                <input type="number" is="dom-input" bind:model="paddingRight" bind:onmodel="paddingRightChange($event)"/>
+            </mat-input-container>
+            <mat-input-container placeholder="Padding Top">
+                <input type="number" is="dom-input" bind:model="paddingTop" bind:onmodel="paddingTopChange($event)"/>
+            </mat-input-container>
+            <mat-input-container placeholder="Padding Bottom">
+                <input type="number" is="dom-input" bind:model="paddingBottom" bind:onmodel="paddingBottomChange($event)"/>
+            </mat-input-container>
+        </div>
+    </template>
+</body>
+</html>

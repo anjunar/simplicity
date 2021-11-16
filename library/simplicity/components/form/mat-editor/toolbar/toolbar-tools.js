@@ -3,7 +3,7 @@ import {loader} from "../../../../processors/loader-processor.js";
 
 class ToolbarTools extends HTMLElement {
 
-    content;
+    contents;
 
     copyClick() {
         this.dispatchEvent(new CustomEvent("copy"))
@@ -31,8 +31,8 @@ class ToolbarTools extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "content" : {
-                this.content = newValue;
+            case "contents" : {
+                this.contents = newValue;
             }
         }
     }
@@ -43,7 +43,7 @@ class ToolbarTools extends HTMLElement {
 
     static get observedAttributes() {
         return [{
-            name : "content",
+            name : "contents",
             type : "input"
         }]
     }

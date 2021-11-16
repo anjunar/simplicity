@@ -4,7 +4,7 @@ import {loader} from "../../../../processors/loader-processor.js";
 
 class ToolbarJustify extends HTMLElement {
 
-    content;
+    contents;
 
     justify
     justifyLeft
@@ -18,7 +18,7 @@ class ToolbarJustify extends HTMLElement {
 
     initialize() {
 
-        this.content.addEventListener("click", (event) => {
+        this.contents.addEventListener("click", (event) => {
             let computedStyle = window.getComputedStyle(event.target);
 
             let textAlign = computedStyle.textAlign;
@@ -163,8 +163,8 @@ class ToolbarJustify extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "content" : {
-                this.content = newValue;
+            case "contents" : {
+                this.contents = newValue;
             }
         }
     }
@@ -175,7 +175,7 @@ class ToolbarJustify extends HTMLElement {
 
     static get observedAttributes() {
         return [{
-            name : "content",
+            name : "contents",
             type : "input"
         }]
     }

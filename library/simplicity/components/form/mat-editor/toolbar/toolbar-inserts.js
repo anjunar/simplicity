@@ -3,13 +3,13 @@ import {loader} from "../../../../processors/loader-processor.js";
 
 class ToolbarInserts extends HTMLElement {
 
-    content;
+    contents;
 
     link
     unLink;
 
     initialize() {
-        this.content.addEventListener("click", (event) => {
+        this.contents.addEventListener("click", (event) => {
             let selection = window.getSelection();
             if (selection.anchorNode) {
                 let parentElement = selection.anchorNode.parentElement;
@@ -67,8 +67,8 @@ class ToolbarInserts extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "content" : {
-                this.content = newValue;
+            case "contents" : {
+                this.contents = newValue;
             }
         }
     }
@@ -79,7 +79,7 @@ class ToolbarInserts extends HTMLElement {
 
     static get observedAttributes() {
         return [{
-            name : "content",
+            name : "contents",
             type : "input"
         }]
     }

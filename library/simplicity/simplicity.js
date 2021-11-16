@@ -189,7 +189,6 @@ EventTarget.prototype.addEventListener = (function (_super) {
     return function (name, callback, options = {lifeCycle : true}) {
         if (name !== "") {
             _super.apply(this, [name, (event) => {
-                console.log(name)
                 callback(event)
                 if (blackList.indexOf(name) === -1 && options.lifeCycle) {
                     lifeCycle();
@@ -424,13 +423,14 @@ export const customComponents = new class CustomComponents {
 
                             variableBinding(this, template);
 
+                            createProcessors(this)
+
                             this.appendChild(template.content);
 
                             for (const child of this.content.children) {
                                 createProcessorsTree(child);
                             }
 
-                            createProcessors(this)
                         } else {
                             createProcessors(this)
                         }

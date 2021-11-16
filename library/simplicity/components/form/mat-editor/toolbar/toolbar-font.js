@@ -2,11 +2,10 @@ import {customComponents} from "../../../../simplicity.js";
 import {lifeCycle} from "../../../../processors/life-cycle-processor.js";
 import {loader} from "../../../../processors/loader-processor.js";
 import DomSelect from "../../../../directives/dom-select.js";
-import select from "../../../../../../documentation/basic/form/select.js";
 
 class ToolbarFont extends HTMLElement {
 
-    content;
+    contents;
 
     fontName = "none"
     fontSize = "none"
@@ -44,7 +43,7 @@ class ToolbarFont extends HTMLElement {
 
     initialize() {
 
-        this.content.addEventListener("click", (event) => {
+        this.contents.addEventListener("click", (event) => {
             let computedStyle = window.getComputedStyle(event.target);
 
             this.fontAdjustUpper(computedStyle, event);
@@ -178,8 +177,8 @@ class ToolbarFont extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "content" : {
-                this.content = newValue;
+            case "contents" : {
+                this.contents = newValue;
             }
         }
     }
@@ -190,7 +189,7 @@ class ToolbarFont extends HTMLElement {
 
     static get observedAttributes() {
         return [{
-            name : "content",
+            name : "contents",
             type : "input"
         }]
     }

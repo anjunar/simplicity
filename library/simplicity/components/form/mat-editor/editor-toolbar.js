@@ -5,21 +5,27 @@ import ToolbarFont from "./toolbar/toolbar-font.js";
 import ToolbarInserts from "./toolbar/toolbar-inserts.js";
 import ToolbarJustify from "./toolbar/toolbar-justify.js";
 import ToolbarTools from "./toolbar/toolbar-tools.js";
+import MatTabs from "../../navigation/mat-tabs.js";
+import MatTab from "../../navigation/mat-tab.js";
+import MatPage from "../../navigation/mat-page.js";
+import MatPages from "../../navigation/mat-pages.js";
+import ToolbarTable from "./toolbar/toolbar-table.js";
 
 class EditorToolbar extends HTMLElement {
 
-    content;
+    contents;
+    page = 0;
 
     fontNameClick(event) {
-        this.dispatchEvent(new CustomEvent("fontname", {detail : event.detail}))
+        this.dispatchEvent(new CustomEvent("fontname", {detail: event.detail}))
     }
 
     fontSizeClick(event) {
-        this.dispatchEvent(new CustomEvent("fontsize", {detail : event.detail}))
+        this.dispatchEvent(new CustomEvent("fontsize", {detail: event.detail}))
     }
 
     formatBlockClick(event) {
-        this.dispatchEvent(new CustomEvent("formatblock", {detail : event.detail}))
+        this.dispatchEvent(new CustomEvent("formatblock", {detail: event.detail}))
     }
 
     boldClick() {
@@ -43,12 +49,12 @@ class EditorToolbar extends HTMLElement {
     }
 
     colorClick(event) {
-        this.dispatchEvent(new CustomEvent("color", {detail : event.detail}))
-    }
-    backGroundColorClick(event) {
-        this.dispatchEvent(new CustomEvent("backgroundcolor", {detail : event.detail}))
+        this.dispatchEvent(new CustomEvent("color", {detail: event.detail}))
     }
 
+    backGroundColorClick(event) {
+        this.dispatchEvent(new CustomEvent("backgroundcolor", {detail: event.detail}))
+    }
 
 
     justifyFullClick() {
@@ -84,8 +90,6 @@ class EditorToolbar extends HTMLElement {
     }
 
 
-
-
     copyClick() {
         this.dispatchEvent(new CustomEvent("copy"))
     }
@@ -111,7 +115,6 @@ class EditorToolbar extends HTMLElement {
     }
 
 
-
     insertLinkClick() {
         this.dispatchEvent(new CustomEvent("insertlink"))
     }
@@ -132,8 +135,8 @@ class EditorToolbar extends HTMLElement {
         this.dispatchEvent(new CustomEvent("inserttext"))
     }
 
-    insertTableClick(columnsSize) {
-        this.dispatchEvent(new CustomEvent("inserttable"))
+    insertTableClick(event) {
+        this.dispatchEvent(new CustomEvent("inserttable", {detail : event.detail}))
     }
 
     insertOrderedListClick() {
@@ -154,19 +157,19 @@ class EditorToolbar extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "content" : {
-                this.content = newValue;
+            case "contents" : {
+                this.contents = newValue;
             }
         }
     }
 
     static get components() {
-        return [ToolbarColors, ToolbarFont, ToolbarInserts, ToolbarJustify, ToolbarTools]
+        return [ToolbarColors, ToolbarFont, ToolbarInserts, ToolbarJustify, ToolbarTools, ToolbarTable, MatTabs, MatTab, MatPages, MatPage]
     }
 
     static get observedAttributes() {
         return [{
-            name: "content",
+            name: "contents",
             type: "input"
         }]
     }

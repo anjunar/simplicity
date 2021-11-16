@@ -52,9 +52,13 @@ button.thin {
     color: var(--main-font-color);
 }
 
-button.thin:hover {
+button.thin:not([disabled]):hover {
     color: var(--main-background-color);
     background-color: var(--main-selected-color);
+}
+
+button.thin[disabled] {
+    background-color: var(--main-dark2-color);
 }
 
 button.normal {

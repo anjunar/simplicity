@@ -45,7 +45,11 @@ class DomInput extends HTMLInputElement {
         asyncValidationHandler();
 
         let valueChangeHandler = () => {
-            this.model = this.value
+            if (this.type === "number") {
+                this.model = Number.parseInt(this.value);
+            } else {
+                this.model = this.value
+            }
             this.dispatchEvent(new CustomEvent("model"))
         }
 
@@ -169,7 +173,7 @@ class DomInput extends HTMLInputElement {
                             this.checked = true
                         }
                     }
-                        break
+                        break;
                     default : {
                         this.value = newValue;
                     }

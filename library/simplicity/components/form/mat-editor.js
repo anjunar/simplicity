@@ -20,7 +20,12 @@ class MatEditor extends HTMLElement {
             this.model.text = this.contents.innerText
             this.dispatchEvent(new Event("model"));
 
-        }, {lifeCycle : true});
+        }, {lifeCycle: true});
+
+        let element = this.querySelector("div.content");
+        if (element.innerHTML !== this.model.html) {
+            element.innerHTML = this.model.html;
+        }
 
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
@@ -226,35 +231,23 @@ class MatEditor extends HTMLElement {
 
     }
 
-    insertTableClick() {
-        let dialog = EditorTableDialog();
+    insertTableClick(event) {
+        let columns = event.detail.columns;
+        let rows = event.detail.rows;
 
-        document.componentQuery("body")
-            .appendChild(dialog);
-
-        let selection = document.getSelection();
-        let rangeAt = selection.getRangeAt(0);
-
-        dialog.callback = function (columnsSize) {
-            document.getSelection().removeAllRanges();
-            document.getSelection().addRange(rangeAt);
-
-            let columns = [];
-            let outerHTML = document.createElement("td").outerHTML;
-            for (let i = 0; i < columnsSize; i++) {
-                columns.push(outerHTML);
-            }
-
-            let table = `<table is="editor-table" style="border-collapse: separate;width: 100%; table-layout: fixed;">
-                                        <tr>
-                                            ${columns.join("")}
-                                        </tr>
-                                 </table>`
-
-            document.execCommand("insertHTML", false, table)
-
-            dialog.close();
+        let columnsHTML = "";
+        for (let i = 0; i < columns; i++) {
+            columnsHTML += "<td></td>"
         }
+
+        let rowsHTML = "";
+        for (let i = 0; i < rows; i++) {
+            rowsHTML += "<tr>" + columnsHTML + "</tr>"
+        }
+
+        let table = "<table>" + rowsHTML + "</table>";
+
+        document.execCommand("insertHTML", false, table)
     }
 
     insertOrderedListClick() {
@@ -278,21 +271,29 @@ class MatEditor extends HTMLElement {
         document.execCommand("insertParagraph")
     }
 
-    /*
-        initialize() {
-            let element = this.querySelector("div.content");
-            element.innerHTML = this.model.html;
+    contextmenuClick(event) {
+        event.stopPropagation();
+
+        let content = this.querySelector("div.content");
+        let newPath = [];
+        for (const segment of event.path) {
+            if (segment === content) {
+                break
+            }
+            newPath.push(segment);
         }
-    */
+
+        windowManager.openWindow("/library/simplicity/components/form/mat-editor/dialog/context-dialog", {
+            data: {
+                path: newPath
+            }
+        })
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {
                 this.model = newValue;
-                let element = this.querySelector("div.content");
-                if (element.innerHTML !== newValue) {
-                    element.innerHTML = newValue.html;
-                }
             }
                 break
             case "placeholder" : {

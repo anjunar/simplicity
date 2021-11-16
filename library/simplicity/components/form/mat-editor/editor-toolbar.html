@@ -9,10 +9,6 @@
             width: 100%;
         }
 
-        editor-toolbar * {
-            font-size: 14px;
-        }
-
         editor-toolbar .row {
             margin: 2px;
             border: var(--main-dark1-color) solid 1px;
@@ -24,43 +20,72 @@
 </head>
 <body>
 <template>
+    <div style="border: 1px solid var(--main-dark1-color); margin: 2px">
+        <mat-tabs bind:page="page">
+            <mat-tab>
+                <div>Start</div>
+            </mat-tab>
+            <mat-tab>
+                <div>Table</div>
+            </mat-tab>
+        </mat-tabs>
+    </div>
+
+    <mat-pages bind:page="page">
+        <mat-page>
+            <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%">
+                <toolbar-font class="row"
+                              bind:contents="contents"
+                              bind:onfontname="fontNameClick($event)"
+                              bind:onfontsize="fontSizeClick($event)"
+                              bind:onformatblock="formatBlockClick($event)"
+                              bind:onbold="boldClick()"
+                              bind:onitalic="italicClick()"
+                              bind:onstrikethrough="strikethroughClick()"
+                              bind:onsubscript="subscriptClick()"
+                              bind:onsupscript="superscriptClick()"
+                ></toolbar-font>
+                <toolbar-colors class="row"
+                                bind:contents="contents"
+                                bind:onbackgroundcolor="backGroundColorClick($event)"
+                                bind:oncolor="colorClick($event)"
+                ></toolbar-colors>
+                <toolbar-justify class="row"
+                                 bind:contents="contents"
+                                 bind:onjustifyfull="justifyFullClick()"
+                                 bind:onjustifyleft="justifyLeftClick()"
+                                 bind:onjustifyright="justifyRightClick()"
+                                 bind:onjustifycenter="justifyCenterClick()"
+                                 bind:onindent="indentClick()"
+                                 bind:onoutdent="outdentClick()"
+                                 bind:onfloatleft="floatLeftClick()"
+                                 bind:onfloatright="floatRightClick()"
+                ></toolbar-justify>
+                <toolbar-tools class="row"
+                               bind:contents="contents"
+                               bind:oncopy="copyClick()"
+                               bind:oncut="cutClick()"
+                               bind:onundo="undoClick()"
+                               bind:ondelete="deleteClick()"
+                               bind:onselectall="selectAllClick()"
+                               bind:onredo="redoClick()"
+                ></toolbar-tools>
+                <div class="row" style="flex: 1"></div>
+            </div>
+        </mat-page>
+        <mat-page>
+            <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
+                <toolbar-table class="row"
+                               bind:contents="contents"
+                               bind:oninserttable="insertTableClick($event)"
+                ></toolbar-table>
+                <div class="row" style="flex: 1"></div>
+            </div>
+        </mat-page>
+    </mat-pages>
+
+<!--
     <div style="display: flex; align-items : stretch; justify-content: flex-start;">
-        <toolbar-font class="row"
-                      bind:content="content"
-                      bind:onfontname="fontNameClick($event)"
-                      bind:onfontsize="fontSizeClick($event)"
-                      bind:onformatblock="formatBlockClick($event)"
-                      bind:onbold="boldClick()"
-                      bind:onitalic="italicClick()"
-                      bind:onstrikethrough="strikethroughClick()"
-                      bind:onsubscript="subscriptClick()"
-                      bind:onsupscript="superscriptClick()"
-        ></toolbar-font>
-        <toolbar-colors class="row"
-                        bind:content="content"
-                        bind:onbackgroundcolor="backGroundColorClick($event)"
-                        bind:oncolor="colorClick($event)"
-        ></toolbar-colors>
-        <toolbar-justify class="row"
-                         bind:content="content"
-                         bind:onjustifyfull="justifyFullClick()"
-                         bind:onjustifyleft="justifyLeftClick()"
-                         bind:onjustifyright="justifyRightClick()"
-                         bind:onjustifycenter="justifyCenterClick()"
-                         bind:onindent="indentClick()"
-                         bind:onoutdent="outdentClick()"
-                         bind:onfloatleft="floatLeftClick()"
-                         bind:onfloatright="floatRightClick()"
-        ></toolbar-justify>
-        <toolbar-tools class="row"
-                       bind:content="content"
-                       bind:oncopy="copyClick()"
-                       bind:oncut="cutClick()"
-                       bind:onundo="undoClick()"
-                       bind:ondelete="deleteClick()"
-                       bind:onselectall="selectAllClick()"
-                       bind:onredo="redoClick()"
-        ></toolbar-tools>
         <toolbar-inserts class="row"
                          bind:content="content"
                          bind:oninsertlink="insertLinkClick()"
@@ -78,6 +103,7 @@
         <div class="row" style="flex: 1"></div>
     </div>
     </div>
+-->
 </template>
 </body>
 </html>

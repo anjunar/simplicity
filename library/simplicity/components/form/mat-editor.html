@@ -8,7 +8,6 @@
             display: block;
             height: 100%;
             min-height: 300px;
-            min-width: 800px;
         }
 
         mat-editor div.content{
@@ -19,11 +18,19 @@
             overflow : auto
         }
 
+        mat-editor div.content * {
+            border: 1px solid var(--main-dark2-color);
+        }
+
+        mat-editor div.content table tr td:empty::after {
+            content: "\00a0";
+        }
+
     </style>
 </head>
 <body>
     <template>
-        <editor-toolbar bind:content="content"
+        <editor-toolbar bind:contents="contents"
                         bind:onfontname="fontNameClick($event)"
                         bind:onfontsize="fontSizeClick($event)"
                         bind:onformatblock="formatBlockClick($event)"
@@ -59,13 +66,13 @@
                         bind:oninsertimage="insertImageClick()"
                         bind:oninserthorizontalrule="insertHorizontalRuleClick()"
                         bind:oninserttext="insertTextClick()"
-                        bind:oninserttable="insertTableClick()"
+                        bind:oninserttable="insertTableClick($event)"
                         bind:oninsertorderedlist="insertOrderedListClick()"
                         bind:oninsertunorderedlist="insertUnorderedListClick()"
                         bind:oninsertdivflex="insertDivFlexClick()"
                         bind:oninsertparagraph="insertParagraphClick()">
         </editor-toolbar>
-        <div bind:variable="contents" class="content" contenteditable="true"></div>
+        <div bind:variable="contents" class="content" contenteditable="true" bind:oncontextmenu="contextmenuClick($event)"></div>
     </template>
 </body>
 </html>
