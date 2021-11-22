@@ -25,10 +25,6 @@ class DomRouter extends HTMLElement {
         this.handler();
     }
 
-    destroy() {
-        window.removeEventListener("hashchange", this.handler)
-    }
-
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "level" : {
