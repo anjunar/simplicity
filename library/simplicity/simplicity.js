@@ -185,18 +185,30 @@ Element.prototype.insertAdjacentElement = (function (_super) {
 
 const blackList = ["mousemove", "mouseover", "loadend"]
 
+let listeners = new WeakMap();
+
 EventTarget.prototype.addEventListener = (function (_super) {
     return function (name, callback, options = {lifeCycle : true}) {
         if (name !== "") {
-            _super.apply(this, [name, (event) => {
+            let handler = (event) => {
                 callback(event)
                 if (blackList.indexOf(name) === -1 && options.lifeCycle) {
                     lifeCycle();
                 }
-            }], options)
+            };
+            listeners.set(callback, handler);
+            _super.apply(this, [name, handler], options)
+            return handler;
         }
     }
 })(EventTarget.prototype.addEventListener);
+
+EventTarget.prototype.removeEventListener = (function (_super) {
+    return function (name, callback) {
+        let listener = listeners.get(callback);
+        _super.apply(this, [name, listener])
+    }
+})(EventTarget.prototype.removeEventListener)
 
 function findProperty(name, scope, lhsNode) {
     if (lhsNode.context?.length > 0) {
@@ -448,8 +460,10 @@ export const customComponents = new class CustomComponents {
             }
 
             disconnectedCallback() {
-                if (super.destroy) {
-                    super.destroy();
+                if (this.hydrated) {
+                    if (super.destroy) {
+                        super.destroy();
+                    }
                 }
             }
 

@@ -18,10 +18,23 @@
                          bind:onclick="insertTableClick(columns, rows)">table_view
                 </button>
             </div>
-            <div>
-                <button type="button" class="thin" bind:onclick="addColumnClick()" bind:variable="addColumnButton" disabled>Add Column</button>
+            <div style="display: flex; align-items: center">
+                <button type="button" class="image" bind:onclick="addColumnClick()" bind:variable="addColumnButton" disabled>
+                    <img src="./images/icons/icons8-add-column-24.png">
+                </button>
                 <br/>
-                <button type="button" class="thin" bind:onclick="addRowClick()" bind:variable="addRowButton" disabled>Add Row</button>
+                <button type="button" class="image" bind:onclick="addRowClick()" bind:variable="addRowButton" disabled>
+                    <img src="./images/icons/icons8-add-row-24.png">
+                </button>
+            </div>
+            <div style="display: flex; align-items: center">
+                <button type="button" class="image" bind:onclick="removeColumnClick()" bind:variable="removeColumnButton" disabled>
+                    <img src="./images/icons/icons8-delete-column-24.png">
+                </button>
+                <br/>
+                <button type="button" class="image" bind:onclick="removeRowClick()" bind:variable="removeRowButton" disabled>
+                    <img src="./images/icons/icons8-delete-row-24.png">
+                </button>
             </div>
         </div>
     </template>

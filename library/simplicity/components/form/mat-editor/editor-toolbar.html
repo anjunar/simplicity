@@ -28,6 +28,9 @@
             <mat-tab>
                 <div>Table</div>
             </mat-tab>
+            <mat-tab>
+                <div>Flexbox</div>
+            </mat-tab>
         </mat-tabs>
     </div>
 
@@ -78,7 +81,20 @@
                 <toolbar-table class="row"
                                bind:contents="contents"
                                bind:oninserttable="insertTableClick($event)"
+                               bind:onaddColumn="addColumnClick()"
+                               bind:onaddRow="addRowClick()"
+                               bind:onRemoveColumn="removeColumnClick()"
+                               bind:onRemoveRow="removeRowClick()"
                 ></toolbar-table>
+                <div class="row" style="flex: 1"></div>
+            </div>
+        </mat-page>
+        <mat-page>
+            <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
+                <toolbar-flexbox class="row"
+                                 bind:contents="contents"
+                                 bind:oninsertdivflex="insertDivFlexClick($event)">
+                </toolbar-flexbox>
                 <div class="row" style="flex: 1"></div>
             </div>
         </mat-page>
@@ -96,7 +112,6 @@
                          bind:oninserttable="insertTableClick()"
                          bind:oninsertorderedlist="insertOrderedListClick()"
                          bind:oninsertunorderedlist="insertUnorderedListClick()"
-                         bind:oninsertdivflex="insertDivFlexClick()"
                          bind:oninsertparagraph="insertParagraphClick()"
                          bind:oninserttext="insertTextClick()"
         ></toolbar-inserts>

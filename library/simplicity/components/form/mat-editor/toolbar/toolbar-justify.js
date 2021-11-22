@@ -17,8 +17,7 @@ class ToolbarJustify extends HTMLElement {
     floatRight;
 
     initialize() {
-
-        this.contents.addEventListener("click", (event) => {
+        let handler = (event) => {
             let computedStyle = window.getComputedStyle(event.target);
 
             let textAlign = computedStyle.textAlign;
@@ -72,9 +71,15 @@ class ToolbarJustify extends HTMLElement {
                 }
             }
 
-            lifeCycle(this);
-        })
+        }
+
+        this.handler = this.contents.addEventListener("click",  handler)
+
+        ToolbarJustify.prototype.destroy = () => {
+            this.contents.removeEventListener("click", handler);
+        }
     }
+
 
     justifyFullClick() {
         this.dispatchEvent(new CustomEvent("justifyfull"))

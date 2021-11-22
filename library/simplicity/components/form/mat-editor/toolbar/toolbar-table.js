@@ -13,18 +13,31 @@ class ToolbarTable extends HTMLElement {
     addColumnButton;
     addRowButton;
 
+    removeColumnButton;
+    removeRowButton;
+
     initialize() {
-        this.contents.addEventListener("click", (event) => {
+        let handler = (event) => {
             event.stopPropagation();
             let tableElement = event.path.find((segment) => segment.localName === "table");
             if (tableElement) {
-                this.addColumnButton.removeAttribute("disabled")
-                this.addRowButton.removeAttribute("disabled")
+                this.addColumnButton.removeAttribute("disabled");
+                this.addRowButton.removeAttribute("disabled");
+                this.removeColumnButton.removeAttribute("disabled");
+                this.removeRowButton.removeAttribute("disabled")
             } else {
                 this.addColumnButton.setAttribute("disabled", "true")
                 this.addRowButton.setAttribute("disabled", "true")
+                this.removeColumnButton.setAttribute("disabled", "true")
+                this.removeRowButton.setAttribute("disabled", "true")
             }
-        })
+        };
+
+        this.handler = this.contents.addEventListener("click", handler)
+
+        ToolbarTable.prototype.destroy = () => {
+            this.contents.removeEventListener("click", handler);
+        }
     }
 
     insertTableClick(columns, rows) {
@@ -37,6 +50,14 @@ class ToolbarTable extends HTMLElement {
 
     addRowClick() {
         this.dispatchEvent(new CustomEvent("addrow"))
+    }
+
+    removeColumnClick() {
+        this.dispatchEvent(new CustomEvent("removecolumn"))
+    }
+
+    removeRowClick() {
+        this.dispatchEvent(new CustomEvent("removerow"))
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

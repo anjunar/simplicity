@@ -9,7 +9,7 @@ class ToolbarInserts extends HTMLElement {
     unLink;
 
     initialize() {
-        this.contents.addEventListener("click", (event) => {
+        let handler = (event) => {
             let selection = window.getSelection();
             if (selection.anchorNode) {
                 let parentElement = selection.anchorNode.parentElement;
@@ -22,7 +22,13 @@ class ToolbarInserts extends HTMLElement {
                     }
                 }
             }
-        })
+        };
+
+        this.handler = this.contents.addEventListener("click",handler);
+
+        ToolbarInserts.prototype.destroy = () => {
+            this.contents.removeEventListener("click", handler);
+        }
     }
 
     insertLinkClick() {

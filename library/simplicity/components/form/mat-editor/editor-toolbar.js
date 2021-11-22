@@ -10,6 +10,7 @@ import MatTab from "../../navigation/mat-tab.js";
 import MatPage from "../../navigation/mat-page.js";
 import MatPages from "../../navigation/mat-pages.js";
 import ToolbarTable from "./toolbar/toolbar-table.js";
+import ToolbarFlexbox from "./toolbar/toolbar-flexbox.js";
 
 class EditorToolbar extends HTMLElement {
 
@@ -135,10 +136,6 @@ class EditorToolbar extends HTMLElement {
         this.dispatchEvent(new CustomEvent("inserttext"))
     }
 
-    insertTableClick(event) {
-        this.dispatchEvent(new CustomEvent("inserttable", {detail : event.detail}))
-    }
-
     insertOrderedListClick() {
         this.dispatchEvent(new CustomEvent("insertorderedlist"))
     }
@@ -147,12 +144,33 @@ class EditorToolbar extends HTMLElement {
         this.dispatchEvent(new CustomEvent("insertunorderedlist"))
     }
 
-    insertDivFlexClick() {
-        this.dispatchEvent(new CustomEvent("insertdivflex"))
+    insertDivFlexClick(event) {
+        this.dispatchEvent(new CustomEvent("insertdivflex", {detail : event.detail}))
     }
 
     insertParagraphClick() {
         this.dispatchEvent(new CustomEvent("insertparagraph"))
+    }
+
+
+    insertTableClick(event) {
+        this.dispatchEvent(new CustomEvent("inserttable", {detail : event.detail}))
+    }
+
+    addColumnClick() {
+        this.dispatchEvent(new CustomEvent("addcolumn"))
+    }
+
+    addRowClick() {
+        this.dispatchEvent(new CustomEvent("addrow"))
+    }
+
+    removeColumnClick() {
+        this.dispatchEvent(new CustomEvent("removecolumn"))
+    }
+
+    removeRowClick() {
+        this.dispatchEvent(new CustomEvent("removerow"))
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -164,7 +182,7 @@ class EditorToolbar extends HTMLElement {
     }
 
     static get components() {
-        return [ToolbarColors, ToolbarFont, ToolbarInserts, ToolbarJustify, ToolbarTools, ToolbarTable, MatTabs, MatTab, MatPages, MatPage]
+        return [ToolbarColors, ToolbarFont, ToolbarInserts, ToolbarJustify, ToolbarTools, ToolbarTable, ToolbarFlexbox, MatTabs, MatTab, MatPages, MatPage]
     }
 
     static get observedAttributes() {

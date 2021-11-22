@@ -46,10 +46,27 @@ button.thin {
     cursor: pointer;
     margin: 0;
     padding: 0;
-    width: 80px;
+    width: 100px;
     height: 20px;
     background-color: inherit;
     color: var(--main-font-color);
+}
+
+button.image {
+    border: 0;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    height: 24px;
+    width: 24px;
+    background-color: inherit;
+    color: var(--main-font-color);
+    filter: invert(100);
+}
+
+button.image img {
+    height: 100%;
+    width: 100%;
 }
 
 button.thin:not([disabled]):hover {

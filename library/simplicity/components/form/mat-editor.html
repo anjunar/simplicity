@@ -26,6 +26,14 @@
             content: "\00a0";
         }
 
+        mat-editor div.flex {
+            display: flex;
+        }
+
+        mat-editor div.flex div:empty:after {
+            content: "\00a0";
+        }
+
     </style>
 </head>
 <body>
@@ -48,7 +56,6 @@
                         bind:onjustifyleft="justifyLeftClick()"
                         bind:onjustifyright="justifyRightClick()"
                         bind:onjustifycenter="justifyCenterClick()"
-                        bind:oninsertdivflex="insertDivFlex()"
                         bind:onindent="indentClick()"
                         bind:onoutdent="outdentClick()"
                         bind:onfloatleft="floatLeftClick()"
@@ -66,11 +73,17 @@
                         bind:oninsertimage="insertImageClick()"
                         bind:oninserthorizontalrule="insertHorizontalRuleClick()"
                         bind:oninserttext="insertTextClick()"
-                        bind:oninserttable="insertTableClick($event)"
                         bind:oninsertorderedlist="insertOrderedListClick()"
                         bind:oninsertunorderedlist="insertUnorderedListClick()"
-                        bind:oninsertdivflex="insertDivFlexClick()"
-                        bind:oninsertparagraph="insertParagraphClick()">
+                        bind:oninsertparagraph="insertParagraphClick()"
+
+                        bind:oninserttable="insertTableClick($event)"
+                        bind:onaddColumn="addColumnClick($event)"
+                        bind:onaddRow="addRowClick($event)"
+                        bind:onRemoveColumn="removeColumnClick()"
+                        bind:onRemoveRow="removeRowClick()"
+
+                        bind:oninsertdivflex="insertDivFlexClick($event)">
         </editor-toolbar>
         <div bind:variable="contents" class="content" contenteditable="true" bind:oncontextmenu="contextmenuClick($event)"></div>
     </template>

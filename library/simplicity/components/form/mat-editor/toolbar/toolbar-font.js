@@ -43,14 +43,19 @@ class ToolbarFont extends HTMLElement {
 
     initialize() {
 
-        this.contents.addEventListener("click", (event) => {
+        let handler = (event) => {
             let computedStyle = window.getComputedStyle(event.target);
 
             this.fontAdjustUpper(computedStyle, event);
             this.fontAdjustLower(computedStyle);
 
-            lifeCycle(this);
-        })
+        };
+
+        this.contents.addEventListener("click", handler)
+
+        ToolbarFont.prototype.destroy = () => {
+            this.contents.removeEventListener("click", handler);
+        }
     }
 
     fontAdjustUpper(computedStyle, selection) {

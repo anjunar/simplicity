@@ -19,8 +19,7 @@ class MatEditor extends HTMLElement {
             this.model.html = this.contents.innerHTML;
             this.model.text = this.contents.innerText
             this.dispatchEvent(new Event("model"));
-
-        }, {lifeCycle: true});
+        });
 
         let element = this.querySelector("div.content");
         if (element.innerHTML !== this.model.html) {
@@ -245,9 +244,58 @@ class MatEditor extends HTMLElement {
             rowsHTML += "<tr>" + columnsHTML + "</tr>"
         }
 
-        let table = "<table>" + rowsHTML + "</table>";
+        let table = "<table><tbody>" + rowsHTML + "</tbody></table>";
 
         document.execCommand("insertHTML", false, table)
+    }
+
+    addColumnClick() {
+        let selection = document.getSelection();
+        let rangeAt = selection.getRangeAt(0);
+
+        let node = rangeAt.commonAncestorContainer;
+        let table = node.queryUpwards((node) => node.localName === "table")
+        let rows = table.querySelectorAll("tr");
+        for (const row of rows) {
+            row.appendChild(document.createElement("td"))
+        }
+    }
+
+    addRowClick() {
+        let selection = document.getSelection();
+        let rangeAt = selection.getRangeAt(0);
+        let node = rangeAt.commonAncestorContainer;
+        let table = node.queryUpwards((node) => node.localName === "table")
+        let tbody = table.querySelector("tbody");
+        let trBody = tbody.querySelector("tr")
+        let columns = trBody.querySelectorAll("td");
+
+        let tr = document.createElement("tr");
+        for (let i = 0; i < columns.length; i++) {
+            tr.appendChild(document.createElement("td"))
+        }
+        tbody.appendChild(tr)
+    }
+
+    removeColumnClick() {
+        let selection = document.getSelection();
+        let rangeAt = selection.getRangeAt(0);
+        let node = rangeAt.commonAncestorContainer;
+        let table = node.queryUpwards((node) => node.localName === "table")
+        let rows = table.querySelectorAll("tr");
+        for (const row of rows) {
+            let tds = row.querySelectorAll("td");
+            tds.item(tds.length - 1).remove();
+        }
+    }
+
+    removeRowClick() {
+        let selection = document.getSelection();
+        let rangeAt = selection.getRangeAt(0);
+        let node = rangeAt.commonAncestorContainer;
+        let table = node.queryUpwards((node) => node.localName === "table")
+        let trs = table.querySelectorAll("tr");
+        trs.item(trs.length - 1).remove();
     }
 
     insertOrderedListClick() {
@@ -258,11 +306,15 @@ class MatEditor extends HTMLElement {
         document.execCommand("insertUnorderedList")
     }
 
-    insertDivFlex() {
+    insertDivFlexClick(event) {
+        let columns = event.detail.columns;
 
-        let html = `<div is="editor-flexbox" style="display: flex">
-                                <div style="flex: 1">Insert here...</div>
-                            </div>`;
+        let columnsHTML = ""
+        for (let i = 0; i < columns; i++) {
+            columnsHTML += "<div></div>"
+        }
+
+        let html = "<div class='flex'>" + columnsHTML + "</div>"
 
         document.execCommand("insertHTML", false, html)
     }

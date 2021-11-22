@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <template>
+      <div style="display: flex; align-items: center; height: 100%">
+          <mat-input-container placeholder="Columns" style="width: 80px">
+              <input is="dom-input" type="number" bind:model="columns" min="0"/>
+          </mat-input-container>
+          <button  type="button" class="material-icons" title="Div FlexBox"
+                   bind:onclick="insertDivFlexClick(columns)">table_chart
+          </button>
+      </div>
+  </template>
+</body>
+</html>
