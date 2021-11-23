@@ -1,74 +1,135 @@
 import {customComponents} from "../../../../simplicity.js";
 import {loader} from "../../../../processors/loader-processor.js";
+import {windowManager} from "../../../../services/window-manager.js";
+import DomInput from "../../../../directives/dom-input.js";
+import MatInputContainer from "../../container/mat-input-container.js";
 
 class ToolbarInserts extends HTMLElement {
 
     contents;
 
-    link
-    unLink;
+    link = {
+        value : "",
+        active : false,
+        click : (link) => {
+            document.execCommand("createLink", false, link);
+        },
+        handler : (event) => {
+
+        }
+    }
+    unLink = {
+        active : false,
+        click : (event) => {
+            document.execCommand("unlink")
+        },
+        handler : (event) => {
+
+        }
+    }
+    image = {
+        active : false,
+        click : (event) => {
+            let selection = document.getSelection();
+            let rangeAt = selection.getRangeAt(0);
+
+            let options = {
+                width: "640px",
+                height: "480px",
+                header: "Image Upload"
+            };
+
+            windowManager.openWindow("/library/simplicity/components/form/mat-editor/dialog/image-upload-dialog", options).then((matWindow) => {
+                matWindow.addEventListener("ok", (event) => {
+                    let value = event.target.contents.value;
+                    document.getSelection().removeAllRanges();
+                    document.getSelection().addRange(rangeAt);
+                    document.execCommand("insertImage", false, value.data);
+                    matWindow.close();
+                })
+            })
+        },
+        handler : (event) => {
+
+        }
+    }
+    horizontalRule = {
+        active : false,
+        click : (event) => {
+            document.execCommand("insertHorizontalRule")
+        },
+        handler : (event) => {
+
+        }
+    }
+    text = {
+        active : false,
+        click : (event) => {
+            let selection = document.getSelection();
+            let rangeAt = selection.getRangeAt(0);
+
+            let options = {
+                width: "640px",
+                height: "480px",
+                header: "Text import"
+            };
+
+            windowManager.openWindow("/library/simplicity/components/form/mat-editor/dialog/text-dialog", options).then((matWindow) => {
+                matWindow.addEventListener("ok", (event) => {
+                    let value = event.target.contents.value;
+                    document.getSelection().removeAllRanges();
+                    document.getSelection().addRange(rangeAt);
+                    document.execCommand("insertText", false, value);
+                    matWindow.close();
+                })
+            });
+        },
+        handler : (event) => {
+
+        }
+    }
+    orderedList = {
+        active : false,
+        click : (event) => {
+            document.execCommand("insertOrderedList")
+        },
+        handler : (event) => {
+
+        }
+    }
+    unOrderedList = {
+        active : false,
+        click : (event) => {
+            document.execCommand("insertUnorderedList")
+        },
+        handler : (event) => {
+
+        }
+    }
+    paragraph = {
+        active : false,
+        click : (event) => {
+            document.execCommand("insertParagraph")
+        },
+        handler : (event) => {
+
+        }
+    }
+
+    inputs = [this.link, this.unLink, this.image, this.horizontalRule, this.text, this.orderedList, this.unOrderedList, this.paragraph];
 
     initialize() {
         let handler = (event) => {
-            let selection = window.getSelection();
-            if (selection.anchorNode) {
-                let parentElement = selection.anchorNode.parentElement;
-                switch (parentElement.localName) {
-                    case "a" : {
-                        this.link.classList.add("active");
-                    } break;
-                    default : {
-                        this.link.classList.remove("active")
-                    }
-                }
+            for (const input of this.inputs) {
+                input.handler(event)
             }
-        };
+        }
 
-        this.handler = this.contents.addEventListener("click",handler);
+        this.contents.addEventListener("click", handler);
 
         ToolbarInserts.prototype.destroy = () => {
             this.contents.removeEventListener("click", handler);
         }
-    }
-
-    insertLinkClick() {
-        this.dispatchEvent(new CustomEvent("insertlink"))
-    }
-
-    insertUnLinkClick() {
-        this.dispatchEvent(new CustomEvent("insertunlink"))
-    }
-
-    insertImageClick() {
-        this.dispatchEvent(new CustomEvent("insertimage"))
-    }
-
-    insertHorizontalRuleClick() {
-        this.dispatchEvent(new CustomEvent("inserthorizontalrule"))
-    }
-
-    insertTextClick() {
-        this.dispatchEvent(new CustomEvent("inserttext"))
-    }
-
-    insertTableClick(columnsSize) {
-        this.dispatchEvent(new CustomEvent("inserttable"))
-    }
-
-    insertOrderedListClick() {
-        this.dispatchEvent(new CustomEvent("insertorderedlist"))
-    }
-
-    insertUnorderedListClick() {
-        this.dispatchEvent(new CustomEvent("insertunorderedlist"))
-    }
-
-    insertDivFlexClick() {
-        this.dispatchEvent(new CustomEvent("insertdivflex"))
-    }
-
-    insertParagraphClick() {
-        this.dispatchEvent(new CustomEvent("insertparagraph"))
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -80,7 +141,7 @@ class ToolbarInserts extends HTMLElement {
     }
 
     static get components() {
-        return []
+        return [DomInput, MatInputContainer]
     }
 
     static get observedAttributes() {

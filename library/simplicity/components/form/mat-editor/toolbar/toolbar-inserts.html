@@ -17,38 +17,33 @@
 </head>
 <body>
 <template>
-    <div style="display: flex">
+    <div style="display: flex; align-items: center; height: 100%">
+        <mat-input-container placeholder="Link">
+            <input type="url" is="dom-input" bind:model="link.value">
+        </mat-input-container>
         <button  type="button" class="material-icons" title="Link" id="link"
-                 bind:onclick="insertLinkClick()">insert_link
+                 bind:onclick="link.click(link.value)">insert_link
         </button>
         <button  type="button" class="material-icons" title="unLink" id="unLink"
-                 bind:onclick="insertUnLinkClick()">link_off
+                 bind:onclick="unLink.click()">link_off
         </button>
         <button  type="button" class="material-icons" title="Image"
-                 bind:onclick="insertImageClick()">image
+                 bind:onclick="image.click()">image
         </button>
         <button  type="button" class="material-icons" title="Insert Hr"
-                 bind:onclick="insertHorizontalRuleClick()">code
+                 bind:onclick="horizontalRule.click()">code
         </button>
         <button  type="button" class="material-icons" title="Insert Text"
-                 bind:onclick="insertTextClick()">short_text
-        </button>
-    </div>
-    <div style="display: flex">
-        <button  type="button" class="material-icons" title="Table"
-                 bind:onclick="insertTableClick()">table_view
+                 bind:onclick="text.click()">short_text
         </button>
         <button  type="button" class="material-icons" title="Insert Ordered List"
-                 bind:onclick="insertOrderedListClick()">format_list_numbered
+                 bind:onclick="orderedList.click()">format_list_numbered
         </button>
         <button  type="button" class="material-icons" title="Insert Unordered List"
-                 bind:onclick="insertUnorderedListClick()">format_list_bulleted
-        </button>
-        <button  type="button" class="material-icons" title="Div FlexBox"
-                 bind:onclick="insertDivFlexClick()">table_chart
+                 bind:onclick="unOrderedList.click()">format_list_bulleted
         </button>
         <button  type="button" class="material-icons" title="Insert Paragraph"
-                 bind:onclick="insertParagraphClick()">notes
+                 bind:onclick="paragraph.click()">notes
         </button>
     </div>
 </template>

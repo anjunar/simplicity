@@ -31,6 +31,9 @@
             <mat-tab>
                 <div>Flexbox</div>
             </mat-tab>
+            <mat-tab>
+                <div>Inserts</div>
+            </mat-tab>
         </mat-tabs>
     </div>
 
@@ -53,6 +56,12 @@
         <mat-page>
             <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
                 <toolbar-flexbox class="row" bind:contents="contents"></toolbar-flexbox>
+                <div class="row" style="flex: 1"></div>
+            </div>
+        </mat-page>
+        <mat-page>
+            <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
+                <toolbar-inserts class="row" bind:contents="contents"></toolbar-inserts>
                 <div class="row" style="flex: 1"></div>
             </div>
         </mat-page>

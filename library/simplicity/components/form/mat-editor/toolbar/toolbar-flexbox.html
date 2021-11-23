@@ -24,7 +24,7 @@
                   <img src="./images/icons/icons8-delete-column-24.png">
               </button>
           </div>
-          <div style="margin-left: 5px">
+          <div style="margin-left: 5px; display: flex; align-items: center">
               <select is="dom-select" bind:model="justifyContent.value" bind:onmodel="justifyContent.click($event)" style="width: 100px">
                   <option value="normal" selected>Justify Content</option>
                   <option value="flex-start">Flex Start</option>
@@ -34,7 +34,6 @@
                   <option value="space-around">Space Around</option>
                   <option value="space-evenly">Space Evenly</option>
               </select>
-              <br/>
               <select is="dom-select" bind:model="alignItems.value" bind:onmodel="alignItems.click($event)" style="width: 100px">
                   <option value="normal">Align Items</option>
                   <option value="stretch">Stretch</option>
