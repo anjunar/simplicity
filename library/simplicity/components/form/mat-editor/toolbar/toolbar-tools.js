@@ -5,28 +5,40 @@ class ToolbarTools extends HTMLElement {
 
     contents;
 
-    copyClick() {
-        this.dispatchEvent(new CustomEvent("copy"))
+    copy = {
+        click() {
+            document.execCommand("copy")
+        }
     }
 
-    cutClick() {
-        this.dispatchEvent(new CustomEvent("cut"))
+    cut = {
+        click() {
+            document.execCommand("cut")
+        }
     }
 
-    undoClick() {
-        this.dispatchEvent(new CustomEvent("undo"))
+    undo = {
+        click() {
+            document.execCommand("undo")
+        }
     }
 
-    deleteClick() {
-        this.dispatchEvent(new CustomEvent("delete"))
+    delete = {
+        click() {
+            document.execCommand("delete")
+        }
     }
 
-    selectAllClick() {
-        this.dispatchEvent(new CustomEvent("selectall"))
+    selectAll = {
+        click() {
+            document.execCommand("selectALl")
+        }
     }
 
-    redoClick() {
-        this.dispatchEvent(new CustomEvent("redo"))
+    redo = {
+        click() {
+            document.execCommand("redo")
+        }
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

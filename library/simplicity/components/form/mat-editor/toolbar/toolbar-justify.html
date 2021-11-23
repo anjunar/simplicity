@@ -19,32 +19,32 @@
 <body>
 <template>
     <div style="display: flex">
-        <button bind:variable="justify"  type="button" class="material-icons" title="Justify Full"
-                bind:onclick="justifyFullClick()">format_align_justify
+        <button bind:class="justify.active ? 'active' : ''; 'material-icons'"  type="button" title="Justify Full"
+                bind:onclick="justify.click()">format_align_justify
         </button>
-        <button bind:variable="justifyLeft"  type="button" class="material-icons" title="Justify Left"
-                bind:onclick="justifyLeftClick()">format_align_left
+        <button bind:class="justifyLeft.active ? 'active' : ''; 'material-icons'"  type="button" title="Justify Left"
+                bind:onclick="justifyLeft.click()">format_align_left
         </button>
-        <button bind:variable="justifyRight"  type="button" class="material-icons" title="Justify Right"
-                bind:onclick="justifyRightClick()">format_align_right
+        <button bind:class="justifyRight.active ? 'active' : ''; 'material-icons'"  type="button" title="Justify Right"
+                bind:onclick="justifyRight.click()">format_align_right
         </button>
-        <button  bind:variable="justifyCenter" type="button" class="material-icons" title="Justify Center"
-                 bind:onclick="justifyCenterClick()">format_align_center
+        <button  bind:class="justifyCenter.active ? 'active' : ''; 'material-icons'" type="button" title="Justify Center"
+                 bind:onclick="justifyCenter.click()">format_align_center
         </button>
     </div>
     <div style="display: flex">
-        <button bind:variable="indent"  type="button" class="material-icons" title="Indent"
-                bind:onclick="indentClick()">format_indent_increase
+        <button bind:class="indent.active ? 'active' : ''; 'material-icons'"  type="button" title="Indent"
+                bind:onclick="indent.click()">format_indent_increase
         </button>
-        <button bind:variable="outdent"  type="button" class="material-icons" title="Outdent"
-                bind:onclick="outdentClick()">format_indent_decrease
+        <button bind:class="outdent.active ? 'active' : ''; 'material-icons'"  type="button" title="Outdent"
+                bind:onclick="outdent.click()">format_indent_decrease
         </button>
-        <button bind:variable="floatLeft"  type="button" class="material-icons" title="Float Left"
-                bind:onclick="floatLeftClick()">
+        <button bind:class="floatLeft.active ? 'active' : ''; 'material-icons'"  type="button" title="Float Left"
+                bind:onclick="floatLeft.click()">
             view_sidebar
         </button>
-        <button bind:variable="floatRight"  type="button" class="material-icons" title="Float Right"
-                bind:onclick="floatRightClick()">
+        <button bind:class="floatRight.active ? 'active' : ''; 'material-icons'"  type="button" title="Float Right"
+                bind:onclick="floatRight.click()">
             vertical_split
         </button>
 

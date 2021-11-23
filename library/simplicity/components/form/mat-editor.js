@@ -36,132 +36,6 @@ class MatEditor extends HTMLElement {
         }
     }
 
-    fontNameClick(event) {
-        document.execCommand("fontname", false, event.detail.select);
-    }
-
-    fontSizeClick(event) {
-        document.execCommand("fontSize", false, event.detail.select);
-    }
-
-    formatBlockClick(event) {
-        document.execCommand("formatBlock", false, event.detail.select)
-    }
-
-
-    boldClick() {
-        document.execCommand("styleWithCSS", false, true);
-        document.execCommand('bold', false, null)
-    }
-
-    italicClick() {
-        document.execCommand("styleWithCSS", false, true);
-        document.execCommand("italic", false, null);
-    }
-
-    strikethroughClick() {
-        document.execCommand("styleWithCSS", false, true);
-        document.execCommand("strikethrough", false, null)
-    }
-
-    subscriptClick() {
-        document.execCommand("styleWithCSS", false, true);
-        document.execCommand("subscript", false, null)
-    }
-
-    superscriptClick() {
-        document.execCommand("styleWithCSS", false, true);
-        document.execCommand("superscript", false, null)
-    }
-
-
-    colorClick(event) {
-        document.execCommand("styleWithCSS", false, true);
-        document.execCommand("foreColor", false, event.detail.select)
-    }
-
-    backGroundColorClick(event) {
-        document.execCommand("styleWithCSS", false, true);
-        document.execCommand("backColor", false, event.detail.select);
-    }
-
-
-    justifyFullClick() {
-        document.execCommand("justifyFull");
-    }
-
-    justifyLeftClick() {
-        document.execCommand("justifyLeft")
-    }
-
-    justifyRightClick() {
-        document.execCommand("justifyRight");
-    }
-
-    justifyCenterClick() {
-        document.execCommand("justifyCenter");
-    }
-
-    indentClick() {
-        document.execCommand("indent");
-    }
-
-    outdentClick() {
-        document.execCommand("outdent");
-    }
-
-    floatLeftClick() {
-        let selection = window.getSelection();
-        let parentElement = selection.anchorNode;
-
-        let computedStyle = window.getComputedStyle(parentElement);
-
-        if (computedStyle.float === "left") {
-            parentElement.style.float = "";
-        } else {
-            parentElement.style.float = "left";
-        }
-    }
-
-    floatRightClick() {
-        let selection = window.getSelection();
-        let parentElement = selection.anchorNode;
-
-        let computedStyle = window.getComputedStyle(parentElement);
-
-        if (computedStyle.float === "right") {
-            parentElement.style.float = "";
-        } else {
-            parentElement.style.float = "right";
-        }
-    }
-
-
-    copyClick() {
-        document.execCommand("copy")
-    }
-
-    cutClick() {
-        document.execCommand("cut")
-    }
-
-    undoClick() {
-        document.execCommand("undo")
-    }
-
-    deleteClick() {
-        document.execCommand("delete")
-    }
-
-    selectAllClick() {
-        document.execCommand("selectALl")
-    }
-
-    redoClick() {
-        document.execCommand("redo")
-    }
-
-
     insertLinkClick() {
         let dialog = linkDialog();
 
@@ -230,74 +104,6 @@ class MatEditor extends HTMLElement {
 
     }
 
-    insertTableClick(event) {
-        let columns = event.detail.columns;
-        let rows = event.detail.rows;
-
-        let columnsHTML = "";
-        for (let i = 0; i < columns; i++) {
-            columnsHTML += "<td></td>"
-        }
-
-        let rowsHTML = "";
-        for (let i = 0; i < rows; i++) {
-            rowsHTML += "<tr>" + columnsHTML + "</tr>"
-        }
-
-        let table = "<table><tbody>" + rowsHTML + "</tbody></table>";
-
-        document.execCommand("insertHTML", false, table)
-    }
-
-    addColumnClick() {
-        let selection = document.getSelection();
-        let rangeAt = selection.getRangeAt(0);
-
-        let node = rangeAt.commonAncestorContainer;
-        let table = node.queryUpwards((node) => node.localName === "table")
-        let rows = table.querySelectorAll("tr");
-        for (const row of rows) {
-            row.appendChild(document.createElement("td"))
-        }
-    }
-
-    addRowClick() {
-        let selection = document.getSelection();
-        let rangeAt = selection.getRangeAt(0);
-        let node = rangeAt.commonAncestorContainer;
-        let table = node.queryUpwards((node) => node.localName === "table")
-        let tbody = table.querySelector("tbody");
-        let trBody = tbody.querySelector("tr")
-        let columns = trBody.querySelectorAll("td");
-
-        let tr = document.createElement("tr");
-        for (let i = 0; i < columns.length; i++) {
-            tr.appendChild(document.createElement("td"))
-        }
-        tbody.appendChild(tr)
-    }
-
-    removeColumnClick() {
-        let selection = document.getSelection();
-        let rangeAt = selection.getRangeAt(0);
-        let node = rangeAt.commonAncestorContainer;
-        let table = node.queryUpwards((node) => node.localName === "table")
-        let rows = table.querySelectorAll("tr");
-        for (const row of rows) {
-            let tds = row.querySelectorAll("td");
-            tds.item(tds.length - 1).remove();
-        }
-    }
-
-    removeRowClick() {
-        let selection = document.getSelection();
-        let rangeAt = selection.getRangeAt(0);
-        let node = rangeAt.commonAncestorContainer;
-        let table = node.queryUpwards((node) => node.localName === "table")
-        let trs = table.querySelectorAll("tr");
-        trs.item(trs.length - 1).remove();
-    }
-
     insertOrderedListClick() {
         document.execCommand("insertOrderedList")
     }
@@ -306,22 +112,10 @@ class MatEditor extends HTMLElement {
         document.execCommand("insertUnorderedList")
     }
 
-    insertDivFlexClick(event) {
-        let columns = event.detail.columns;
-
-        let columnsHTML = ""
-        for (let i = 0; i < columns; i++) {
-            columnsHTML += "<div></div>"
-        }
-
-        let html = "<div class='flex'>" + columnsHTML + "</div>"
-
-        document.execCommand("insertHTML", false, html)
-    }
-
     insertParagraphClick() {
         document.execCommand("insertParagraph")
     }
+
 
     contextmenuClick(event) {
         event.stopPropagation();

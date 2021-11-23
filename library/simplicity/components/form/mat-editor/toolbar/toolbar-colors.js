@@ -5,12 +5,14 @@ import DomSelect from "../../../../directives/dom-select.js";
 class ToolbarColors extends HTMLElement {
 
     contents;
-    color = "none";
-    backGroundColor = "none";
 
-    initialize() {
-
-        let handler = (event) => {
+    color = {
+        value : "none",
+        click : (event) => {
+            document.execCommand("styleWithCSS", false, true);
+            document.execCommand("foreColor", false, event.target.value)
+        },
+        handler : (event) => {
             function rgbToHex(color) {
                 color = "" + color;
                 if (!color || color.indexOf("rgb") < 0) {
@@ -35,25 +37,36 @@ class ToolbarColors extends HTMLElement {
 
             let computedStyle = window.getComputedStyle(event.target);
 
-            this.color = rgbToHex(computedStyle.color) || "none";
-            this.backGroundColor = computedStyle.backgroundColor || "none";
+            this.color.value = rgbToHex(computedStyle.color) || "none";
+        }
+    };
 
+    backGroundColor = {
+        value : "rgba(0, 0, 0, 0)",
+        click : (event) => {
+            document.execCommand("styleWithCSS", false, true);
+            document.execCommand("backColor", false, event.target.value);
+        },
+        handler : (event) => {
+            let computedStyle = window.getComputedStyle(event.target);
+            this.backGroundColor.value = computedStyle.backgroundColor || "none";
+        }
+    };
 
-        };
+    inputs = [this.color, this.backGroundColor];
 
-        this.contents.addEventListener("click", handler)
+    initialize() {
+        let handler = (event) => {
+            for (const input of this.inputs) {
+                input.handler(event)
+            }
+        }
+
+        this.contents.addEventListener("click", handler);
 
         ToolbarColors.prototype.destroy = () => {
             this.contents.removeEventListener("click", handler);
         }
-    }
-
-    backGroundColorClick(event) {
-        this.dispatchEvent(new CustomEvent("backgroundcolor", {detail: {select: event.target.value}}))
-    }
-
-    colorClick(event) {
-        this.dispatchEvent(new CustomEvent("color", {detail: {select: event.target.value}}))
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

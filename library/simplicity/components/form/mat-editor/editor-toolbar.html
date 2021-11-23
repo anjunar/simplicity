@@ -37,88 +37,26 @@
     <mat-pages bind:page="page">
         <mat-page>
             <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%">
-                <toolbar-font class="row"
-                              bind:contents="contents"
-                              bind:onfontname="fontNameClick($event)"
-                              bind:onfontsize="fontSizeClick($event)"
-                              bind:onformatblock="formatBlockClick($event)"
-                              bind:onbold="boldClick()"
-                              bind:onitalic="italicClick()"
-                              bind:onstrikethrough="strikethroughClick()"
-                              bind:onsubscript="subscriptClick()"
-                              bind:onsupscript="superscriptClick()"
-                ></toolbar-font>
-                <toolbar-colors class="row"
-                                bind:contents="contents"
-                                bind:onbackgroundcolor="backGroundColorClick($event)"
-                                bind:oncolor="colorClick($event)"
-                ></toolbar-colors>
-                <toolbar-justify class="row"
-                                 bind:contents="contents"
-                                 bind:onjustifyfull="justifyFullClick()"
-                                 bind:onjustifyleft="justifyLeftClick()"
-                                 bind:onjustifyright="justifyRightClick()"
-                                 bind:onjustifycenter="justifyCenterClick()"
-                                 bind:onindent="indentClick()"
-                                 bind:onoutdent="outdentClick()"
-                                 bind:onfloatleft="floatLeftClick()"
-                                 bind:onfloatright="floatRightClick()"
-                ></toolbar-justify>
-                <toolbar-tools class="row"
-                               bind:contents="contents"
-                               bind:oncopy="copyClick()"
-                               bind:oncut="cutClick()"
-                               bind:onundo="undoClick()"
-                               bind:ondelete="deleteClick()"
-                               bind:onselectall="selectAllClick()"
-                               bind:onredo="redoClick()"
-                ></toolbar-tools>
+                <toolbar-font class="row" bind:contents="contents"></toolbar-font>
+                <toolbar-colors class="row" bind:contents="contents"></toolbar-colors>
+                <toolbar-justify class="row" bind:contents="contents"></toolbar-justify>
+                <toolbar-tools class="row" bind:contents="contents"></toolbar-tools>
                 <div class="row" style="flex: 1"></div>
             </div>
         </mat-page>
         <mat-page>
             <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
-                <toolbar-table class="row"
-                               bind:contents="contents"
-                               bind:oninserttable="insertTableClick($event)"
-                               bind:onaddColumn="addColumnClick()"
-                               bind:onaddRow="addRowClick()"
-                               bind:onRemoveColumn="removeColumnClick()"
-                               bind:onRemoveRow="removeRowClick()"
-                ></toolbar-table>
+                <toolbar-table class="row" bind:contents="contents"></toolbar-table>
                 <div class="row" style="flex: 1"></div>
             </div>
         </mat-page>
         <mat-page>
             <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
-                <toolbar-flexbox class="row"
-                                 bind:contents="contents"
-                                 bind:oninsertdivflex="insertDivFlexClick($event)">
-                </toolbar-flexbox>
+                <toolbar-flexbox class="row" bind:contents="contents"></toolbar-flexbox>
                 <div class="row" style="flex: 1"></div>
             </div>
         </mat-page>
     </mat-pages>
-
-<!--
-    <div style="display: flex; align-items : stretch; justify-content: flex-start;">
-        <toolbar-inserts class="row"
-                         bind:content="content"
-                         bind:oninsertlink="insertLinkClick()"
-                         bind:oninsertunlink="insertUnLinkClick()"
-                         bind:oninsertimage="insertImageClick()"
-                         bind:oninserthorizontalrule="insertHorizontalRuleClick()"
-                         bind:oninserttext="insertTextClick()"
-                         bind:oninserttable="insertTableClick()"
-                         bind:oninsertorderedlist="insertOrderedListClick()"
-                         bind:oninsertunorderedlist="insertUnorderedListClick()"
-                         bind:oninsertparagraph="insertParagraphClick()"
-                         bind:oninserttext="insertTextClick()"
-        ></toolbar-inserts>
-        <div class="row" style="flex: 1"></div>
-    </div>
-    </div>
--->
 </template>
 </body>
 </html>

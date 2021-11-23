@@ -6,13 +6,44 @@
 </head>
 <body>
   <template>
-      <div style="display: flex; align-items: center; height: 100%">
-          <mat-input-container placeholder="Columns" style="width: 80px">
-              <input is="dom-input" type="number" bind:model="columns" min="0"/>
-          </mat-input-container>
-          <button  type="button" class="material-icons" title="Div FlexBox"
-                   bind:onclick="insertDivFlexClick(columns)">table_chart
-          </button>
+      <div style="display: flex">
+          <div style="display: flex; align-items: center; height: 100%">
+              <mat-input-container placeholder="Columns" style="width: 80px">
+                  <input is="dom-input" type="number" bind:model="columns.value" min="0"/>
+              </mat-input-container>
+              <button  type="button" class="material-icons" title="Div FlexBox"
+                       bind:onclick="insertDivFlex.click(columns.value)">table_chart
+              </button>
+          </div>
+          <div style="display: flex; align-items: center">
+              <button type="button" class="image" bind:onclick="addColumn.click()" bind:disabled="addColumn.disabled">
+                  <img src="./images/icons/icons8-add-column-24.png">
+              </button>
+              <br/>
+              <button type="button" class="image" bind:onclick="removeColumn.click()" bind:disabled="removeColumn.disabled">
+                  <img src="./images/icons/icons8-delete-column-24.png">
+              </button>
+          </div>
+          <div style="margin-left: 5px">
+              <select is="dom-select" bind:model="justifyContent.value" bind:onmodel="justifyContent.click($event)" style="width: 100px">
+                  <option value="normal" selected>Justify Content</option>
+                  <option value="flex-start">Flex Start</option>
+                  <option value="flex-end">Flex End</option>
+                  <option value="center">Center</option>
+                  <option value="space-between">Space Between</option>
+                  <option value="space-around">Space Around</option>
+                  <option value="space-evenly">Space Evenly</option>
+              </select>
+              <br/>
+              <select is="dom-select" bind:model="alignItems.value" bind:onmodel="alignItems.click($event)" style="width: 100px">
+                  <option value="normal">Align Items</option>
+                  <option value="stretch">Stretch</option>
+                  <option value="flex-start">Flex Start</option>
+                  <option value="flex-end">Flex End</option>
+                  <option value="center">Center</option>
+                  <option value="baseline">Baseline</option>
+              </select>
+          </div>
       </div>
   </template>
 </body>

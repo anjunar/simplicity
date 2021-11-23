@@ -17,7 +17,7 @@
 <body>
 <template>
     <div style="display: flex">
-        <select bind:model="color" is="dom-select" bind:onmodel="colorClick($event)" style="width: 100px; border: 0; margin: 5px">
+        <select bind:model="color.value" is="dom-select" bind:onmodel="color.click($event)" style="width: 100px; border: 0; margin: 5px">
             <option value="none" selected>Choose</option>
             <option value="#dddddd"><span style="color:#dddddd">Font</span></option>
             <option value="#3c3f41"><span style="color:#3c3f41">Normal</span></option>
@@ -29,9 +29,9 @@
         <label style="line-height: 26px" >Font Color</label>
     </div>
     <div style="display: flex">
-        <select bind:model="backGroundColor" is="dom-select" bind:onmodel="backGroundColorClick($event)"
+        <select bind:model="backGroundColor.value" is="dom-select" bind:onmodel="backGroundColor.click($event)"
                 style="width: 100px; border: 0; margin: 5px">
-            <option value="none" selected>Choose</option>
+            <option value="rgba(0, 0, 0, 0)" selected>Choose</option>
             <option value="rgb(221, 221, 221)"><span style="color:#dddddd">Font</span></option>
             <option value="rgb(60, 63, 65)"><span style="color:#3c3f41">Normal</span></option>
             <option value="rgb(255, 70, 63)"><span style="color:#ff463f">Error</span></option>

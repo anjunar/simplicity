@@ -19,24 +19,24 @@
 <template>
     <div style="display: flex">
         <button  type="button" class="material-icons" title="Copy"
-                 bind:onclick="copyClick()">file_copy
+                 bind:onclick="copy.click()">file_copy
         </button>
         <button  type="button" class="material-icons" title="Cut"
-                 bind:onclick="cutClick()">content_cut
+                 bind:onclick="cut.click()">content_cut
         </button>
         <button  type="button" class="material-icons" title="Undo"
-                 bind:onclick="undoClick()">undo
+                 bind:onclick="undo.click()">undo
         </button>
     </div>
     <div style="display: flex">
         <button  type="button" class="material-icons" title="Delete"
-                 bind:onclick="deleteClick()">delete
+                 bind:onclick="delete.click()">delete
         </button>
         <button  type="button" class="material-icons" title="Select All"
-                 bind:onclick="selectAllClick()">select_all
+                 bind:onclick="selectAll.click()">select_all
         </button>
         <button  type="button" class="material-icons" title="Redo"
-                 bind:onclick="redoClick()">redo
+                 bind:onclick="redo.click()">redo
         </button>
     </div>
 </template>

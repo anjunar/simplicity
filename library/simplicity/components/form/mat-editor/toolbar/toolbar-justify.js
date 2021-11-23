@@ -1,170 +1,146 @@
 import {customComponents} from "../../../../simplicity.js";
-import {lifeCycle} from "../../../../processors/life-cycle-processor.js";
 import {loader} from "../../../../processors/loader-processor.js";
 
 class ToolbarJustify extends HTMLElement {
 
     contents;
 
-    justify
-    justifyLeft
-    justifyRight
-    justifyCenter;
+    justify = {
+        active : false,
+        click : (event) => {
+            document.execCommand("justifyFull");
+            this.justify.active = true;
+            this.justifyLeft.active = false;
+            this.justifyRight.active = false;
+            this.justifyCenter.active = false;
+        },
+        handler : (event) => {
+            let computedStyle = window.getComputedStyle(event.target);
+            this.justify.active = computedStyle.textAlign === "justify";
+        }
+    }
+    justifyLeft = {
+        active : false,
+        click : (event) => {
+            document.execCommand("justifyLeft");
+            this.justify.active = false;
+            this.justifyLeft.active = true;
+            this.justifyRight.active = false;
+            this.justifyCenter.active = false;
+        },
+        handler : (event) => {
+            let computedStyle = window.getComputedStyle(event.target);
+            this.justifyLeft.active = computedStyle.textAlign === "left";
+        }
+    }
+    justifyRight = {
+        active : false,
+        click : (event) => {
+            document.execCommand("justifyRight");
+            this.justify.active = false;
+            this.justifyLeft.active = false;
+            this.justifyRight.active = true;
+            this.justifyCenter.active = false;
+        },
+        handler : (event) => {
+            let computedStyle = window.getComputedStyle(event.target);
+            this.justifyRight.active = computedStyle.textAlign === "right";
+        }
+    }
+    justifyCenter = {
+        active : false,
+        click : (event) => {
+            document.execCommand("justifyCenter");
+            this.justify.active = false;
+            this.justifyLeft.active = false;
+            this.justifyRight.active = false;
+            this.justifyCenter.active = true;
+        },
+        handler : (event) => {
+            let computedStyle = window.getComputedStyle(event.target);
+            this.justifyCenter.active = computedStyle.textAlign === "center";
+        }
+    }
 
-    indent
-    outdent
-    floatLeft
-    floatRight;
+    indent = {
+        active : false,
+        click : (event) => {
+            document.execCommand("indent");
+        },
+        handler : (event) => {
+            //Todo: Needs to be implemented
+        }
+    }
+    outdent = {
+        active : false,
+        click : (event) => {
+            document.execCommand("outdent");
+        },
+        handler : (event) => {
+            //Todo: Needs to be implemented
+        }
+    }
+    floatLeft = {
+        active : false,
+        click : (event) => {
+            let selection = window.getSelection();
+            let parentElement = selection.anchorNode.parentElement;
+
+            let computedStyle = window.getComputedStyle(parentElement);
+
+            if (computedStyle.float === "left") {
+                parentElement.style.float = "";
+                this.floatLeft.active = false;
+            } else {
+                parentElement.style.float = "left";
+                this.floatLeft.active = true;
+                this.floatRight.active = false;
+            }
+        },
+        handler : (event) => {
+            let computedStyle = window.getComputedStyle(event.target);
+            this.floatLeft.active = computedStyle.float === "left"
+        }
+    }
+    floatRight = {
+        active : false,
+        click : (event) => {
+            let selection = window.getSelection();
+            let parentElement = selection.anchorNode.parentElement;
+
+            let computedStyle = window.getComputedStyle(parentElement);
+
+            if (computedStyle.float === "right") {
+                parentElement.style.float = "";
+                this.floatRight.active = false;
+            } else {
+                parentElement.style.float = "right";
+                this.floatLeft.active = false;
+                this.floatRight.active = true;
+            }
+        },
+        handler : (event) => {
+            let computedStyle = window.getComputedStyle(event.target);
+            this.floatRight.active = computedStyle.float === "right"
+        }
+    }
+
+    inputs = [this.justify, this.justifyLeft, this.justifyRight, this.justifyCenter, this.outdent, this.indent, this.floatLeft, this.floatRight];
 
     initialize() {
         let handler = (event) => {
-            let computedStyle = window.getComputedStyle(event.target);
-
-            let textAlign = computedStyle.textAlign;
-            if (textAlign === "justify") {
-                this.justify.classList.add("active");
-            } else {
-                this.justify.classList.remove("active");
+            for (const input of this.inputs) {
+                input.handler(event)
             }
-
-            if (textAlign === "left") {
-                this.justifyLeft.classList.add("active");
-            } else {
-                this.justifyLeft.classList.remove("active");
-            }
-
-            if (textAlign === "right") {
-                this.justifyRight.classList.add("active");
-            } else {
-                this.justifyRight.classList.remove("active");
-            }
-
-            if (textAlign === "center") {
-                this.justifyCenter.classList.add("active");
-            } else {
-                this.justifyCenter.classList.remove("active");
-            }
-
-            let selection = window.getSelection();
-            if (selection.anchorNode) {
-                let parentElementParentElement = selection.anchorNode.parentElement.parentElement;
-                if (parentElementParentElement.localName === "blockquote") {
-                    this.indent.classList.add("active");
-                } else {
-                    this.indent.classList.remove("active")
-                }
-            }
-
-            let float = computedStyle.float
-            switch (float) {
-                case "left" : {
-                    this.floatLeft.classList.add("active")
-                    this.floatRight.classList.remove("active")
-                } break
-                case "right" : {
-                    this.floatLeft.classList.remove("active")
-                    this.floatRight.classList.add("active")
-                } break;
-                default : {
-                    this.floatLeft.classList.remove("active")
-                    this.floatRight.classList.remove("active")
-                }
-            }
-
         }
 
-        this.handler = this.contents.addEventListener("click",  handler)
+        this.contents.addEventListener("click", handler);
 
         ToolbarJustify.prototype.destroy = () => {
             this.contents.removeEventListener("click", handler);
         }
     }
 
-
-    justifyFullClick() {
-        this.dispatchEvent(new CustomEvent("justifyfull"))
-        this.justify.classList.add("active")
-        this.justifyLeft.classList.remove("active")
-        this.justifyRight.classList.remove("active")
-        this.justifyCenter.classList.remove("active")
-    }
-
-    justifyLeftClick() {
-        this.dispatchEvent(new CustomEvent("justifyleft"))
-        this.justify.classList.remove("active")
-        this.justifyLeft.classList.add("active")
-        this.justifyRight.classList.remove("active")
-        this.justifyCenter.classList.remove("active")
-    }
-
-    justifyRightClick() {
-        this.dispatchEvent(new CustomEvent("justifyright"))
-        this.justify.classList.remove("active")
-        this.justifyLeft.classList.remove("active")
-        this.justifyRight.classList.add("active")
-        this.justifyCenter.classList.remove("active")
-    }
-
-    justifyCenterClick() {
-        this.dispatchEvent(new CustomEvent("justifycenter"))
-        this.justify.classList.remove("active")
-        this.justifyLeft.classList.remove("active")
-        this.justifyRight.classList.remove("active")
-        this.justifyCenter.classList.add("active")
-    }
-
-    indentClick() {
-        this.dispatchEvent(new CustomEvent("indent"))
-        this.indent.classList.add("active")
-    }
-
-    outdentClick() {
-        this.dispatchEvent(new CustomEvent("outdent"))
-        this.outdent.classList.add("active")
-    }
-
-    floatLeftClick() {
-        this.dispatchEvent(new CustomEvent("floatleft"))
-        let selection = window.getSelection();
-        let computedStyle = window.getComputedStyle(selection.anchorNode);
-
-        let float = computedStyle.float
-        switch (float) {
-            case "left" : {
-                this.floatLeft.classList.add("active")
-                this.floatRight.classList.remove("active")
-            } break
-            case "right" : {
-                this.floatLeft.classList.remove("active")
-                this.floatRight.classList.add("active")
-            } break;
-            default : {
-                this.floatLeft.classList.remove("active")
-                this.floatRight.classList.remove("active")
-            }
-        }
-    }
-
-    floatRightClick() {
-        this.dispatchEvent(new CustomEvent("floatright"))
-        let selection = window.getSelection();
-        let computedStyle = window.getComputedStyle(selection.anchorNode);
-        let float = computedStyle.float
-        switch (float) {
-            case "left" : {
-                this.floatLeft.classList.add("active")
-                this.floatRight.classList.remove("active")
-            } break
-            case "right" : {
-                this.floatLeft.classList.remove("active")
-                this.floatRight.classList.add("active")
-            } break;
-            default : {
-                this.floatLeft.classList.remove("active")
-                this.floatRight.classList.remove("active")
-            }
-        }
-    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
@@ -180,8 +156,8 @@ class ToolbarJustify extends HTMLElement {
 
     static get observedAttributes() {
         return [{
-            name : "contents",
-            type : "input"
+            name: "contents",
+            type: "input"
         }]
     }
 

@@ -38,53 +38,7 @@
 </head>
 <body>
     <template>
-        <editor-toolbar bind:contents="contents"
-                        bind:onfontname="fontNameClick($event)"
-                        bind:onfontsize="fontSizeClick($event)"
-                        bind:onformatblock="formatBlockClick($event)"
-
-                        bind:onbold="boldClick()"
-                        bind:onitalic="italicClick()"
-                        bind:onstrikethrough="strikethroughClick()"
-                        bind:onsubscript="subscriptClick()"
-                        bind:onsupscript="superscriptClick()"
-
-                        bind:oncolor="colorClick($event)"
-                        bind:onbackgroundcolor="backGroundColorClick($event)"
-
-                        bind:onjustifyfull="justifyFullClick()"
-                        bind:onjustifyleft="justifyLeftClick()"
-                        bind:onjustifyright="justifyRightClick()"
-                        bind:onjustifycenter="justifyCenterClick()"
-                        bind:onindent="indentClick()"
-                        bind:onoutdent="outdentClick()"
-                        bind:onfloatleft="floatLeftClick()"
-                        bind:onfloatright="floatRightClick()"
-
-                        bind:oncopy="copyClick()"
-                        bind:oncut="cutClick()"
-                        bind:onundo="undoClick()"
-                        bind:ondelete="deleteClick()"
-                        bind:onselectall="selectAllClick()"
-                        bind:onredo="redoClick()"
-
-                        bind:oninsertlink="insertLinkClick()"
-                        bind:oninsertunlink="insertUnLinkClick()"
-                        bind:oninsertimage="insertImageClick()"
-                        bind:oninserthorizontalrule="insertHorizontalRuleClick()"
-                        bind:oninserttext="insertTextClick()"
-                        bind:oninsertorderedlist="insertOrderedListClick()"
-                        bind:oninsertunorderedlist="insertUnorderedListClick()"
-                        bind:oninsertparagraph="insertParagraphClick()"
-
-                        bind:oninserttable="insertTableClick($event)"
-                        bind:onaddColumn="addColumnClick($event)"
-                        bind:onaddRow="addRowClick($event)"
-                        bind:onRemoveColumn="removeColumnClick()"
-                        bind:onRemoveRow="removeRowClick()"
-
-                        bind:oninsertdivflex="insertDivFlexClick($event)">
-        </editor-toolbar>
+        <editor-toolbar bind:contents="contents"></editor-toolbar>
         <div bind:variable="contents" class="content" contenteditable="true" bind:oncontextmenu="contextmenuClick($event)"></div>
     </template>
 </body>
