@@ -21,9 +21,12 @@ class DomSlot extends HTMLSlotElement {
             content = this.template.content;
         }
 
-        let mutationObserver = new MutationObserver(() => {
-            this.render();
-            lifeCycle();
+        let mutationObserver = new MutationObserver((records) => {
+            let find = records.find((record) => record.addedNodes.length > 0);
+            if (find) {
+                this.render();
+                lifeCycle();
+            }
         })
 
         mutationObserver.observe(content, {subtree : true, childList : true})
