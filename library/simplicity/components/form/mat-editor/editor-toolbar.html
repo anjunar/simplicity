@@ -14,58 +14,21 @@
             border: var(--main-dark1-color) solid 1px;
             align-items: stretch;
             vertical-align: top;
+            flex : 1
         }
 
     </style>
 </head>
 <body>
 <template>
-    <div style="border: 1px solid var(--main-dark1-color); margin: 2px">
-        <mat-tabs bind:page="page">
-            <mat-tab>
-                <div>Start</div>
-            </mat-tab>
-            <mat-tab>
-                <div>Table</div>
-            </mat-tab>
-            <mat-tab>
-                <div>Flexbox</div>
-            </mat-tab>
-            <mat-tab>
-                <div>Inserts</div>
-            </mat-tab>
-        </mat-tabs>
+    <div style="display: flex; align-items : stretch; justify-content: flex-start; flex-wrap : wrap; width: 100%">
+        <toolbar-font class="row" bind:contents="contents"></toolbar-font>
+        <toolbar-colors class="row" bind:contents="contents"></toolbar-colors>
+        <toolbar-justify class="row" bind:contents="contents"></toolbar-justify>
+        <toolbar-tools class="row" bind:contents="contents"></toolbar-tools>
+        <toolbar-inserts class="row" bind:contents="contents"></toolbar-inserts>
+        <div class="row" style="flex: 1"></div>
     </div>
-
-    <mat-pages bind:page="page">
-        <mat-page>
-            <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%">
-                <toolbar-font class="row" bind:contents="contents"></toolbar-font>
-                <toolbar-colors class="row" bind:contents="contents"></toolbar-colors>
-                <toolbar-justify class="row" bind:contents="contents"></toolbar-justify>
-                <toolbar-tools class="row" bind:contents="contents"></toolbar-tools>
-                <div class="row" style="flex: 1"></div>
-            </div>
-        </mat-page>
-        <mat-page>
-            <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
-                <toolbar-table class="row" bind:contents="contents"></toolbar-table>
-                <div class="row" style="flex: 1"></div>
-            </div>
-        </mat-page>
-        <mat-page>
-            <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
-                <toolbar-flexbox class="row" bind:contents="contents"></toolbar-flexbox>
-                <div class="row" style="flex: 1"></div>
-            </div>
-        </mat-page>
-        <mat-page>
-            <div style="display: flex; align-items : stretch; justify-content: flex-start; width: 100%; height: 48px">
-                <toolbar-inserts class="row" bind:contents="contents"></toolbar-inserts>
-                <div class="row" style="flex: 1"></div>
-            </div>
-        </mat-page>
-    </mat-pages>
 </template>
 </body>
 </html>

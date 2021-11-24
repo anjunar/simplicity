@@ -27,6 +27,36 @@ class ToolbarInserts extends HTMLElement {
 
         }
     }
+    insertDivFlex = {
+        disabled : false,
+        click : (columns = 2) => {
+            let columnsHTML = ""
+            for (let i = 0; i < columns; i++) {
+                columnsHTML += "<div></div>"
+            }
+
+            let html = "<div class='flex'>" + columnsHTML + "</div>"
+
+            document.execCommand("insertHTML", false, html)
+        }
+    }
+    insertTable = {
+        click : (columns = 2, rows = 2 ) => {
+            let columnsHTML = "";
+            for (let i = 0; i < columns; i++) {
+                columnsHTML += "<td></td>"
+            }
+
+            let rowsHTML = "";
+            for (let i = 0; i < rows; i++) {
+                rowsHTML += "<tr>" + columnsHTML + "</tr>"
+            }
+
+            let table = "<table><tbody>" + rowsHTML + "</tbody></table>";
+
+            document.execCommand("insertHTML", false, table)
+        }
+    }
     image = {
         active : false,
         click : (event) => {

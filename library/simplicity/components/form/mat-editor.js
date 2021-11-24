@@ -48,7 +48,7 @@ class MatEditor extends HTMLElement {
             newPath.push(segment);
         }
 
-        windowManager.openWindow("/library/simplicity/components/form/mat-editor/dialog/context-dialog", {
+        windowManager.openWindow("/library/simplicity/components/form/mat-editor/dialog/extended-dialog", {
             data: {
                 path: newPath
             }

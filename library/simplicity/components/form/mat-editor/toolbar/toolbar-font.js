@@ -7,7 +7,7 @@ class ToolbarFont extends HTMLElement {
     contents;
 
     fontName = {
-        value : "none",
+        value : "Helvetica, serif",
         click : (event) => {
             document.execCommand("fontname", false, event.target.value);
         },
@@ -17,7 +17,7 @@ class ToolbarFont extends HTMLElement {
         }
     }
     fontSize = {
-        value : "none",
+        value : "3",
         click : (event) => {
             document.execCommand("fontSize", false, event.target.value);
         },

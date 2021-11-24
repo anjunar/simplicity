@@ -18,14 +18,17 @@
 <body>
 <template>
     <div style="display: flex; align-items: center; height: 100%">
-        <mat-input-container placeholder="Link">
-            <input type="url" is="dom-input" bind:model="link.value">
-        </mat-input-container>
         <button  type="button" class="material-icons" title="Link" id="link"
                  bind:onclick="link.click(link.value)">insert_link
         </button>
         <button  type="button" class="material-icons" title="unLink" id="unLink"
                  bind:onclick="unLink.click()">link_off
+        </button>
+        <button  type="button" class="material-icons" title="Div FlexBox"
+                 bind:onclick="insertDivFlex.click()">table_chart
+        </button>
+        <button type="button" class="material-icons" title="Table"
+                bind:onclick="insertTable.click()">table_view
         </button>
         <button  type="button" class="material-icons" title="Image"
                  bind:onclick="image.click()">image

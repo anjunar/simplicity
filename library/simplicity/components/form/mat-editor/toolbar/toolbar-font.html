@@ -19,8 +19,7 @@
 <template>
   <div style="display: flex;">
     <select bind:model="fontName.value" bind:onmodel="fontName.click($event)" is="dom-select"
-            style="border: 0; margin: 5px">
-      <option value="none" selected>Choose</option>
+            style="border: 0; margin: 5px; width: 80px">
       <option value="Georgia, serif">Georgia</option>
       <option value="Palatino Linotype, serif">Palatino</option>
       <option value="Times New Roman, serif">Times new Roman</option>
@@ -36,8 +35,7 @@
       <option value="Lucida Console, serif">Lucida</option>
     </select>
 
-    <select bind:model="fontSize.value" is="dom-select" bind:onmodel="fontSize.click($event)" style="border: 0;  margin: 5px">
-      <option value="none" selected>Choose</option>
+    <select bind:model="fontSize.value" is="dom-select" bind:onmodel="fontSize.click($event)" style="border: 0;  margin: 5px; width: 80px">
       <option value="1">x-small</option>
       <option value="2">small</option>
       <option value="3">medium</option>
@@ -45,8 +43,8 @@
       <option value="5">x-large</option>
       <option value="6">xx-large</option>
     </select>
-    <select bind:model="formatBlock.value" is="dom-select" bind:onmodel="formatBlock.click($event)" style="border: 0;  margin: 5px">
-      <option value="none" selected>Choose</option>
+    <select bind:model="formatBlock.value" is="dom-select" bind:onmodel="formatBlock.click($event)" style="border: 0;  margin: 5px; width: 80px">
+      <option value="none" selected>Format</option>
       <option value="H1">H1</option>
       <option value="H2">H2</option>
       <option value="H3">H3</option>
@@ -54,23 +52,23 @@
       <option value="H5">H5</option>
       <option value="H6">H6</option>
     </select>
-  </div>
-  <div style="display: flex;">
-    <button bind:class="bold.active ? 'active' : ''; 'material-icons'"  type="button" title="Bold"
-            bind:onclick="bold.click()">format_bold
-    </button>
-    <button bind:class="italic.active ? 'active' : ''; 'material-icons'"  type="button" title="Italic"
-            bind:onclick="italic.click()">format_italic
-    </button>
-    <button bind:class="strikeThrough.active ? 'active' : ''; 'material-icons'"  type="button" title="Strike Through"
-            bind:onclick="strikeThrough.click()">strikethrough_s
-    </button>
-    <button bind:class="subScript.active ? 'active' : ''; 'material-icons'" type="button" title="Subscript"
-            bind:onclick="subScript.click()">subscript
-    </button>
-    <button bind:class="superScript.active ? 'active' : ''; 'material-icons'" type="button" title="SuperScript"
-            bind:onclick="superScript.click()">superscript
-    </button>
+    <div style="display: flex;">
+      <button bind:class="bold.active ? 'active' : ''; 'material-icons'"  type="button" title="Bold"
+              bind:onclick="bold.click()">format_bold
+      </button>
+      <button bind:class="italic.active ? 'active' : ''; 'material-icons'"  type="button" title="Italic"
+              bind:onclick="italic.click()">format_italic
+      </button>
+      <button bind:class="strikeThrough.active ? 'active' : ''; 'material-icons'"  type="button" title="Strike Through"
+              bind:onclick="strikeThrough.click()">strikethrough_s
+      </button>
+      <button bind:class="subScript.active ? 'active' : ''; 'material-icons'" type="button" title="Subscript"
+              bind:onclick="subScript.click()">subscript
+      </button>
+      <button bind:class="superScript.active ? 'active' : ''; 'material-icons'" type="button" title="SuperScript"
+              bind:onclick="superScript.click()">superscript
+      </button>
+    </div>
   </div>
 </template>
 </body>

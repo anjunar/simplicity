@@ -7,7 +7,7 @@ import MatPage from "../../../navigation/mat-page.js";
 import MarginsNode from "./context-dialog/margins-node.js";
 import PaddingNode from "./context-dialog/padding-node.js";
 
-class ContextDialog extends HTMLElement {
+class ExtendedDialog extends HTMLElement {
 
     page = 0;
 
@@ -18,12 +18,12 @@ class ContextDialog extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity/components/form/mat-editor/dialog/context-dialog.html")
+        return loader("library/simplicity/components/form/mat-editor/dialog/extended-dialog.html")
     }
 
 }
 
 export default customViews.define({
     name : "context-dialog",
-    class : ContextDialog
+    class : ExtendedDialog
 })
