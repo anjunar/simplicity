@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-context-menu {
+            display: block;
+            position: absolute;
+            border: 1px solid var(--main-dark1-color);
+            background-color: var(--main-dark2-color);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <div class="content">
+            <slot is="dom-slot"></slot>
+        </div>
+    </template>
+</body>
+</html>

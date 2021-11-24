@@ -420,41 +420,39 @@ export const customComponents = new class CustomComponents {
                 }
 
                 if (this.isConnected || force) {
-                    if (! this.hydrated) {
-                        if (template) {
-                            this.context = this.context || [];
-                            this.context.push("template");
+                    if (template) {
+                        this.context = this.context || [];
+                        this.context.push("template");
 
-                            buildContent.call(this);
+                        buildContent.call(this);
 
-                            if (clazz.components) {
-                                checker(clazz.components, templateElement, this.localName)
-                            }
-
-                            let template = buildContext(this, templateElement);
-
-                            variableBinding(this, template);
-
-                            createProcessors(this)
-
-                            this.appendChild(template.content);
-
-                            for (const child of this.content.children) {
-                                createProcessorsTree(child);
-                            }
-
-                        } else {
-                            createProcessors(this)
+                        if (clazz.components) {
+                            checker(clazz.components, templateElement, this.localName)
                         }
 
-                        if (this.initialize) {
-                            this.initialize();
+                        let template = buildContext(this, templateElement);
+
+                        variableBinding(this, template);
+
+                        createProcessors(this)
+
+                        this.appendChild(template.content);
+
+                        for (const child of this.content.children) {
+                            createProcessorsTree(child);
                         }
 
-                        this.attributesChanged = false;
-
-                        this.hydrated = true;
+                    } else {
+                        createProcessors(this)
                     }
+
+                    if (this.initialize) {
+                        this.initialize();
+                    }
+
+                    this.attributesChanged = false;
+
+                    this.hydrated = true;
                 }
 
             }

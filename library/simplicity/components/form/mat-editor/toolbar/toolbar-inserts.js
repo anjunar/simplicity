@@ -171,7 +171,7 @@ class ToolbarInserts extends HTMLElement {
     }
 
     static get components() {
-        return [DomInput, MatInputContainer]
+        return []
     }
 
     static get observedAttributes() {

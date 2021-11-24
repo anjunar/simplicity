@@ -58,7 +58,7 @@ class PaddingNode extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity/components/form/mat-editor/dialog/context-dialog/padding-node.html")
+        return loader("library/simplicity/components/form/mat-editor/dialog/extended-dialog/padding-node.html")
     }
 
 

@@ -4,8 +4,8 @@ import MatTabs from "../../../navigation/mat-tabs.js";
 import MatTab from "../../../navigation/mat-tab.js";
 import MatPages from "../../../navigation/mat-pages.js";
 import MatPage from "../../../navigation/mat-page.js";
-import MarginsNode from "./context-dialog/margins-node.js";
-import PaddingNode from "./context-dialog/padding-node.js";
+import MarginsNode from "./extended-dialog/margins-node.js";
+import PaddingNode from "./extended-dialog/padding-node.js";
 
 class ExtendedDialog extends HTMLElement {
 

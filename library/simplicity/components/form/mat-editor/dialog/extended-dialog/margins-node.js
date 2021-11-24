@@ -58,7 +58,7 @@ class MarginsNode extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity/components/form/mat-editor/dialog/context-dialog/margins-node.html")
+        return loader("library/simplicity/components/form/mat-editor/dialog/extended-dialog/margins-node.html")
     }
 
 

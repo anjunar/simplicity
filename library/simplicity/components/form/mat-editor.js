@@ -3,6 +3,7 @@ import {loader} from "../../processors/loader-processor.js";
 import EditorToolbar from "./mat-editor/editor-toolbar.js";
 import {windowManager} from "../../services/window-manager.js";
 import DomForm from "../../directives/dom-form.js";
+import {contextManager} from "../../services/context-manager.js";
 
 class MatEditor extends HTMLElement {
 
@@ -38,6 +39,7 @@ class MatEditor extends HTMLElement {
 
     contextmenuClick(event) {
         event.stopPropagation();
+        event.preventDefault();
 
         let content = this.querySelector("div.content");
         let newPath = [];
@@ -48,11 +50,14 @@ class MatEditor extends HTMLElement {
             newPath.push(segment);
         }
 
-        windowManager.openWindow("/library/simplicity/components/form/mat-editor/dialog/extended-dialog", {
+        contextManager.openContext("/library/simplicity/components/form/mat-editor/context-menu", {
+            pageX : event.pageX,
+            pageY : event.pageY,
             data: {
                 path: newPath
             }
         })
+        return false;
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

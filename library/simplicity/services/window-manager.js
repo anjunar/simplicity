@@ -1,7 +1,6 @@
 import MatWindow from "../components/modal/mat-window.js";
 import {get, viewManager} from "./view-manager.js";
 import MatModal from "../components/modal/mat-modal.js";
-import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 const windowsRegistry = [];
 

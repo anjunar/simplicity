@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div>
+            <button type="button" class="normal" bind:onclick="cut()" bind:disabled="isCollapsed">
+                <div style="display: flex; align-items: center;width: 100px">
+                    <i class="material-icons">content_cut</i>
+                    Cut
+                </div>
+            </button>
+            <br/>
+            <button type="button" class="normal" bind:onclick="copy()" bind:disabled="isCollapsed">
+                <div style="display: flex; align-items: center;width: 100px">
+                    <i class="material-icons">file_copy</i>
+                    Copy
+                </div>
+            </button>
+            <br/>
+            <button type="button" class="normal" bind:onclick="paste()">
+                <div style="display: flex; align-items: center; width: 100px">
+                    <i class="material-icons">content_paste</i>
+                    Paste
+                </div>
+            </button>
+            <br/>
+            <hr/>
+            <button type="button" class="normal" bind:onclick="extension()">
+                <div style="display: flex; align-items: center; width: 100px">
+                    <i class="material-icons">extension</i>
+                    Extension
+                </div>
+            </button>
+        </div>
+    </template>
+</body>
+</html>

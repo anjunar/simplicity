@@ -75,7 +75,7 @@ button.thin:not([disabled]):hover {
 }
 
 button.thin[disabled] {
-    background-color: var(--main-dark2-color);
+    color: var(--main-dark1-color);
 }
 
 button.normal {
@@ -89,9 +89,13 @@ button.normal {
     color: var(--main-font-color);
 }
 
-button.normal:hover {
+button.normal:not([disabled]):hover {
     color: var(--main-background-color);
     background-color: var(--main-selected-color);
+}
+
+button.normal[disabled] {
+    color: var(--main-dark1-color);
 }
 
 button.material-icons {
