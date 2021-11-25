@@ -30,6 +30,10 @@ class DomSlot extends HTMLSlotElement {
         })
 
         mutationObserver.observe(content, {subtree : true, childList : true})
+
+        DomSlot.prototype.destroy = () => {
+            mutationObserver.disconnect();
+        }
     }
 
     render() {
