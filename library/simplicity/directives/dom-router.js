@@ -9,7 +9,7 @@ class DomRouter extends HTMLElement {
         super();
         this.style.display = "block"
         this.handler = function (event) {
-            viewManager.load(event?.newURL || window.location.hash, this.level)
+            viewManager.load(event?.newURL || window.location.hash, this.level, false)
                 .then((view) => {
                     for (const child of Array.from(this.children)) {
                         child.remove();
