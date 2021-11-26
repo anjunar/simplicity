@@ -160,20 +160,11 @@ export const formClient = new class JSONClient {
                     if (event.target.responseText.length > 0) {
                         let response = multipartToJSON(parse(event.target.responseText));
                         resolve(response)
-                        window.setTimeout(() => {
-                            lifeCycle();
-                        }, 10)
                     } else {
                         resolve("")
-                        window.setTimeout(() => {
-                            lifeCycle();
-                        }, 10)
                     }
                 } else {
                     reject(event.target);
-                    window.setTimeout(() => {
-                        lifeCycle();
-                    }, 10)
                     for (const exceptionHandler of exceptionHandlers) {
                         exceptionHandler(event.target);
                     }

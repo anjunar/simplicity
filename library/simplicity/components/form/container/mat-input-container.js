@@ -47,17 +47,23 @@ class MatInputContainer extends HTMLElement {
 
     inputEmpty() {
         let element = this.querySelector("input");
-        return element.value === ""
+        if (element) {
+            return element.value === ""
+        }
     }
 
     hasFocus() {
         let element = this.querySelector("input");
-        return document.activeElement === element;
+        if (element) {
+            return document.activeElement === element;
+        }
     }
 
     hasErrors() {
         let element = this.querySelector("input");
-        return element.errors.length > 0 || ! element.validity.valid
+        if (element) {
+            return element.errors.length > 0 || ! element.validity.valid
+        }
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

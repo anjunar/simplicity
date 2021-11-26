@@ -103,7 +103,6 @@ class EventAttributeProcessor {
     matched = false;
     name;
     runOnce = true;
-    ranOnce = false;
 
     constructor(attribute, element) {
         this.attribute = attribute;
@@ -121,7 +120,7 @@ class EventAttributeProcessor {
     process() {
         this.element.addEventListener(this.name, ($event) => {
             evaluation(this.attribute.value, this.element, {$event: $event})
-        }, {lifeCycle: true})
+        })
     }
 }
 

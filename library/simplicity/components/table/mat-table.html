@@ -39,7 +39,7 @@
                             <div style="display: flex; align-items: center;">
                                 <div bind:onclick="showConfiguration()">
                                     <strong>
-                                        <slot is="dom-slot" selector="thead tr td *" bind:index="td.index" import="true"></slot>
+                                        <slot is="dom-slot" selector="thead tr td *" bind:index="td.index" import="true" resilient="true"></slot>
                                     </strong>
                                 </div>
                                 <div style="flex: 1"></div>
@@ -58,7 +58,7 @@
                 <tr>
                     <template is="dom-repeat" bind:items="configuration(columns)" item="td">
                         <td>
-                            <slot is="dom-slot" implicit="tr" selector="tbody tr td *" bind:index="td.index" import="true"></slot>
+                            <slot is="dom-slot" implicit="tr" selector="tbody tr td *" bind:index="td.index" import="true" resilient="true"></slot>
                         </td>
                     </template>
                 </tr>

@@ -35,30 +35,20 @@ export const viewManager = new class ViewManager {
                     }
                 }
 
-                let lastRoute = lastRouteRegistry.get(level);
-
-                if (lastRoute && path === lastRoute.path && lastRoute.view) {
-                    resolve(lastRoute.view);
-                } else {
-                    let newPath = "../../.." + path + ".js";
-                    lastRouteRegistry.set(level, {
-                        path : path
+                let newPath = "../../.." + path + ".js";
+                import(newPath)
+                    .then((module) => {
+                        let view;
+                        view = new module.default();
+                        this.loadGuards(view, result).then(() => {
+                            resolve(view);
+                            console.timeEnd("load");
+                        })
                     })
-                    import(newPath)
-                        .then((module) => {
-                            let view;
-                            view = new module.default();
-                            this.loadGuards(view, result).then(() => {
-                                let lastRoute = lastRouteRegistry.get(level)
-                                lastRoute.view = view;
-                                resolve(view);
-                                console.timeEnd("load");
-                            })
-                        })
-                        .catch((result) => {
-                            console.log(result)
-                        })
-                }
+                    .catch((result) => {
+                        console.log(result)
+                    })
+
             }
         }
 

@@ -83,7 +83,7 @@ class DomLazySelect extends HTMLElement {
             this.window = data;
             this.size = size;
             this.open = true;
-            lifeCycle();
+            document.dispatchEvent(new CustomEvent("lifecycle"));
         })
     }
 

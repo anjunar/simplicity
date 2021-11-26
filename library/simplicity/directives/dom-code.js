@@ -61,14 +61,6 @@ class DomCode extends HTMLElement {
         let container = document.createElement("div");
         container.innerHTML = result.replaceAll("&amp;gt;", "&gt;")
 
-        let iterator = document.createNodeIterator(container, NodeFilter.SHOW_ELEMENT);
-        let node = iterator.nextNode();
-
-        while (node !== null) {
-            node.preventHydration = true;
-            node = iterator.nextNode();
-        }
-
         this.appendChild(container)
     }
 

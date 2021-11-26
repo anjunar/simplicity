@@ -2,6 +2,11 @@ import {attributeProcessorRegistry} from "./processors/attribute-processors.js";
 import {register} from "./services/view-manager.js";
 import {TextProcessor} from "./processors/text-processor.js";
 import {lifeCycle} from "./processors/life-cycle-processor.js";
+import {debounce} from "./services/tools.js";
+
+document.addEventListener("lifecycle", debounce(() => {
+    lifeCycle();
+}, 30))
 
 export function isEqual(lhs, rhs) {
     if (lhs instanceof Array && rhs instanceof Array) {
@@ -32,17 +37,14 @@ Node.prototype.queryUpwards = function (callback) {
     }
 }
 
-export function createProcessors(element) {
+function createProcessors(element) {
     for (const attribute of Array.from(element.attributes)) {
         for (const AttributeProcessor of attributeProcessorRegistry) {
             if (!attribute.processor) {
                 let processor = new AttributeProcessor(attribute, element);
                 if (processor.matched) {
                     attribute.processor = processor;
-                    if (!processor.runOnce) {
-                        element.attributeBindings = element.attributeBindings || [];
-                        element.attributeBindings.push(processor);
-                    }
+                    element.component.attributeBindings.push(processor);
                 }
             }
         }
@@ -55,135 +57,14 @@ export function createProcessors(element) {
                 if (!childNode.processor) {
                     let textProcessor = new TextProcessor(element, childNode);
                     childNode.processor = textProcessor;
-                    element.textNodeProcessors = element.textNodeProcessors || [];
-                    element.textNodeProcessors.push(textProcessor);
+                    element.component.textNodeProcessors.push(textProcessor);
                 }
             }
         }
-    }
-    element.hydrated = true;
-}
-
-function createProcessorsTree(element) {
-    if (element.localName.indexOf("-") > -1) {
-        return;
-    }
-
-    let iterator = document.createNodeIterator(element, NodeFilter.SHOW_ELEMENT, {
-        acceptNode(node) {
-            if (node.localName.indexOf("-") > -1) {
-                return NodeFilter.FILTER_REJECT;
-            }
-            if (node.preventHydration) {
-                return NodeFilter.FILTER_SKIP;
-            }
-            if (node.hydrated) {
-                return NodeFilter.FILTER_SKIP;
-            }
-            if (node.isConnected) {
-                return NodeFilter.FILTER_ACCEPT;
-            } else {
-                if (node.localName === "template") {
-                    return NodeFilter.FILTER_ACCEPT;
-                } else {
-                    return NodeFilter.FILTER_SKIP;
-                }
-            }
-        }
-    });
-
-    let node = iterator.nextNode();
-    while (node !== null) {
-        if (node.isConnected) {
-            createProcessors(node);
-        } else {
-            let parentElement = node.parentNode;
-            // Import the Template Element for initialization
-            let importNode = document.importNode(node, true);
-            // Replace the uninitialized Template Element with the initialized
-            parentElement.replaceChild(importNode, node, false);
-            // Call connnectedCallback because it is not triggered when placed inside a Template
-            importNode.connectedCallback(true);
-        }
-        node = iterator.nextNode();
     }
 }
 
-/*
-let mutationObserver = new MutationObserver((records) => {
-    for (const record of records) {
-        for (const addedNode of record.addedNodes) {
-            createProcessorsTree(addedNode, addedNode);
-        }
-    }
-})
-
-mutationObserver.observe(document.body, {subtree:true, childList : true})
-*/
-
-Element.prototype.after = (function (_super) {
-    return function (nodes, createProcessors = true) {
-        if (nodes instanceof DocumentFragment) {
-            let children = Array.from(nodes.children);
-            _super.apply(this, [nodes])
-            if (createProcessors) {
-                for (const child of children) {
-                    createProcessorsTree(child, this);
-                }
-            }
-        } else {
-            _super.apply(this, [nodes])
-            if (createProcessors) {
-                createProcessorsTree(nodes, this);
-            }
-        }
-    }
-})(Element.prototype.after)
-
-Node.prototype.replaceChild = (function (_super) {
-    return function (newChild, oldChild, createProcessors = true) {
-        let result = _super.apply(this, [newChild, oldChild]);
-        if (createProcessors) {
-            createProcessorsTree(newChild, this);
-        }
-        return result;
-    }
-})(Node.prototype.replaceChild)
-
-Node.prototype.appendChild = (function (_super) {
-    return function (newChild, createProcessors = true) {
-        if (newChild instanceof DocumentFragment) {
-            let children = Array.from(newChild.children);
-            let result = _super.apply(this, [newChild]);
-            if (createProcessors) {
-                for (const child of children) {
-                    createProcessorsTree(child, this);
-                }
-            }
-            return result;
-        } else {
-            let result = _super.apply(this, [newChild]);
-            if (createProcessors) {
-                createProcessorsTree(newChild, this);
-            }
-            return result;
-        }
-
-    }
-})(Node.prototype.appendChild)
-
-Element.prototype.insertAdjacentElement = (function (_super) {
-    return function (position, insertedElement, createProcessors = true) {
-        let result = _super.apply(this, [position, insertedElement]);
-        if (createProcessors) {
-            createProcessorsTree(result, this);
-        }
-        return result;
-    }
-})
-(Element.prototype.insertAdjacentElement)
-
-const blackList = ["mousemove", "mouseover", "loadend"]
+const blackList = ["mousemove", "mouseover", "loadend", "lifecycle"]
 
 let listeners = new WeakMap();
 
@@ -193,7 +74,7 @@ EventTarget.prototype.addEventListener = (function (_super) {
             let handler = (event) => {
                 callback(event)
                 if (blackList.indexOf(name) === -1 && options.lifeCycle) {
-                    lifeCycle();
+                    document.dispatchEvent(new CustomEvent("lifecycle"));
                 }
             };
             listeners.set(callback, handler);
@@ -210,30 +91,33 @@ EventTarget.prototype.removeEventListener = (function (_super) {
     }
 })(EventTarget.prototype.removeEventListener)
 
-function findProperty(name, scope, lhsNode) {
-    if (lhsNode.context?.length > 0) {
-        for (const context of lhsNode.context) {
+export function findProperty(name, scope, element) {
+    if (element === null) {
+        throw new Error(`property: ${name} not found in template: ${scope.localName}`)
+    }
+    if (element.component) {
+        for (const context of element.component.context) {
             switch (context) {
                 case "slot" : {
-                    if (lhsNode.template === scope) {
-                        if (Reflect.has(lhsNode, name)) {
-                            return lhsNode;
+                    if (element.template === scope) {
+                        if (Reflect.has(element, name)) {
+                            return element;
                         }
                     }
                 }
                     break;
                 case "repeat" : {
-                    if (lhsNode.template === scope) {
-                        if (Reflect.has(lhsNode, name)) {
-                            return lhsNode;
+                    if (element.template === scope) {
+                        if (Reflect.has(element, name)) {
+                            return element;
                         }
                     }
                 }
                     break;
                 case "template" : {
-                    if (lhsNode === scope) {
-                        if (Reflect.has(lhsNode, name)) {
-                            return lhsNode;
+                    if (element === scope) {
+                        if (Reflect.has(element, name)) {
+                            return element;
                         }
                     }
                 }
@@ -241,95 +125,125 @@ function findProperty(name, scope, lhsNode) {
             }
         }
     }
-    return lhsNode.parentNode.findProperty(name, scope);
+    if (element.root) {
+        return findProperty(name, scope, element.root)
+    }
+    return findProperty(name, scope, element.parentNode)
 }
 
-document.importNode = (function (_super) {
-    return function (node, deep) {
-        let result = _super.apply(this, [node, deep]);
+document.importComponent = function (node) {
+    let result = document.importNode(node, true);
 
-        function createLink(clone, original) {
+    function createLink(clone, original) {
 
-            let lhsIterator = document.createNodeIterator(clone, NodeFilter.SHOW_ELEMENT);
-            let rhsIterator = document.createNodeIterator(original, NodeFilter.SHOW_ELEMENT);
+        let lhsIterator = document.createNodeIterator(clone, NodeFilter.SHOW_ELEMENT);
+        let rhsIterator = document.createNodeIterator(original, NodeFilter.SHOW_ELEMENT);
 
-            let lhsNode = lhsIterator.nextNode();
-            let rhsNode = rhsIterator.nextNode();
+        let lhsNode = lhsIterator.nextNode();
+        let rhsNode = rhsIterator.nextNode();
 
-            for (const property of Object.keys(rhsNode)) {
-                if (!(rhsNode[property] instanceof Function)) {
-                    lhsNode[property] = rhsNode[property];
-                }
+        for (const property of Object.keys(rhsNode)) {
+            if (!(rhsNode[property] instanceof Function) && property !== "component") {
+                lhsNode[property] = rhsNode[property];
             }
+        }
 
-            if (rhsNode.variableBind) {
-                lhsNode.variableBind = rhsNode.variableBind;
-                rhsNode.variableBind(lhsNode);
-            }
+        if (rhsNode.component) {
+            lhsNode.component.context = rhsNode.component.context;
+        }
 
-            while (lhsNode !== null && rhsNode !== null) {
-                function scope(lhsNode, rhsNode) {
-                    Object.defineProperties(lhsNode, {
-                        template: {
-                            get() {
-                                return rhsNode.template;
-                            }
-                        },
-                        findProperty: {
-                            value: (name, scope) => {
-                                return findProperty(name, scope, lhsNode);
-                            }
+        if (rhsNode.variableBind) {
+            lhsNode.variableBind = rhsNode.variableBind;
+            rhsNode.variableBind(lhsNode);
+        }
+
+        while (lhsNode !== null && rhsNode !== null) {
+            function scope(lhsNode, rhsNode) {
+                Object.defineProperties(lhsNode, {
+                    template: {
+                        get() {
+                            return rhsNode.template;
                         }
-                    })
-                }
-
-                scope(lhsNode, rhsNode)
-
-                if (lhsNode instanceof HTMLTemplateElement && rhsNode instanceof HTMLTemplateElement) {
-                    createLink(lhsNode.content, rhsNode.content)
-                }
-
-                lhsNode = lhsIterator.nextNode();
-                rhsNode = rhsIterator.nextNode();
-
+                    }
+                })
             }
 
+            scope(lhsNode, rhsNode)
+
+            if (lhsNode instanceof HTMLTemplateElement && rhsNode instanceof HTMLTemplateElement) {
+                createLink(lhsNode.content, rhsNode.content)
+            }
+
+            lhsNode = lhsIterator.nextNode();
+            rhsNode = rhsIterator.nextNode();
+
         }
 
-        createLink(result, node);
-
-        return result;
     }
-})(document.importNode);
 
-function buildContent() {
-    if (!(this instanceof HTMLTemplateElement)) {
-        this.content = document.createDocumentFragment();
-        this.content.findProperty = (name, scope) => {
-            return this.findProperty(name, scope);
-        }
-        for (const child of Array.from(this.children)) {
-            this.content.root = this;
-            this.content.appendChild(child, false);
+    createLink(result, node);
+
+    return result;
+}
+
+function buildContent(element) {
+    if (!(element instanceof HTMLTemplateElement)) {
+        element.content = document.createDocumentFragment();
+        for (const child of Array.from(element.children)) {
+            element.content.root = element;
+            element.content.appendChild(child);
         }
     }
+}
+
+function enrich(templateElement) {
+    function hasBinding(element) {
+        for (const attribute of element.attributes) {
+            if (attribute.name.startsWith("bind:") || attribute.name === "action") {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function hasTextInterpolation(element) {
+        let interpolationRegExp = /\${([^}]+)}/g;
+        return interpolationRegExp.test(element.textContent)
+    }
+
+    function iterate(element, template) {
+        let iterator = document.createNodeIterator(element, NodeFilter.SHOW_ELEMENT);
+        let node = iterator.nextNode();
+        while (node != null) {
+            if (node.localName.indexOf("-") === -1 && ! node.hasAttribute("is")) {
+                if (hasBinding(node) || hasTextInterpolation(node)) {
+                    node.setAttribute("is", "native-" + node.localName);
+                    import("./components/native/native-" + node.localName + ".js")
+                        .then(() => {
+                            document.dispatchEvent(new CustomEvent("lifeCycle"))
+                        })
+                }
+                if (template && node.parentNode === template.content && template.getAttribute("is") === "dom-repeat") {
+                    node.setAttribute("is", "native-" + node.localName);
+                    import("./components/native/native-" + node.localName + ".js")
+                        .then(() => {
+                            document.dispatchEvent(new CustomEvent("lifeCycle"))
+                        })
+                }
+            }
+
+            if (node instanceof HTMLTemplateElement) {
+                iterate(node.content, node);
+            }
+            node = iterator.nextNode();
+        }
+    }
+
+    iterate(templateElement.content);
 }
 
 function buildContext(root, templateElement) {
-    let templateElementCloned = templateElement.cloneNode(true);
-
-    if (!Reflect.has(root, "findProperty")) {
-        Object.defineProperties(root, {
-            findProperty: {
-                value: (name, scope) => {
-                    if (Reflect.has(root, name)) {
-                        return root;
-                    }
-                    throw new Error(`Property not found: ${name} in template: ${scope.localName}`)
-                }
-            }
-        })
-    }
+    let templateElementCloned = document.importNode(templateElement, true);
 
     function createLink(root, clone) {
         let iterator = document.createNodeIterator(clone, NodeFilter.SHOW_ELEMENT);
@@ -341,11 +255,6 @@ function buildContext(root, templateElement) {
                     template: {
                         get() {
                             return root;
-                        }
-                    },
-                    findProperty: {
-                        value: (name, scope) => {
-                            return findProperty(name, scope, lhsNode);
                         }
                     }
                 })
@@ -367,24 +276,46 @@ function buildContext(root, templateElement) {
 }
 
 function variableBinding(root, template) {
-    function traverse(root, elements) {
-        for (const node of elements) {
-            if (node.localName !== "code") {
-                for (const attribute of node.attributes) {
-                    if (attribute.name === "bind:variable") {
-                        let variableName = attribute.value;
+    let iterator = document.createNodeIterator(template.content, NodeFilter.SHOW_ELEMENT, {
+        acceptNode(node) {
+            if (node.localName === "code") {
+                return NodeFilter.FILTER_REJECT
+            }
+            return NodeFilter.FILTER_ACCEPT;
+        }
+    });
+    let node = iterator.nextNode();
+    while (node !== null) {
+        function scope(node) {
+            for (const attribute of node.attributes) {
+                if (attribute.name === "bind:variable") {
+                    let variableName = attribute.value;
+                    root[variableName] = node;
+                    node.variableBind = (node) => {
                         root[variableName] = node;
-                        node.variableBind = (node) => {
-                            root[variableName] = node;
-                        }
                     }
                 }
-                traverse(root, node.children);
             }
         }
+        scope(node);
+        node = iterator.nextNode();
     }
+}
 
-    traverse(root, template.content.children);
+export function templateBinding(content, oldTemplates) {
+    let templates = content.querySelectorAll("template[is]");
+    for (const template of templates) {
+        let component = template.queryUpwards((element) => element.localName.indexOf("-") > -1);
+        if (! component) {
+            let parentElement = template.parentNode;
+            // Import the Template Element for initialization
+            let importNode = document.importComponent(template);
+            // Replace the uninitialized Template Element with the initialized
+            parentElement.replaceChild(importNode, template, false);
+            // Call connnectedCallback because it is not triggered when placed inside a Template
+            importNode.connectedCallback(true);
+        }
+    }
 }
 
 const names = new Map();
@@ -396,6 +327,11 @@ export const customComponents = new class CustomComponents {
         let domParser = new DOMParser();
         let html = domParser.parseFromString(template, "text/html");
         let templateElement = html.querySelector("template");
+        if (templateElement) {
+            enrich(templateElement);
+            let parsed = domParser.parseFromString(templateElement.outerHTML, "text/html");
+            templateElement = parsed.querySelector("template")
+        }
         let css = html.querySelector("style");
         if (css) {
             document.head.appendChild(css);
@@ -403,13 +339,23 @@ export const customComponents = new class CustomComponents {
 
         class SimplicityComponent extends clazz {
 
-            context = [];
-            attributesChanged = false;
-            hydrated = false;
+            component = {
+                context : [],
+                attributesChanged : false,
+                initialized : false,
+                attributeBindings : [],
+                textNodeProcessors : [],
+                addContext : (value) => {
+                    this.component.context.push(value);
+                },
+                hasContext : () => {
+                    return this.component.context.length > 0;
+                }
+            }
 
             attributeChangedCallback(name, oldValue, newValue) {
                 if (!isEqual(oldValue, newValue)) {
-                    this.attributesChanged = true;
+                    this.component.attributesChanged = true;
                     super.attributeChangedCallback(name, oldValue, newValue)
                 }
             }
@@ -420,45 +366,46 @@ export const customComponents = new class CustomComponents {
                 }
 
                 if (this.isConnected || force) {
-                    if (template) {
-                        this.context = this.context || [];
-                        this.context.push("template");
+                    if (! this.component.initialized) {
 
-                        buildContent.call(this);
+                        if (template) {
+                            this.component.addContext("template");
 
-                        if (clazz.components) {
-                            checker(clazz.components, templateElement, this.localName)
+                            buildContent(this);
+
+                            if (clazz.components) {
+                                checker(clazz.components, templateElement, this.localName)
+                            }
+
+                            let template = buildContext(this, templateElement);
+
+                            variableBinding(this, template);
+
+                            createProcessors(this);
+
+                            templateBinding(this.content)
+
+                            this.appendChild(template.content);
+
+                        } else {
+                            createProcessors(this)
                         }
 
-                        let template = buildContext(this, templateElement);
-
-                        variableBinding(this, template);
-
-                        createProcessors(this)
-
-                        this.appendChild(template.content);
-
-                        for (const child of this.content.children) {
-                            createProcessorsTree(child);
+                        if (this.initialize) {
+                            this.initialize();
                         }
 
-                    } else {
-                        createProcessors(this)
+                        this.component.attributesChanged = false;
+                        this.component.initialized = true;
+
+                        document.dispatchEvent(new CustomEvent("lifecycle"));
                     }
-
-                    if (this.initialize) {
-                        this.initialize();
-                    }
-
-                    this.attributesChanged = false;
-
-                    this.hydrated = true;
                 }
 
             }
 
             disconnectedCallback() {
-                if (this.hydrated) {
+                if (this.component.initialized) {
                     if (super.destroy) {
                         super.destroy();
                     }
@@ -513,8 +460,10 @@ function checker(jsImports, html, path) {
                 }
                 if (element.hasAttribute("is")) {
                     let name = element.getAttribute("is");
-                    if (components.indexOf(name) === -1) {
-                        components.push(name);
+                    if (! name.startsWith("native")) {
+                        if (components.indexOf(name) === -1) {
+                            components.push(name);
+                        }
                     }
                 }
 
@@ -522,7 +471,7 @@ function checker(jsImports, html, path) {
                     traverse(element.content.children)
                 }
 
-                if (! element.preventHydration) {
+                if (! element.preventHydration && element.localName !== "code") {
                     traverse(element.children);
                 }
             }
@@ -537,7 +486,7 @@ function checker(jsImports, html, path) {
             let toMuch = sortedJsImports.filter((importz) => sortedComponents.indexOf(importz) === -1);
             let missing = sortedComponents.filter((component) => sortedJsImports.indexOf(component) === -1)
 
-            console.log(`path: ${path}\ntoMuch : ${toMuch.join(", ")}\nmissing:  ${missing.join(", ")}`)
+            console.log(`path: ${path} toMuch : ${toMuch.join(", ")} missing:  ${missing.join(", ")}`)
         }
 
     }

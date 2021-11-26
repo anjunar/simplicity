@@ -1,4 +1,4 @@
-import {customComponents} from "../simplicity.js";
+import {customComponents, findProperty} from "../simplicity.js";
 import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 class DomSlot extends HTMLSlotElement {
@@ -14,26 +14,6 @@ class DomSlot extends HTMLSlotElement {
 
     initialize() {
         this.render();
-        let content;
-        if (this.source) {
-            content = this.source.content;
-        } else {
-            content = this.template.content;
-        }
-
-        let mutationObserver = new MutationObserver((records) => {
-            let find = records.find((record) => record.addedNodes.length > 0);
-            if (find) {
-                this.render();
-                lifeCycle();
-            }
-        })
-
-        mutationObserver.observe(content, {subtree : true, childList : true})
-
-        DomSlot.prototype.destroy = () => {
-            mutationObserver.disconnect();
-        }
     }
 
     render() {
@@ -75,13 +55,13 @@ class DomSlot extends HTMLSlotElement {
         if (element) {
             let importNode;
             if (this.import === "true") {
-                importNode = document.importNode(element, true);
+                importNode = document.importComponent(element);
             } else {
                 importNode = element;
             }
 
             if (this.implicit) {
-                let implicitVariable = this.findProperty(this.implicit, this.template);
+                let implicitVariable = findProperty(this.implicit, this.template, this);
                 let selector;
                 if (importNode.hasAttribute("let")) {
                     selector = importNode;
@@ -90,8 +70,7 @@ class DomSlot extends HTMLSlotElement {
                 }
                 let letVariable = selector.getAttribute("let")
                 selector[letVariable] = implicitVariable[this.implicit];
-                selector.context = selector.context || [];
-                selector.context.push("slot")
+                selector.component.addContext("slot")
             }
 
             if (this.firstElementChild) {

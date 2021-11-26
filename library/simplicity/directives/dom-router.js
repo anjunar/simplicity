@@ -1,6 +1,5 @@
 import {customComponents} from "../simplicity.js";
 import {viewManager} from "../services/view-manager.js";
-import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 class DomRouter extends HTMLElement {
 

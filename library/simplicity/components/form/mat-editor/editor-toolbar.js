@@ -5,10 +5,6 @@ import ToolbarFont from "./toolbar/toolbar-font.js";
 import ToolbarInserts from "./toolbar/toolbar-inserts.js";
 import ToolbarJustify from "./toolbar/toolbar-justify.js";
 import ToolbarTools from "./toolbar/toolbar-tools.js";
-import MatTabs from "../../navigation/mat-tabs.js";
-import MatTab from "../../navigation/mat-tab.js";
-import MatPage from "../../navigation/mat-page.js";
-import MatPages from "../../navigation/mat-pages.js";
 
 class EditorToolbar extends HTMLElement {
 
@@ -24,7 +20,7 @@ class EditorToolbar extends HTMLElement {
     }
 
     static get components() {
-        return [ToolbarColors, ToolbarFont, ToolbarInserts, ToolbarJustify, ToolbarTools, MatTabs, MatTab, MatPages, MatPage]
+        return [ToolbarColors, ToolbarFont, ToolbarInserts, ToolbarJustify, ToolbarTools]
     }
 
     static get observedAttributes() {

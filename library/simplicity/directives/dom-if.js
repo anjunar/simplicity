@@ -9,7 +9,7 @@ class DomIf extends HTMLTemplateElement {
                     if (newValue) {
                         let newChild = this.content.firstElementChild;
                         if (newChild) {
-                            let importNode = document.importNode(newChild, true);
+                            let importNode = document.importComponent(newChild);
                             importNode.isIf = true;
                             this.insertAdjacentElement("afterend", importNode);
                         }

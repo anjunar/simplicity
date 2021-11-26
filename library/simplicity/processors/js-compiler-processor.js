@@ -1,3 +1,5 @@
+import {findProperty} from "../simplicity.js";
+
 function tokenizer(expression) {
 
     let tags = [
@@ -489,7 +491,7 @@ export function evaluation(expression, element, context) {
             let scopes = [];
 
             let output = compiler(expression, (property) => {
-                scopes.push(element.findProperty(property, element.template));
+                scopes.push(findProperty(property, element.template, element));
                 let index = scopes.length - 1;
                 if (index === -1) {
                     throw new Error(`${expression} not found on element: ${element.localName} is: ${element.getAttribute("is")}`)
@@ -513,7 +515,7 @@ export function evaluation(expression, element, context) {
         let scopes = [];
 
         let output = compiler(expression, (property) => {
-            scopes.push(element.findProperty(property, element.template));
+            scopes.push(findProperty(property, element.template, element));
             let index = scopes.length - 1;
             if (index === -1) {
                 throw new Error(`${expression} not found on element: ${element.localName} is: ${element.getAttribute("is")}`)

@@ -28,10 +28,10 @@ class DomForm extends HTMLFormElement {
         }
         Promise.all(results)
             .then(() => {
-                lifeCycle();
+                document.dispatchEvent(new CustomEvent("lifecycle"))
             })
             .catch(() => {
-                lifeCycle();
+                document.dispatchEvent(new CustomEvent("lifecycle"))
             })
     }
 

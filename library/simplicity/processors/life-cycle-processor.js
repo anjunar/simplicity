@@ -18,20 +18,26 @@ export function lifeCycle(scope = document.body) {
         let node = iterator.nextNode();
 
         while (node !== null) {
-            if (node.attributeBindings) {
-                for (const attributeBinding of node.attributeBindings) {
-                    attributeBinding.process();
+            let component = node.component;
+
+            if (component) {
+                if (component.attributeBindings) {
+                    for (const attributeBinding of component.attributeBindings) {
+                        if (! attributeBinding.runOnce) {
+                            attributeBinding.process();
+                        }
+                    }
                 }
-            }
-            if (node.textNodeProcessors) {
-                for (const textNodeProcessor of node.textNodeProcessors) {
-                    textNodeProcessor.process();
+                if (component.textNodeProcessors) {
+                    for (const textNodeProcessor of component.textNodeProcessors) {
+                        textNodeProcessor.process();
+                    }
                 }
-            }
-            if (node.attributesChanged) {
-                if (node.render) {
-                    node.attributesChanged = false
-                    node.render();
+                if (component.attributesChanged) {
+                    if (node.render) {
+                        component.attributesChanged = false
+                        node.render();
+                    }
                 }
             }
 
