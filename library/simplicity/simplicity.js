@@ -200,7 +200,7 @@ function buildContent(element) {
 function enrich(templateElement) {
     function hasBinding(element) {
         for (const attribute of element.attributes) {
-            if (attribute.name.startsWith("bind:") || attribute.name === "action") {
+            if (attribute.name.startsWith("bind:")) {
                 return true;
             }
         }

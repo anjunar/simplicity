@@ -1,32 +1,6 @@
 import {evaluation} from "./js-compiler-processor.js";
 import {isEqual} from "../simplicity.js";
 
-class ActionAttributeProcessor {
-    attribute;
-    element;
-    matched = false;
-    runOnce = true;
-
-    constructor(attribute, element) {
-        this.attribute = attribute;
-        this.element = element;
-
-        if (attribute.name === "action") {
-            this.matched = true;
-            this.process();
-        }
-    }
-
-    process() {
-        this.element.addEventListener("click", () => {
-            import("../services/window-manager.js")
-                .then((result) => {
-                    result.windowManager.openWindow(this.attribute.value);
-                })
-        })
-    }
-}
-
 class StyleAttributeProcessor {
     attribute;
     element;
@@ -217,7 +191,6 @@ class DomAttributesProcessor {
 }
 
 export const attributeProcessorRegistry = [
-    ActionAttributeProcessor,
     StyleAttributeProcessor,
     ClassAttributeProcessor,
     EventAttributeProcessor,

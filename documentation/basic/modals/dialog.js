@@ -6,6 +6,7 @@ import MatPage from "../../../library/simplicity/components/navigation/mat-page.
 import MatPages from "../../../library/simplicity/components/navigation/mat-pages.js";
 import MatTabs from "../../../library/simplicity/components/navigation/mat-tabs.js";
 import MatTab from "../../../library/simplicity/components/navigation/mat-tab.js";
+import DomButton from "../../../library/simplicity/directives/dom-button.js";
 
 class Dialog extends HTMLElement {
 
@@ -16,7 +17,7 @@ class Dialog extends HTMLElement {
     }
 
     static get components() {
-        return [DomCode, MatPages, MatPage, MatTabs, MatTab]
+        return [DomButton, DomCode, MatPages, MatPage, MatTabs, MatTab]
     }
 
     static get template() {

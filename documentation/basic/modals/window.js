@@ -6,6 +6,7 @@ import MatTabs from "../../../library/simplicity/components/navigation/mat-tabs.
 import MatTab from "../../../library/simplicity/components/navigation/mat-tab.js";
 import MatPages from "../../../library/simplicity/components/navigation/mat-pages.js";
 import MatPage from "../../../library/simplicity/components/navigation/mat-page.js";
+import DomButton from "../../../library/simplicity/directives/dom-button.js";
 
 class Window extends HTMLElement {
 
@@ -16,7 +17,7 @@ class Window extends HTMLElement {
     }
 
     static get components() {
-        return [DomCode, MatTabs, MatTab, MatPages, MatPage]
+        return [DomButton, DomCode, MatTabs, MatTab, MatPages, MatPage]
     }
 
     static get template() {
