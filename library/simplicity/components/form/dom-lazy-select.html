@@ -31,7 +31,7 @@
         <div style="position: relative">
             <template is="dom-if" bind:predicate="open">
                 <div class="overlay" bind:style="width : inputWidth() + 'px'">
-                    <button class="material-icons" type="button" bind:style="display : 0 < index ? 'block' : 'none'" bind:onclick="up()" style="width: 100%">arrow_drop_up</button>
+                    <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none'" bind:onclick="up()" style="width: 100%">arrow_drop_up</button>
                     <div>
                         <template is="dom-repeat" bind:items="window" item="item">
                             <div bind:onclick="onItemClicked($event, item)" class="item">
@@ -39,7 +39,7 @@
                             </div>
                         </template>
                     </div>
-                    <button class="material-icons" type="button" bind:style="display : (index + limit) < size ? 'block' : 'none'" bind:onclick="down()" style="width: 100%">arrow_drop_down</button>
+                    <button class="material-icons" translate="no" type="button" bind:style="display : (index + limit) < size ? 'block' : 'none'" bind:onclick="down()" style="width: 100%">arrow_drop_down</button>
                 </div>
             </template>
         </div>

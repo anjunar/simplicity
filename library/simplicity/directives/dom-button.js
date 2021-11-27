@@ -25,7 +25,7 @@ class DomButton extends HTMLButtonElement {
         return [
             {
                 name: "action",
-                type: "two-way"
+                type: "input"
             }
         ]
     }

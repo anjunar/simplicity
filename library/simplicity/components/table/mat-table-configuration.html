@@ -25,8 +25,8 @@
                             </mat-checkbox-container>
                             <input is="dom-input" type="text" bind:onvalue="table.load(td.path, $event)" placeholder="Search" style="margin-left: 5px; margin-right: 5px">
                             <div style="display: flex">
-                                <button type="button" class="material-icons" bind:onclick="left(index)" bind:disabled="index === 0">chevron_left</button>
-                                <button type="button" class="material-icons" bind:onclick="right(index)" bind:disabled="index === length - 1">chevron_right</button>
+                                <button type="button" class="material-icons" translate="no" bind:onclick="left(index)" bind:disabled="index === 0">chevron_left</button>
+                                <button type="button" class="material-icons" translate="no" bind:onclick="right(index)" bind:disabled="index === length - 1">chevron_right</button>
                             </div>
                         </div>
                     </div>

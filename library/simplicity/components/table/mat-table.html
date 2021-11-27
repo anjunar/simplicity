@@ -43,9 +43,9 @@
                                     </strong>
                                 </div>
                                 <div style="flex: 1"></div>
-                                <button bind:style="display : td.sort === undefined ? 'block' : 'none'" class="material-icons" bind:onclick="asc(td)" style="width: 32px;">sort</button>
-                                <button bind:style="display : td.sort === 'asc' ? 'block' : 'none'" class="material-icons" bind:onclick="desc(td)" style="width: 32px;">expand_more</button>
-                                <button bind:style="display : td.sort === 'desc' ? 'block' : 'none'" class="material-icons" bind:onclick="none(td)" style="width: 32px;">expand_less</button>
+                                <button bind:style="display : td.sort === undefined ? 'block' : 'none'" class="material-icons" translate="no" bind:onclick="asc(td)" style="width: 32px;">sort</button>
+                                <button bind:style="display : td.sort === 'asc' ? 'block' : 'none'" class="material-icons" translate="no" bind:onclick="desc(td)" style="width: 32px;">expand_more</button>
+                                <button bind:style="display : td.sort === 'desc' ? 'block' : 'none'" class="material-icons" translate="no" bind:onclick="none(td)" style="width: 32px;">expand_less</button>
                                 <div style="flex: 1"></div>
                             </div>
                         </td>
@@ -70,27 +70,27 @@
                 <div style="display: flex">
                     <div  style="line-height: 42px;">${index} - ${index + limit} of ${size}</div>
 
-                    <button class="material-icons"
+                    <button class="material-icons" translate="no"
                             style="color: var(--main-font-color)"
                             bind:onclick="skipPrevious()">
                         skip_previous
                     </button>
 
-                    <button class="material-icons"
+                    <button class="material-icons" translate="no"
                             style="color: var(--main-font-color)"
                             bind:onclick="arrowLeft()"
                             bind:disabled="! canArrowLeft()">
                         keyboard_arrow_left
                     </button>
 
-                    <button class="material-icons"
+                    <button class="material-icons" translate="no"
                             style="color: var(--main-font-color)"
                             bind:onclick="arrowRight()"
                             bind:disabled="! canArrowRight()">
                         keyboard_arrow_right
                     </button>
 
-                    <button class="material-icons"
+                    <button class="material-icons" translate="no"
                             style="color: var(--main-font-color)"
                             bind:onclick="skipNext()">
                         skip_next
