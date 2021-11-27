@@ -1,6 +1,5 @@
 import {customComponents} from "../simplicity.js";
 import DomForm from "./dom-form.js";
-import {lifeCycle} from "../processors/life-cycle-processor.js";
 import {debounce} from "../services/tools.js";
 
 class DomInput extends HTMLInputElement {

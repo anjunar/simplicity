@@ -1,5 +1,4 @@
 import {customComponents, findProperty} from "../simplicity.js";
-import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 class DomSlot extends HTMLSlotElement {
 

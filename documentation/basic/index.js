@@ -5,6 +5,7 @@ import MatToolbar from "../../library/simplicity/components/navigation/mat-toolb
 import MatDrawerContainer from "../../library/simplicity/components/navigation/mat-drawer-container.js";
 import MatDrawerContent from "../../library/simplicity/components/navigation/mat-drawer-content.js";
 import MatDrawer from "../../library/simplicity/components/navigation/mat-drawer.js";
+import MatFooter from "../../library/simplicity/components/navigation/mat-footer.js";
 
 class Index extends HTMLElement {
 

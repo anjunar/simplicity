@@ -1,5 +1,4 @@
 import {parse, multipartToJSON} from "./multipart.js"
-import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 const exceptionHandlers = [];
 

@@ -2,6 +2,7 @@ import {customComponents} from "../library/simplicity/simplicity.js";
 import {loader} from "../library/simplicity/processors/loader-processor.js";
 import DomRouter from "../library/simplicity/directives/dom-router.js"
 import MatToolbar from "../library/simplicity/components/navigation/mat-toolbar.js";
+import MatFooter from "../library/simplicity/components/navigation/mat-footer.js";
 
 export default class DocumentationApp extends HTMLElement {
 
@@ -10,7 +11,7 @@ export default class DocumentationApp extends HTMLElement {
     }
 
     static get components() {
-        return [DomRouter, MatToolbar];
+        return [DomRouter, MatToolbar, MatFooter];
     }
 
     static get template() {

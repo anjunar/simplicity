@@ -1,6 +1,5 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
-import {lifeCycle} from "../../processors/life-cycle-processor.js";
 import DomRepeat from "../../directives/dom-repeat.js";
 import DomSlot from "../../directives/dom-slot.js";
 import DomIf from "../../directives/dom-if.js";
