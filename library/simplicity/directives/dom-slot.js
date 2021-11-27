@@ -13,6 +13,23 @@ class DomSlot extends HTMLSlotElement {
     import = "false";
 
     initialize() {
+        let content;
+        if (this.source) {
+            content = this.source.content;
+        } else {
+            content = this.template.content;
+        }
+
+        let handler = () => {
+            this.render();
+        };
+
+        content.addEventListener("contentChanged", handler)
+
+        DomSlot.prototype.destroy = () => {
+            content.removeEventListener("contentChanged", handler)
+        }
+
         this.render();
     }
 

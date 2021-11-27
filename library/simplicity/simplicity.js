@@ -189,6 +189,7 @@ document.importComponent = function (node) {
 function buildContent(element) {
     if (!(element instanceof HTMLTemplateElement)) {
         element.content = document.createDocumentFragment();
+        templateBinding(element.content)
         for (const child of Array.from(element.children)) {
             element.content.root = element;
             element.content.appendChild(child);
@@ -211,19 +212,16 @@ function enrich(templateElement) {
         return interpolationRegExp.test(element.textContent)
     }
 
+    function isTemplateRepeat(node, template) {
+        return template && node.parentNode === template.content && template.getAttribute("is") === "dom-repeat"
+    }
+
     function iterate(element, template) {
         let iterator = document.createNodeIterator(element, NodeFilter.SHOW_ELEMENT);
         let node = iterator.nextNode();
         while (node != null) {
             if (node.localName.indexOf("-") === -1 && ! node.hasAttribute("is")) {
-                if (hasBinding(node) || hasTextInterpolation(node)) {
-                    node.setAttribute("is", "native-" + node.localName);
-                    import("./components/native/native-" + node.localName + ".js")
-                        .then(() => {
-                            document.dispatchEvent(new CustomEvent("lifeCycle"))
-                        })
-                }
-                if (template && node.parentNode === template.content && template.getAttribute("is") === "dom-repeat") {
+                if (hasBinding(node) || hasTextInterpolation(node) || isTemplateRepeat(node, template)) {
                     node.setAttribute("is", "native-" + node.localName);
                     import("./components/native/native-" + node.localName + ".js")
                         .then(() => {
@@ -302,20 +300,29 @@ function variableBinding(root, template) {
     }
 }
 
-export function templateBinding(content, oldTemplates) {
-    let templates = content.querySelectorAll("template[is]");
-    for (const template of templates) {
-        let component = template.queryUpwards((element) => element.localName.indexOf("-") > -1);
-        if (! component) {
-            let parentElement = template.parentNode;
-            // Import the Template Element for initialization
-            let importNode = document.importComponent(template);
-            // Replace the uninitialized Template Element with the initialized
-            parentElement.replaceChild(importNode, template, false);
-            // Call connnectedCallback because it is not triggered when placed inside a Template
-            importNode.connectedCallback(true);
+export function templateBinding(content) {
+    let mutationObserver = new MutationObserver((records) => {
+        let mutationRecord = records.find((record) => record.addedNodes);
+        if (mutationRecord) {
+            for (const addedNode of mutationRecord.addedNodes) {
+                if (addedNode instanceof HTMLTemplateElement && addedNode.hasAttribute("is")) {
+                    let component = addedNode.queryUpwards((element) => element.localName.indexOf("-") > -1);
+                    if (! component && ! addedNode.component.initialized) {
+                        let parentElement = addedNode.parentNode;
+                        // Import the Template Element for initialization
+                        let importNode = document.importComponent(addedNode);
+                        // Replace the uninitialized Template Element with the initialized
+                        parentElement.replaceChild(importNode, addedNode);
+                        // Call connnectedCallback because it is not triggered when placed inside a Template
+                        importNode.connectedCallback(true);
+                        // Event for Dom-Slot, because the MutationObserver is async
+                        content.dispatchEvent(new CustomEvent("contentChanged"))
+                    }
+                }
+            }
         }
-    }
+    })
+    mutationObserver.observe(content, {subtree : true, childList : true});
 }
 
 const names = new Map();
@@ -382,8 +389,6 @@ export const customComponents = new class CustomComponents {
                             variableBinding(this, template);
 
                             createProcessors(this);
-
-                            templateBinding(this.content)
 
                             this.appendChild(template.content);
 
