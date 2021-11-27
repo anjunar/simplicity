@@ -4,6 +4,15 @@ import {TextProcessor} from "./processors/text-processor.js";
 import {lifeCycle} from "./processors/life-cycle-processor.js";
 import {debounce} from "./services/tools.js";
 
+document.system = {
+    pageLoad : [],
+    lifeCycle : {
+        cycles : 0,
+        latency : [],
+        avgLatency : [],
+    }
+}
+
 document.addEventListener("lifecycle", debounce(() => {
     lifeCycle();
 }, 30))
@@ -225,7 +234,7 @@ function enrich(templateElement) {
                     node.setAttribute("is", "native-" + node.localName);
                     import("./components/native/native-" + node.localName + ".js")
                         .then(() => {
-                            document.dispatchEvent(new CustomEvent("lifeCycle"))
+                            document.dispatchEvent(new CustomEvent("lifecycle"))
                         })
                 }
             }

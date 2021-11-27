@@ -3,7 +3,7 @@ let avgLatency = 0;
 
 export function lifeCycle(scope = document.body) {
 
-    let timeStart = new Date().getTime();
+    let timeStart = performance.now();
 
     function iterate(scope) {
         let iterator = document.createNodeIterator(scope, NodeFilter.SHOW_ELEMENT, {
@@ -55,9 +55,17 @@ export function lifeCycle(scope = document.body) {
 
     iterate(scope);
 
-    let timeEnd = new Date().getTime();
+    let timeEnd = performance.now();
     let delta = timeEnd - timeStart;
     avgLatency = (avgLatency + delta);
     console.log(`Latency ${delta} ms - avg Latency: ${avgLatency / lifeCycles} ms`);
+
+    let lifeCycle = document.system.lifeCycle;
+
+    lifeCycle.cycles = lifeCycles;
+    lifeCycle.avgLatency.push(avgLatency / lifeCycles)
+    lifeCycle.latency.push(delta);
+
     lifeCycles++;
+
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-footer {
+            display: block;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            z-index: 9999;
+            background-color: var(--main-dark1-color);
+            height: 40px;
+        }
+
+        mat-footer div.container {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div class="container">
+        <div>
+            <slot is="dom-slot" name="left"></slot>
+        </div>
+        <div style="flex: 1">
+
+        </div>
+        <div>
+            <slot is="dom-slot" name="right"></slot>
+        </div>
+    </div>
+</template>
+</body>
+</html>

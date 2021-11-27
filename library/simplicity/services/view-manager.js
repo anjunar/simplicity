@@ -5,7 +5,7 @@ let lastRouteRegistry = new Map();
 export const viewManager = new class ViewManager {
     load(url, level = 0, reload = true) {
         let executor = (resolve, reject) => {
-            console.time("load")
+            let startTimer = performance.now();
 
             let segments = url.split("#");
 
@@ -55,7 +55,12 @@ export const viewManager = new class ViewManager {
                                 let lastRoute = lastRouteRegistry.get(level)
                                 lastRoute.view = view;
                                 resolve(view);
-                                console.timeEnd("load");
+
+                                let endTimer = performance.now();
+                                let delta = endTimer - startTimer;
+
+                                console.log("page load: " + delta + " ms")
+                                document.system.pageLoad.push(endTimer - startTimer);
                             })
                         })
                         .catch((result) => {
