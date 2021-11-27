@@ -70,13 +70,17 @@
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">
-                            <select is="dom-select" bind:model="car">
-                                <option value="fiat">Fiat</option>
-                                <option value="audi">Audi</option>
-                                <option value="bmw">BMW</option>
-                                <option value="mercedes">Mercedes</option>
-                            </select>
-                            <div>${car}</div>
+                            <template>
+                                <iframe>
+                                    <select is="dom-select" bind:model="car">
+                                        <option value="fiat">Fiat</option>
+                                        <option value="audi">Audi</option>
+                                        <option value="bmw">BMW</option>
+                                        <option value="mercedes">Mercedes</option>
+                                    </select>
+                                    <div>${car}</div>
+                                </iframe>
+                            </template>
                         </code>
                     </div>
                 </div>
@@ -84,28 +88,32 @@
                 <div>
                     <div>
                         <code is="dom-code" lang="javascript">
-                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                            import {customViews} from "../../library/simplicity/simplicity.js";
-                            import DomSelect from "../../library/simplicity/directives/dom-select.js";
+                            <template>
+                                <script>
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import {customViews} from "../../library/simplicity/simplicity.js";
+                                    import DomSelect from "../../library/simplicity/directives/dom-select.js";
 
-                            class Select extends HTMLElement {
+                                    class Select extends HTMLElement {
 
-                                car = "bmw"
+                                        car = "bmw"
 
-                                static get components() {
-                                    return [DomSelect]
-                                }
+                                        static get components() {
+                                            return [DomSelect]
+                                        }
 
-                                static get template() {
-                                    return loader("documentation/form/select.html")
-                                }
+                                        static get template() {
+                                            return loader("documentation/form/select.html")
+                                        }
 
-                            }
+                                    }
 
-                            export default customViews.define({
-                                name : "form-select",
-                                class : Select
-                            })
+                                    export default customViews.define({
+                                        name : "form-select",
+                                        class : Select
+                                    })
+                                </script>
+                            </template>
                         </code>
                     </div>
                 </div>

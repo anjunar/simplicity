@@ -65,10 +65,14 @@
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">
-                            <mat-image-upload placeholder="click" bind:model="image" style="width: 320px; height: 200px"></mat-image-upload>
-                            <div>
-                                <span>${image.name}</span>
-                            </div>
+                            <template>
+                                <iframe>
+                                    <mat-image-upload placeholder="click" bind:model="image" style="width: 320px; height: 200px"></mat-image-upload>
+                                    <div>
+                                        <span>${image.name}</span>
+                                    </div>
+                                </iframe>
+                            </template>
                         </code>
                     </div>
                 </div>
@@ -76,30 +80,34 @@
                 <div>
                     <div>
                         <code is="dom-code" lang="javascript">
-                            import {customViews} from "../../library/simplicity/simplicity.js";
-                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                            import MatImageUpload from "../../library/simplicity/components/form/mat-image-upload.js";
+                            <template>
+                                <script>
+                                    import {customViews} from "../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import MatImageUpload from "../../library/simplicity/components/form/mat-image-upload.js";
 
-                            class Upload extends HTMLElement {
+                                    class Upload extends HTMLElement {
 
-                                image = {
-                                    data : ""
-                                }
+                                        image = {
+                                            data : ""
+                                        }
 
-                                static get components() {
-                                    return [MatImageUpload]
-                                }
+                                        static get components() {
+                                            return [MatImageUpload]
+                                        }
 
-                                static get template() {
-                                    return loader("documentation/form/upload.html")
-                                }
+                                        static get template() {
+                                            return loader("documentation/form/upload.html")
+                                        }
 
-                            }
+                                    }
 
-                            export default customViews.define({
-                                name : "form-upload",
-                                    class : Upload
-                            })
+                                    export default customViews.define({
+                                        name : "form-upload",
+                                        class : Upload
+                                    })
+                                </script>
+                            </template>
                         </code>
                     </div>
                 </div>

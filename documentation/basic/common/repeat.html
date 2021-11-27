@@ -71,8 +71,12 @@
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">
-                            <template is="dom-repeat" bind:items="materials" item="material">
-                                <div>${material.position} ${material.name}</div>
+                            <template>
+                                <iframe>
+                                    <template is="dom-repeat" bind:items="materials" item="material">
+                                        <div>${material.position} ${material.name}</div>
+                                    </template>
+                                </iframe>
                             </template>
                         </code>
                     </div>
@@ -81,35 +85,39 @@
                 <div>
                     <div>
                         <code is="dom-code" lang="javascript">
-                            import {customViews} from "../../library/simplicity/simplicity.js";
-                            import {jsonClient} from "../../library/simplicity/services/client.js";
-                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                            import DomRepeat from "../../library/simplicity/directives/dom-repeat.js";
+                            <template>
+                                <script>
+                                    import {customViews} from "../../library/simplicity/simplicity.js";
+                                    import {jsonClient} from "../../library/simplicity/services/client.js";
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import DomRepeat from "../../library/simplicity/directives/dom-repeat.js";
 
-                            class Repeat extends HTMLElement {
+                                    class Repeat extends HTMLElement {
 
-                                materials = [];
+                                        materials = [];
 
-                                static get components() {
-                                    return [DomRepeat]
-                                }
+                                        static get components() {
+                                            return [DomRepeat]
+                                        }
 
-                                static get template() {
-                                    return loader("documentation/common/repeat.html")
-                                }
+                                        static get template() {
+                                            return loader("documentation/common/repeat.html")
+                                        }
 
-                            }
-
-                            export default customViews.define({
-                                name: "common-repeat",
-                                class: Repeat,
-                                header : "Repeat",
-                                guard(activeRoute) {
-                                    return {
-                                        materials: jsonClient.get("materials.json")
                                     }
-                                }
-                            })
+
+                                    export default customViews.define({
+                                        name: "common-repeat",
+                                        class: Repeat,
+                                        header : "Repeat",
+                                        guard(activeRoute) {
+                                            return {
+                                                materials: jsonClient.get("materials.json")
+                                            }
+                                        }
+                                    })
+                                </script>
+                            </template>
                         </code>
                     </div>
                 </div>

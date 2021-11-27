@@ -120,11 +120,15 @@
                         <div style="margin-top: 20px;">
                             <div>
                                 <code is="dom-code" lang="html5">
-                                    <common-example bind:items="materials">
-                                        <div let="material">
-                                            ${material.position} ${material.name}
-                                        </div>
-                                    </common-example>
+                                    <template>
+                                        <iframe>
+                                            <common-example bind:items="materials">
+                                                <div let="material">
+                                                    ${material.position} ${material.name}
+                                                </div>
+                                            </common-example>
+                                        </iframe>
+                                    </template>
                                 </code>
                             </div>
                         </div>
@@ -132,33 +136,37 @@
                         <div>
                             <div>
                                 <code is="dom-code" lang="javascript">
-                                    import {customViews} from "../../library/simplicity/simplicity.js";
-                                    import {jsonClient} from "../../library/simplicity/services/client.js";
-                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                                    import Repeat from "./example.js";
+                                    <template>
+                                        <script>
+                                            import {customViews} from "../../library/simplicity/simplicity.js";
+                                            import {jsonClient} from "../../library/simplicity/services/client.js";
+                                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                            import Repeat from "./example.js";
 
-                                    class CommonImplicit extends HTMLElement {
+                                            class CommonImplicit extends HTMLElement {
 
-                                        materials = [];
+                                                materials = [];
 
-                                        static get components() {
-                                            return [Repeat]
-                                        }
+                                                static get components() {
+                                                    return [Repeat]
+                                                }
 
-                                        static get template() {
-                                            return loader("documentation/common/implicit.html")
-                                        }
-                                    }
-
-                                    export default customViews.define({
-                                        name : "common-implicit",
-                                        class : CommonImplicit,
-                                        guard(activeRoute) {
-                                            return {
-                                                materials : jsonClient.get("materials.json")
+                                                static get template() {
+                                                    return loader("documentation/common/implicit.html")
+                                                }
                                             }
-                                        }
-                                    })
+
+                                            export default customViews.define({
+                                                name : "common-implicit",
+                                                class : CommonImplicit,
+                                                guard(activeRoute) {
+                                                    return {
+                                                        materials : jsonClient.get("materials.json")
+                                                    }
+                                                }
+                                            })
+                                        </script>
+                                    </template>
                                 </code>
                             </div>
                         </div>
@@ -171,10 +179,14 @@
                         <div style="margin-top: 20px;">
                             <div>
                                 <code is="dom-code" lang="html5">
-                                    <template is="dom-repeat" bind:items="items" item="item">
-                                        <div>
-                                            <slot is="dom-slot" implicit="item"></slot>
-                                        </div>
+                                    <template>
+                                        <iframe>
+                                            <template is="dom-repeat" bind:items="items" item="item">
+                                                <div>
+                                                    <slot is="dom-slot" implicit="item"></slot>
+                                                </div>
+                                            </template>
+                                        </iframe>
                                     </template>
                                 </code>
                             </div>
@@ -183,43 +195,47 @@
                         <div>
                             <div>
                                 <code is="dom-code" lang="javascript">
-                                    import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-                                    import {customComponents} from "../../../library/simplicity/simplicity.js";
-                                    import DomRepeat from "../../../library/simplicity/directives/dom-repeat.js";
-                                    import DomSlot from "../../../library/simplicity/directives/dom-slot.js";
+                                    <template>
+                                        <script>
+                                            import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                                            import {customComponents} from "../../../library/simplicity/simplicity.js";
+                                            import DomRepeat from "../../../library/simplicity/directives/dom-repeat.js";
+                                            import DomSlot from "../../../library/simplicity/directives/dom-slot.js";
 
-                                    class CommonExample extends HTMLElement {
+                                            class CommonExample extends HTMLElement {
 
-                                        items = [];
+                                                items = [];
 
-                                        attributeChangedCallback(name, oldValue, newValue) {
-                                            switch (name) {
-                                                case "items" : {
-                                                    this.items = newValue;
-                                                } break;
-                                            }
-                                        }
-
-                                        static get components() {
-                                            return [DomRepeat, DomSlot]
-                                        }
-
-                                        static get observedAttributes() {
-                                            return [
-                                                {
-                                                    name: "items",
-                                                    type: "input"
+                                                attributeChangedCallback(name, oldValue, newValue) {
+                                                    switch (name) {
+                                                        case "items" : {
+                                                            this.items = newValue;
+                                                        } break;
+                                                    }
                                                 }
-                                            ]
-                                        }
 
-                                        static get template() {
-                                            return loader("documentation/basic/examples/example.html");
-                                        }
+                                                static get components() {
+                                                    return [DomRepeat, DomSlot]
+                                                }
 
-                                    }
+                                                static get observedAttributes() {
+                                                    return [
+                                                        {
+                                                            name: "items",
+                                                            type: "input"
+                                                        }
+                                                    ]
+                                                }
 
-                                    export default customComponents.define("common-example", CommonExample)
+                                                static get template() {
+                                                    return loader("documentation/basic/examples/example.html");
+                                                }
+
+                                            }
+
+                                            export default customComponents.define("common-example", CommonExample)
+                                        </script>
+                                    </template>
                                 </code>
                             </div>
                         </div>

@@ -77,24 +77,28 @@
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">
-                            <button type="button" class="material-icons" bind:onclick="open = ! open">menu</button>
+                            <template>
+                                <iframe>
+                                    <button type="button" class="material-icons" bind:onclick="open = ! open">menu</button>
 
-                            <mat-drawer-container>
-                                <mat-drawer bind:open="open">
-                                    <nav>
-                                        <ul>
-                                            <li>Link 1</li>
-                                            <li>Link 2</li>
-                                            <li>Link 3</li>
-                                        </ul>
-                                    </nav>
-                                </mat-drawer>
-                                <mat-drawer-content>
-                                    <div>
-                                        Content goes here...
-                                    </div>
-                                </mat-drawer-content>
-                            </mat-drawer-container>
+                                    <mat-drawer-container>
+                                        <mat-drawer bind:open="open">
+                                            <nav>
+                                                <ul>
+                                                    <li>Link 1</li>
+                                                    <li>Link 2</li>
+                                                    <li>Link 3</li>
+                                                </ul>
+                                            </nav>
+                                        </mat-drawer>
+                                        <mat-drawer-content>
+                                            <div>
+                                                Content goes here...
+                                            </div>
+                                        </mat-drawer-content>
+                                    </mat-drawer-container>
+                                </iframe>
+                            </template>
                         </code>
                     </div>
                 </div>
@@ -102,29 +106,33 @@
                 <div>
                     <div>
                         <code is="dom-code" lang="javascript">
-                            import {customViews} from "../../library/simplicity/simplicity.js";
-                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                            import MatDrawer from "../../library/simplicity/components/navigation/mat-drawer.js";
-                            import MatDrawerContent from "../../library/simplicity/components/navigation/mat-drawer-content.js";
-                            import MatDrawerContainer from "../../library/simplicity/components/navigation/mat-drawer-container.js";
+                            <template>
+                                <script>
+                                    import {customViews} from "../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import MatDrawer from "../../library/simplicity/components/navigation/mat-drawer.js";
+                                    import MatDrawerContent from "../../library/simplicity/components/navigation/mat-drawer-content.js";
+                                    import MatDrawerContainer from "../../library/simplicity/components/navigation/mat-drawer-container.js";
 
-                            class Drawer extends HTMLElement {
+                                    class Drawer extends HTMLElement {
 
-                                open = false
+                                        open = false
 
-                                static get components() {
-                                    return [MatDrawer, MatDrawerContent, MatDrawerContainer]
-                                }
+                                        static get components() {
+                                            return [MatDrawer, MatDrawerContent, MatDrawerContainer]
+                                        }
 
-                                static get template() {
-                                    return loader("documentation/navigation/drawer.html")
-                                }
-                            }
+                                        static get template() {
+                                            return loader("documentation/navigation/drawer.html")
+                                        }
+                                    }
 
-                            export default customViews.define({
-                                name: "navigation-drawer",
-                                class: Drawer
-                            })
+                                    export default customViews.define({
+                                        name: "navigation-drawer",
+                                        class: Drawer
+                                    })
+                                </script>
+                            </template>
                         </code>
                     </div>
                 </div>

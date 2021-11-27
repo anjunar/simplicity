@@ -75,9 +75,13 @@
                         <div style="margin-top: 20px;">
                             <div>
                                 <code is="dom-code" lang="html5">
-                                    <button class="thin" type="button" action="/documentation/basic/modals/window/example">Show Window</button>
+                                    <template>
+                                        <iframe>
+                                            <button class="thin" type="button" action="/documentation/basic/modals/window/example">Show Window</button>
 
-                                    <button class="thin" type="button" bind:onclick="open()">Show Window</button>
+                                            <button class="thin" type="button" bind:onclick="open()">Show Window</button>
+                                        </iframe>
+                                    </template>
                                 </code>
                             </div>
                         </div>
@@ -85,29 +89,33 @@
                         <div>
                             <div>
                                 <code is="dom-code" lang="javascript">
-                                    import {customViews} from "../../../library/simplicity/simplicity.js";
-                                    import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-                                    import {windowManager} from "../../../library/simplicity/services/window-manager.js";
+                                    <template>
+                                        <script>
+                                            import {customViews} from "../../../library/simplicity/simplicity.js";
+                                            import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                                            import {windowManager} from "../../../library/simplicity/services/window-manager.js";
 
-                                    class Window extends HTMLElement {
+                                            class Window extends HTMLElement {
 
-                                        open() {
-                                            windowManager.openWindow("/documentation/basic/modals/window/example")
-                                        }
+                                                open() {
+                                                    windowManager.openWindow("/documentation/basic/modals/window/example")
+                                                }
 
-                                        static get components() {
-                                            return []
-                                        }
+                                                static get components() {
+                                                    return []
+                                                }
 
-                                        static get template() {
-                                            return loader("documentation/basic/modals/window.html")
-                                        }
-                                    }
+                                                static get template() {
+                                                    return loader("documentation/basic/modals/window.html")
+                                                }
+                                            }
 
-                                    export default customViews.define({
-                                        name: "modals-window",
-                                        class: Window
-                                    })
+                                            export default customViews.define({
+                                                name: "modals-window",
+                                                class: Window
+                                            })
+                                        </script>
+                                    </template>
                                 </code>
                             </div>
                         </div>
@@ -120,7 +128,11 @@
                         <div style="margin-top: 20px;">
                             <div>
                                 <code is="dom-code" lang="html5">
-                                    <div>Content...</div>
+                                    <template>
+                                        <iframe>
+                                            <div>Content...</div>
+                                        </iframe>
+                                    </template>
                                 </code>
                             </div>
                         </div>
@@ -128,28 +140,32 @@
                         <div>
                             <div>
                                 <code is="dom-code" lang="javascript">
-                                    import {customViews} from "../../../../library/simplicity/simplicity.js";
-                                    import {loader} from "../../../../library/simplicity/processors/loader-processor.js";
+                                    <template>
+                                        <script>
+                                            import {customViews} from "../../../../library/simplicity/simplicity.js";
+                                            import {loader} from "../../../../library/simplicity/processors/loader-processor.js";
 
-                                    class Example extends HTMLElement {
+                                            class Example extends HTMLElement {
 
-                                        static get components() {
-                                            return []
-                                        }
+                                                static get components() {
+                                                    return []
+                                                }
 
-                                        static get template() {
-                                            return loader("documentation/basic/modals/dialog/example.html")
-                                        }
+                                                static get template() {
+                                                    return loader("documentation/basic/modals/dialog/example.html")
+                                                }
 
-                                    }
+                                            }
 
-                                    export default customViews.define({
-                                        name: "window-example",
-                                        class: Example,
-                                        header: "Example",
-                                        width : "320px",
-                                        height : "200px"
-                                    });
+                                            export default customViews.define({
+                                                name: "window-example",
+                                                class: Example,
+                                                header: "Example",
+                                                width : "320px",
+                                                height : "200px"
+                                            });
+                                        </script>
+                                    </template>
                                 </code>
                             </div>
                         </div>

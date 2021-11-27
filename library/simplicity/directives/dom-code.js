@@ -45,12 +45,16 @@ class DomCode extends HTMLElement {
 
         let result;
 
-        let orLanguageName = this.convert(this.innerHTML);
+        let templateElement = this.querySelector("template");
 
         if (this.getAttribute("lang") === "html5") {
+            let htmliFrameElement = templateElement.content.querySelector("iframe");
+            let orLanguageName = this.convert(htmliFrameElement.innerHTML);
             result = hljs.highlight(orLanguageName, {language: 'xml'}).value
         }
         if (this.getAttribute("lang") === "javascript") {
+            let htmlScriptElement = templateElement.content.querySelector("script");
+            let orLanguageName = this.convert(htmlScriptElement.innerHTML);
             result = hljs.highlight(orLanguageName, {language: 'javascript'}).value
         }
 

@@ -69,12 +69,16 @@
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">
-                            <form is="dom-form" bind:model="person" bind:variable="form">
-                                <mat-input-container placeholder="First Name">
-                                    <input is="dom-input" type="text" name="firstName"/>
-                                </mat-input-container>
-                                <button type="button" bind:style="display : form.dirty ? 'inline' : 'none'" bind:onclick="form.reset()">Reset</button>
-                            </form>
+                            <template>
+                                <iframe>
+                                    <form is="dom-form" bind:model="person" bind:variable="form">
+                                        <mat-input-container placeholder="First Name">
+                                            <input is="dom-input" type="text" name="firstName"/>
+                                        </mat-input-container>
+                                        <button type="button" bind:style="display : form.dirty ? 'inline' : 'none'" bind:onclick="form.reset()">Reset</button>
+                                    </form>
+                                </iframe>
+                            </template>
                         </code>
                     </div>
                 </div>
@@ -82,32 +86,37 @@
                 <div>
                     <div>
                         <code is="dom-code" lang="javascript">
-                            import {customViews} from "../../library/simplicity/simplicity.js";
-                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                            import DomForm from "../../library/simplicity/directives/dom-form.js";
-                            import DomInput from "../../library/simplicity/directives/dom-input.js";
-                            import MatInputContainer from "../../library/simplicity/components/form/container/mat-input-container.js";
+                            <template>
+                                <script>
+                                    import {customViews} from "../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import DomForm from "../../library/simplicity/directives/dom-form.js";
+                                    import DomInput from "../../library/simplicity/directives/dom-input.js";
+                                    import MatInputContainer from "../../library/simplicity/components/form/container/mat-input-container.js";
 
-                            class Form extends HTMLElement {
+                                    class Form extends HTMLElement {
 
-                                person = {
-                                    firstName : "Max"
-                                }
+                                        person = {
+                                            firstName : "Max"
+                                        }
 
-                                static get components() {
-                                    return [DomForm, DomInput, MatInputContainer]
-                                }
+                                        static get components() {
+                                            return [DomForm, DomInput, MatInputContainer]
+                                        }
 
-                                static get template() {
-                                    return loader("documentation/form/form.html")
-                                }
+                                        static get template() {
+                                            return loader("documentation/form/form.html")
+                                        }
 
-                            }
+                                    }
 
-                            export default customViews.define({
-                                name : "form-form",
-                                class : Form
-                            })                        </code>
+                                    export default customViews.define({
+                                        name : "form-form",
+                                        class : Form
+                                    })
+                                </script>
+                            </template>
+                        </code>
                     </div>
                 </div>
             </div>

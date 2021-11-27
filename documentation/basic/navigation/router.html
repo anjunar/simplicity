@@ -52,7 +52,11 @@
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">
-                            <dom-router level="0"></dom-router>
+                            <template>
+                                <iframe>
+                                    <dom-router level="0"></dom-router>
+                                </iframe>
+                            </template>
                         </code>
                     </div>
                 </div>
@@ -60,23 +64,27 @@
                 <div>
                     <div>
                         <code is="dom-code" lang="javascript">
-                            import {customComponent} from "../../library/simplicity/simplicity.js";
-                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                            import DomRouter from "../../library/simplicity/directives/dom-router.js";
+                            <template>
+                                <script>
+                                    import {customComponent} from "../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import DomRouter from "../../library/simplicity/directives/dom-router.js";
 
-                            class AppDocumentation extends HTMLElement {
+                                    class AppDocumentation extends HTMLElement {
 
-                                static get components() {
-                                    return [DomRouter]
-                                }
+                                        static get components() {
+                                            return [DomRouter]
+                                        }
 
-                                static get template() {
-                                    return loader("documentation/app.html")
-                                }
+                                        static get template() {
+                                            return loader("documentation/app.html")
+                                        }
 
-                            }
+                                    }
 
-                            export default customComponent.define("app-documentation", AppDocumentation)
+                                    export default customComponent.define("app-documentation", AppDocumentation)
+                                </script>
+                            </template>
                         </code>
                     </div>
                 </div>

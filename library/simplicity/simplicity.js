@@ -230,7 +230,7 @@ function enrich(templateElement) {
                 }
             }
 
-            if (node instanceof HTMLTemplateElement) {
+            if (node instanceof HTMLTemplateElement && node.hasAttribute("is")) {
                 iterate(node.content, node);
             }
             node = iterator.nextNode();
@@ -274,14 +274,7 @@ function buildContext(root, templateElement) {
 }
 
 function variableBinding(root, template) {
-    let iterator = document.createNodeIterator(template.content, NodeFilter.SHOW_ELEMENT, {
-        acceptNode(node) {
-            if (node.localName === "code") {
-                return NodeFilter.FILTER_REJECT
-            }
-            return NodeFilter.FILTER_ACCEPT;
-        }
-    });
+    let iterator = document.createNodeIterator(template.content, NodeFilter.SHOW_ELEMENT);
     let node = iterator.nextNode();
     while (node !== null) {
         function scope(node) {
@@ -472,13 +465,11 @@ function checker(jsImports, html, path) {
                     }
                 }
 
-                if (element instanceof HTMLTemplateElement) {
+                if (element instanceof HTMLTemplateElement && element.hasAttribute("is")) {
                     traverse(element.content.children)
                 }
 
-                if (! element.preventHydration && element.localName !== "code") {
-                    traverse(element.children);
-                }
+                traverse(element.children);
             }
         }
 

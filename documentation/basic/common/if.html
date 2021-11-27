@@ -82,12 +82,16 @@
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">
-                        <button class="thin" bind:onclick="show = ! show">Toggle</button>
+                        <template>
+                            <iframe>
+                                <button class="thin" bind:onclick="show = ! show">Toggle</button>
 
-                        <template is="dom-if" bind:predicate="show">
-                            <div>
-                                Text to be shown
-                            </div>
+                                <template is="dom-if" bind:predicate="show">
+                                    <div>
+                                        Text to be shown
+                                    </div>
+                                </template>
+                            </iframe>
                         </template>
                     </code>
                 </div>
@@ -96,28 +100,32 @@
             <div>
                 <div>
                     <code is="dom-code" lang="javascript">
-                        import {customViews} from "../../library/simplicity/simplicity.js";
-                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                        import DomIf from "../../library/simplicity/directives/dom-if.js";
+                        <template>
+                            <script>
+                                import {customViews} from "../../library/simplicity/simplicity.js";
+                                import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                import DomIf from "../../library/simplicity/directives/dom-if.js";
 
-                        class If extends HTMLElement {
+                                class If extends HTMLElement {
 
-                            show = true;
+                                    show = true;
 
-                            static get components() {
-                                return [DomIf];
-                            }
+                                    static get components() {
+                                        return [DomIf];
+                                    }
 
-                            static get template() {
-                                return loader("documentation/common/if.html");
-                            }
+                                    static get template() {
+                                        return loader("documentation/common/if.html");
+                                    }
 
-                        }
+                                }
 
-                        export default customViews.define({
-                            name: "common-if",
-                            class: If
-                        });
+                                export default customViews.define({
+                                    name: "common-if",
+                                    class: If
+                                });
+                            </script>
+                        </template>
                     </code>
                 </div>
             </div>

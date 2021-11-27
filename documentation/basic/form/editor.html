@@ -65,9 +65,13 @@
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">
-                            <mat-editor bind:model="value"></mat-editor>
+                            <template>
+                                <iframe>
+                                    <mat-editor bind:model="value"></mat-editor>
 
-                            <div bind:innerHTML="value.text"></div>
+                                    <div bind:innerHTML="value.text"></div>
+                                </iframe>
+                            </template>
                         </code>
                     </div>
                 </div>
@@ -75,31 +79,35 @@
                 <div>
                     <div>
                         <code is="dom-code" lang="javascript">
-                            import {customViews} from "../../library/simplicity/simplicity.js";
-                            import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                            import MatEditor from "../../library/simplicity/components/form/mat-editor.js";
+                            <template>
+                                <script>
+                                    import {customViews} from "../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                    import MatEditor from "../../library/simplicity/components/form/mat-editor.js";
 
-                            class Editor extends HTMLElement {
+                                    class Editor extends HTMLElement {
 
-                                value = {
-                                    html : "",
-                                    text : ""
-                                }
+                                        value = {
+                                            html : "",
+                                            text : ""
+                                        }
 
-                                static get components() {
-                                    return [MatEditor]
-                                }
+                                        static get components() {
+                                            return [MatEditor]
+                                        }
 
-                                static get template() {
-                                    return loader("documentation/form/editor.html")
-                                }
+                                        static get template() {
+                                            return loader("documentation/form/editor.html")
+                                        }
 
-                            }
+                                    }
 
-                            export default customViews.define({
-                                name: "form-editor",
-                                class: Editor
-                            })
+                                    export default customViews.define({
+                                        name: "form-editor",
+                                        class: Editor
+                                    })
+                                </script>
+                            </template>
                         </code>
                     </div>
                 </div>

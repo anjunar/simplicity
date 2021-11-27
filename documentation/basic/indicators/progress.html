@@ -33,7 +33,11 @@
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">
-                        <mat-progress-bar></mat-progress-bar>
+                        <template>
+                            <iframe>
+                                <mat-progress-bar></mat-progress-bar>
+                            </iframe>
+                        </template>
                     </code>
                 </div>
             </div>
@@ -41,26 +45,30 @@
             <div>
                 <div>
                     <code is="dom-code" lang="javascript">
-                        import {customViews} from "../../library/simplicity/simplicity.js";
-                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                        import MatProgressBar from "../../library/simplicity/components/indicators/mat-progress-bar.js";
+                        <template>
+                            <script>
+                                import {customViews} from "../../library/simplicity/simplicity.js";
+                                import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                import MatProgressBar from "../../library/simplicity/components/indicators/mat-progress-bar.js";
 
-                        class Spinner extends HTMLElement {
+                                class Spinner extends HTMLElement {
 
-                            static get components() {
-                                return [MatProgressBar]
-                            }
+                                    static get components() {
+                                        return [MatProgressBar]
+                                    }
 
-                            static get template() {
-                                return loader("documentation/indicators/progress.html")
-                            }
+                                    static get template() {
+                                        return loader("documentation/indicators/progress.html")
+                                    }
 
-                        }
+                                }
 
-                        export default customViews.define({
-                            name: "indicators-progress",
-                            class: Spinner
-                        })
+                                export default customViews.define({
+                                    name: "indicators-progress",
+                                    class: Spinner
+                                })
+                            </script>
+                        </template>
                     </code>
                 </div>
             </div>

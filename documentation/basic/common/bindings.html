@@ -54,45 +54,57 @@
             <h3>HTML5</h3>
             <p>The rest of the HTML file is not displayed</p>
             <code is="dom-code" lang="html5">
-                <button class="thin" type="button" bind:onclick="show = ! show">Click me</button>
+                <template>
+                    <iframe>
+                        <button class="thin" type="button" bind:onclick="show = ! show">Click me</button>
 
-                <div bind:style="display : show ? 'block' : 'none'">
-                    Show me :-)
-                </div>
+                        <div bind:style="display : show ? 'block' : 'none'">
+                            Show me :-)
+                        </div>
+                    </iframe>
+                </template>
             </code>
 
             <code is="dom-code" lang="html5">
-                <button class="thin" type="button" bind:onclick="show = ! show">Click me</button>
+                <template>
+                    <iframe>
+                        <button class="thin" type="button" bind:onclick="show = ! show">Click me</button>
 
-                <div bind:class="show ? 'show' : 'hide'">
-                    Show me :-)
-                </div>
+                        <div bind:class="show ? 'show' : 'hide'">
+                            Show me :-)
+                        </div>
+                    </iframe>
+                </template>
             </code>
             <h3>Javascript</h3>
             <div>
                 <div>
                     <code is="dom-code" lang="javascript">
-                        import {customViews} from "../../library/simplicity/simplicity.js";
-                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                        <template>
+                            <script>
+                                import {customViews} from "../../library/simplicity/simplicity.js";
+                                import {loader} from "../../library/simplicity/processors/loader-processor.js";
 
-                        class AppGettingStarted extends HTMLElement {
+                                class AppGettingStarted extends HTMLElement {
 
-                            show = false;
+                                    show = false;
 
-                            static get components() {
-                                return [];
-                            }
+                                    static get components() {
+                                        return [];
+                                    }
 
-                            static get template() {
-                                return loader("documentation/basic/started.html")
-                            }
+                                    static get template() {
+                                        return loader("documentation/basic/started.html")
+                                    }
 
-                        }
+                                }
 
-                        export default customViews.define({
-                            name: "basic-getting-started",
-                            class: AppGettingStarted
-                        });
+                                export default customViews.define({
+                                    name: "basic-getting-started",
+                                    class: AppGettingStarted
+                                });
+                            </script>
+                        </template>
                     </code>
                 </div>
             </div>

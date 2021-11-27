@@ -33,11 +33,82 @@
             <h3>HTML5</h3>
             <p>The rest of the HTML file is not displayed</p>
             <code is="dom-code" lang="html5">
-                <advanced-hello-world text="Hello World!"></advanced-hello-world>
+                <template>
+                    <iframe>
+                        <advanced-hello-world text="Hello World!"></advanced-hello-world>
+                    </iframe>
+                </template>
+
             </code>
-            <pre><code id="html"></code></pre>
+            <code is="dom-code" lang="html5">
+                <template>
+                    <iframe>
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Hello World</title>
+                            <style>
+                                advanced-hello-world {
+                                    display: block;
+                                }
+
+                                advanced-hello-world div.center {
+                                    margin: 0;
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%);
+                                }
+                            </style>
+                        </head>
+                        <body>
+                        <template>
+                            <div class="center">
+                                <div>${text}</div>
+                            </div>
+                        </template>
+                        </body>
+                        </html>
+                    </iframe>
+                </template>
+            </code>
             <h3>Javascript</h3>
-            <pre><code id="script"></code></pre>
+            <code is="dom-code" lang="javascript">
+                <template>
+                    <script>
+                        import {customComponents} from "../../../library/simplicity/simplicity.js";
+                        import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+
+                        class HelloWorld extends HTMLElement {
+
+                            text = ""
+
+                            attributeChangedCallback(name, oldValue, newValue) {
+                                switch (name) {
+                                    case "text" : {
+                                        this.text = newValue;
+                                    }
+                                }
+                            }
+
+                            static get observedAttributes() {
+                                return [{
+                                    name : "text",
+                                    type : "input"
+                                }];
+                            }
+
+                            static get template() {
+                                return loader("documentation/advanced/examples/hello-world.html");
+                            }
+
+                        }
+
+                        export default customComponents.define("advanced-hello-world", HelloWorld)
+                    </script>
+                </template>
+            </code>
         </div>
     </div>
 </template>

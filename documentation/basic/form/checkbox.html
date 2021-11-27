@@ -73,14 +73,18 @@
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">
-                        <mat-checkbox-container placeholder="Checkbox">
-                            <input is="dom-input" type="checkbox" bind:model="checked"/>
-                        </mat-checkbox-container>
+                        <template>
+                            <iframe>
+                                <mat-checkbox-container placeholder="Checkbox">
+                                    <input is="dom-input" type="checkbox" bind:model="checked"/>
+                                </mat-checkbox-container>
 
-                        <template is="dom-if" bind:predicate="checked">
-                            <div>
-                                Checked
-                            </div>
+                                <template is="dom-if" bind:predicate="checked">
+                                    <div>
+                                        Checked
+                                    </div>
+                                </template
+                            </iframe>
                         </template>
                     </code>
                 </div>
@@ -89,29 +93,33 @@
             <div>
                 <div>
                     <code is="dom-code" lang="javascript">
-                        import {customViews} from "../../library/simplicity/simplicity.js";
-                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                        import DomInput from "../../library/simplicity/directives/dom-input.js";
-                        import MatCheckboxContainer from "../../library/simplicity/components/form/container/mat-checkbox-container.js";
-                        import DomIf from "../../library/simplicity/directives/dom-if.js";
+                        <template>
+                            <script>
+                                import {customViews} from "../../library/simplicity/simplicity.js";
+                                import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                import DomInput from "../../library/simplicity/directives/dom-input.js";
+                                import MatCheckboxContainer from "../../library/simplicity/components/form/container/mat-checkbox-container.js";
+                                import DomIf from "../../library/simplicity/directives/dom-if.js";
 
-                        class Checkbox extends HTMLElement {
+                                class Checkbox extends HTMLElement {
 
-                            checked = false;
+                                    checked = false;
 
-                            static get components() {
-                                return [DomInput, DomIf, MatCheckboxContainer]
-                            }
+                                    static get components() {
+                                        return [DomInput, DomIf, MatCheckboxContainer]
+                                    }
 
-                            static get template() {
-                                return loader("documentation/form/checkbox.html")
-                            }
-                        }
+                                    static get template() {
+                                        return loader("documentation/form/checkbox.html")
+                                    }
+                                }
 
-                        export default customViews.define({
-                            name: "form-checkbox",
-                            class: Checkbox
-                        })
+                                export default customViews.define({
+                                    name: "form-checkbox",
+                                    class: Checkbox
+                                })
+                            </script>
+                        </template>
                     </code>
                 </div>
             </div>

@@ -90,28 +90,32 @@
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">
-                        <form is="dom-form" bind:model="person">
-                            <mat-input-container placeholder="First Name">
-                                <input type="text" is="dom-input" name="firstName">
-                            </mat-input-container>
-                            <mat-input-container placeholder="Last Name">
-                                <input type="text" is="dom-input" name="lastName">
-                            </mat-input-container>
+                        <template>
+                            <iframe>
+                                <form is="dom-form" bind:model="person">
+                                    <mat-input-container placeholder="First Name">
+                                        <input type="text" is="dom-input" name="firstName">
+                                    </mat-input-container>
+                                    <mat-input-container placeholder="Last Name">
+                                        <input type="text" is="dom-input" name="lastName">
+                                    </mat-input-container>
 
-                            <form is="dom-form" name="address">
-                                <mat-input-container placeholder="Street">
-                                    <input type="text" is="dom-input" name="street">
-                                </mat-input-container>
-                                <mat-input-container placeholder="State">
-                                    <input type="text" is="dom-input" name="state">
-                                </mat-input-container>
-                            </form>
-                        </form>
-                        <br/>
-                        <div>First Name: ${person.firstName}</div>
-                        <div>Last Name: ${person.lastName}</div>
-                        <div>Street: ${person.address.street}</div>
-                        <div>State: ${person.address.state}</div>
+                                    <form is="dom-form" name="address">
+                                        <mat-input-container placeholder="Street">
+                                            <input type="text" is="dom-input" name="street">
+                                        </mat-input-container>
+                                        <mat-input-container placeholder="State">
+                                            <input type="text" is="dom-input" name="state">
+                                        </mat-input-container>
+                                    </form>
+                                </form>
+                                <br/>
+                                <div>First Name: ${person.firstName}</div>
+                                <div>Last Name: ${person.lastName}</div>
+                                <div>Street: ${person.address.street}</div>
+                                <div>State: ${person.address.state}</div>
+                            </iframe>
+                        </template>
                     </code>
                 </div>
             </div>
@@ -119,37 +123,41 @@
             <div>
                 <div>
                     <code is="dom-code" lang="javascript">
-                        import {customViews} from "../../../library/simplicity/simplicity.js";
-                        import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-                        import DomInput from "../../../library/simplicity/directives/dom-input.js";
-                        import DomForm from "../../../library/simplicity/directives/dom-form.js";
-                        import MatInputContainer from "../../../library/simplicity/components/form/container/mat-input-container.js";
+                        <template>
+                            <script>
+                                import {customViews} from "../../../library/simplicity/simplicity.js";
+                                import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                                import DomInput from "../../../library/simplicity/directives/dom-input.js";
+                                import DomForm from "../../../library/simplicity/directives/dom-form.js";
+                                import MatInputContainer from "../../../library/simplicity/components/form/container/mat-input-container.js";
 
-                        class NestedForms extends HTMLElement {
+                                class NestedForms extends HTMLElement {
 
-                            person = {
-                                firstName: "Max",
-                                lastName: "Mustermann",
-                                address: {
-                                    street: "Somestreet",
-                                    state: "Somewere"
+                                    person = {
+                                        firstName: "Max",
+                                        lastName: "Mustermann",
+                                        address: {
+                                            street: "Somestreet",
+                                            state: "Somewere"
+                                        }
+                                    }
+
+                                    static get components() {
+                                        return [DomInput, DomForm, MatInputContainer]
+                                    }
+
+                                    static get template() {
+                                        return loader("documentation/advanced/form/nested-forms.html")
+                                    }
+
                                 }
-                            }
 
-                            static get components() {
-                                return [DomInput, DomForm, MatInputContainer]
-                            }
-
-                            static get template() {
-                                return loader("documentation/advanced/form/nested-forms.html")
-                            }
-
-                        }
-
-                        export default customViews.define({
-                            name: "form-nested-forms",
-                            class: NestedForms
-                        })
+                                export default customViews.define({
+                                    name: "form-nested-forms",
+                                    class: NestedForms
+                                })
+                            </script>
+                        </template>
                     </code>
                 </div>
             </div>

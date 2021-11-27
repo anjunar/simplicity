@@ -33,7 +33,11 @@
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">
-                        <mat-spinner></mat-spinner>
+                        <template>
+                            <iframe>
+                                <mat-spinner></mat-spinner>
+                            </iframe>
+                        </template>
                     </code>
                 </div>
             </div>
@@ -41,26 +45,30 @@
             <div>
                 <div>
                     <code is="dom-code" lang="javascript">
-                        import {customViews} from "../../library/simplicity/simplicity.js";
-                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                        import MatSpinner from "../../library/simplicity/components/indicators/mat-spinner.js";
+                        <template>
+                            <script>
+                                import {customViews} from "../../library/simplicity/simplicity.js";
+                                import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                import MatSpinner from "../../library/simplicity/components/indicators/mat-spinner.js";
 
-                        class Spinner extends HTMLElement {
+                                class Spinner extends HTMLElement {
 
-                            static get components() {
-                                return [MatSpinner]
-                            }
+                                    static get components() {
+                                        return [MatSpinner]
+                                    }
 
-                            static get template() {
-                                return loader("documentation/indicators/spinner.html")
-                            }
+                                    static get template() {
+                                        return loader("documentation/indicators/spinner.html")
+                                    }
 
-                        }
+                                }
 
-                        export default customViews.define({
-                            name: "indicators-spinner",
-                            class: Spinner
-                        })
+                                export default customViews.define({
+                                    name: "indicators-spinner",
+                                    class: Spinner
+                                })
+                            </script>
+                        </template>
                     </code>
                 </div>
             </div>

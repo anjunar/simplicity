@@ -78,11 +78,15 @@
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">
-                        <mat-input-container placeholder="Materials">
-                            <dom-lazy-select bind:items="materials">
-                                <div let="material">${material.position} ${material.name}</div>
-                            </dom-lazy-select>
-                        </mat-input-container>
+                        <template>
+                            <iframe>
+                                <mat-input-container placeholder="Materials">
+                                    <dom-lazy-select bind:items="materials">
+                                        <div let="material">${material.position} ${material.name}</div>
+                                    </dom-lazy-select>
+                                </mat-input-container>
+                            </iframe>
+                        </template>
                     </code>
                 </div>
             </div>
@@ -90,36 +94,40 @@
             <div>
                 <div>
                     <code is="dom-code" lang="javascript">
-                        import {customViews} from "../../library/simplicity/simplicity.js";
-                        import {jsonClient} from "../../library/simplicity/services/client.js";
-                        import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                        import DomLazySelect from "../../library/simplicity/directives/dom-lazy-select.js";
-                        import MatDomSelectContainer from "../../library/simplicity/components/form/container/mat-dom-select-container.js";
+                        <template>
+                            <script>
+                                import {customViews} from "../../library/simplicity/simplicity.js";
+                                import {jsonClient} from "../../library/simplicity/services/client.js";
+                                import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                import DomLazySelect from "../../library/simplicity/directives/dom-lazy-select.js";
+                                import MatDomSelectContainer from "../../library/simplicity/components/form/container/mat-dom-select-container.js";
 
-                        class LazySelect extends HTMLElement {
+                                class LazySelect extends HTMLElement {
 
-                            materials(query, callback) {
-                                jsonClient.get("materials.json")
-                                .then((response) => {
-                                    let result = response.slice(query.index, query.index + query.limit);
-                                    callback(result, response.length)
+                                    materials(query, callback) {
+                                        jsonClient.get("materials.json")
+                                            .then((response) => {
+                                                let result = response.slice(query.index, query.index + query.limit);
+                                                callback(result, response.length)
+                                            })
+                                    }
+
+                                    static get components() {
+                                        return [DomLazySelect, MatDomSelectContainer]
+                                    }
+
+                                    static get template() {
+                                        return loader("documentation/form/lazy-select.html")
+                                    }
+
+                                }
+
+                                export default customViews.define({
+                                    name: "form-lazy-select",
+                                    class: LazySelect
                                 })
-                            }
-
-                            static get components() {
-                                return [DomLazySelect, MatDomSelectContainer]
-                            }
-
-                            static get template() {
-                                return loader("documentation/form/lazy-select.html")
-                            }
-
-                        }
-
-                        export default customViews.define({
-                            name: "form-lazy-select",
-                            class: LazySelect
-                        })
+                            </script>
+                        </template>
                     </code>
                 </div>
             </div>
