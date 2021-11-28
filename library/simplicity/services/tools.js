@@ -55,9 +55,10 @@ export function create(html) {
 export function debounce(func, wait) {
     let timeout;
     return function () {
+        let args = arguments;
         const later = function () {
             clearTimeout(timeout)
-            func.apply(this, arguments);
+            func.apply(this, args);
         };
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);

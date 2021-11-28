@@ -88,7 +88,7 @@ class MatTable extends HTMLTableElement {
             this.window = data;
             this.size = size;
             this.open = true;
-            document.dispatchEvent(new CustomEvent("lifecycle"))
+            document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "items"}}))
         })
     }
 

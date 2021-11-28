@@ -13,8 +13,8 @@ document.system = {
     }
 }
 
-document.addEventListener("lifecycle", debounce(() => {
-    lifeCycle();
+document.addEventListener("lifecycle", debounce((event) => {
+    lifeCycle(document.body, event);
 }, 30))
 
 export function isEqual(lhs, rhs) {
@@ -83,7 +83,7 @@ EventTarget.prototype.addEventListener = (function (_super) {
             let handler = (event) => {
                 callback(event)
                 if (blackList.indexOf(name) === -1 && options.lifeCycle) {
-                    document.dispatchEvent(new CustomEvent("lifecycle"));
+                    document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : event.target, event : name}}));
                 }
             };
             listeners.set(callback, handler);
@@ -217,8 +217,12 @@ function enrich(templateElement) {
     }
 
     function hasTextInterpolation(element) {
-        let interpolationRegExp = /\${([^}]+)}/g;
-        return interpolationRegExp.test(element.textContent)
+        for (const childNode of element.childNodes) {
+            if (childNode.nodeType === 3) {
+                let interpolationRegExp = /\${([^}]+)}/g;
+                return interpolationRegExp.test(childNode.textContent)
+            }
+        }
     }
 
     function isTemplateRepeat(node, template) {
@@ -234,7 +238,7 @@ function enrich(templateElement) {
                     node.setAttribute("is", "native-" + node.localName);
                     import("./components/native/native-" + node.localName + ".js")
                         .then(() => {
-                            document.dispatchEvent(new CustomEvent("lifecycle"))
+                            document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target: document.body, event: "import"}}))
                         })
                 }
             }
@@ -405,7 +409,7 @@ export const customComponents = new class CustomComponents {
                         this.component.attributesChanged = false;
                         this.component.initialized = true;
 
-                        document.dispatchEvent(new CustomEvent("lifecycle"));
+                        document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "initialize"}}));
                     }
                 }
 

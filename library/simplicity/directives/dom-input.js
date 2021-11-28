@@ -33,10 +33,10 @@ class DomInput extends HTMLInputElement {
 
                 Promise.all(results)
                     .then(() => {
-                        document.dispatchEvent(new CustomEvent("lifecycle"))
+                        document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "validate"}}))
                     })
                     .catch(() => {
-                        document.dispatchEvent(new CustomEvent("lifecycle"))
+                        document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "validate"}}))
                     })
             }
         }
@@ -97,7 +97,7 @@ class DomInput extends HTMLInputElement {
                 this.addEventListener("input", valueChangeHandler, {lifeCylce: false});
                 this.addEventListener("model", debounce(asyncValidationHandler, 300), {lifeCylce: false});
                 this.addEventListener("focus", () => {
-                    document.dispatchEvent(new CustomEvent("lifecycle"));
+                    document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "focus"}}));
                 }, {lifeCylce: false});
             }
                 break;

@@ -27,10 +27,10 @@ class DomForm extends HTMLFormElement {
         }
         Promise.all(results)
             .then(() => {
-                document.dispatchEvent(new CustomEvent("lifecycle"))
+                document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "validate"}}))
             })
             .catch(() => {
-                document.dispatchEvent(new CustomEvent("lifecycle"))
+                document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "validate"}}))
             })
     }
 
