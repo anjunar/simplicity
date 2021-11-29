@@ -3,6 +3,7 @@ import {register} from "./services/view-manager.js";
 import {TextProcessor} from "./processors/text-processor.js";
 import {lifeCycle} from "./processors/life-cycle-processor.js";
 import {debounce} from "./services/tools.js";
+import {ComponentProcessor} from "./processors/component-processor.js";
 
 document.system = {
     pageLoad : [],
@@ -151,19 +152,17 @@ document.importComponent = function (node) {
         let lhsNode = lhsIterator.nextNode();
         let rhsNode = rhsIterator.nextNode();
 
+        variableBindingExecution(lhsNode, rhsNode)
+
         for (const property of Object.keys(rhsNode)) {
-            if (!(rhsNode[property] instanceof Function) && property !== "component") {
-                lhsNode[property] = rhsNode[property];
+            switch (property) {
+                case "component" : {
+                    lhsNode.component.context = rhsNode.component.context;
+                } break
+                default : {
+                    lhsNode[property] = rhsNode[property];
+                } break;
             }
-        }
-
-        if (rhsNode.component) {
-            lhsNode.component.context = rhsNode.component.context;
-        }
-
-        if (rhsNode.variableBind) {
-            lhsNode.variableBind = rhsNode.variableBind;
-            rhsNode.variableBind(lhsNode);
         }
 
         while (lhsNode !== null && rhsNode !== null) {
@@ -196,65 +195,17 @@ document.importComponent = function (node) {
 }
 
 function buildContent(element) {
-    if (!(element instanceof HTMLTemplateElement)) {
-        element.content = document.createDocumentFragment();
-        templateBinding(element.content)
-        for (const child of Array.from(element.children)) {
-            element.content.root = element;
-            element.content.appendChild(child);
-        }
+    let fragment = document.createDocumentFragment();
+    templateBinding(fragment)
+    for (const child of Array.from(element.children)) {
+        fragment.root = element;
+        fragment.appendChild(child);
     }
-}
-
-function enrich(templateElement) {
-    function hasBinding(element) {
-        for (const attribute of element.attributes) {
-            if (attribute.name.startsWith("bind:")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function hasTextInterpolation(element) {
-        for (const childNode of element.childNodes) {
-            if (childNode.nodeType === 3) {
-                let interpolationRegExp = /\${([^}]+)}/g;
-                return interpolationRegExp.test(childNode.textContent)
-            }
-        }
-    }
-
-    function isTemplateRepeat(node, template) {
-        return template && node.parentNode === template.content && template.getAttribute("is") === "dom-repeat"
-    }
-
-    function iterate(element, template) {
-        let iterator = document.createNodeIterator(element, NodeFilter.SHOW_ELEMENT);
-        let node = iterator.nextNode();
-        while (node != null) {
-            if (node.localName.indexOf("-") === -1 && ! node.hasAttribute("is")) {
-                if (hasBinding(node) || hasTextInterpolation(node) || isTemplateRepeat(node, template)) {
-                    node.setAttribute("is", "native-" + node.localName);
-                    import("./components/native/native-" + node.localName + ".js")
-                        .then(() => {
-                            document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target: document.body, event: "import"}}))
-                        })
-                }
-            }
-
-            if (node instanceof HTMLTemplateElement && node.hasAttribute("is")) {
-                iterate(node.content, node);
-            }
-            node = iterator.nextNode();
-        }
-    }
-
-    iterate(templateElement.content);
+    return fragment;
 }
 
 function buildContext(root, templateElement) {
-    let templateElementCloned = document.importNode(templateElement, true);
+    let templateElementCloned = templateElement.cloneNode(true);
 
     function createLink(root, clone) {
         let iterator = document.createNodeIterator(clone, NodeFilter.SHOW_ELEMENT);
@@ -273,7 +224,7 @@ function buildContext(root, templateElement) {
 
             scope(root, node);
 
-            if (node instanceof HTMLTemplateElement) {
+            if (node instanceof HTMLTemplateElement && node.hasAttribute("is")) {
                 createLink(root, node.content);
             }
 
@@ -286,8 +237,18 @@ function buildContext(root, templateElement) {
     return templateElementCloned;
 }
 
+const variableBindingRegistry = new WeakMap();
+
+function variableBindingExecution(lhsNode, rhsNode) {
+    let variableBinding = variableBindingRegistry.get(rhsNode);
+    if (variableBinding) {
+        variableBindingRegistry.set(lhsNode, variableBinding);
+        variableBinding(lhsNode);
+    }
+}
+
 function variableBinding(root, template) {
-    let iterator = document.createNodeIterator(template.content, NodeFilter.SHOW_ELEMENT);
+    let iterator = document.createNodeIterator(template, NodeFilter.SHOW_ELEMENT);
     let node = iterator.nextNode();
     while (node !== null) {
         function scope(node) {
@@ -295,9 +256,9 @@ function variableBinding(root, template) {
                 if (attribute.name === "bind:variable") {
                     let variableName = attribute.value;
                     root[variableName] = node;
-                    node.variableBind = (node) => {
+                    variableBindingRegistry.set(node, (node) => {
                         root[variableName] = node;
-                    }
+                    })
                 }
             }
         }
@@ -308,19 +269,14 @@ function variableBinding(root, template) {
 
 export function templateBinding(content) {
     let mutationObserver = new MutationObserver((records) => {
-        let mutationRecord = records.find((record) => record.addedNodes);
+        let mutationRecord = records.find((record) => record.addedNodes.length > 0);
         if (mutationRecord) {
             for (const addedNode of mutationRecord.addedNodes) {
                 if (addedNode instanceof HTMLTemplateElement && addedNode.hasAttribute("is")) {
                     let component = addedNode.queryUpwards((element) => element.localName.indexOf("-") > -1);
-                    if (! component && ! addedNode.component.initialized) {
-                        let parentElement = addedNode.parentNode;
-                        // Import the Template Element for initialization
-                        let importNode = document.importComponent(addedNode);
-                        // Replace the uninitialized Template Element with the initialized
-                        parentElement.replaceChild(importNode, addedNode);
+                    if (! component) {
                         // Call connnectedCallback because it is not triggered when placed inside a Template
-                        importNode.connectedCallback(true);
+                        addedNode.connectedCallback(true);
                         // Event for Dom-Slot, because the MutationObserver is async
                         content.dispatchEvent(new CustomEvent("contentChanged"))
                     }
@@ -333,38 +289,38 @@ export function templateBinding(content) {
 
 const names = new Map();
 
+class Component {
+    context = []
+    attributesChanged = false
+    initialized = false
+    attributeBindings = []
+    textNodeProcessors = []
+    addContext(value) {
+        this.context.push(value);
+    }
+    hasContext() {
+        return this.context.length > 0;
+    }
+}
+
 export const customComponents = new class CustomComponents {
     define(name, clazz, options) {
 
         let template = clazz.template;
-        let domParser = new DOMParser();
-        let html = domParser.parseFromString(template, "text/html");
-        let templateElement = html.querySelector("template");
-        if (templateElement) {
-            enrich(templateElement);
-            let parsed = domParser.parseFromString(templateElement.outerHTML, "text/html");
-            templateElement = parsed.querySelector("template")
-        }
-        let css = html.querySelector("style");
-        if (css) {
-            document.head.appendChild(css);
+        let templateElement = null;
+        if (template) {
+            let parser = new ComponentProcessor();
+            let html = parser.parse(template);
+            templateElement = html.querySelector("template");
+            let css = html.querySelector("style");
+            if (css) {
+                document.head.appendChild(css);
+            }
         }
 
         class SimplicityComponent extends clazz {
 
-            component = {
-                context : [],
-                attributesChanged : false,
-                initialized : false,
-                attributeBindings : [],
-                textNodeProcessors : [],
-                addContext : (value) => {
-                    this.component.context.push(value);
-                },
-                hasContext : () => {
-                    return this.component.context.length > 0;
-                }
-            }
+            component = new Component();
 
             attributeChangedCallback(name, oldValue, newValue) {
                 if (!isEqual(oldValue, newValue)) {
@@ -384,7 +340,7 @@ export const customComponents = new class CustomComponents {
                         if (template) {
                             this.component.addContext("template");
 
-                            buildContent(this);
+                            this.content = buildContent(this);
 
                             if (clazz.components) {
                                 checker(clazz.components, templateElement, this.localName)

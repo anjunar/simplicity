@@ -187,7 +187,31 @@ class DomAttributesProcessor {
             this.element[this.name] = result;
         }
     }
+}
 
+class ForAttributeProcessor {
+    attribute;
+    element;
+    matched = false;
+    variable;
+    source;
+
+    constructor(attribute, element) {
+        this.attribute = attribute;
+        this.element = element;
+
+        if (this.attribute.name === "bind:for") {
+            this.matched = true;
+            let regex = /let\s+(\w[\w\d]*)\s+of\s+(\w[\w\d]*)/g;
+            let regexResult = regex.exec(this.attribute.value);
+            this.variable = regexResult[1];
+            this.source = regexResult[2];
+        }
+    }
+
+    process() {
+
+    }
 }
 
 export const attributeProcessorRegistry = [
