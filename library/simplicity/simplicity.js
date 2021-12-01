@@ -248,7 +248,7 @@ function variableBindingExecution(lhsNode, rhsNode) {
 }
 
 function variableBinding(root, template) {
-    let iterator = document.createNodeIterator(template, NodeFilter.SHOW_ELEMENT);
+    let iterator = document.createNodeIterator(template.content, NodeFilter.SHOW_ELEMENT);
     let node = iterator.nextNode();
     while (node !== null) {
         function scope(node) {
