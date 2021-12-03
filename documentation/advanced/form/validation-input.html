@@ -3,6 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>In this example we are applying Input validation</origin>
+            <destination lang="de">In diesem Beispiel wenden wir Input Validation an</destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>Only Letters</origin>
+            <destination lang="de">Nur Buchstaben</destination>
+        </translation>
+        <translation>
+            <origin>Value required</origin>
+            <destination lang="de">Wert wird benötigt</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
     <template>
@@ -12,8 +46,8 @@
                 <h2 style="margin-left: 0;">Input Validation</h2>
                 <hr class="line">
 
-                <h3>Introduction</h3>
-                <p>
+                <h3 i18n>Introduction</h3>
+                <p i18n>
                     In this example we are applying Input validation
                 </p>
 
@@ -21,9 +55,9 @@
                 <table style="width: 100%">
                     <thead>
                     <tr>
-                        <td><strong>Element</strong></td>
-                        <td><strong>Attribute</strong></td>
-                        <td><strong>Description</strong></td>
+                        <td><strong i18n>Element</strong></td>
+                        <td><strong i18n>Attribute</strong></td>
+                        <td><strong i18n>Description</strong></td>
                     </tr>
                     </thead>
                     <tbody>
@@ -40,8 +74,8 @@
                         <mat-input-container placeholder="Text">
                             <input type="text" is="dom-input" bind:variable="input" bind:model="text" required pattern="[a-zA-Z]+"/>
                             <div slot="error" >
-                                <span name="valueMissing">Value required</span>
-                                <span name="patternMismatch">Only Letters</span>
+                                <span name="valueMissing" i18n>Value required</span>
+                                <span name="patternMismatch" i18n>Only Letters</span>
                                 <span name="hello">Hello World!</span>
                             </div>
                         </mat-input-container>
@@ -56,7 +90,7 @@
                 <h2>Source Code</h2>
                 <hr class="line">
                 <h3>HTML5</h3>
-                <p>The rest of the HTML file is not displayed</p>
+                <p i18n>The rest of the HTML file is not displayed</p>
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">

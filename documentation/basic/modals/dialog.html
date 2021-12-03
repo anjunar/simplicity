@@ -3,6 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                This is a dialog that is rendered into the viewport. The dialog can be started either with the action attribute,
+                or generated with the windowManager. The only important thing is the modal flag in the view that represents the dialog.
+                Width and Height can also be given, otherwise the size of the dialog is calculated from the content.
+            </origin>
+            <destination lang="de">
+                Dies ist ein Dialog, der in den viewport gerendert wird. Der Dialog kann entweder mit dem action Attribut,
+                oder mit dem windowManager erzeugt werden. Wichtig ist nur das Flag modal in der View die den Dialog darstellt.
+                Es kann ebenso Width und Height mitgegeben werden, ansonsten wird die Größe des Dialogs durch den Inhalt berechnet.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The Path to the Dialog</origin>
+            <destination lang="de">Der Pfad zum Dialog</destination>
+        </translation>
+        <translation>
+            <origin>Show Dialog</origin>
+            <destination lang="de">Zeige Dialog</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -13,16 +55,9 @@
             <h2 style="margin-left: 0;">Mat Dialog</h2>
             <hr>
 
-            <h3>Introduction</h3>
-<!--
-            <p>
-                Dies ist ein Dialog, der in den viewport gerendert wird. Der Dialog kann entweder mit dem action Attribut,
-                oder mit dem windowManager erzeugt werden. Wichtig ist nur das Flag modal in der View die den Dialog darstellt.
-                Es kann ebenso Width und Height mitgegeben werden, ansonsten wird die Größe des Dialogs durch den Inhalt berechnet.
-            </p>
--->
+            <h3 i18n>Introduction</h3>
 
-            <p>
+            <p i18n>
                 This is a dialog that is rendered into the viewport. The dialog can be started either with the action attribute,
                 or generated with the windowManager. The only important thing is the modal flag in the view that represents the dialog.
                 Width and Height can also be given, otherwise the size of the dialog is calculated from the content.
@@ -32,24 +67,24 @@
             <table style="width: 100%">
                 <thead>
                 <tr>
-                    <td><strong>Element</strong></td>
-                    <td><strong>Attribute</strong></td>
-                    <td><strong>Description</strong></td>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>template</td>
-                    <td>predicate</td>
-                    <td>The predicate to eval</td>
+                    <td>button</td>
+                    <td>action</td>
+                    <td i18n>The Path to the Dialog</td>
                 </tr>
                 </tbody>
             </table>
 
             <div style="margin: 20px;">
-                <button is="dom-button" class="thin" type="button" action="/documentation/basic/modals/dialog/example">Show Dialog</button>
+                <button is="dom-button" class="thin" type="button" action="/documentation/basic/modals/dialog/example" i18n>Show Dialog</button>
 
-                <button class="thin" type="button" bind:onclick="open()">Show Dialog</button>
+                <button class="thin" type="button" bind:onclick="open()" i18n>Show Dialog</button>
             </div>
 
 
@@ -71,7 +106,7 @@
                 <mat-page>
                     <div>
                         <h3>HTML5</h3>
-                        <p>The rest of the HTML file is not displayed</p>
+                        <p i18n>The rest of the HTML file is not displayed</p>
                         <div style="margin-top: 20px;">
                             <div>
                                 <code is="dom-code" lang="html5">

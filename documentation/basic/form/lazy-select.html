@@ -8,6 +8,50 @@
             display: block;
         }
     </style>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                This is a lazy select that receives the values from a callback. There are only 5 items at a time
+                displayed. The model consists of one of the selected records when the record was selected. In contrast,
+                the model of the native select consists of the value of the option element. In addition to the lazy Select there is
+                the mat-input-container to turn the lazy Select into a Material Design Select.
+            </origin>
+            <destination lang="de">
+                Dies ist ein lazy Select das die Werte aus einem Callback erhält. Es werden immer nur 5 Elemente zurzeit
+                angezeigt. Das Model besteht aus einen der gewählten Records, wenn der Record ausgewählt wurde. Im Gegensatz
+                besteht das Model des nativen Selects aus dem value des option Elementes. Zusätzlich zum lazy Select gibt
+                es den mat-input-container, um aus dem lazy Select ein Material Design Select zu machen.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The Placeholder text</origin>
+            <destination lang="de">Der Placeholder Text</destination>
+        </translation>
+        <translation>
+            <origin>The items data source</origin>
+            <destination lang="de">Die Items Data Source</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -18,19 +62,11 @@
             <h2 style="margin-left: 0;">Lazy Select</h2>
             <hr class="line">
 
-            <h3>Introduction</h3>
-<!--
-            <p>
-                Dies ist ein lazy Select das die Werte aus einen Callback erhält. Es werden immer nur 5 Elemente zur Zeit
-                angezeigt. Das Model besteht aus einen der gewählten Records wenn der Record ausgewählt wurde. Im Gegensatz
-                besteht das Model des nativen Selects aus dem value des option Elementes. Zusätzlich zum lazy Select gibt es
-                den mat-input-container um aus dem lazy Select ein Material Design Select zu machen.
-            </p>
--->
+            <h3 i18n>Introduction</h3>
 
-            <p>
+            <p i18n>
                 This is a lazy select that receives the values from a callback. There are only 5 items at a time
-                displayed. The model consists of one of the selected records when the record was selected. In contrast
+                displayed. The model consists of one of the selected records when the record was selected. In contrast,
                 the model of the native select consists of the value of the option element. In addition to the lazy Select there is
                 the mat-input-container to turn the lazy Select into a Material Design Select.
             </p>
@@ -39,21 +75,21 @@
             <table style="width: 100%">
                 <thead>
                 <tr>
-                    <td><strong>Element</strong></td>
-                    <td><strong>Attribute</strong></td>
-                    <td><strong>Description</strong></td>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>mat-input-container</td>
                     <td>placeholder</td>
-                    <td>The Placeholder text</td>
+                    <td i18n>The Placeholder text</td>
                 </tr>
                 <tr>
                     <td>dom-select</td>
                     <td>items</td>
-                    <td>The items data source</td>
+                    <td i18n>The items data source</td>
                 </tr>
                 </tbody>
             </table>
@@ -74,7 +110,7 @@
             <h2>Source Code</h2>
             <hr class="line">
             <h3>HTML5</h3>
-            <p>The rest of the HTML file is not displayed</p>
+            <p i18n>The rest of the HTML file is not displayed</p>
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">

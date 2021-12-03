@@ -6,7 +6,7 @@ class DomButton extends HTMLButtonElement {
 
     initialize() {
         this.addEventListener("click", () => {
-            import("../services/window-manager.js")
+            import("../manager/window-manager.js")
                 .then((result) => {
                     result.windowManager.openWindow(this.action);
                 })

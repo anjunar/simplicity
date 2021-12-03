@@ -3,6 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                The code can be downloaded from the Github repository, the link is available in the toolbar above.
+                As can be seen, there is no build management as the project is based on ES6 modules.
+                Because there is no packaging, the source code of the project is visible. So the backend has to
+                offer sufficient security.
+            </origin>
+            <destination lang="de">
+                Der Code kann vom Github Repository heruntergeladen werden, der Link ist oben in der Toolbar verfügbar.
+                Wie zu sehen ist, gibt es kein Build Management, da das Projekt auf ES6 Modules aufgebaut ist.
+                Dadurch das es kein Packaging gibt, ist der Source Code des Projektes einsehbar. Das Backend muss also
+                genügend Sicherheit bieten.
+            </destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -10,18 +30,12 @@
 
         <div style="flex: 1; padding: 20px;">
 
-            <h2 style="margin-left: 0;">Introduction</h2>
+            <h2 style="margin-left: 0;" i18n>Introduction</h2>
             <hr class="line">
 
             <h3>Getting started</h3>
-            <p style="display: none">
-                Der Code kann vom Github Repository heruntergeladen werden, der Link ist oben in der Toolbar verfügbar.
-                Wie zu sehen ist, gibt es kein Build Management, da das Projekt auf ES6 Modules aufgebaut ist.
-                Dadurch das es kein Packaging gibt, ist der Source Code des Projektes einsehbar. Das Backend muss also
-                genügend Sicherheit bieten.
-            </p>
 
-            <p>
+            <p i18n>
                 The code can be downloaded from the Github repository, the link is available in the toolbar above.
                 As can be seen, there is no build management as the project is based on ES6 modules.
                 Because there is no packaging, the source code of the project is visible. So the backend has to

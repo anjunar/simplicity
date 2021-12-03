@@ -3,7 +3,7 @@ import {loader} from "../../processors/loader-processor.js";
 import DomRepeat from "../../directives/dom-repeat.js";
 import DomSlot from "../../directives/dom-slot.js";
 import DomIf from "../../directives/dom-if.js";
-import {windowManager} from "../../services/window-manager.js";
+import {windowManager} from "../../manager/window-manager.js";
 import table from "../../../../documentation/basic/tables/table.js";
 
 class MatTable extends HTMLTableElement {

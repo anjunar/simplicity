@@ -3,6 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                A native Wysiwyg editor. Images, links, tables and a flexbox container can be integrated.
+                On the server side it is recommended to search for scripts within the document and to deactivate them,
+                since scripts can also be inserted without any problems.
+            </origin>
+            <destination lang="de">
+                Ein nativer Wysiwyg Editor. Es lassen sich Bilder, Links, Tabellen und ein Flexbox Container einbinden.
+                Auf der Server Seite wird empfohlen auf Scripte innerhalb des Dokumentes zu suchen und zu deaktivieren,
+                da ohne Probleme auch Scripte eingefügt werden können.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The value object with properties html and text</origin>
+            <destination lang="de">Das Value Objekt mit Properties html und text</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
     <template>
@@ -13,16 +51,9 @@
                 <h2 style="margin-left: 0;">Mat Editor</h2>
                 <hr class="line">
 
-                <h3>Introduction</h3>
-<!--
-                <p>
-                    Ein nativer Wysiwyg Editor. Es lassen sich Bilder, Links, Tabellen und ein Flexbox Container einbinden.
-                    Auf der Server Seite wird empfohlen auf Scripte innerhalb des Dokumentes zu suchen und zu deaktivieren,
-                    da ohne Probleme auch Scripte eingefügt werden können.
-                </p>
--->
+                <h3 i18n>Introduction</h3>
 
-                <p>
+                <p i18n>
                     A native Wysiwyg editor. Images, links, tables and a flexbox container can be integrated.
                     On the server side it is recommended to search for scripts within the document and to deactivate them,
                     since scripts can also be inserted without any problems.
@@ -32,16 +63,16 @@
                 <table style="width: 100%">
                     <thead>
                     <tr>
-                        <td><strong>Element</strong></td>
-                        <td><strong>Attribute</strong></td>
-                        <td><strong>Description</strong></td>
+                        <td><strong i18n>Element</strong></td>
+                        <td><strong i18n>Attribute</strong></td>
+                        <td><strong i18n>Description</strong></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>mat-editor</td>
                         <td>model</td>
-                        <td>The value object with properties html and text</td>
+                        <td i18n>The value object with properties html and text</td>
                     </tr>
                     </tbody>
                 </table>
@@ -61,7 +92,7 @@
                 <h2>Source Code</h2>
                 <hr class="line">
                 <h3>HTML5</h3>
-                <p>The rest of the HTML file is not displayed</p>
+                <p i18n>The rest of the HTML file is not displayed</p>
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">

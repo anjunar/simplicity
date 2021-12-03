@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        div.center {
+        mat-performance div.center {
             font-size: xx-small;
             position: absolute;
+            text-align: right;
             top: 50%;
+            right: 0;
             transform: translate(0%, -50%);
+            margin-right: 5px;
         }
     </style>
 </head>
 <body>
     <template>
-        <div style="width : 200px; height: 40px; position: relative">
+        <div style="width : 90px; height: 40px; position: relative">
             <div class="center">
                 <div>
                     Latency: ${latency}ms

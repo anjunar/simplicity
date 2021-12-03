@@ -3,6 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Dom Select</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                A native implementation of the select element. Via bind: model you can access the value in two-way mode
+                be taken from the option element. Native select works well when there are only a few values
+                about the options element there. If the values exceed a certain number of possibilities, then
+                it is advisable to use the lazy select.
+            </origin>
+            <destination lang="de">
+                Eine native implementierung des select Elements. Über bind:model kann im two-way modus auf den Wert
+                vom option Element genommen werden. Natives select lässt sich gut anwenden, wenn es nur wenige Werte
+                über das options Element gibt. Überschreiten die Werte eine bestimmte Anzahl von Möglichkeiten, dann
+                ist es ratsam das lazy select zu benutzen.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The two-way model of the component</origin>
+            <destination lang="de">Das Two-way Modell der Komponente</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
     <template>
@@ -13,17 +53,9 @@
                 <h2 style="margin-left: 0;">Dom Select</h2>
                 <hr class="line">
 
-                <h3>Introduction</h3>
-<!--
-                <p>
-                    Eine native implementierung des select Elements. Über bind:model kann im two-way modus auf den Wert
-                    vom option Element genommen werden. Natives select lässt sich gut anwenden, wenn es nur wenige Werte
-                    über das options Element gibt. Überschreiten die Werte eine bestimmte Anzahl von Möglichkeiten, dann
-                    ist es ratsam das lazy select zu benutzen.
-                </p>
--->
+                <h3 i18n>Introduction</h3>
 
-                <p>
+                <p i18n>
                     A native implementation of the select element. Via bind: model you can access the value in two-way mode
                     be taken from the option element. Native select works well when there are only a few values
                     about the options element there. If the values exceed a certain number of possibilities, then
@@ -34,16 +66,16 @@
                 <table style="width: 100%">
                     <thead>
                     <tr>
-                        <td><strong>Element</strong></td>
-                        <td><strong>Attribute</strong></td>
-                        <td><strong>Description</strong></td>
+                        <td><strong i18n>Element</strong></td>
+                        <td><strong i18n>Attribute</strong></td>
+                        <td><strong i18n>Description</strong></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>select</td>
                         <td>model</td>
-                        <td>The two-way model of the component</td>
+                        <td i18n>The two-way model of the component</td>
                     </tr>
                     </tbody>
                 </table>
@@ -66,7 +98,7 @@
                 <h2>Source Code</h2>
                 <hr class="line">
                 <h3>HTML5</h3>
-                <p>The rest of the HTML file is not displayed</p>
+                <p i18n>The rest of the HTML file is not displayed</p>
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">

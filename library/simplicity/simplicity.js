@@ -1,18 +1,10 @@
 import {attributeProcessorRegistry} from "./processors/attribute-processors.js";
-import {register} from "./services/view-manager.js";
+import {register} from "./manager/view-manager.js";
 import {TextProcessor} from "./processors/text-processor.js";
 import {lifeCycle} from "./processors/life-cycle-processor.js";
 import {debounce} from "./services/tools.js";
 import {ComponentProcessor} from "./processors/component-processor.js";
-
-document.system = {
-    pageLoad : [],
-    lifeCycle : {
-        cycles : 0,
-        latency : [],
-        avgLatency : [],
-    }
-}
+import {appManager} from "./manager/app-manager.js";
 
 document.addEventListener("lifecycle", debounce((event) => {
     lifeCycle(document.body, event);
@@ -308,6 +300,7 @@ export const customComponents = new class CustomComponents {
 
         let template = clazz.template;
         let templateElement = null;
+        let i18nMessages = {};
         if (template) {
             let parser = new ComponentProcessor();
             let html = parser.parse(template);
@@ -316,11 +309,33 @@ export const customComponents = new class CustomComponents {
             if (css) {
                 document.head.appendChild(css);
             }
+            let i18nElement = html.querySelector("i18n");
+            if (i18nElement) {
+                for (const translation of i18nElement.children) {
+                    let source = translation.querySelector("origin");
+                    let targets = translation.querySelectorAll("destination");
+                    for (const target of targets) {
+                        let language = target.getAttribute("lang");
+                        let trim = source.textContent.trim().replaceAll(/\s+/g, " ");
+                        let message = i18nMessages[trim] = {};
+                        message[language] = target.textContent.trim();
+                    }
+                }
+            }
         }
 
         class SimplicityComponent extends clazz {
 
             component = new Component();
+
+            i18n(text) {
+                let language = appManager.language;
+                if (language === "en") {
+                    return text;
+                } else {
+                    return i18nMessages[text][language]
+                }
+            }
 
             attributeChangedCallback(name, oldValue, newValue) {
                 if (!isEqual(oldValue, newValue)) {

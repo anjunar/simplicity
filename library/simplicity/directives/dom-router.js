@@ -1,5 +1,5 @@
 import {customComponents} from "../simplicity.js";
-import {viewManager} from "../services/view-manager.js";
+import {viewManager} from "../manager/view-manager.js";
 
 class DomRouter extends HTMLElement {
 

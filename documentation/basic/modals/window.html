@@ -3,6 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                This is a window that is rendered into the viewport element. The window can be set with the action attribute,
+                or generated with the windowManager. Height and Width can be specified in the definition of the view,
+                otherwise the size of the window is calculated based on its content.
+            </origin>
+            <destination lang="de">
+                Dies ist ein Window, das in das viewport Element gerendert wird. Das Window kann mit dem action Attribut,
+                oder mit dem windowManager erzeugt werden. In der Definition der View kann Height und Width angeben werden,
+                ansonsten berechnet sich die Größe des Window durch dessen Inhalt.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The Path to the Window Component</origin>
+            <destination lang="de">Der Pfad zu der Window Komponente</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -13,16 +51,9 @@
             <h2 style="margin-left: 0;">Mat Window</h2>
             <hr>
 
-            <h3>Introduction</h3>
-<!--
-            <p>
-                Dies ist ein Window, das in das viewport Element gerendert wird. Das Window kann mit dem action Attribut,
-                oder mit dem windowManager erzeugt werden. In der Definition der View kann Height und Width angeben werden,
-                ansonsten berechnet sich die Größe des Window durch dessen Inhalt.
-            </p>
--->
+            <h3 i18n>Introduction</h3>
 
-            <p>
+            <p i18n>
                 This is a window that is rendered into the viewport element. The window can be set with the action attribute,
                 or generated with the windowManager. Height and Width can be specified in the definition of the view,
                 otherwise the size of the window is calculated based on its content.
@@ -32,16 +63,16 @@
             <table style="width: 100%">
                 <thead>
                 <tr>
-                    <td><strong>Element</strong></td>
-                    <td><strong>Attribute</strong></td>
-                    <td><strong>Description</strong></td>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>template</td>
-                    <td>predicate</td>
-                    <td>The predicate to eval</td>
+                    <td>button</td>
+                    <td>action</td>
+                    <td i18n>The Path to the Window Component</td>
                 </tr>
                 </tbody>
             </table>
@@ -71,7 +102,7 @@
                 <mat-page>
                     <div>
                         <h3>HTML5</h3>
-                        <p>The rest of the HTML file is not displayed</p>
+                        <p i18n>The rest of the HTML file is not displayed</p>
                         <div style="margin-top: 20px;">
                             <div>
                                 <code is="dom-code" lang="html5">
@@ -93,7 +124,7 @@
                                         <script>
                                             import {customViews} from "../../../library/simplicity/simplicity.js";
                                             import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-                                            import {windowManager} from "../../../library/simplicity/services/window-manager.js";
+                                            import {windowManager} from "../../../library/simplicity/manager/window-manager.js";
 
                                             class Window extends HTMLElement {
 

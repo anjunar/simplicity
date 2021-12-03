@@ -3,6 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Image Upload</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                This is an image upload component to upload images. The object that is bound via bind: model
+                contains the name, lastModified and data. Data is a base64 representation of the image.
+            </origin>
+            <destination lang="de">
+                Dies ist eine Image Upload Komponente um Images hochzuladen. Das Object das über bind:model gebunden
+                wird, beinhaltet den name, lastModified und data. Data ist eine base64 repräsentation des Images.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The value object</origin>
+            <destination lang="de">Das Value Objekt</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
     <template>
@@ -13,15 +49,9 @@
                 <h2 style="margin-left: 0;">Mat Image Upload</h2>
                 <hr class="line">
 
-                <h3>Introduction</h3>
-<!--
-                <p>
-                    Dies ist eine Image Upload Komponente um Images hochzuladen. Das Object das über bind:model gebunden
-                    wird, beinhaltet den name, lastModified und data. Data ist eine base64 repräsentation des Images.
-                </p>
--->
+                <h3 i18n>Introduction</h3>
 
-                <p>
+                <p i18n>
                     This is an image upload component to upload images. The object that is bound via bind: model
                     contains the name, lastModified and data. Data is a base64 representation of the image.
                 </p>
@@ -30,16 +60,16 @@
                 <table style="width: 100%">
                     <thead>
                     <tr>
-                        <td><strong>Element</strong></td>
-                        <td><strong>Attribute</strong></td>
-                        <td><strong>Description</strong></td>
+                        <td><strong i18n>Element</strong></td>
+                        <td><strong i18n>Attribute</strong></td>
+                        <td><strong i18n>Description</strong></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>mat-image-upload</td>
                         <td>model</td>
-                        <td>The value object</td>
+                        <td i18n>The value object</td>
                     </tr>
                     </tbody>
                 </table>
@@ -61,7 +91,7 @@
                 <h2>Source Code</h2>
                 <hr class="line">
                 <h3>HTML5</h3>
-                <p>The rest of the HTML file is not displayed</p>
+                <p i18n>The rest of the HTML file is not displayed</p>
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">

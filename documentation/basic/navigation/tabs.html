@@ -3,6 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                A tab implementation with Pages. The bind: page attribute of mat-tabs is two-way bound, the bind: page
+                The attribute of mat-pages is only input bounded.
+            </origin>
+            <destination lang="de">
+                Eine Tab implementierung mit Pages. Das bind:page Attribut von mat-tabs ist two-way bound, das bind:page
+                Attribut von mat-pages ist nur input bounded.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The tab page</origin>
+            <destination lang="de">Die Tab Page</destination>
+        </translation>
+        <translation>
+            <origin>The Page to be displayed</origin>
+            <destination lang="de">Die Page die angezeigt werden soll</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
     <template>
@@ -13,15 +53,9 @@
                 <h2 style="margin-left: 0;">Mat Tabs and Mat Pages</h2>
                 <hr class="line">
 
-                <h3>Introduction</h3>
-<!--
-                <p>
-                    Eine Tab implementierung mit Pages. Das bind:page Attribut von mat-tabs ist two-way bound, das bind:page
-                    Attribut von mat-pages ist nur input bounded.
-                </p>
--->
+                <h3 i18n>Introduction</h3>
 
-                <p>
+                <p i18n>
                     A tab implementation with Pages. The bind: page attribute of mat-tabs is two-way bound, the bind: page
                     The attribute of mat-pages is only input bounded.
                 </p>
@@ -30,21 +64,21 @@
                 <table style="width: 100%">
                     <thead>
                     <tr>
-                        <td><strong>Element</strong></td>
-                        <td><strong>Attribute</strong></td>
-                        <td><strong>Description</strong></td>
+                        <td><strong i18n>Element</strong></td>
+                        <td><strong i18n>Attribute</strong></td>
+                        <td><strong i18n>Description</strong></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>mat-tabs</td>
                         <td>page</td>
-                        <td>The tab page</td>
+                        <td i18n>The tab page</td>
                     </tr>
                     <tr>
                         <td>mat-pages</td>
                         <td>page</td>
-                        <td>The Page to be displayed</td>
+                        <td i18n>The Page to be displayed</td>
                     </tr>
                     </tbody>
                 </table>
@@ -82,7 +116,7 @@
                 <h2>Source Code</h2>
                 <hr class="line">
                 <h3>HTML5</h3>
-                <p>The rest of the HTML file is not displayed</p>
+                <p i18n>The rest of the HTML file is not displayed</p>
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">

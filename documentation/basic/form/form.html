@@ -3,6 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                This is an extension of the form element. This form can be accessed with the bind: model attribute
+                a property can be bound. Each input element of the form then receives the values by name
+                of the input element. This form has the addValidator method for an asynchronous validator
+                to register. Forms can contain other forms. More on this on the Advanced page.
+            </origin>
+            <destination lang="de">
+                Dies ist eine Erweiterung des Elementes form. Dieses Formular kann mit dem bind:model Attribute auf
+                eine Property gebunden werden. Jedes Input Element des Formulars empfängt dann die Werte über den Namen
+                des Input Elementes. Dieses Formular besitzt die Methode addValidator, um einen Asynchronen Validator
+                zu registrieren. Formulare können weitere Formulare enthalten. Dazu mehr auf der Seite Advanced.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The model of the form</origin>
+            <destination lang="de">Das Modell des Formulars</destination>
+        </translation>
+        <translation>
+            <origin>First Name</origin>
+            <destination lang="de">Vorname</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
     <template>
@@ -13,19 +57,11 @@
                 <h2 style="margin-left: 0;">Dom Form</h2>
                 <hr class="line">
 
-                <h3>Introduction</h3>
-<!--
-                <p>
-                    Dies ist eine Erweiterung des Elementes form. Dieses Formular kann mit dem bind:model Attribute auf
-                    eine Property gebunden werden. Jedes Input Element des Formulars empfängt dann die Werte über den Namen
-                    des Input Elementes. Dieses Formular besitzt die Methode addValidator, um einen Asynchronen Validator
-                    zu registrieren. Formulare können weitere Formulare enthalten. Dazu mehr auf der Seite Advanced.
-                </p>
--->
+                <h3 i18n>Introduction</h3>
 
-                <p>
+                <p i18n>
                     This is an extension of the form element. This form can be accessed with the bind: model attribute
-                    a property can be bound. Each input element of the form then receives the values ​​by name
+                    a property can be bound. Each input element of the form then receives the values by name
                     of the input element. This form has the addValidator method for an asynchronous validator
                     to register. Forms can contain other forms. More on this on the Advanced page.
                 </p>
@@ -34,23 +70,23 @@
                 <table style="width: 100%">
                     <thead>
                     <tr>
-                        <td><strong>Element</strong></td>
-                        <td><strong>Attribute</strong></td>
-                        <td><strong>Description</strong></td>
+                        <td><strong i18n>Element</strong></td>
+                        <td><strong i18n>Attribute</strong></td>
+                        <td><strong i18n>Description</strong></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>form</td>
                         <td>model</td>
-                        <td>The model of the form</td>
+                        <td i18n>The model of the form</td>
                     </tr>
                     </tbody>
                 </table>
 
                 <div style="margin: 20px;">
                     <form is="dom-form" bind:model="person" bind:variable="form">
-                        <mat-input-container placeholder="First Name">
+                        <mat-input-container bind:placeholder="i18n('First Name')">
                             <input is="dom-input" type="text" name="firstName"/>
                         </mat-input-container>
                         <button type="button" bind:style="display : form.dirty ? 'inline' : 'none'" bind:onclick="form.reset()">Reset</button>
@@ -65,7 +101,7 @@
                 <h2>Source Code</h2>
                 <hr class="line">
                 <h3>HTML5</h3>
-                <p>The rest of the HTML file is not displayed</p>
+                <p i18n>The rest of the HTML file is not displayed</p>
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">

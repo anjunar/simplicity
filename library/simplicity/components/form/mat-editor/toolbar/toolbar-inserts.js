@@ -1,6 +1,6 @@
 import {customComponents} from "../../../../simplicity.js";
 import {loader} from "../../../../processors/loader-processor.js";
-import {windowManager} from "../../../../services/window-manager.js";
+import {windowManager} from "../../../../manager/window-manager.js";
 import DomInput from "../../../../directives/dom-input.js";
 import MatInputContainer from "../../container/mat-input-container.js";
 

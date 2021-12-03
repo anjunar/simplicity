@@ -1,18 +1,21 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
+import {appManager} from "../../manager/app-manager.js";
 
 class MatPerformance extends HTMLElement {
 
+    performance = appManager.performance;
+
     get latency() {
-        return Math.round(document.system.lifeCycle.latency[document.system.lifeCycle.latency.length - 1])
+        return Math.round(this.performance.lifeCycle.latency[this.performance.lifeCycle.latency.length - 1])
     }
 
     get avgLatency() {
-        return Math.round(document.system.lifeCycle.avgLatency[document.system.lifeCycle.avgLatency.length - 1])
+        return Math.round(this.performance.lifeCycle.avgLatency[this.performance.lifeCycle.avgLatency.length - 1])
     }
 
     get pageLoad() {
-        return Math.round(document.system.pageLoad[document.system.pageLoad.length - 1])
+        return Math.round(this.performance.pageLoad[this.performance.pageLoad.length - 1])
     }
 
     static get components() {

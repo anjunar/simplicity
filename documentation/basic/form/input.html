@@ -3,6 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                The input HTML element is used to create interactive controls for web-based forms in order to accept
+                data from the user; a wide variety of types of input data and control widgets are available, depending
+                on the device and user agent. The input element is one of the most powerful and complex in all of HTML
+                due to the sheer number of combinations of input types and attributes.
+            </origin>
+            <destination lang="de">
+                Das HTML-Element input ermöglicht es, interaktive Bedienelemente für webbasierte Formulare zu erstellen,
+                die Daten vom Benutzer entgegennehmen. Eine große Bandbreite verschiedener Eingabedaten und Bedienelemente
+                ist verfügbar, abhängig je nach Gerät und user agent. Das input Element ist eine der mächtigsten und
+                komplexesten von allen HTML-Elemente, da es eine ungeheure Anzahl an Kombinationen aus Eingabetypen und
+                Attributen besitzt.
+            </destination>
+        </translation>
+        <translation>
+            <origin>
+                How an input works varies considerably depending on the value of its type attribute, hence the
+                different types are covered in their own separate reference pages. If this attribute is not specified,
+                the default type adopted is text.
+            </origin>
+            <destination lang="de">
+                Wie ein input sich verhält ist stark von seinem type-Attribut abhängig. Deshalb werden dessen Werte in
+                einer eigenen Referenz beschrieben. Fehlt das Attribut, gilt der Standardwert text.
+            </destination>
+        </translation>
+        <translation>
+            <origin>
+                With the Attribute bind:model you can bind two-way the value of the input Element to your model in your
+                View or Component.
+            </origin>
+            <destination lang="de">
+                Mit dem Attribute bind:model können Sie als two-way den Wert des Input Elements auf die View oder Komponente binden.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The model to work with</origin>
+            <destination lang="de">Das Modell mit dem gearbeitet wird</destination>
+        </translation>
+        <translation>
+            <origin>First Name</origin>
+            <destination lang="de">Vorname</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
     <template>
@@ -10,24 +75,24 @@
 
             <div style="flex: 1; padding: 20px;">
 
-                <h2 style="margin-left: 0;">Dom Form</h2>
+                <h2 style="margin-left: 0;">Dom Input</h2>
                 <hr class="line">
 
-                <h3>Introduction</h3>
-                <p>
+                <h3 i18n>Introduction</h3>
+                <p i18n>
                     The input HTML element is used to create interactive controls for web-based forms in order to accept
                     data from the user; a wide variety of types of input data and control widgets are available, depending
                     on the device and user agent. The input element is one of the most powerful and complex in all of HTML
                     due to the sheer number of combinations of input types and attributes.
                 </p>
 
-                <p>
+                <p i18n>
                     How an input works varies considerably depending on the value of its type attribute, hence the
                     different types are covered in their own separate reference pages. If this attribute is not specified,
                     the default type adopted is text.
                 </p>
 
-                <p>
+                <p i18n>
                     With the Attribute bind:model you can bind two-way the value of the input Element to your model in your
                     View or Component.
                 </p>
@@ -36,22 +101,22 @@
                 <table style="width: 100%">
                     <thead>
                     <tr>
-                        <td><strong>Element</strong></td>
-                        <td><strong>Attribute</strong></td>
-                        <td><strong>Description</strong></td>
+                        <td><strong i18n>Element</strong></td>
+                        <td><strong i18n>Attribute</strong></td>
+                        <td><strong i18n>Description</strong></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>input</td>
                         <td>model</td>
-                        <td>The model to work with</td>
+                        <td i18n>The model to work with</td>
                     </tr>
                     </tbody>
                 </table>
 
                 <div style="margin: 20px;">
-                    <mat-input-container placeholder="FirstName">
+                    <mat-input-container bind:placeholder="i18n('First Name')">
                         <input is="dom-input" type="text" bind:model="firstName"/>
                     </mat-input-container>
                     <div>${firstName}</div>
@@ -65,7 +130,7 @@
                 <h2>Source Code</h2>
                 <hr class="line">
                 <h3>HTML5</h3>
-                <p>The rest of the HTML file is not displayed</p>
+                <p i18n>The rest of the HTML file is not displayed</p>
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">

@@ -3,6 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>About this Framework</origin>
+            <destination lang="de">Über dieses Framework</destination>
+        </translation>
+        <translation>
+            <origin>
+                This Framework is used to be without NPM or other libraries, because of performance issues. It is
+                kept simple to be as most performant as it can be. It has no compiler, all is used natively direct
+                from the Browser. This way it is as performant as the Browser can be.
+            </origin>
+            <destination lang="de">
+                Dieses Framework wird aufgrund von Leistungsproblemen ohne NPM oder andere Bibliotheken verwendet. Es ist
+                einfach gehalten, um so leistungsfähig wie möglich zu sein. Es hat keinen Compiler, alles wird nativ direkt verwendet
+                aus dem Browser. Auf diese Weise ist es so performant wie der Browser nur sein kann.
+            </destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -10,11 +36,11 @@
 
         <div style="flex: 1; padding: 20px;">
 
-            <h2 style="margin-left: 0;">Introduction</h2>
+            <h2 style="margin-left: 0;" i18n>Introduction</h2>
             <hr class="line">
 
-            <h3>About this Framework</h3>
-            <p>
+            <h3 i18n>About this Framework</h3>
+            <p i18n>
                 This Framework is used to be without NPM or other libraries, because of performance issues. It is
                 kept simple to be as most performant as it can be. It has no compiler, all is used natively direct
                 from the Browser. This way it is as performant as the Browser can be.
@@ -31,7 +57,7 @@
             <h2>Source Code</h2>
             <hr class="line">
             <h3>HTML5</h3>
-            <p>The rest of the HTML file is not displayed</p>
+            <p i18n>The rest of the HTML file is not displayed</p>
             <code is="dom-code" lang="html5">
                 <template>
                     <iframe>

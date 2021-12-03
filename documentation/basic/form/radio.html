@@ -3,6 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                A native radio implementation with associated mat radio container to switch to material design.
+                With the attribute bind: model, the attribute value can be linked to the selected property.
+            </origin>
+            <destination lang="de">
+                Eine native Radio Implementierung mit zugehörigen mat-radio-container um auf Material Design zu wechseln.
+                Mit dem Attribut bind:model lässt sich der Attributwert value auf den gewählten Property binden.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>Male</origin>
+            <destination lang="de">Männlich</destination>
+        </translation>
+        <translation>
+            <origin>Female</origin>
+            <destination lang="de">Weiblich</destination>
+        </translation>
+        <translation>
+            <origin>Other</origin>
+            <destination lang="de">Andere</destination>
+        </translation>
+        <translation>
+            <origin>Selected Gender</origin>
+            <destination lang="de">Selektiertes Geschlecht</destination>
+        </translation>
+        <translation>
+            <origin>Two-way data bound to a Property</origin>
+            <destination lang="de">Two-way Verbindung zu einer Property</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -13,33 +65,27 @@
             <h2 style="margin-left: 0;">Mat Radio</h2>
             <hr class="line">
 
-            <h3>Introduction</h3>
-<!--
-            <p>
-                Eine native Radio Implementierung mit zugehörigen mat-radio-container um auf Material Design zu wechseln.
-                Mit dem Attribut bind:model lässt sich der Attributwert value auf den gewählten Property binden.
-            </p>
--->
+            <h3 i18n>Introduction</h3>
 
-            <p>
+            <p i18n>
                 A native radio implementation with associated mat radio container to switch to material design.
-                With the attribute bind: model, the attribute value value can be linked to the selected property.
+                With the attribute bind: model, the attribute value can be linked to the selected property.
             </p>
 
             <h3>DOM-API</h3>
             <table style="width: 100%">
                 <thead>
                 <tr>
-                    <td><strong>Element</strong></td>
-                    <td><strong>Attribute</strong></td>
-                    <td><strong>Description</strong></td>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>input</td>
                     <td>model</td>
-                    <td>Two-way data bound to a Property</td>
+                    <td i18n>Two-way data bound to a Property</td>
                 </tr>
                 </tbody>
             </table>
@@ -47,19 +93,17 @@
             <br/>
 
             <div style="margin: auto;">
-                <mat-radio-container placeholder="Male">
+                <mat-radio-container bind:placeholder="i18n('Male')">
                     <input bind:model="gender" is="dom-input" name="gender" type="radio" value="male">
                 </mat-radio-container>
-                <mat-radio-container placeholder="Female">
+                <mat-radio-container bind:placeholder="i18n('Female')">
                     <input bind:model="gender" is="dom-input" name="gender" type="radio" value="female">
                 </mat-radio-container>
-                <mat-radio-container placeholder="Other">
+                <mat-radio-container bind:placeholder="i18n('Other')">
                     <input bind:model="gender" is="dom-input" name="gender" type="radio" value="other">
                 </mat-radio-container>
 
-                <div style="margin-top: 20px;">Selected Gender:
-                    <span>${gender}</span>
-                </div>
+                <div style="margin-top: 20px;">${i18n('Selected Gender')}: <span>${gender}</span></div>
             </div>
 
 
@@ -70,7 +114,7 @@
             <h2>Source Code</h2>
             <hr class="line">
             <h3>HTML5</h3>
-            <p>The rest of the HTML file is not displayed</p>
+            <p i18n>The rest of the HTML file is not displayed</p>
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">

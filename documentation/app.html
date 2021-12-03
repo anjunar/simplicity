@@ -57,7 +57,10 @@
     </mat-toolbar>
     <dom-router level="0" style="overflow-y: auto; overflow-x: hidden; height: 100%; width: 100%"></dom-router>
     <mat-footer>
-        <mat-performance slot="right"></mat-performance>
+        <div slot="right" style="display: flex">
+            <mat-language></mat-language>
+            <mat-performance></mat-performance>
+        </div>
     </mat-footer>
 </template>
 </body>

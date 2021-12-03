@@ -1,5 +1,6 @@
 import {evaluation} from "./js-compiler-processor.js";
 import {isEqual} from "../simplicity.js";
+import {appManager} from "../manager/app-manager.js";
 
 class StyleAttributeProcessor {
     attribute;
@@ -189,28 +190,36 @@ class DomAttributesProcessor {
     }
 }
 
-class ForAttributeProcessor {
+class i18nAttributeProcessor {
     attribute;
     element;
     matched = false;
-    variable;
-    source;
+    text;
+    lastLanguage;
 
     constructor(attribute, element) {
         this.attribute = attribute;
         this.element = element;
-
-        if (this.attribute.name === "bind:for") {
+        if (this.attribute.name === "i18n") {
             this.matched = true;
-            let regex = /let\s+(\w[\w\d]*)\s+of\s+(\w[\w\d]*)/g;
-            let regexResult = regex.exec(this.attribute.value);
-            this.variable = regexResult[1];
-            this.source = regexResult[2];
+            this.text = element.textContent.trim().replaceAll(/\s+/g, " ");
+            this.process();
         }
     }
 
     process() {
+        let language = appManager.language;
 
+        if (language !== this.lastLanguage) {
+            if (language === "en") {
+                this.element.textContent = this.text;
+            } else {
+                let text = this.element.template.i18n(this.text, this.attribute.value);
+                this.element.textContent = text;
+            }
+
+            this.lastLanguage = language;
+        }
     }
 }
 
@@ -219,6 +228,7 @@ export const attributeProcessorRegistry = [
     ClassAttributeProcessor,
     EventAttributeProcessor,
     DynamicBindingAttributeProcessor,
-    DomAttributesProcessor
+    DomAttributesProcessor,
+    i18nAttributeProcessor
 ];
 

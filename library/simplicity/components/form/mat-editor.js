@@ -1,9 +1,9 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import EditorToolbar from "./mat-editor/editor-toolbar.js";
-import {windowManager} from "../../services/window-manager.js";
+import {windowManager} from "../../manager/window-manager.js";
 import DomForm from "../../directives/dom-form.js";
-import {contextManager} from "../../services/context-manager.js";
+import {contextManager} from "../../manager/context-manager.js";
 
 class MatEditor extends HTMLElement {
 
