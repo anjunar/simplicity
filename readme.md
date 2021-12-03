@@ -31,7 +31,7 @@ app.html
 </head>
 <body>
     <template>
-        ${text}
+        <div>${text}</div>
     </template>
 </body>
 </html>
