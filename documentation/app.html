@@ -26,6 +26,16 @@
             margin: 3px;
         }
     </style>
+    <i18n>
+        <translation>
+            <origin>Basic</origin>
+            <destination lang="de">Einfach</destination>
+        </translation>
+        <translation>
+            <origin>Advanced</origin>
+            <destination lang="de">Fortgeschritten</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -33,8 +43,10 @@
     <mat-toolbar style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <div slot="left">
             <div style="display: flex">
-                <a class="test" href="#/documentation/basic/index#/documentation/basic/introduction" bind:class="active('basic') ? 'normal active' : 'normal'">Basic</a>
-                <a class="normal" href="#/documentation/advanced/index#/documentation/advanced/introduction" bind:class="active('advanced') ? 'normal active' : 'normal'">Advanced</a>
+                <a class="test" href="#/documentation/basic/index#/documentation/basic/introduction"
+                   bind:class="active('basic') ? 'normal active' : 'normal'" i18n>Basic</a>
+                <a class="normal" href="#/documentation/advanced/index#/documentation/advanced/introduction"
+                   bind:class="active('advanced') ? 'normal active' : 'normal'" i18n>Advanced</a>
             </div>
         </div>
         <div slot="middle">
@@ -42,13 +54,16 @@
         </div>
         <div slot="right">
             <a href="https://www.google.de/chrome" target="_blank  ">
-                <img src="images/chrome_logo.png" style="height: 32px; width: 32px; margin-right: 5px; vertical-align: bottom"/>
+                <img src="images/chrome_logo.png"
+                     style="height: 32px; width: 32px; margin-right: 5px; vertical-align: bottom"/>
             </a>
             <a href="https://www.microsoft.com/de-de/edge" target="_blank">
-                <img src="images/edge.png" style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
+                <img src="images/edge.png"
+                     style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
             </a>
             <a href="https://www.mozilla.org" target="_blank">
-                <img src="images/firefox_logo.png" style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
+                <img src="images/firefox_logo.png"
+                     style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
             </a>
             <a href="https://github.com/anjunar/simplicity" target="_blank">
                 <img src="images/github-circle-white-transparent.svg"/>
