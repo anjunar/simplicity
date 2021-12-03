@@ -1,25 +1,30 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {appManager} from "../../manager/app-manager.js";
+import DomRepeat from "../../directives/dom-repeat.js";
 
 class MatPerformance extends HTMLElement {
 
-    performance = appManager.performance;
-
-    get latency() {
-        return Math.round(this.performance.lifeCycle.latency[this.performance.lifeCycle.latency.length - 1])
+    get performanceLifeCycle() {
+        let latency = appManager.performance.lifeCycle.latency;
+        let avgLatency = appManager.performance.lifeCycle.avgLatency;
+        let result = [];
+        for (let i = 0; i < latency.length; i++) {
+            result.push({
+                latency : Math.round(latency[i]) || 0,
+                avgLatency : Math.round(avgLatency[i]) || 0
+            })
+        }
+        return result;
     }
 
-    get avgLatency() {
-        return Math.round(this.performance.lifeCycle.avgLatency[this.performance.lifeCycle.avgLatency.length - 1])
-    }
-
-    get pageLoad() {
-        return Math.round(this.performance.pageLoad[this.performance.pageLoad.length - 1])
+    get performancePageLoad() {
+        let pageLoad = appManager.performance.pageLoad;
+        return pageLoad.map((item) => Math.round(item))
     }
 
     static get components() {
-        return []
+        return [DomRepeat]
     }
 
     static get template() {

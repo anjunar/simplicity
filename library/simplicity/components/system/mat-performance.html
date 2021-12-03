@@ -1,35 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        mat-performance div.center {
-            font-size: xx-small;
-            position: absolute;
-            text-align: right;
-            top: 50%;
-            right: 0;
-            transform: translate(0%, -50%);
-            margin-right: 5px;
+        mat-performance  {
+            display: block;
+            width: 150px;
+            opacity: 0.5;
         }
     </style>
 </head>
 <body>
-    <template>
-        <div style="width : 100px; height: 40px; position: relative">
-            <div class="center">
-                <div>
-                    Latency: ${latency}ms
-                </div>
-                <div>
-                    avg Latency: ${avgLatency}ms
-                </div>
-                <div>
-                    Page load: ${pageLoad}ms
-                </div>
-            </div>
+<template>
+    <div>
+        <div style="display: flex; align-items: flex-start; font-size: xx-small; background-color: var(--main-dark1-color)">
+            <table style="table-layout: fixed">
+                <thead>
+                    <tr>
+                        <td>Latency</td>
+                        <td>avg Latency</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <template is="dom-repeat" bind:items="performanceLifeCycle" item="performance">
+                    <tr nolifecycle>
+                        <td nolifecycle>${performance.latency}ms</td>
+                        <td nolifecycle>${performance.avgLatency}ms</td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+            <table style="table-layout: fixed">
+                <thead>
+                <tr>
+                    <td>Page Load</td>
+                </tr>
+                </thead>
+                <tbody>
+                <template is="dom-repeat" bind:items="performancePageLoad" item="performance">
+                    <tr nolifecycle>
+                        <td nolifecycle>${performance}ms</td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
         </div>
-    </template>
+    </div>
+</template>
 </body>
 </html>
