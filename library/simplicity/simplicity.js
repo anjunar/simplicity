@@ -380,7 +380,9 @@ export const customComponents = new class CustomComponents {
                         this.component.attributesChanged = false;
                         this.component.initialized = true;
 
-                        document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "initialize"}}));
+                        if (! this.hasAttribute("noLifeCycle")) {
+                            document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "initialize"}}));
+                        }
                     }
                 }
 

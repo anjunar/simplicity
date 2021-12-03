@@ -62,7 +62,7 @@ export const viewManager = new class ViewManager {
                                 let delta = endTimer - startTimer;
 
                                 console.log("page load: " + delta + " ms")
-                                appManager.performance.pageLoad.push(endTimer - startTimer);
+                                appManager.performance.addPageLoad(endTimer - startTimer);
                             })
                         })
                         .catch((result) => {

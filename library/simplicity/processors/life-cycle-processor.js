@@ -62,12 +62,11 @@ export function lifeCycle(scope = document.body, event) {
     avgLatency = (avgLatency + delta);
     console.log(`target: ${event.detail.target.localName} with ${event.detail.event} Latency ${Math.round(delta)} ms - avg Latency: ${Math.round(avgLatency / lifeCycles)} ms`);
 
-
     let lifeCycle = appManager.performance.lifeCycle;
 
     lifeCycle.cycles = lifeCycles;
-    lifeCycle.avgLatency.push(avgLatency / lifeCycles)
-    lifeCycle.latency.push(delta);
+    lifeCycle.addAvgLatency(avgLatency / lifeCycles)
+    lifeCycle.addLatency(delta);
 
     lifeCycles++;
 
