@@ -13,6 +13,30 @@
         }
 
     </style>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                Bindings are a central part of dirty checking. Almost every attribute can be supplemented with bind
+                and thus assigned to a property. Note that with bind: style the CSS values as a string
+                The same applies to bind: class. In addition, with bind: class, the individual classes are carried out;
+                separated.
+            </origin>
+            <destination lang="de">
+                Bindings sind ein zentraler Bestandteil von Dirty-checking. Nahezu jedes Attribut kann durch bind ergänzt
+                werden und somit einer Property zugewiesen werden. Man beachte das bei bind:style die CSS-Werte als String
+                übergeben werden das Gleiche gilt für bind:class. Zudem wird bei bind:class die einzelnen Klassen durch ;
+                separiert.
+            </destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -20,21 +44,12 @@
 
         <div style="flex: 1; padding: 20px;">
 
-            <h2 style="margin-left: 0;">Introduction</h2>
+            <h2 style="margin-left: 0;" i18n>Introduction</h2>
             <hr class="line">
 
             <h3>Bindings</h3>
 
-<!--
-            <p>
-                Bindings sind ein zentraler Bestandteil von Dirty-checking. Nahezu jedes Attribut kann durch bind ergänzt
-                werden und somit einer Property zugewiesen werden. Man beachte das bei bind:style die CSS-Werte als String
-                übergeben werden das Gleiche gilt für bind:class. Zudem wird bei bind:class die einzelnen Klassen durch ;
-                separiert.
-            </p>
--->
-
-            <p>
+            <p i18n>
                 Bindings are a central part of dirty checking. Almost every attribute can be supplemented with bind
                 and thus assigned to a property. Note that with bind: style the CSS values as a string
                 The same applies to bind: class. In addition, with bind: class, the individual classes are carried out;
@@ -52,7 +67,7 @@
             <h2>Source Code</h2>
             <hr class="line">
             <h3>HTML5</h3>
-            <p>The rest of the HTML file is not displayed</p>
+            <p i18n>The rest of the HTML file is not displayed</p>
             <code is="dom-code" lang="html5">
                 <template>
                     <iframe>

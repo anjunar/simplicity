@@ -3,6 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                A for loop for elements of the DOM. This for loop iterates over the items given to it
+                Arrays with the items attribute. The DOM element receives the item via the item attribute. Additionally
+                the dom element receives the index of the iteration, the index is via the property index of the dom element
+                available.
+            </origin>
+            <destination lang="de">
+                Ein For Loop für Elemente des DOM. Dieser For Loop iteriert über die ihm gegebenen items eines
+                Arrays mit dem items Attribut. Das DOM-Element erhält das item über das item Attribut. Zusätzlich
+                erhält das Dom-Element den Index der iteration, der Index ist über die Property index des Dom-Elements
+                verfügbar.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The array to be looped</origin>
+            <destination lang="de">Das Array das gelooped wird</destination>
+        </translation>
+        <translation>
+            <origin>The property in which the data is stored</origin>
+            <destination lang="de">Die Property in der das Element gespeichert wird</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
     <template>
@@ -13,17 +57,9 @@
                 <h2 style="margin-left: 0;">Dom Repeat</h2>
                 <hr class="line">
 
-                <h3>Introduction</h3>
-<!--
-                <p>
-                    Ein For Loop für Elemente des DOM. Dieser For Loop iteriert über die ihm gegebenen items eines
-                    Arrays mit dem items Attribut. Das DOM-Element erhält das item über das item Attribut. Zusätzlich
-                    erhält das Dom-Element den Index der iteration, der Index ist über die Property index des Dom-Elements
-                    verfügbar.
-                </p>
--->
+                <h3 i18n>Introduction</h3>
 
-                <p>
+                <p i18n>
                     A for loop for elements of the DOM. This for loop iterates over the items given to it
                     Arrays with the items attribute. The DOM element receives the item via the item attribute. Additionally
                     the dom element receives the index of the iteration, the index is via the property index of the dom element
@@ -34,21 +70,21 @@
                 <table style="width: 100%">
                     <thead>
                     <tr>
-                        <td><strong>Element</strong></td>
-                        <td><strong>Attribute</strong></td>
-                        <td><strong>Description</strong></td>
+                        <td><strong i18n>Element</strong></td>
+                        <td><strong i18n>Attribute</strong></td>
+                        <td><strong i18n>Description</strong></td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>template</td>
                         <td>items</td>
-                        <td>The array to be looped</td>
+                        <td i18n>The array to be looped</td>
                     </tr>
                     <tr>
                         <td>template</td>
                         <td>item</td>
-                        <td>The property in which the data is stored</td>
+                        <td i18n>The property in which the data is stored</td>
                     </tr>
                     </tbody>
                 </table>
@@ -67,7 +103,7 @@
                 <h2>Source Code</h2>
                 <hr class="line">
                 <h3>HTML5</h3>
-                <p>The rest of the HTML file is not displayed</p>
+                <p i18n>The rest of the HTML file is not displayed</p>
                 <div style="margin-top: 20px;">
                     <div>
                         <code is="dom-code" lang="html5">

@@ -15,6 +15,50 @@
             transform: translate(-50%, -50%);
         }
     </style>
+    <i18n>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+        <translation>
+            <origin>
+                An If-Statement is essential in programming and therefore also in this framework as a template
+                available. The difference to display:none or display:block is that the corresponding element is only
+                is rendered when the Predicate evaluates to true. The element becomes the template as a nextElementSibling
+                rendered.
+            </origin>
+            <destination lang="de">
+                Ein If-Statement ist essenziell in der Programmierung und somit auch in diesen Framework als template
+                vorhanden. Der Unterschied zu display:none oder display:block ist, dass das entsprechende Element erst
+                gerendert wird, wenn das Predicate zu true evaluiert. Das Element wird als nextElementSibling zum Template
+                gerendert.
+            </destination>
+        </translation>
+        <translation>
+            <origin>Element</origin>
+            <destination lang="de">Element</destination>
+        </translation>
+        <translation>
+            <origin>Attribute</origin>
+            <destination lang="de">Attribut</destination>
+        </translation>
+        <translation>
+            <origin>Description</origin>
+            <destination lang="de">Beschreibung</destination>
+        </translation>
+        <translation>
+            <origin>The predicate to eval</origin>
+            <destination lang="de">Das Prädikat zum evaluieren</destination>
+        </translation>
+        <translation>
+            <origin>Text to be shown</origin>
+            <destination lang="de">Der Text, der hier angezeigt wird</destination>
+        </translation>
+        <translation>
+            <origin>The rest of the HTML file is not displayed</origin>
+            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -25,17 +69,9 @@
             <h2 style="margin-left: 0;">Dom If</h2>
             <hr class="line">
 
-            <h3>Introduction</h3>
-<!--
-            <p>
-                Ein If-Statement ist essenziell in der Programmierung und somit auch in diesen Framework als template
-                vorhanden. Der Unterschied zu display:none oder display:block ist, dass das entsprechende Element erst
-                gerendert wird, wenn das Predicate zu true evaluiert. Das Element wird als nextElementSibling zum Template
-                gerendert.
-            </p>
--->
+            <h3 i18n>Introduction</h3>
 
-            <p>
+            <p i18n>
                 An If-Statement is essential in programming and therefore also in this framework as a template
                 available. The difference to display:none or display:block is that the corresponding element is only
                 is rendered when the Predicate evaluates to true. The element becomes the template as a nextElementSibling
@@ -46,16 +82,16 @@
             <table style="width: 100%">
                 <thead>
                 <tr>
-                    <td><strong>Element</strong></td>
-                    <td><strong>Attribute</strong></td>
-                    <td><strong>Description</strong></td>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>template</td>
                     <td>predicate</td>
-                    <td>The predicate to eval</td>
+                    <td i18n>The predicate to eval</td>
                 </tr>
                 </tbody>
             </table>
@@ -65,7 +101,7 @@
 
                 <template is="dom-if" bind:predicate="show">
                     <div>
-                        Text to be shown
+                        ${i18n('Text to be shown')}
                     </div>
                 </template>
             </div>
@@ -78,7 +114,7 @@
             <h2>Source Code</h2>
             <hr class="line">
             <h3>HTML5</h3>
-            <p>The rest of the HTML file is not displayed</p>
+            <p i18n>The rest of the HTML file is not displayed</p>
             <div style="margin-top: 20px;">
                 <div>
                     <code is="dom-code" lang="html5">
