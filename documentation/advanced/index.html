@@ -8,6 +8,16 @@
             display: block;
         }
     </style>
+    <i18n>
+        <translation>
+            <origin>Content</origin>
+            <destination lang="de">Inhalt</destination>
+        </translation>
+        <translation>
+            <origin>Introduction</origin>
+            <destination lang="de">Einleitung</destination>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
@@ -21,7 +31,7 @@
         <mat-drawer bind:open="open">
             <div style="width: 300px">
                 <div style="padding-top: 20px">
-                    <h2>Content</h2>
+                    <h2 i18n>Content</h2>
                 </div>
 
                 <hr class="line">
@@ -31,7 +41,7 @@
                         <li>
                             <a href="#/documentation/advanced/index#/documentation/advanced/introduction">
                                 <div class="row">
-                                    <h4>Introduction</h4>
+                                    <h4 i18n>Introduction</h4>
                                 </div>
                             </a>
                         </li>
