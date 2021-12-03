@@ -37,7 +37,7 @@
         <translation>
             <origin>
                 The method attributeChangedCallback is executed when the attribute with or without binding is
-                changes. The Web Component specification was taken into account and extended with bindings.
+                changing. The Web Component specification was taken into account and extended with bindings.
                 The static method observedAttributes was also taken from the web component specification and
                 extended by the property type. Possible values are input for incoming bindings and two-way for bindings
                 that work both ways.
@@ -105,7 +105,7 @@
             </p>
             <p i18n>
                 The method attributeChangedCallback is executed when the attribute with or without binding is
-                changes. The Web Component specification was taken into account and extended with bindings.
+                changing. The Web Component specification was taken into account and extended with bindings.
                 The static method observedAttributes was also taken from the web component specification and
                 extended by the property type. Possible values are input for incoming bindings and two-way for bindings
                 that work both ways.
@@ -135,80 +135,90 @@
                 </tbody>
             </table>
 
-            <div style="margin: 20px;">
-                <input type="text" is="dom-input" bind:model="text"/>
-                <div>${text}</div>
-            </div>
-
-
         </div>
 
         <div style="flex: 1; padding: 20px;">
-
             <h2>Source Code</h2>
             <hr class="line">
             <h3>HTML5</h3>
             <p i18n>The rest of the HTML file is not displayed</p>
-            <div style="margin-top: 20px;">
-                <div>
-                    <code is="dom-code" lang="html5">
-                        <template>
-                            <iframe>
-                                <input type="text" is="dom-input" bind:model="text"/>
-                                <div>${text}</div>
-                            </iframe>
-                        </template>
-                    </code>
-                </div>
-            </div>
-            <h3>Javascript</h3>
-            <div>
-                <div>
-                    <code is="dom-code" lang="javascript">
-                        <template>
-                            <script>
-                                import {customComponents} from "../simplicity.js";
+            <code is="dom-code" lang="html5">
+                <template>
+                    <iframe>
+                        <advanced-hello-world text="Hello World!"></advanced-hello-world>
+                    </iframe>
+                </template>
 
-                                class DomInput extends HTMLInputElement {
-
-                                    model;
-
-                                    initialize() {
-                                        let valueChangeHandler = () => {
-                                            this.model = this.value
-                                            this.dispatchEvent(new CustomEvent("model"))
-                                        }
-
-                                        this.addEventListener("input", valueChangeHandler)
-                                    }
-
-                                    attributeChangedCallback(name, oldValue, newValue) {
-                                        switch (name) {
-                                            case "model" : {
-                                                this.model = newValue;
-                                                this.value = newValue;
-                                            }
-                                                break;
-                                        }
-                                    }
-
-                                    static get observedAttributes() {
-                                        return [
-                                            {
-                                                name: "model",
-                                                type: "two-way"
-                                            }
-                                        ]
-                                    }
-
+            </code>
+            <code is="dom-code" lang="html5">
+                <template>
+                    <iframe>
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Hello World</title>
+                            <style>
+                                advanced-hello-world {
+                                    display: block;
                                 }
 
-                                export default customComponents.define("dom-input", DomInput, {extends: "input"})
-                            </script>
+                                advanced-hello-world div.center {
+                                    margin: 0;
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%);
+                                }
+                            </style>
+                        </head>
+                        <body>
+                        <template>
+                            <div class="center">
+                                <div>${text}</div>
+                            </div>
                         </template>
-                    </code>
-                </div>
-            </div>
+                        </body>
+                        </html>
+                    </iframe>
+                </template>
+            </code>
+            <h3>Javascript</h3>
+            <code is="dom-code" lang="javascript">
+                <template>
+                    <script>
+                        import {customComponents} from "../../../library/simplicity/simplicity.js";
+                        import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+
+                        class HelloWorld extends HTMLElement {
+
+                            text = ""
+
+                            attributeChangedCallback(name, oldValue, newValue) {
+                                switch (name) {
+                                    case "text" : {
+                                        this.text = newValue;
+                                    }
+                                }
+                            }
+
+                            static get observedAttributes() {
+                                return [{
+                                    name : "text",
+                                    type : "input"
+                                }];
+                            }
+
+                            static get template() {
+                                return loader("documentation/advanced/examples/hello-world.html");
+                            }
+
+                        }
+
+                        export default customComponents.define("advanced-hello-world", HelloWorld)
+                    </script>
+                </template>
+            </code>
         </div>
     </div>
 </template>
