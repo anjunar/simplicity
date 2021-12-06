@@ -16,21 +16,17 @@ function hasTextInterpolation(element) {
     }
 }
 
-function isTemplateRepeat(node, template) {
-    return template && node.parentNode === template.content && template.getAttribute("is") === "dom-repeat"
-}
-
 function isI18n(element) {
     return element.hasAttribute("i18n");
 }
 
 function enrich(templateElement) {
-    function iterate(element, template) {
+    function iterate(element) {
         let iterator = document.createNodeIterator(element, NodeFilter.SHOW_ELEMENT);
         let node = iterator.nextNode();
         while (node != null) {
             if (node.localName.indexOf("-") === -1 && ! node.hasAttribute("is")) {
-                if (hasBinding(node) || hasTextInterpolation(node) || isTemplateRepeat(node, template) || isI18n(node)) {
+                if (hasBinding(node) || hasTextInterpolation(node) || isI18n(node)) {
                     node.setAttribute("is", "native-" + node.localName);
                     import("../components/native/native-" + node.localName + ".js")
                         .then(() => {

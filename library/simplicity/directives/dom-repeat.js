@@ -13,7 +13,7 @@ class DomRepeat extends HTMLTemplateElement {
         let sibling = this.nextElementSibling;
         while (sibling) {
             let nextElementSibling = sibling.nextElementSibling;
-            if (sibling.component?.hasContext) {
+            if (sibling.component?.control === this) {
                 sibling.remove();
             }
             sibling = nextElementSibling
@@ -30,6 +30,7 @@ class DomRepeat extends HTMLTemplateElement {
             importNode.index = index;
             importNode.length = this.items.length;
             importNode.component.addContext("repeat");
+            importNode.component.control = this;
 
             container.appendChild(importNode)
         })

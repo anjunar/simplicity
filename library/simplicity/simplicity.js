@@ -144,31 +144,23 @@ document.importComponent = function (node) {
         let lhsNode = lhsIterator.nextNode();
         let rhsNode = rhsIterator.nextNode();
 
-        variableBindingExecution(lhsNode, rhsNode)
-
-        for (const property of Object.keys(rhsNode)) {
-            switch (property) {
-                case "component" : {
-                    lhsNode.component.context = rhsNode.component.context;
-                } break
-                default : {
-                    lhsNode[property] = rhsNode[property];
-                } break;
-            }
-        }
-
         while (lhsNode !== null && rhsNode !== null) {
-            function scope(lhsNode, rhsNode) {
-                Object.defineProperties(lhsNode, {
-                    template: {
-                        get() {
-                            return rhsNode.template;
-                        }
-                    }
-                })
+            lhsNode.component = new Component();
+
+            variableBindingExecution(lhsNode, rhsNode)
+
+            for (const property of Object.keys(rhsNode)) {
+                switch (property) {
+                    case "component" : {
+                        lhsNode.component.context = rhsNode.component.context;
+                    } break
+                    default : {
+                        lhsNode[property] = rhsNode[property];
+                    } break;
+                }
             }
 
-            scope(lhsNode, rhsNode)
+            lhsNode.template = rhsNode.template;
 
             if (lhsNode instanceof HTMLTemplateElement && rhsNode instanceof HTMLTemplateElement) {
                 createLink(lhsNode.content, rhsNode.content)
@@ -204,17 +196,8 @@ function buildContext(root, templateElement) {
         let node = iterator.nextNode();
 
         while (node !== null) {
-            function scope(root, lhsNode) {
-                Object.defineProperties(lhsNode, {
-                    template: {
-                        get() {
-                            return root;
-                        }
-                    }
-                })
-            }
-
-            scope(root, node);
+            node.component = new Component();
+            node.template = root;
 
             if (node instanceof HTMLTemplateElement && node.hasAttribute("is")) {
                 createLink(root, node.content);
