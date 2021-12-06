@@ -133,6 +133,27 @@ export function findProperty(name, scope, element) {
     return findProperty(name, scope, element.parentNode)
 }
 
+function synchronize(lhsNode, rhsNode) {
+    if (! lhsNode.component) {
+        lhsNode.component = new Component();
+    }
+
+    variableBindingExecution(lhsNode, rhsNode)
+
+    for (const property of Object.keys(rhsNode)) {
+        switch (property) {
+            case "component" : {
+                lhsNode.component.context = rhsNode.component.context;
+            } break
+            default : {
+                lhsNode[property] = rhsNode[property];
+            } break;
+        }
+    }
+
+    lhsNode.template = rhsNode.template;
+}
+
 document.importComponent = function (node) {
     let result = document.importNode(node, true);
 
@@ -145,22 +166,8 @@ document.importComponent = function (node) {
         let rhsNode = rhsIterator.nextNode();
 
         while (lhsNode !== null && rhsNode !== null) {
-            lhsNode.component = new Component();
 
-            variableBindingExecution(lhsNode, rhsNode)
-
-            for (const property of Object.keys(rhsNode)) {
-                switch (property) {
-                    case "component" : {
-                        lhsNode.component.context = rhsNode.component.context;
-                    } break
-                    default : {
-                        lhsNode[property] = rhsNode[property];
-                    } break;
-                }
-            }
-
-            lhsNode.template = rhsNode.template;
+            synchronize(lhsNode, rhsNode);
 
             if (lhsNode instanceof HTMLTemplateElement && rhsNode instanceof HTMLTemplateElement) {
                 createLink(lhsNode.content, rhsNode.content)
@@ -188,15 +195,18 @@ function buildContent(element) {
     return fragment;
 }
 
-function buildContext(root, templateElement) {
-    let templateElementCloned = templateElement.cloneNode(true);
+function buildContext(root, template) {
+    let fragment = document.importNode(template.content, true)
 
     function createLink(root, clone) {
         let iterator = document.createNodeIterator(clone, NodeFilter.SHOW_ELEMENT);
         let node = iterator.nextNode();
 
         while (node !== null) {
-            node.component = new Component();
+            if (! node.component) {
+                node.component = new Component();
+            }
+
             node.template = root;
 
             if (node instanceof HTMLTemplateElement && node.hasAttribute("is")) {
@@ -207,9 +217,9 @@ function buildContext(root, templateElement) {
         }
     }
 
-    createLink(root, templateElementCloned.content);
+    createLink(root, fragment);
 
-    return templateElementCloned;
+    return fragment;
 }
 
 const variableBindingRegistry = new WeakMap();
@@ -222,8 +232,8 @@ function variableBindingExecution(lhsNode, rhsNode) {
     }
 }
 
-function variableBinding(root, template) {
-    let iterator = document.createNodeIterator(template.content, NodeFilter.SHOW_ELEMENT);
+function variableBinding(root, fragment) {
+    let iterator = document.createNodeIterator(fragment, NodeFilter.SHOW_ELEMENT);
     let node = iterator.nextNode();
     while (node !== null) {
         function scope(node) {
@@ -344,13 +354,13 @@ export const customComponents = new class CustomComponents {
                                 checker(clazz.components, templateElement, this.localName)
                             }
 
-                            let template = buildContext(this, templateElement);
+                            let fragment = buildContext(this, templateElement);
 
-                            variableBinding(this, template);
+                            variableBinding(this, fragment);
 
                             createProcessors(this);
 
-                            this.appendChild(template.content);
+                            this.appendChild(fragment);
 
                         } else {
                             createProcessors(this)
