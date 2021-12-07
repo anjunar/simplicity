@@ -7,7 +7,7 @@ class ContextMenu extends HTMLElement {
     isCollapsed = true;
     path;
 
-    initialize() {
+    preInitialize() {
         let selection = window.getSelection();
         this.isCollapsed = selection.isCollapsed;
     }

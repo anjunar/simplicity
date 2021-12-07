@@ -11,7 +11,7 @@ class Index extends HTMLElement {
 
     open = false
 
-    initialize() {
+    preInitialize() {
         let media = window.matchMedia("(max-width: 800px)")
         if (! media.matches) {
             this.open = true;

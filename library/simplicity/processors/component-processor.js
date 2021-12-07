@@ -29,9 +29,6 @@ function enrich(templateElement) {
                 if (hasBinding(node) || hasTextInterpolation(node) || isI18n(node)) {
                     node.setAttribute("is", "native-" + node.localName);
                     import("../components/native/native-" + node.localName + ".js")
-                        .then(() => {
-                            document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target: document.body, event: "import"}}))
-                        })
                 }
             }
 

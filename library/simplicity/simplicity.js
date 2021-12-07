@@ -2,13 +2,12 @@ import {attributeProcessorRegistry} from "./processors/attribute-processors.js";
 import {register} from "./manager/view-manager.js";
 import {TextProcessor} from "./processors/text-processor.js";
 import {lifeCycle} from "./processors/life-cycle-processor.js";
-import {debounce} from "./services/tools.js";
 import {ComponentProcessor} from "./processors/component-processor.js";
 import {appManager} from "./manager/app-manager.js";
 
-document.addEventListener("lifecycle", debounce((event) => {
+document.addEventListener("lifecycle", (event) => {
     lifeCycle(document.body, event);
-}, 30))
+})
 
 export function isEqual(lhs, rhs) {
     if (lhs instanceof Array && rhs instanceof Array) {
@@ -71,12 +70,12 @@ const blackList = ["mousemove", "mouseover", "loadend", "lifecycle"]
 let listeners = new WeakMap();
 
 EventTarget.prototype.addEventListener = (function (_super) {
-    return function (name, callback, options = {lifeCycle : true}) {
+    return function (name, callback, options = {lifeCycle: true}) {
         if (name !== "") {
             let handler = (event) => {
                 callback(event)
                 if (blackList.indexOf(name) === -1 && options.lifeCycle) {
-                    document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : event.target, event : name}}));
+                    document.dispatchEvent(new CustomEvent("lifecycle", {detail: {target: event.target, event: name}}));
                 }
             };
             listeners.set(callback, handler);
@@ -134,7 +133,7 @@ export function findProperty(name, scope, element) {
 }
 
 function synchronize(lhsNode, rhsNode) {
-    if (! lhsNode.component) {
+    if (!lhsNode.component) {
         lhsNode.component = new Component();
     }
 
@@ -144,10 +143,12 @@ function synchronize(lhsNode, rhsNode) {
         switch (property) {
             case "component" : {
                 lhsNode.component.context = rhsNode.component.context;
-            } break
+            }
+                break
             default : {
                 lhsNode[property] = rhsNode[property];
-            } break;
+            }
+                break;
         }
     }
 
@@ -203,7 +204,7 @@ function buildContext(root, template) {
         let node = iterator.nextNode();
 
         while (node !== null) {
-            if (! node.component) {
+            if (!node.component) {
                 node.component = new Component();
             }
 
@@ -247,6 +248,7 @@ function variableBinding(root, fragment) {
                 }
             }
         }
+
         scope(node);
         node = iterator.nextNode();
     }
@@ -259,7 +261,7 @@ export function templateBinding(content) {
             for (const addedNode of mutationRecord.addedNodes) {
                 if (addedNode instanceof HTMLTemplateElement && addedNode.hasAttribute("is")) {
                     let component = addedNode.queryUpwards((element) => element.localName.indexOf("-") > -1);
-                    if (! component) {
+                    if (!component) {
                         // Call connnectedCallback because it is not triggered when placed inside a Template
                         addedNode.connectedCallback(true);
                         // Event for Dom-Slot, because the MutationObserver is async
@@ -269,7 +271,7 @@ export function templateBinding(content) {
             }
         }
     })
-    mutationObserver.observe(content, {subtree : true, childList : true});
+    mutationObserver.observe(content, {subtree: true, childList: true});
 }
 
 const names = new Map();
@@ -280,9 +282,11 @@ class Component {
     initialized = false
     attributeBindings = []
     textNodeProcessors = []
+
     addContext(value) {
         this.context.push(value);
     }
+
     hasContext() {
         return this.context.length > 0;
     }
@@ -343,7 +347,7 @@ export const customComponents = new class CustomComponents {
                 }
 
                 if (this.isConnected || force) {
-                    if (! this.component.initialized) {
+                    if (!this.component.initialized) {
 
                         if (template) {
                             this.component.addContext("template");
@@ -357,6 +361,10 @@ export const customComponents = new class CustomComponents {
                             let fragment = buildContext(this, templateElement);
 
                             variableBinding(this, fragment);
+
+                            if (this.preInitialize) {
+                                this.preInitialize()
+                            }
 
                             createProcessors(this);
 
@@ -373,9 +381,6 @@ export const customComponents = new class CustomComponents {
                         this.component.attributesChanged = false;
                         this.component.initialized = true;
 
-                        if (! this.hasAttribute("noLifeCycle")) {
-                            document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "initialize"}}));
-                        }
                     }
                 }
 
@@ -437,7 +442,7 @@ function checker(jsImports, html, path) {
                 }
                 if (element.hasAttribute("is")) {
                     let name = element.getAttribute("is");
-                    if (! name.startsWith("native")) {
+                    if (!name.startsWith("native")) {
                         if (components.indexOf(name) === -1) {
                             components.push(name);
                         }
