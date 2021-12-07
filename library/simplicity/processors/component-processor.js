@@ -28,7 +28,6 @@ function enrich(templateElement) {
             if (node.localName.indexOf("-") === -1 && ! node.hasAttribute("is")) {
                 if (hasBinding(node) || hasTextInterpolation(node) || isI18n(node)) {
                     node.setAttribute("is", "native-" + node.localName);
-                    import("../components/native/native-" + node.localName + ".js")
                 }
             }
 
