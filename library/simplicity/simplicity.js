@@ -2,7 +2,6 @@ import {attributeProcessorRegistry} from "./processors/attribute-processors.js";
 import {register} from "./manager/view-manager.js";
 import {TextProcessor} from "./processors/text-processor.js";
 import {lifeCycle} from "./processors/life-cycle-processor.js";
-import {ComponentProcessor} from "./processors/component-processor.js";
 import {appManager} from "./manager/app-manager.js";
 
 document.addEventListener("lifecycle", (event) => {
@@ -64,6 +63,36 @@ function createProcessors(element) {
         }
     }
 }
+
+function createProcessorTree(element) {
+    let iterator = document.createTreeWalker(element, NodeFilter.SHOW_ELEMENT, {
+        acceptNode(node) {
+            if (node.localName === "code") {
+                return NodeFilter.FILTER_REJECT;
+            }
+            if (node.isCompositeComponent) {
+                return NodeFilter.FILTER_REJECT
+            }
+            return NodeFilter.FILTER_ACCEPT;
+        }
+    });
+    let node = iterator.nextNode();
+
+    while (node !== null) {
+        createProcessors(node);
+        node = iterator.nextNode();
+    }
+}
+
+let mutationObserver = new MutationObserver((records) => {
+    for (const record of records) {
+        for (const addedNode of record.addedNodes) {
+            createProcessorTree(addedNode)
+        }
+    }
+})
+
+mutationObserver.observe(document.body, {subtree : true, childList : true})
 
 const blackList = ["mousemove", "mouseover", "loadend", "lifecycle"]
 
@@ -142,7 +171,9 @@ function synchronize(lhsNode, rhsNode) {
     for (const property of Object.keys(rhsNode)) {
         switch (property) {
             case "component" : {
-                lhsNode.component.context = rhsNode.component.context;
+                for (const contextElement of rhsNode.component.context) {
+                    lhsNode.component.context.push(contextElement)
+                }
             }
                 break
             default : {
@@ -299,8 +330,8 @@ export const customComponents = new class CustomComponents {
         let templateElement = null;
         let i18nMessages = {};
         if (template) {
-            let parser = new ComponentProcessor();
-            let html = parser.parse(template);
+            let parser = new DOMParser();
+            let html = parser.parseFromString(template, "text/html");
             templateElement = html.querySelector("template");
             let css = html.querySelector("style");
             if (css) {
@@ -361,6 +392,7 @@ export const customComponents = new class CustomComponents {
 
                         if (template) {
                             this.component.addContext("template");
+                            this.isCompositeComponent = true;
 
                             this.content = buildContent(this);
 

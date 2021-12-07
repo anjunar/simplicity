@@ -5,9 +5,8 @@ import MatToolbar from "../library/simplicity/components/navigation/mat-toolbar.
 import MatFooter from "../library/simplicity/components/navigation/mat-footer.js";
 import MatPerformance from "../library/simplicity/components/system/mat-performance.js";
 import MatLanguage from "../library/simplicity/components/system/mat-language.js";
-import {App} from "../library/simplicity/components/app.js";
 
-export default class DocumentationApp extends App {
+export default class DocumentationApp extends HTMLElement {
 
     active(value) {
         return window.location.hash.startsWith(`#/documentation/${value}/index`)
