@@ -3,38 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Image Upload</title>
-    <i18n>
-        <translation>
-            <origin>
-                This is an image upload component to upload images. The object that is bound via bind: model
-                contains the name, lastModified and data. Data is a base64 representation of the image.
-            </origin>
-            <destination lang="de">
-                Dies ist eine Image Upload Komponente um Images hochzuladen. Das Object das über bind:model gebunden
-                wird, beinhaltet den name, lastModified und data. Data ist eine base64 repräsentation des Images.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The value object</origin>
-            <destination lang="de">Das Value Objekt</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `This is an image upload component to upload images. The object that is bound via bind: model
+                contains the name, lastModified and data. Data is a base64 representation of the image.`,
+                de : `Dies ist eine Image Upload Komponente um Images hochzuladen. Das Object das über bind:model gebunden
+                wird, beinhaltet den name, lastModified und data. Data ist eine base64 repräsentation des Images.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The value object`,
+                de : `Das Value Objekt`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
     <template>

@@ -3,36 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>In this example we are applying Input validation</origin>
-            <destination lang="de">In diesem Beispiel wenden wir Input Validation an</destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>Only Letters</origin>
-            <destination lang="de">Nur Buchstaben</destination>
-        </translation>
-        <translation>
-            <origin>Value required</origin>
-            <destination lang="de">Wert wird benötigt</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `In this example we are applying Input validation`,
+                de : `In diesem Beispiel wenden wir Input Validation an`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `Only Letters`,
+                de : `Nur Buchstaben`
+            }, {
+                en : `Value required`,
+                de : `Wert wird benötigt`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
     <template>

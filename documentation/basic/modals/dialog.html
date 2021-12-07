@@ -3,44 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>
-                This is a dialog that is rendered into the viewport. The dialog can be started either with the action attribute,
+    <script>
+        function i18n() {
+            return [{
+                en : `This is a dialog that is rendered into the viewport. The dialog can be started either with the action attribute,
                 or generated with the windowManager. The only important thing is the modal flag in the view that represents the dialog.
-                Width and Height can also be given, otherwise the size of the dialog is calculated from the content.
-            </origin>
-            <destination lang="de">
-                Dies ist ein Dialog, der in den viewport gerendert wird. Der Dialog kann entweder mit dem action Attribut,
+                Width and Height can also be given, otherwise the size of the dialog is calculated from the content.`,
+                de : `Dies ist ein Dialog, der in den viewport gerendert wird. Der Dialog kann entweder mit dem action Attribut,
                 oder mit dem windowManager erzeugt werden. Wichtig ist nur das Flag modal in der View die den Dialog darstellt.
-                Es kann ebenso Width und Height mitgegeben werden, ansonsten wird die Größe des Dialogs durch den Inhalt berechnet.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The Path to the Dialog</origin>
-            <destination lang="de">Der Pfad zum Dialog</destination>
-        </translation>
-        <translation>
-            <origin>Show Dialog</origin>
-            <destination lang="de">Zeige Dialog</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+                Es kann ebenso Width und Height mitgegeben werden, ansonsten wird die Größe des Dialogs durch den Inhalt berechnet.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The Path to the Dialog`,
+                de : `Der Pfad zum Dialog`
+            }, {
+                en : `Show Dialog`,
+                de : `Zeige Dialog`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

@@ -3,60 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>Getting started</origin>
-            <destination lang="de">Erste Schritte</destination>
-        </translation>
-        <translation>
-            <origin>
-                Simplicity is a framework for building surfaces. Special attention was paid to that
+    <script>
+        function i18n() {
+            return [{
+                en : `Getting started`,
+                de : `Erste Schritte`
+            }, {
+                en : `Simplicity is a framework for building surfaces. Special attention was paid to that
                 no other libraries are used in order to keep the lines of code as small as possible. That
-                promises performance and readability. It is also advised to use vanilla Javascript.
-            </origin>
-            <destination lang="de">
-                Simplicity ist ein Framework um Oberflächen zu bauen. Dabei ist extra darauf geachtet worden das
+                promises performance and readability. It is also advised to use vanilla Javascript.`,
+                de : `Simplicity ist ein Framework um Oberflächen zu bauen. Dabei ist extra darauf geachtet worden das
                 keine weiteren Bibliotheken verwendet werden, um die Lines of Code möglichst gering zu halten. Das
-                verspricht Performance und Lesbarkeit. Es wird auch geraten vanilla Javascript zu nutzen.
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                Build management was deliberately avoided because the ES6 modules are used. Each view is
+                verspricht Performance und Lesbarkeit. Es wird auch geraten vanilla Javascript zu nutzen.`
+            }, {
+                en : `Build management was deliberately avoided because the ES6 modules are used. Each view is
                 lazy loaded and the other attached components as well. Thus the framework achieves a
-                excellent page load latency.
-            </origin>
-            <destination lang="de">
-                Auf Bildmanagement wurde bewusst verzichtet, da die ES6 Modules verwendet werden. Jede View wird
+                excellent page load latency.`,
+                de : `Auf Bildmanagement wurde bewusst verzichtet, da die ES6 Modules verwendet werden. Jede View wird
                 lazy geladen und die weiteren angehängten Komponenten ebenfalls. Somit erreicht das Framework eine
-                ausgezeichnete Latenz beim Laden von Seiten.
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                The architecture has been kept particularly close to the web component and HTML specification.
-                This framework can therefore be seen as an extension of the Web Component specification.
-            </origin>
-            <destination lang="de">
-                Die Architektur ist extra besonders nahe an der Web-Component und HTML Spezifikation gehalten worden.
-                Somit kann dieses Framework als eine Erweiterung der Web-Component Spezifikation gesehen werden.
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                The code can be downloaded from the Github repository, the link is available in the toolbar above.
+                ausgezeichnete Latenz beim Laden von Seiten.`
+            }, {
+                en : `The architecture has been kept particularly close to the web component and HTML specification.
+                This framework can therefore be seen as an extension of the Web Component specification.`,
+                de : `Die Architektur ist extra besonders nahe an der Web-Component und HTML Spezifikation gehalten worden.
+                Somit kann dieses Framework als eine Erweiterung der Web-Component Spezifikation gesehen werden.`
+            }, {
+                en : `The code can be downloaded from the Github repository, the link is available in the toolbar above.
                 As can be seen, there is no build management as the project is based on ES6 modules.
                 Because there is no packaging, the source code of the project is visible. So the backend has to
-                offer sufficient security.
-            </origin>
-            <destination lang="de">
-                Der Code kann vom Github Repository heruntergeladen werden, der Link ist oben in der Toolbar verfügbar.
+                offer sufficient security.`,
+                de : `Der Code kann vom Github Repository heruntergeladen werden, der Link ist oben in der Toolbar verfügbar.
                 Wie zu sehen ist, gibt es kein Build Management, da das Projekt auf ES6 Modules aufgebaut ist.
                 Dadurch das es kein Packaging gibt, ist der Source Code des Projektes einsehbar. Das Backend muss also
-                genügend Sicherheit bieten.
-            </destination>
-        </translation>
-    </i18n>
+                genügend Sicherheit bieten.`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

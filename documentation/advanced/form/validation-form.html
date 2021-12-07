@@ -22,52 +22,46 @@
             transform: translate(-50%, -50%);
         }
     </style>
-    <i18n>
-        <translation>
-            <origin>Form Validation</origin>
-            <destination lang="de">Formular Validation</destination>
-        </translation>
-        <translation>
-            <origin>In this example you can see how Form validation is done. Form Validation is always async, because in most cases it is a Server request.</origin>
-            <destination lang="de">In diesem Beispiel kann man sehen wie Formular Validierung gemacht wird. Formular Validierung ist immer Asynchron, weil fast alle Fälle es ein Server Request ist.</destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>Points to the Object model</origin>
-            <destination lang="de">Zeigt auf das Objekt Modell</destination>
-        </translation>
-        <translation>
-            <origin>Makes the form in the View available</origin>
-            <destination lang="de">Macht das Formular in der View verfügbar</destination>
-        </translation>
-        <translation>
-            <origin>First Name</origin>
-            <destination lang="de">Vorname</destination>
-        </translation>
-        <translation>
-            <origin>Last Name</origin>
-            <destination lang="de">Nachname</destination>
-        </translation>
-        <translation>
-            <origin>Name already exists</origin>
-            <destination lang="de">Name existiert bereits</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `Form Validation`,
+                de : `Formular Validation`
+            }, {
+                en : `In this example you can see how Form validation is done. Form Validation is always async, because
+                in most cases it is a Server request.`,
+                de : `In diesem Beispiel kann man sehen wie Formular Validierung gemacht wird. Formular Validierung ist
+                immer Asynchron, weil fast alle Fälle es ein Server Request ist.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `Points to the Object model`,
+                de : `Zeigt auf das Objekt Modell`
+            }, {
+                en : `Makes the form in the View available`,
+                de : `Macht das Formular in der View verfügbar`
+            }, {
+                en : `First Name`,
+                de : `Vorname`
+            }, {
+                en : `Last Name`,
+                de : `Nachname`
+            }, {
+                en : `Name already exists`,
+                de : `Name existiert bereits`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

@@ -3,58 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Check Box</title>
-    <i18n>
-        <translation>
-            <origin>
-                Input elements of type checkbox are rendered by default as boxes that are checked (ticked) when
+    <script>
+        function i18n() {
+            return [{
+                en : `Input elements of type checkbox are rendered by default as boxes that are checked (ticked) when
                 activated, like you might see in an official government paper form. A checkbox allows you to select
-                single values for submission in a form (or not).
-            </origin>
-            <destination lang="de">
-                Eingabeelemente vom Typ Checkbox werden standardmäßig als Kästchen gerendert, die aktiviert (angekreuzt) sind, wenn
+                single values for submission in a form (or not).`,
+                de : `Eingabeelemente vom Typ Checkbox werden standardmäßig als Kästchen gerendert, die aktiviert (angekreuzt) sind, wenn
                 aktiviert, wie Sie vielleicht in einem offiziellen Regierungsformular sehen. Ein Kontrollkästchen ermöglicht Ihnen die Auswahl
-                Einzelwerte für die Einreichung in einem Formular (oder nicht).
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                A DOMString representing the value of the checkbox. This is not displayed on the client-side, but on
-                the server this is the value given to the data submitted with the checkbox's name.
-            </origin>
-            <destination lang="de">
-                Ein DOMString, der den Wert des Kontrollkästchens darstellt. Dies wird nicht clientseitig angezeigt, sondern auf
-                der Server Dies ist der Wert, der den mit dem Namen des Kontrollkästchens übermittelten Daten zugewiesen wird.
-            </destination>
-        </translation>
-        <translation>
-            <origin>With the bind:model Attribute you can bind the value of the Checkbox to a property of your choice.</origin>
-            <destination lang="de">Mit dem bind: model Attribut können Sie den Wert der Checkbox an eine Eigenschaft Ihrer Wahl binden.</destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The Placeholder text</origin>
-            <destination lang="de">Der Placeholder Text</destination>
-        </translation>
-        <translation>
-            <origin>The Bind variable that can be bound</origin>
-            <destination lang="de">Die Bind Variable, die gebunden werden kann</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+                Einzelwerte für die Einreichung in einem Formular (oder nicht).`
+            }, {
+                en : `A DOMString representing the value of the checkbox. This is not displayed on the client-side, but on
+                the server this is the value given to the data submitted with the checkbox's name.`,
+                de : `Ein DOMString, der den Wert des Kontrollkästchens darstellt. Dies wird nicht clientseitig angezeigt, sondern auf
+                der Server Dies ist der Wert, der den mit dem Namen des Kontrollkästchens übermittelten Daten zugewiesen wird.`
+            }, {
+                en : `With the bind:model Attribute you can bind the value of the Checkbox to a property of your choice.`,
+                de : `Mit dem bind: model Attribut können Sie den Wert der Checkbox an eine Eigenschaft Ihrer Wahl binden.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The Placeholder text`,
+                de : `Der Placeholder Text`
+            }, {
+                en : `The Bind variable that can be bound`,
+                de : `Die Bind Variable, die gebunden werden kann`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

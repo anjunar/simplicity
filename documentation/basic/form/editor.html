@@ -3,40 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>
-                A native Wysiwyg editor. Images, links, tables and a flexbox container can be integrated.
+    <script>
+        function i18n() {
+            return [{
+                en : `A native Wysiwyg editor. Images, links, tables and a flexbox container can be integrated.
                 On the server side it is recommended to search for scripts within the document and to deactivate them,
-                since scripts can also be inserted without any problems.
-            </origin>
-            <destination lang="de">
-                Ein nativer Wysiwyg Editor. Es lassen sich Bilder, Links, Tabellen und ein Flexbox Container einbinden.
+                since scripts can also be inserted without any problems.`,
+                de : `Ein nativer Wysiwyg Editor. Es lassen sich Bilder, Links, Tabellen und ein Flexbox Container einbinden.
                 Auf der Server Seite wird empfohlen auf Scripte innerhalb des Dokumentes zu suchen und zu deaktivieren,
-                da ohne Probleme auch Scripte eingefügt werden können.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The value object with properties html and text</origin>
-            <destination lang="de">Das Value Objekt mit Properties html und text</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+                da ohne Probleme auch Scripte eingefügt werden können.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The value object with properties html and text`,
+                de : `Das Value Objekt mit Properties html und text`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
     <template>

@@ -15,76 +15,58 @@
             transform: translate(-50%, -50%);
         }
     </style>
-    <i18n>
-        <translation>
-            <origin>Custom Component</origin>
-            <destination lang="de">Eigene Komponente</destination>
-        </translation>
-        <translation>
-            <origin>
-                When creating components, there are several methods that must be implemented. The initialize
+    <script>
+        function i18n() {
+            return [{
+                en: `Custom Component`,
+                de: `Eigene Komponente`
+            }, {
+                en: `When creating components, there are several methods that must be implemented. The initialize
                 Method is executed when the template has been applied and is available as children of the component
                 stand. It should be noted that the child elements have not yet been initialized, so a method
-                how, e.g. register on the parent element are called by the child element.
-            </origin>
-            <destination lang="de">
-                Bei der Erstellung von Komponenten gibt es mehrere Methoden die implementiert werden müssen. Die initialize
+                how, e.g. register on the parent element are called by the child element.`,
+                de: `Bei der Erstellung von Komponenten gibt es mehrere Methoden die implementiert werden müssen. Die initialize
                 Methode wird ausgeführt, wenn das Template angewendet wurde und als children der Komponente zur Verfügung
                 stehen. Dabei ist zu beachten, dass die Kind-Elemente noch nicht initialisiert sind, somit muss eine Methode
-                wie, z.B. register am Eltern-Element vom Kind-Element aufgerufen werden.
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                The method attributeChangedCallback is executed when the attribute with or without binding is
+                wie, z.B. register am Eltern-Element vom Kind-Element aufgerufen werden.`
+            }, {
+                en: `The method attributeChangedCallback is executed when the attribute with or without binding is
                 changing. The Web Component specification was taken into account and extended with bindings.
                 The static method observedAttributes was also taken from the web component specification and
                 extended by the property type. Possible values are input for incoming bindings and two-way for bindings
-                that work both ways.
-            </origin>
-            <destination lang="de">
-                Die Methode attributeChangedCallback wird ausgeführt, wenn das Attribut mit oder ohne Binding sich
+                that work both ways.`,
+                de: `Die Methode attributeChangedCallback wird ausgeführt, wenn das Attribut mit oder ohne Binding sich
                 ändert. Es wurde hier Rücksicht auf die Web-Component Spezifikation genommen und mit Bindings erweitert.
-                Die statische Methode observedAttributes wurde ebenfalls aus der Web-Component Spezifikation genommen und
-                um die Property type erweitert. Mögliche Werte sind input für eingehende Bindings und two-way für Bindings
-                die in beide Richtungen funktionieren.
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                There is the static method template where the string is sent directly as a
+                Die statische Methode observedAttributes wurde ebenfalls aus der Web-Component Spezifikation genommen
+                und um die Property type erweitert. Mögliche Werte sind input für eingehende Bindings und two-way für
+                Bindings die in beide Richtungen funktionieren.`
+            }, {
+                en: `There is the static method template where the string is sent directly as a
                 HTML template can be attached, or the loader can be used to extract the template from an HTML
                 File to load. The render method is called when an attribute changes and the update
-                is called when the LifeCycle is run through.
-            </origin>
-            <destination lang="de">
-                Es gibt die statische Methode template wo direkt der String als
+                is called when the LifeCycle is run through.`,
+                de: `Es gibt die statische Methode template wo direkt der String als
                 HTML-Template angehängt werden kann, oder der loader benutzt werden kann, um das Template aus einer HTML
                 Datei zu laden. Die Methode render wird aufgerufen, wenn sich ein Attribut ändert und die Methode update
-                wird aufgerufen, wenn der LifeCycle durchlaufen wird.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The model property with two-way binding</origin>
-            <destination lang="de">Das Model mit der two-way Property</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+                wird aufgerufen, wenn der LifeCycle durchlaufen wird.`
+            }, {
+                en: `Element`,
+                de: `Element`
+            }, {
+                en: `Attribute`,
+                de: `Attribut`
+            }, {
+                en: `Description`,
+                de: `Beschreibung`
+            }, {
+                en: `The model property with two-way binding`,
+                de: `Das Model mit der two-way Property`
+            }, {
+                en: `The rest of the HTML file is not displayed`,
+                de: `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>
@@ -184,8 +166,8 @@
 
                             static get observedAttributes() {
                                 return [{
-                                    name : "text",
-                                    type : "input"
+                                    name: "text",
+                                    type: "input"
                                 }];
                             }
 

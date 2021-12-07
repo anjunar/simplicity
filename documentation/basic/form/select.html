@@ -3,42 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Dom Select</title>
-    <i18n>
-        <translation>
-            <origin>
-                A native implementation of the select element. Via bind: model you can access the value in two-way mode
+    <script>
+        function i18n() {
+            return [{
+                en : `A native implementation of the select element. Via bind: model you can access the value in two-way mode
                 be taken from the option element. Native select works well when there are only a few values
                 about the options element there. If the values exceed a certain number of possibilities, then
-                it is advisable to use the lazy select.
-            </origin>
-            <destination lang="de">
-                Eine native implementierung des select Elements. Über bind:model kann im two-way modus auf den Wert
+                it is advisable to use the lazy select.`,
+                de : `Eine native implementierung des select Elements. Über bind:model kann im two-way modus auf den Wert
                 vom option Element genommen werden. Natives select lässt sich gut anwenden, wenn es nur wenige Werte
                 über das options Element gibt. Überschreiten die Werte eine bestimmte Anzahl von Möglichkeiten, dann
-                ist es ratsam das lazy select zu benutzen.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The two-way model of the component</origin>
-            <destination lang="de">Das Two-way Modell der Komponente</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+                ist es ratsam das lazy select zu benutzen.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The two-way model of the component`,
+                de : `Das Two-way Modell der Komponente`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
     <template>

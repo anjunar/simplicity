@@ -8,32 +8,29 @@
             display: block;
         }
     </style>
-    <i18n>
-        <translation>
-            <origin>Content</origin>
-            <destination lang="de">Inhalt</destination>
-        </translation>
-        <translation>
-            <origin>Common</origin>
-            <destination lang="de">Üblich</destination>
-        </translation>
-        <translation>
-            <origin>Custom Component</origin>
-            <destination lang="de">Eigene Komponente</destination>
-        </translation>
-        <translation>
-            <origin>Custom View</origin>
-            <destination lang="de">Eigene View</destination>
-        </translation>
-        <translation>
-            <origin>Nested Forms</origin>
-            <destination lang="de">Verschachtelte Formulare</destination>
-        </translation>
-        <translation>
-            <origin>Form Validation</origin>
-            <destination lang="de">Formular Validation</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `Content`,
+                de : `Inhalt`
+            }, {
+                en : `Common`,
+                de : `Üblich`
+            }, {
+                en : `Custom Component`,
+                de : `Eigene Komponente`
+            }, {
+                en : `Custom View`,
+                de : `Eigene View`
+            }, {
+                en : `Nested Forms`,
+                de : `Verschachtelte Formulare`
+            }, {
+                en : `Form Validation`,
+                de : `Formular Validation`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

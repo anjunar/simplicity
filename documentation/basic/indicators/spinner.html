@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>A Material Spinner.</origin>
-            <destination lang="de">Ein Material Spinner</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `A Material Spinner.`,
+                de : `Ein Material Spinner`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

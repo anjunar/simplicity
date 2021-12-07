@@ -3,92 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>
-                This extension of the slot element can also use the tag, selector or name as a selector.
-                If none of these selectors is specified, a wildcard selector is selected automatically.
-            </origin>
-            <destination lang="de">
-                Diese Erweiterung des Slot-Elements kann zusätzlich den Tag, Selektor oder Name als Selektor verwenden.
-                Wird keines dieser Selektoren angegeben, wird automatisch ein Wildcard Selektor gewählt.
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                The collection can be accessed with the index attribute if several elements exist
-            </origin>
-            <destination lang="de">
-                Mit dem index Attribut kann auf die Collection zugegriffen werden, falls mehrere Elemente existieren
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                The attribute implicit together with let can be used to declare a variable with which the let attribute
-                can be accessed.
-            </origin>
-            <destination lang="de">
-                Das Attribut implicit zusammen mit let lässt eine Variable deklarieren, mit der über das let Attribut
-                zugegriffen werden kann.
-            </destination>
-        </translation>
-        <translation>
-            <origin>
-                Usually source refers to the ContentChildren of the component, this can be changed with these
-                Attribute. So ContentChildren of another component can be selected.
-            </origin>
-            <destination lang="de">
-                Normalerweise verweist source auf die ContentChildren der Komponente, dies lässt sich ändern mit diesen
-                Attribut. So können ContentChildren einer anderen Komponente gewählt werden.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-
-        <translation>
-            <origin>The implicit Variable</origin>
-            <destination lang="de">Die implizite Variable</destination>
-        </translation>
-        <translation>
-            <origin>When there are multiply elements</origin>
-            <destination lang="de">When es mehrere Elemente gibt</destination>
-        </translation>
-        <translation>
-            <origin>Change the source of the templating element</origin>
-            <destination lang="de">Ändern Sie die Quelle des Template Elements</destination>
-        </translation>
-        <translation>
-            <origin>Select by element property</origin>
-            <destination lang="de">Selektiere mit der Element Property</destination>
-        </translation>
-        <translation>
-            <origin>Select by a selector</origin>
-            <destination lang="de">Selektiere mit einem Selektor</destination>
-        </translation>
-        <translation>
-            <origin>Select by slot name</origin>
-            <destination lang="de">Selektiere mit dem Slot Name</destination>
-        </translation>
-        <translation>
-            <origin>The implicit Variable defined</origin>
-            <destination lang="de">Die implizierte Variable definiert</destination>
-        </translation>
-
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `This extension of the slot element can also use the tag, selector or name as a selector.
+                If none of these selectors is specified, a wildcard selector is selected automatically.`,
+                de : `Diese Erweiterung des Slot-Elements kann zusätzlich den Tag, Selektor oder Name als Selektor verwenden.
+                Wird keines dieser Selektoren angegeben, wird automatisch ein Wildcard Selektor gewählt.`
+            }, {
+                en : `The collection can be accessed with the index attribute if several elements exist`,
+                de : `Mit dem index Attribut kann auf die Collection zugegriffen werden, falls mehrere Elemente existieren`
+            }, {
+                en : `The attribute implicit together with let can be used to declare a variable with which the let attribute
+                can be accessed.`,
+                de : `Das Attribut implicit zusammen mit let lässt eine Variable deklarieren, mit der über das let Attribut
+                zugegriffen werden kann.`
+            }, {
+                en : `Usually source refers to the ContentChildren of the component, this can be changed with these
+                Attribute. So ContentChildren of another component can be selected.`,
+                de : `Normalerweise verweist source auf die ContentChildren der Komponente, dies lässt sich ändern mit diesen
+                Attribut. So können ContentChildren einer anderen Komponente gewählt werden.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The implicit Variable`,
+                de : `Die implizite Variable`
+            }, {
+                en : `When there are multiply elements`,
+                de : `When es mehrere Elemente gibt`
+            }, {
+                en : `Change the source of the templating element`,
+                de : `Ändern Sie die Quelle des Template Elements`
+            }, {
+                en : `Select by element property`,
+                de : `Selektiere mit der Element Property`
+            }, {
+                en : `Select by a selector`,
+                de : `Selektiere mit einem Selektor`
+            }, {
+                en : `Select by slot name`,
+                de : `Selektiere mit dem Slot Name`
+            }, {
+                en : `The implicit Variable defined`,
+                de : `Die implizierte Variable definiert`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

@@ -15,26 +15,22 @@
             transform: translate(-50%, -50%);
         }
     </style>
-    <i18n>
-        <translation>
-            <origin>Custom View with query parameters</origin>
-            <destination lang="de">Eigene View mit Query Parametern</destination>
-        </translation>
-        <translation>
-            <origin>
-                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the server.
-                You don't have to put a .js at the end of the path, it is automatically added to the path.
-            </origin>
-            <destination lang="de">
-                Dies ist eine benutzerdefinierte Seite mit Abfrageparametern. Der Pfad im Hash führt direkt zu der Datei auf dem Server.
-                Sie müssen keine .js-Datei am Ende des Pfads einfügen, sie wird automatisch dem Pfad hinzugefügt.
-            </destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `Custom View with query parameters`,
+                de : `Eigene View mit Query Parametern`
+            }, {
+                en : `This is a Custom Page with query parameters. The path in the hash locates direct to the file on the server.
+                You don't have to put a .js at the end of the path, it is automatically added to the path.`,
+                de : `Dies ist eine benutzerdefinierte Seite mit Abfrageparametern. Der Pfad im Hash führt direkt zu der Datei auf dem Server.
+                Sie müssen keine .js-Datei am Ende des Pfads einfügen, sie wird automatisch dem Pfad hinzugefügt.`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

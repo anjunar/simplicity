@@ -3,42 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>
-                A tab implementation with Pages. The bind: page attribute of mat-tabs is two-way bound, the bind: page
-                The attribute of mat-pages is only input bounded.
-            </origin>
-            <destination lang="de">
-                Eine Tab implementierung mit Pages. Das bind:page Attribut von mat-tabs ist two-way bound, das bind:page
-                Attribut von mat-pages ist nur input bounded.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The tab page</origin>
-            <destination lang="de">Die Tab Page</destination>
-        </translation>
-        <translation>
-            <origin>The Page to be displayed</origin>
-            <destination lang="de">Die Page die angezeigt werden soll</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `A tab implementation with Pages. The bind: page attribute of mat-tabs is two-way bound, the bind: page
+                The attribute of mat-pages is only input bounded.`,
+                de : `Eine Tab implementierung mit Pages. Das bind:page Attribut von mat-tabs ist two-way bound, das bind:page
+                Attribut von mat-pages ist nur input bounded.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The tab page`,
+                de : `Die Tab Page`
+            }, {
+                en : `The Page to be displayed`,
+                de : `Die Page die angezeigt werden soll`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
     <template>

@@ -319,6 +319,16 @@ export const customComponents = new class CustomComponents {
                     }
                 }
             }
+            let scriptElement = html.querySelector("script");
+            if (scriptElement) {
+                let textContent = scriptElement.textContent.replaceAll(/\s+/g, " ");
+                let rawMessagesFunction = eval("(" + textContent + ")")
+                let rawMessages = rawMessagesFunction();
+                for (const rawMessage of rawMessages) {
+                    let message = i18nMessages[rawMessage["en"]] = {}
+                    message["de"] = rawMessage["de"];
+                }
+            }
         }
 
         class SimplicityComponent extends clazz {

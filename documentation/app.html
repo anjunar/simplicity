@@ -26,16 +26,17 @@
             margin: 3px;
         }
     </style>
-    <i18n>
-        <translation>
-            <origin>Basic</origin>
-            <destination lang="de">Einfach</destination>
-        </translation>
-        <translation>
-            <origin>Advanced</origin>
-            <destination lang="de">Fortgeschritten</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `Basic`,
+                de : `Grundlegend`
+            }, {
+                en : `Advanced`,
+                de : `Fortgeschritten`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

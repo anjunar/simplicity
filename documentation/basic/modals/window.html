@@ -3,40 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>
-                This is a window that is rendered into the viewport element. The window can be set with the action attribute,
+    <script>
+        function i18n() {
+            return [{
+                en : `This is a window that is rendered into the viewport element. The window can be set with the action attribute,
                 or generated with the windowManager. Height and Width can be specified in the definition of the view,
-                otherwise the size of the window is calculated based on its content.
-            </origin>
-            <destination lang="de">
-                Dies ist ein Window, das in das viewport Element gerendert wird. Das Window kann mit dem action Attribut,
+                otherwise the size of the window is calculated based on its content.`,
+                de : `Dies ist ein Window, das in das viewport Element gerendert wird. Das Window kann mit dem action Attribut,
                 oder mit dem windowManager erzeugt werden. In der Definition der View kann Height und Width angeben werden,
-                ansonsten berechnet sich die Größe des Window durch dessen Inhalt.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The Path to the Window Component</origin>
-            <destination lang="de">Der Pfad zu der Window Komponente</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+                ansonsten berechnet sich die Größe des Window durch dessen Inhalt.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The Path to the Window Component`,
+                de : `Der Pfad zu der Window Komponente`
+            }, {
+                en : `Show Window`,
+                de : `Zeige Window`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

@@ -13,30 +13,23 @@
         }
 
     </style>
-    <i18n>
-        <translation>
-            <origin>Introduction</origin>
-            <destination lang="de">Einleitung</destination>
-        </translation>
-        <translation>
-            <origin>
-                Bindings are a central part of dirty checking. Almost every attribute can be supplemented with bind
+    <script>
+        function i18n() {
+            return [{
+                en : `Bindings are a central part of dirty checking. Almost every attribute can be supplemented with bind
                 and thus assigned to a property. Note that with bind: style the CSS values as a string
                 The same applies to bind: class. In addition, with bind: class, the individual classes are carried out;
-                separated.
-            </origin>
-            <destination lang="de">
-                Bindings sind ein zentraler Bestandteil von Dirty-checking. Nahezu jedes Attribut kann durch bind ergänzt
+                separated.`,
+                de : `Bindings sind ein zentraler Bestandteil von Dirty-checking. Nahezu jedes Attribut kann durch bind ergänzt
                 werden und somit einer Property zugewiesen werden. Man beachte das bei bind:style die CSS-Werte als String
                 übergeben werden das Gleiche gilt für bind:class. Zudem wird bei bind:class die einzelnen Klassen durch ;
-                separiert.
-            </destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+                separiert.`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>

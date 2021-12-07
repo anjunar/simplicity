@@ -3,38 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <i18n>
-        <translation>
-            <origin>
-                A mat drawer implementation to manage navigation. If the resolution falls below 800px,
-                then the drawer is placed over the content. Otherwise the drawer is inserted from the left.
-            </origin>
-            <destination lang="de">
-                Eine Mat Drawer implementation um Navigation zu bewerkstelligen. Wenn die Auflösung 800px unterschreitet,
-                dann legt sich der Drawer über den Content. Ansonsten wird der Drawer eingeschoben von links.
-            </destination>
-        </translation>
-        <translation>
-            <origin>Element</origin>
-            <destination lang="de">Element</destination>
-        </translation>
-        <translation>
-            <origin>Attribute</origin>
-            <destination lang="de">Attribut</destination>
-        </translation>
-        <translation>
-            <origin>Description</origin>
-            <destination lang="de">Beschreibung</destination>
-        </translation>
-        <translation>
-            <origin>The Flag if the Drawer is open or not</origin>
-            <destination lang="de">Das Flag ob der Drawer offen ist oder nicht</destination>
-        </translation>
-        <translation>
-            <origin>The rest of the HTML file is not displayed</origin>
-            <destination lang="de">Der rest der HTML Datei wird nicht angezeigt</destination>
-        </translation>
-    </i18n>
+    <script>
+        function i18n() {
+            return [{
+                en : `A mat drawer implementation to manage navigation. If the resolution falls below 800px,
+                then the drawer is placed over the content. Otherwise the drawer is inserted from the left.`,
+                de : `Eine Mat Drawer implementation um Navigation zu bewerkstelligen. Wenn die Auflösung 800px unterschreitet,
+                dann legt sich der Drawer über den Content. Ansonsten wird der Drawer eingeschoben von links.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The Flag if the Drawer is open or not`,
+                de : `Das Flag ob der Drawer offen ist oder nicht`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
     <template>
