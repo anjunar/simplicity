@@ -70,9 +70,6 @@ function createProcessorTree(element) {
             if (node.localName === "code") {
                 return NodeFilter.FILTER_REJECT;
             }
-            if (node.isCompositeComponent) {
-                return NodeFilter.FILTER_REJECT
-            }
             return NodeFilter.FILTER_ACCEPT;
         }
     });
