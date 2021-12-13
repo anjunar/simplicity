@@ -6,23 +6,23 @@
 </head>
 <body>
     <template>
-        <div>
+        <div style="width: 150px">
             <button type="button" class="normal" bind:onclick="cut()" bind:disabled="isCollapsed">
-                <div style="display: flex; align-items: center;width: 100px">
+                <div style="display: flex; align-items: center;width: 100%">
                     <i class="material-icons" translate="no">content_cut</i>
                     Cut
                 </div>
             </button>
             <br/>
             <button type="button" class="normal" bind:onclick="copy()" bind:disabled="isCollapsed">
-                <div style="display: flex; align-items: center;width: 100px">
+                <div style="display: flex; align-items: center;width: 100%">
                     <i class="material-icons" translate="no">file_copy</i>
                     Copy
                 </div>
             </button>
             <br/>
             <button type="button" class="normal" bind:onclick="paste()">
-                <div style="display: flex; align-items: center; width: 100px">
+                <div style="display: flex; align-items: center; width: 100%">
                     <i class="material-icons" translate="no">content_paste</i>
                     Paste
                 </div>
@@ -30,11 +30,61 @@
             <br/>
             <hr/>
             <button type="button" class="normal" bind:onclick="extension()">
-                <div style="display: flex; align-items: center; width: 100px">
+                <div style="display: flex; align-items: center; width: 100%">
                     <i class="material-icons" translate="no">extension</i>
                     Extension
                 </div>
             </button>
+            <template is="dom-if" bind:predicate="isTableContext">
+                <div>
+                    <hr/>
+                    <button type="button" class="normal" bind:onclick="addTableRow()">
+                        <div style="display: flex; align-items: center; width: 100%">
+                            <img src="images/icons/icons8-add-row-24.png" style="filter: invert(100)">
+                            Add Row
+                        </div>
+                    </button>
+                    </br>
+                    <button type="button" class="normal" bind:onclick="addTableColumns()">
+                        <div style="display: flex; align-items: center; width: 100%">
+                            <img src="images/icons/icons8-add-column-24.png" style="filter: invert(100)">
+                            Add Columns
+                        </div>
+                    </button>
+                    </br>
+                    <button type="button" class="normal" bind:onclick="removeTableRow()">
+                        <div style="display: flex; align-items: center; width: 100%">
+                            <img src="images/icons/icons8-delete-row-24.png" style="filter: invert(100)">
+                            Remove Row
+                        </div>
+                    </button>
+                    </br>
+                    <button type="button" class="normal" bind:onclick="removeTableColumns()">
+                        <div style="display: flex; align-items: center; width: 100%">
+                            <img src="images/icons/icons8-delete-column-24.png" style="filter: invert(100)">
+                            Remove Columns
+                        </div>
+                    </button>
+                </div>
+            </template>
+            <template is="dom-if" bind:predicate="isFlexBoxContext">
+                <div>
+                    <hr/>
+                    <button type="button" class="normal" bind:onclick="addFlexColumn()">
+                        <div style="display: flex; align-items: center; width: 100%">
+                            <img src="images/icons/icons8-add-column-24.png" style="filter: invert(100)">
+                            Add Columns
+                        </div>
+                    </button>
+                    </br>
+                    <button type="button" class="normal" bind:onclick="removeFlexColumn()">
+                        <div style="display: flex; align-items: center; width: 100%">
+                            <img src="images/icons/icons8-delete-column-24.png" style="filter: invert(100)">
+                            Remove Columns
+                        </div>
+                    </button>
+                </div>
+            </template>
         </div>
     </template>
 </body>
