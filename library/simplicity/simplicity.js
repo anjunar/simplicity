@@ -65,6 +65,10 @@ function createProcessors(element) {
 }
 
 function createProcessorTree(element) {
+    if (element.component) {
+        createProcessors(element);
+    }
+
     let iterator = document.createTreeWalker(element, NodeFilter.SHOW_ELEMENT, {
         acceptNode(node) {
             if (node.localName === "code") {
