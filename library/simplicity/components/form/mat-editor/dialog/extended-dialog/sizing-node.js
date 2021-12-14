@@ -7,21 +7,24 @@ class SizingNode extends HTMLElement {
 
     node;
 
-    sizeX;
-    sizeY
+    sizeX = {
+        value : "",
+        click : (event) => {
+            this.node.style.width = event.target.value;
+        }
+    };
+
+    sizeY = {
+        value : "",
+        click : (event) => {
+            this.node.style.height = event.target.value;
+        }
+    }
 
     initialize() {
         let computedStyle = window.getComputedStyle(this.node);
-        this.sizeX = computedStyle.width;
-        this.sizeY = computedStyle.height;
-    }
-
-    sizeXChange(event) {
-        this.node.style.width = event.target.value;
-    }
-
-    sizeYChange(event) {
-        this.node.style.height = event.target.value;
+        this.sizeX.value = computedStyle.width;
+        this.sizeY.value = computedStyle.height;
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

@@ -5,7 +5,7 @@ function tokenizer(expression) {
     let tags = [
         {
             type : "reserved",
-            regex: /undefined|true|false|class/y
+            regex: /undefined|true|false/y
         },
         {
             type : "placeholder",

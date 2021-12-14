@@ -27,6 +27,9 @@
                         <margins-node bind:node="segment"></margins-node>
                         <padding-node bind:node="segment"></padding-node>
                         <sizing-node bind:node="segment"></sizing-node>
+                        <template is="dom-if" bind:predicate="segment.className === 'flex'">
+                            <flex-box-node bind:node="segment"></flex-box-node>
+                        </template>
                     </div>
                 </mat-page>
             </template>

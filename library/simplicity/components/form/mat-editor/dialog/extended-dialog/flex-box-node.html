@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        flex-box-node {
+            display: block;
+            font-size: small;
+        }
+
+        flex-box-node select {
+            width: 200px;
+            background-color: var(--main-dark2-color);
+        }
+
+        flex-box-node label {
+            width: 200px;
+        }
+
+    </style>
+</head>
+<body>
+    <template>
+        <div style="display: flex; flex-wrap: wrap; align-items: center">
+            <div style="display: flex">
+                <label for="flex-direction">flex-direction</label>
+                <select id="flex-direction" is="dom-select" bind:model="flexDirection.value" bind:onmodel="flexDirection.click($event)">
+                    <option value="row">row</option>
+                    <option value="row-reverse">row-reverse</option>
+                    <option value="column">column</option>
+                    <option value="column-reverse">column-reverse</option>
+                </select>
+            </div>
+            <div style="display: flex">
+                <label for="flex-wrap">flex-wrap</label>
+                <select id="flex-wrap" is="dom-select" bind:model="flexWrap.value" bind:onmodel="flexWrap.click($event)">
+                    <option value="wrap">wrap</option>
+                    <option value="nowrap">nowrap</option>
+                    <option value="wrap-reverse">wrap-reverse</option>
+                </select>
+            </div>
+            <div style="display: flex">
+                <label for="justify-content">justify-content</label>
+                <select id="justify-content" is="dom-select" bind:model="justifyContent.value" bind:onmodel="justifyContent.click($event)">
+                    <option value="flex-start">flex-start</option>
+                    <option value="flex-end">flex-end</option>
+                    <option value="center">center</option>
+                    <option value="space-between">space-between</option>
+                    <option value="space-around">space-around</option>
+                    <option value="space-evenly">space-evenly</option>
+                </select>
+            </div>
+            <div style="display: flex">
+                <label for="align-items">align-items</label>
+                <select id="align-items" is="dom-select" bind:model="alignItems.value" bind:onmodel="alignItems.click($event)">
+                    <option value="flex-start">flex-start</option>
+                    <option value="flex-end">flex-end</option>
+                    <option value="center">center</option>
+                    <option value="stretch">stretch</option>
+                    <option value="baseline">baseline</option>
+                </select>
+            </div>
+            <div style="display: flex">
+                <label for="align-content">align-content</label>
+                <select id="align-content" is="dom-select" bind:model="alignContent.value" bind:onmodel="alignContent.click($event)">
+                    <option value="flex-start">flex-start</option>
+                    <option value="flex-end">flex-end</option>
+                    <option value="center">center</option>
+                    <option value="stretch">stretch</option>
+                    <option value="space-between">space-between</option>
+                    <option value="space-around">space-around</option>
+                </select>
+            </div>
+        </div>
+        <mat-input-container placeholder="gap">
+            <input type="text" is="dom-input" bind:model="gap.value" bind:onmodel="gap.click($event)">
+        </mat-input-container>
+    </template>
+</body>
+</html>

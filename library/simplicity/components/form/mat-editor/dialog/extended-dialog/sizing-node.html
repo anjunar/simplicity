@@ -7,11 +7,11 @@
 <body>
     <template>
         <div style="display: flex">
-            <mat-input-container placeholder="Size X">
-                <input type="text" is="dom-input" bind:model="sizeX" bind:onmodel="sizeXChange($event)"/>
+            <mat-input-container style="flex: 1" placeholder="Size X">
+                <input type="text" is="dom-input" bind:model="sizeX.value" bind:onmodel="sizeX.click($event)"/>
             </mat-input-container>
-            <mat-input-container placeholder="Size Y">
-                <input type="text" is="dom-input" bind:model="sizeY" bind:onmodel="sizeYChange($event)"/>
+            <mat-input-container style="flex: 1" placeholder="Size Y">
+                <input type="text" is="dom-input" bind:model="sizeY.value" bind:onmodel="sizeY.click($event)"/>
             </mat-input-container>
         </div>
     </template>

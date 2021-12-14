@@ -34,6 +34,10 @@ class ContextMenu extends HTMLElement {
         return null;
     }
 
+    get isExtensionContext() {
+        return this.path.length > 0
+    }
+
     get isFlexBoxContext() {
         return this.findElement((element) => {
             return element.className === "flex"
