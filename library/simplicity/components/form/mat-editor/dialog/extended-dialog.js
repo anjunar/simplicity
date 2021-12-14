@@ -29,5 +29,6 @@ class ExtendedDialog extends HTMLElement {
 export default customViews.define({
     name : "context-dialog",
     class : ExtendedDialog,
+    header : "Inspector",
     width : "600px"
 })

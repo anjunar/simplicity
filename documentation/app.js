@@ -5,6 +5,7 @@ import MatToolbar from "../library/simplicity/components/navigation/mat-toolbar.
 import MatFooter from "../library/simplicity/components/navigation/mat-footer.js";
 import MatPerformance from "../library/simplicity/components/system/mat-performance.js";
 import MatLanguage from "../library/simplicity/components/system/mat-language.js";
+import MatTaskbar from "../library/simplicity/components/system/mat-taskbar.js";
 
 export default class DocumentationApp extends HTMLElement {
 
@@ -13,7 +14,7 @@ export default class DocumentationApp extends HTMLElement {
     }
 
     static get components() {
-        return [DomRouter, MatToolbar, MatFooter, MatPerformance, MatLanguage];
+        return [DomRouter, MatToolbar, MatFooter, MatPerformance, MatLanguage, MatTaskbar];
     }
 
     static get template() {

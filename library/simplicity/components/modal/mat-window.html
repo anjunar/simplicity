@@ -31,7 +31,7 @@
                     <div style="margin-bottom: -7px">
                         <button translate="no" type="button" class="material-icons" bind:onclick="minimize()">minimize</button>
                         <button translate="no" type="button" class="material-icons" bind:onclick="maximize()" bind:style="display : resizable ? 'inline' : 'none'">maximize</button>
-                        <button translate="no" type="button" class="material-icons" bind:onclick="close()">close</button>
+                        <button translate="no" type="button" class="material-icons" bind:onclick="close($event)">close</button>
                     </div>
                 </div>
                 <mat-scroll-area style="height: calc(100% - 40px); width: 100%">

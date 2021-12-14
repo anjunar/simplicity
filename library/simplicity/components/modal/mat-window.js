@@ -39,9 +39,11 @@ class MatWindow extends HTMLElement {
         windowManager.close(this);
     }
 
-    close() {
+    close(event) {
+        event.stopPropagation();
         this.dispatchEvent(new CustomEvent("close"))
         windowManager.close(this);
+        return false;
     }
 
     initialize() {

@@ -108,6 +108,19 @@ export const windowManager = new class WindowManager {
         return windowsRegistry;
     }
 
+    get configurations() {
+        return this.windows.map((window) => {
+            return {
+                window : window,
+                configuration : get(window.contents.localName)
+            }
+        })
+    }
+
+    show(matWindow) {
+        matWindow.style.display = "block";
+    }
+
     close(matWindow) {
         let indexOf = windowsRegistry.indexOf(matWindow);
         windowsRegistry.splice(indexOf)
