@@ -73,6 +73,7 @@ class MatScrollArea extends HTMLElement {
             }
 
             this.addEventListener("wheel", (event) => {
+                event.preventDefault();
                 let matrix = getMatrix(this.content);
                 let top = - matrix.y + event.deltaY;
                 let clientOffsetHeight = this.content.offsetHeight - element.offsetHeight + 16;
@@ -90,6 +91,7 @@ class MatScrollArea extends HTMLElement {
                     this.content.style.transition = "all .5s cubic-bezier(0.2, .84, .5, 1)"
                     this.content.style.transform = `translate3d(0px, ${- top}px, 0px)`
                 }
+                return false;
             })
         }
 

@@ -55,13 +55,11 @@ class MatScrollbarHorizontal extends HTMLElement {
     }
 
     show() {
-        let element = this.querySelector("div.cursor");
-        element.style.display = "block";
+        this.style.display = "block";
     }
 
     hide() {
-        let element = this.querySelector("div.cursor");
-        element.style.display = "none";
+        this.style.display = "none";
     }
 
     static get template() {

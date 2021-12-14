@@ -8,7 +8,6 @@ import MatPages from "../navigation/mat-pages.js";
 import MatPage from "../navigation/mat-page.js";
 import DomInput from "../../directives/dom-input.js";
 import MatCheckboxContainer from "../form/container/mat-checkbox-container.js";
-import MatInputContainer from "../form/container/mat-input-container.js";
 
 class MatTableConfiguration extends HTMLElement {
 
@@ -35,7 +34,7 @@ class MatTableConfiguration extends HTMLElement {
 }
 
 export default customViews.define({
-    name : "table-mat-table-configuration",
+    name : "mat-table-configuration",
     class : MatTableConfiguration,
     header : "Table Configuration"
 })

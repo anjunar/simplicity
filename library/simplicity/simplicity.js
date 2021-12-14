@@ -98,7 +98,7 @@ let mutationObserver = new MutationObserver((records) => {
 
 mutationObserver.observe(document.body, {subtree : true, childList : true})
 
-const blackList = ["mousemove", "mouseover", "loadend", "lifecycle"]
+const blackList = ["mousemove", "mouseover", "loadend", "lifecycle", "scroll"]
 
 let listeners = new WeakMap();
 
