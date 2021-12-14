@@ -42,7 +42,7 @@ app.js
 import {customComponents} from "../library/simplicity/simplicity.js";
 import {loader} from "../library/simplicity/processors/loader-processor.js";
 
-export default class DocumentationApp extends HTMLElement {
+class DocumentationApp extends HTMLElement {
 
     text = "Hello World!"
 
@@ -51,6 +51,6 @@ export default class DocumentationApp extends HTMLElement {
     }
 }
 
-customComponents.define("app-documentation", DocumentationApp);
+export default customComponents.define("app-documentation", DocumentationApp);
 
 ```
