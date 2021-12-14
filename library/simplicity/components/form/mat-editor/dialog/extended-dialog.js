@@ -6,6 +6,7 @@ import MatPages from "../../../navigation/mat-pages.js";
 import MatPage from "../../../navigation/mat-page.js";
 import MarginsNode from "./extended-dialog/margins-node.js";
 import PaddingNode from "./extended-dialog/padding-node.js";
+import SizingNode from "./extended-dialog/sizing-node.js";
 
 class ExtendedDialog extends HTMLElement {
 
@@ -14,7 +15,7 @@ class ExtendedDialog extends HTMLElement {
     path = [];
 
     static get components() {
-        return [MatTabs, MatTab, MatPages, MatPage, MarginsNode, PaddingNode]
+        return [MatTabs, MatTab, MatPages, MatPage, MarginsNode, PaddingNode, SizingNode]
     }
 
     static get template() {

@@ -1,47 +1,60 @@
 import {customComponents} from "../../../../simplicity.js";
 import {loader} from "../../../../processors/loader-processor.js";
 import {windowManager} from "../../../../manager/window-manager.js";
-import DomInput from "../../../../directives/dom-input.js";
-import MatInputContainer from "../../container/mat-input-container.js";
 
 class ToolbarInserts extends HTMLElement {
 
     contents;
 
     link = {
-        value : "",
-        active : false,
-        click : (link) => {
-            document.execCommand("createLink", false, link);
+        value: "",
+        active: false,
+        click: (link) => {
+            let selection = document.getSelection();
+            let rangeAt = selection.getRangeAt(0);
+
+            let options = {
+                header: "Link Dialog"
+            };
+
+            windowManager.openWindow("/library/simplicity/components/form/mat-editor/dialog/link-dialog", options).then((matWindow) => {
+                matWindow.addEventListener("ok", (event) => {
+                    let value = event.target.contents.value;
+                    document.getSelection().removeAllRanges();
+                    document.getSelection().addRange(rangeAt);
+                    document.execCommand("createLink", false, value);
+                    matWindow.close();
+                })
+            });
         },
-        handler : (event) => {
+        handler: (event) => {
 
         }
     }
     unLink = {
-        active : false,
-        click : (event) => {
+        active: false,
+        click: (event) => {
             document.execCommand("unlink")
         },
-        handler : (event) => {
+        handler: (event) => {
 
         }
     }
     insertDivFlex = {
-        disabled : false,
-        click : (columns = 2) => {
+        disabled: false,
+        click: (columns = 2) => {
             let columnsHTML = ""
             for (let i = 0; i < columns; i++) {
                 columnsHTML += "<div></div>"
             }
 
-            let html = "<div class='flex'>" + columnsHTML + "</div>"
+            let html = "<div class='flex' style='width: 100%'>" + columnsHTML + "</div>"
 
             document.execCommand("insertHTML", false, html)
         }
     }
     insertTable = {
-        click : (columns = 2, rows = 2 ) => {
+        click: (columns = 2, rows = 2) => {
             let columnsHTML = "";
             for (let i = 0; i < columns; i++) {
                 columnsHTML += "<td></td>"
@@ -52,14 +65,14 @@ class ToolbarInserts extends HTMLElement {
                 rowsHTML += "<tr>" + columnsHTML + "</tr>"
             }
 
-            let table = "<table><tbody>" + rowsHTML + "</tbody></table>";
+            let table = "<table style='width: 100%'><tbody>" + rowsHTML + "</tbody></table>";
 
             document.execCommand("insertHTML", false, table)
         }
     }
     image = {
-        active : false,
-        click : (event) => {
+        active: false,
+        click: (event) => {
             let selection = document.getSelection();
             let rangeAt = selection.getRangeAt(0);
 
@@ -79,22 +92,22 @@ class ToolbarInserts extends HTMLElement {
                 })
             })
         },
-        handler : (event) => {
+        handler: (event) => {
 
         }
     }
     horizontalRule = {
-        active : false,
-        click : (event) => {
+        active: false,
+        click: (event) => {
             document.execCommand("insertHorizontalRule")
         },
-        handler : (event) => {
+        handler: (event) => {
 
         }
     }
     text = {
-        active : false,
-        click : (event) => {
+        active: false,
+        click: (event) => {
             let selection = document.getSelection();
             let rangeAt = selection.getRangeAt(0);
 
@@ -114,34 +127,34 @@ class ToolbarInserts extends HTMLElement {
                 })
             });
         },
-        handler : (event) => {
+        handler: (event) => {
 
         }
     }
     orderedList = {
-        active : false,
-        click : (event) => {
+        active: false,
+        click: (event) => {
             document.execCommand("insertOrderedList")
         },
-        handler : (event) => {
+        handler: (event) => {
 
         }
     }
     unOrderedList = {
-        active : false,
-        click : (event) => {
+        active: false,
+        click: (event) => {
             document.execCommand("insertUnorderedList")
         },
-        handler : (event) => {
+        handler: (event) => {
 
         }
     }
     paragraph = {
-        active : false,
-        click : (event) => {
+        active: false,
+        click: (event) => {
             document.execCommand("insertParagraph")
         },
-        handler : (event) => {
+        handler: (event) => {
 
         }
     }
@@ -176,8 +189,8 @@ class ToolbarInserts extends HTMLElement {
 
     static get observedAttributes() {
         return [{
-            name : "contents",
-            type : "input"
+            name: "contents",
+            type: "input"
         }]
     }
 
