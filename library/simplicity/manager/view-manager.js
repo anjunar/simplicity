@@ -3,6 +3,7 @@ import {appManager} from "./app-manager.js";
 const registry = new Map();
 
 let lastRouteRegistry = new Map();
+let lastQueryParamsRegistry = new Map();
 
 export const viewManager = new class ViewManager {
     load(url, level = 0, reload = true) {
@@ -37,18 +38,21 @@ export const viewManager = new class ViewManager {
                     }
                 }
 
-                let lastRoute;
+                let lastRoute, lastQueryParams;
                 if (! reload) {
                     lastRoute = lastRouteRegistry.get(level);
+                    lastQueryParams = lastQueryParamsRegistry.get(level);
                 }
 
-                if (lastRoute && path === lastRoute.path && lastRoute.view) {
+                let currentQueryParamsString = JSON.stringify(result);
+                let lastQueryParamsString = JSON.stringify(lastQueryParams);
+
+                if (lastRoute && path === lastRoute.path && lastRoute.view && currentQueryParamsString === lastQueryParamsString) {
                     resolve(lastRoute.view);
                 } else {
                     let newPath = "../../.." + path + ".js";
-                    lastRouteRegistry.set(level, {
-                        path : path
-                    })
+                    lastRouteRegistry.set(level, { path : path })
+                    lastQueryParamsRegistry.set(level, result);
                     import(newPath)
                         .then((module) => {
                             let view;

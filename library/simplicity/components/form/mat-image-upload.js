@@ -8,6 +8,8 @@ class MatImageUpload extends HTMLElement {
 
     input;
 
+    name;
+
     model = {
         data : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
     }

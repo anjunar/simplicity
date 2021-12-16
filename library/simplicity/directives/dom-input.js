@@ -47,7 +47,7 @@ class DomInput extends HTMLInputElement {
             if (this.type === "number") {
                 this.model = Number.parseInt(this.value);
             } else {
-                this.model = this.value
+                this.model = this.value;
             }
             this.dispatchEvent(new CustomEvent("model"))
         }
@@ -95,6 +95,7 @@ class DomInput extends HTMLInputElement {
                 break;
             default : {
                 this.addEventListener("input", valueChangeHandler, {lifeCylce: false});
+                this.addEventListener("change", valueChangeHandler, {lifeCylce: false});
                 this.addEventListener("model", debounce(asyncValidationHandler, 300), {lifeCylce: false});
                 this.addEventListener("focus", () => {
                     document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "focus"}}));

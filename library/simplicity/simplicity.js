@@ -3,10 +3,11 @@ import {register} from "./manager/view-manager.js";
 import {TextProcessor} from "./processors/text-processor.js";
 import {lifeCycle} from "./processors/life-cycle-processor.js";
 import {appManager} from "./manager/app-manager.js";
+import {debounce} from "./services/tools.js";
 
-document.addEventListener("lifecycle", (event) => {
+document.addEventListener("lifecycle", debounce((event) => {
     lifeCycle(document.body, event);
-})
+}, 30))
 
 export function isEqual(lhs, rhs) {
     if (lhs instanceof Array && rhs instanceof Array) {
@@ -64,7 +65,7 @@ function createProcessors(element) {
     }
 }
 
-function createProcessorTree(element) {
+export function createProcessorTree(element) {
     if (element.component) {
         createProcessors(element);
     }
@@ -291,16 +292,24 @@ function variableBinding(root, fragment) {
 
 export function templateBinding(content) {
     let mutationObserver = new MutationObserver((records) => {
-        let mutationRecord = records.find((record) => record.addedNodes.length > 0);
-        if (mutationRecord) {
+        let mutationRecords = records.filter((record) => record.addedNodes.length > 0);
+        for (const mutationRecord of mutationRecords) {
             for (const addedNode of mutationRecord.addedNodes) {
-                if (addedNode instanceof HTMLTemplateElement && addedNode.hasAttribute("is")) {
-                    let component = addedNode.queryUpwards((element) => element.localName.indexOf("-") > -1);
-                    if (!component) {
-                        // Call connnectedCallback because it is not triggered when placed inside a Template
-                        addedNode.connectedCallback(true);
-                        // Event for Dom-Slot, because the MutationObserver is async
-                        content.dispatchEvent(new CustomEvent("contentChanged"))
+                if (addedNode.nodeType === Node.ELEMENT_NODE) {
+                    let templates = [];
+                    if (addedNode instanceof HTMLTemplateElement && addedNode.hasAttribute("is")) {
+                        templates.push(addedNode)
+                    } else {
+                        templates = addedNode.querySelectorAll("template[is]");
+                    }
+                    for (const template of templates) {
+                        let component = template.queryUpwards((element) => element.localName.indexOf("-") > -1);
+                        if (!component) {
+                            // Call connnectedCallback because it is not triggered when placed inside a Template
+                            template.connectedCallback(true);
+                            // Event for Dom-Slot, because the MutationObserver is async
+                            content.dispatchEvent(new CustomEvent("contentChanged"))
+                        }
                     }
                 }
             }

@@ -66,6 +66,7 @@ class DomForm extends HTMLFormElement {
         for (const component of this.components) {
             let value = this.model[component.name];
             component.model = value;
+            component.value = value;
             component.defaultValue = value;
         }
 
