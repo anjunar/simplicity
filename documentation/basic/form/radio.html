@@ -86,7 +86,7 @@
                     <input bind:model="gender" is="dom-input" name="gender" type="radio" value="other">
                 </mat-radio-container>
 
-                <div style="margin-top: 20px;">${i18n('Selected Gender')}: <span>${gender}</span></div>
+                <div style="margin-top: 20px;">{{i18n('Selected Gender')}}: <span>{{gender}}</span></div>
             </div>
 
 
@@ -114,7 +114,7 @@
                                 </mat-radio-container>
 
                                 <div style="margin-top: 20px;">Selected Gender:
-                                    <span>${gender}</span>
+                                    <span>{{gender}}</span>
                                 </div>
                             </iframe>
                         </template>

@@ -83,7 +83,7 @@
             <div style="margin: 20px;">
                 <mat-input-container placeholder="Materials">
                     <dom-lazy-select bind:items="materials">
-                        <div let="material">${material.position} ${material.name}</div>
+                        <div let="material">{{material.position}} {{material.name}}</div>
                     </dom-lazy-select>
                 </mat-input-container>
             </div>
@@ -104,7 +104,7 @@
                             <iframe>
                                 <mat-input-container placeholder="Materials">
                                     <dom-lazy-select bind:items="materials">
-                                        <div let="material">${material.position} ${material.name}</div>
+                                        <div let="material">{{material.position}} {{material.name}}</div>
                                     </dom-lazy-select>
                                 </mat-input-container>
                             </iframe>

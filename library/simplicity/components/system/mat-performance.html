@@ -25,8 +25,8 @@
                 <tbody>
                 <template is="dom-repeat" bind:items="performanceLifeCycle" item="performance">
                     <tr nolifecycle>
-                        <td nolifecycle>${performance.latency}ms</td>
-                        <td nolifecycle>${performance.avgLatency}ms</td>
+                        <td nolifecycle>{{performance.latency}}ms</td>
+                        <td nolifecycle>{{performance.avgLatency}}ms</td>
                     </tr>
                 </template>
                 </tbody>
@@ -40,7 +40,7 @@
                 <tbody>
                 <template is="dom-repeat" bind:items="performancePageLoad" item="performance">
                     <tr nolifecycle>
-                        <td nolifecycle>${performance}ms</td>
+                        <td nolifecycle>{{performance}}ms</td>
                     </tr>
                 </template>
                 </tbody>

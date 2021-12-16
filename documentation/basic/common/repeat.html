@@ -77,7 +77,7 @@
 
                 <div style="margin: 20px;">
                     <template is="dom-repeat" bind:items="materials" item="material">
-                        <div>${material.position} ${material.name}</div>
+                        <div>{{material.position}} {{material.name}}</div>
                     </template>
                 </div>
 
@@ -96,7 +96,7 @@
                             <template>
                                 <iframe>
                                     <template is="dom-repeat" bind:items="materials" item="material">
-                                        <div>${material.position} ${material.name}</div>
+                                        <div>{{material.position}} {{material.name}}</div>
                                     </template>
                                 </iframe>
                             </template>

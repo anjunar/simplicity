@@ -16,7 +16,7 @@
             <tr>
                 <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
                     <td>
-                        <div>${column.name}</div>
+                        <div>{{column.name}}</div>
                     </td>
                 </template>
             </tr>
@@ -25,7 +25,7 @@
             <tr>
                 <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
                     <td>
-                        <div let="data">${renderCol(column.name)}</div>
+                        <div let="data">{{renderCol(column.name)}}</div>
                     </td>
                 </template>
             </tr>

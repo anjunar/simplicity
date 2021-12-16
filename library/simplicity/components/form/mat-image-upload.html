@@ -35,7 +35,7 @@
   <template>
       <div class="area" bind:onclick="input.click()">
           <template is="dom-if" bind:predicate="! model.name">
-              <div class="center">${placeholder}</div>
+              <div class="center">{{placeholder}}</div>
           </template>
           <img bind:src="model.data"/>
       </div>

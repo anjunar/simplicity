@@ -53,7 +53,7 @@ function createProcessors(element) {
 
     for (const childNode of element.childNodes) {
         if (childNode.nodeType === 3) {
-            let interpolationRegExp = /\${([^}]+)}/g;
+            let interpolationRegExp = /\{\{([^}]+)\}\}/g;
             if (interpolationRegExp.test(childNode.textContent)) {
                 if (!childNode.processor) {
                     let textProcessor = new TextProcessor(element, childNode);

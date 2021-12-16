@@ -23,7 +23,7 @@
         <div style="display: flex">
             <template is="dom-repeat" bind:items="tasks" item="task">
                 <div class="task" bind:onclick="onClick(task)">
-                    ${task.configuration.header}
+                    {{task.configuration.header}}
                 </div>
             </template>
         </div>

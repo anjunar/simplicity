@@ -15,7 +15,7 @@ export class TextProcessor {
     }
 
     process() {
-        let interpolationRegExp = /\${([^}]+)}/g;
+        let interpolationRegExp = /\{\{([^}]+)\}\}/g;
 
         let scopes = [];
 

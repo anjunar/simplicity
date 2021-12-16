@@ -11,7 +11,7 @@
                 <meta-input bind:model="property"></meta-input>
             </template>
             <template is="dom-repeat" bind:items="model.actions" item="action">
-                <button type="button" bind:onclick="send(action)">${action.rel}</button>
+                <button type="button" bind:onclick="send(action)">{{action.rel}}</button>
             </template>
         </form>
     </template>

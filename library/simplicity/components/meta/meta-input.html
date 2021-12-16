@@ -16,7 +16,7 @@
             </mat-input-container>
             <mat-input-container case="lazyselect" bind:placeholder="model.name">
                 <dom-lazy-select bind:items="domLazySelect(model)">
-                    <div let="data">${data.firstName}</div>
+                    <div let="data">{{data.firstName}}</div>
                 </dom-lazy-select>
             </mat-input-container>
         </template>
