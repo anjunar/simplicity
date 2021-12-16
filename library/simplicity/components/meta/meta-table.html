@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <template>
+      <table is="mat-table" bind:items="items" bind:onRow="onRowClick($event)">
+          <colgroup>
+              <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
+                  <col bind:path="column.name">
+              </template>
+          </colgroup>
+          <thead>
+            <tr>
+                <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
+                    <td>
+                        <div>${column.name}</div>
+                    </td>
+                </template>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
+                    <td>
+                        <div let="data">${renderCol(column.name)}</div>
+                    </td>
+                </template>
+            </tr>
+          </tbody>
+      </table>
+  </template>
+</body>
+</html>

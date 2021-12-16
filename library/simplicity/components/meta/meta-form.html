@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <form is="dom-form" bind:model="model">
+            <template is="dom-repeat" bind:items="model.meta.properties" item="property">
+                <meta-input bind:model="property"></meta-input>
+            </template>
+            <template is="dom-repeat" bind:items="model.actions" item="action">
+                <button type="button" bind:onclick="send(action)">${action.rel}</button>
+            </template>
+        </form>
+    </template>
+</body>
+</html>

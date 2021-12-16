@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <template is="dom-switch" bind:predicate="model.type">
+            <mat-image-upload case="image" style="width: 320px; height: 200px" bind:name="model.name"></mat-image-upload>
+            <mat-checkbox-container case="checkbox" bind:placeholder="model.name">
+                <input is="dom-input" type="checkbox" bind:name="model.name">
+            </mat-checkbox-container>
+            <mat-input-container case="default" bind:placeholder="model.name">
+                <input is="dom-input" bind:type="model.type" bind:name="model.name">
+            </mat-input-container>
+            <mat-input-container case="lazyselect" bind:placeholder="model.name">
+                <dom-lazy-select bind:items="domLazySelect(model)">
+                    <div let="data">${data.firstName}</div>
+                </dom-lazy-select>
+            </mat-input-container>
+        </template>
+    </template>
+</body>
+</html>
