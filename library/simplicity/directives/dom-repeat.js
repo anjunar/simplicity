@@ -38,7 +38,6 @@ class DomRepeat extends HTMLTemplateElement {
         this.after(container)
 
         this.dispatchEvent(new CustomEvent("repeat"))
-
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -51,6 +50,10 @@ class DomRepeat extends HTMLTemplateElement {
                 this.item = newValue;
             }
                 break;
+            case "immediate" : {
+                this.immediate = newValue === "true"
+            }
+                break;
         }
     }
 
@@ -61,6 +64,9 @@ class DomRepeat extends HTMLTemplateElement {
                 type: "input"
             }, {
                 name: "item",
+                type: "input"
+            }, {
+                name : "immediate",
                 type: "input"
             }
         ]

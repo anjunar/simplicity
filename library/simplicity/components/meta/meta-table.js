@@ -1,14 +1,16 @@
 import {customComponents} from "../../simplicity.js";
 import MatTable from "../table/mat-table.js";
 import {jsonClient} from "../../services/client.js";
-import MetaInput from "./meta-input.js";
+import {loader} from "../../processors/loader-processor.js";
+import DomRepeat from "../../directives/dom-repeat.js";
+import MetaColumn from "./meta-column.js";
 
 class MetaTable extends HTMLElement {
 
     model;
 
     renderCol(name) {
-        return "${data." + name + "}"
+        return "{{data." + name + "}}"
     }
 
     renderModel(name) {
@@ -49,35 +51,11 @@ class MetaTable extends HTMLElement {
     }
 
     static get components() {
-        return [MatTable, MetaInput]
+        return [MatTable, MetaColumn, DomRepeat]
     }
 
-    get dynamicTemplate() {
-        return `<table is="mat-table" bind:items="items" bind:onRow="onRowClick($event)">
-          <colgroup>
-              <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
-                  <col bind:path="column.name">
-              </template>
-          </colgroup>
-          <thead>
-            <tr>
-                <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
-                    <td>
-                        <div>${column.name}</div>
-                    </td>
-                </template>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-                <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
-                    <td>
-                        <div let="data">${renderCol(column.name)}</div>
-                    </td>
-                </template>
-            </tr>
-          </tbody>
-      </table>`
+    static get template() {
+        return loader("library/simplicity/components/meta/meta-table.html")
     }
 
 }

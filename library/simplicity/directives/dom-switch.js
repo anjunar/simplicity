@@ -8,13 +8,13 @@ class DomSwitch extends HTMLTemplateElement {
                 if (this.nextElementSibling?.isSwitch) {
                     this.nextElementSibling.remove();
                 }
-                let element = this.content.querySelector(`[case=${newValue}]`);
-                if (element) {
+                let caseElement = this.content.querySelector(`case[value=${newValue}]`);
+                if (caseElement) {
                     // No Op
                 } else {
-                    element = this.content.querySelector(`[case=default]`)
+                    caseElement = this.content.querySelector(`case[value=default]`)
                 }
-                let component = document.importComponent(element);
+                let component = document.importComponent(caseElement.firstElementChild);
                 component.isSwitch = true;
                 this.insertAdjacentElement("afterend", component);
             } break;

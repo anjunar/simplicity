@@ -37,6 +37,15 @@ class DomLazySelect extends HTMLElement {
         }
     }
 
+    render() {
+        let input = this.querySelector("input");
+        if (this.label instanceof Array) {
+            input.value = this.label.map((label) => this.model[label]).join(" ")
+        } else {
+            input.value = this.model[this.label]
+        }
+    }
+
     get placeholder() {
         return this.querySelector("input").placeholder
     }
@@ -111,13 +120,16 @@ class DomLazySelect extends HTMLElement {
     static get observedAttributes() {
         return [
             {
-                name: "value",
+                name: "model",
                 type: "two-way"
             }, {
                 name : "placeholder",
                 type : "input"
             }, {
                 name : "items",
+                type : "input"
+            }, {
+                name : "label",
                 type : "input"
             }
         ]

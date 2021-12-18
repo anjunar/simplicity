@@ -2,6 +2,31 @@ import {evaluation} from "./js-compiler-processor.js";
 import {isEqual} from "../simplicity.js";
 import {appManager} from "../manager/app-manager.js";
 
+class BindInterpolationProcessor {
+    attribute;
+    element;
+    matched = false;
+
+    constructor(attribute, element) {
+        this.attribute = attribute;
+        this.element = element;
+
+        let interpolationRegExp = /\${([^}]+)}/g;
+
+        let result = interpolationRegExp.exec(this.attribute.value);
+        if (result) {
+            this.matched = true;
+            let variable = result[1];
+
+            let value = evaluation(variable, this.element);
+            let replace = attribute.value.replace(interpolationRegExp, value);
+            attribute.value = replace;
+        }
+    }
+
+    process() {}
+}
+
 class StyleAttributeProcessor {
     attribute;
     element;
@@ -39,7 +64,11 @@ class StyleAttributeProcessor {
                 last = char;
             }
 
-            this.element.style[keyString] = evaluation(value, this.element);
+            try {
+                this.element.style[keyString] = evaluation(value, this.element);
+            } catch (e) {
+                this.runOnce = true;
+            }
         }
     }
 }
@@ -63,12 +92,16 @@ class ClassAttributeProcessor {
     }
 
     process() {
-        let classList = this.attribute.value.split(";");
-        let result = [];
-        for (const classListElement of classList) {
-            result.push(evaluation(classListElement.trim(), this.element));
+        try {
+            let classList = this.attribute.value.split(";");
+            let result = [];
+            for (const classListElement of classList) {
+                result.push(evaluation(classListElement.trim(), this.element));
+            }
+            this.element.className = result.join(" ");
+        } catch (e) {
+            this.runOnce = true
         }
-        this.element.className = result.join(" ");
     }
 }
 
@@ -133,16 +166,20 @@ class DynamicBindingAttributeProcessor {
     }
 
     process() {
-        let result = evaluation(this.attribute.value, this.element);
-        if (this.element.attributeChangedCallback) {
-            if (!isEqual(this.oldValue, result)) {
-                this.element.attributeChangedCallback(this.name, this.oldValue, result);
-                if (result instanceof Array) {
-                    this.oldValue = Array.from(result);
-                } else {
-                    this.oldValue = result;
+        try {
+            let result = evaluation(this.attribute.value, this.element);
+            if (this.element.attributeChangedCallback) {
+                if (!isEqual(this.oldValue, result)) {
+                    this.element.attributeChangedCallback(this.name, this.oldValue, result);
+                    if (result instanceof Array) {
+                        this.oldValue = Array.from(result);
+                    } else {
+                        this.oldValue = result;
+                    }
                 }
             }
+        } catch (e) {
+            this.runOnce = true
         }
     }
 }
@@ -182,10 +219,14 @@ class DomAttributesProcessor {
     }
 
     process() {
-        let element = this.element;
-        let result = evaluation(this.attribute.value, element);
-        if (this.element[this.name] !== result) {
-            this.element[this.name] = result;
+        try {
+            let element = this.element;
+            let result = evaluation(this.attribute.value, element);
+            if (this.element[this.name] !== result) {
+                this.element[this.name] = result;
+            }
+        } catch (e) {
+            this.runOnce = true;
         }
     }
 }
@@ -224,6 +265,7 @@ class i18nAttributeProcessor {
 }
 
 export const attributeProcessorRegistry = [
+    BindInterpolationProcessor,
     StyleAttributeProcessor,
     ClassAttributeProcessor,
     EventAttributeProcessor,

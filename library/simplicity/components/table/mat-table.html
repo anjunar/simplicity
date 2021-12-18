@@ -55,10 +55,10 @@
         </template>
         <tbody>
             <template is="dom-repeat" bind:items="window" item="tr">
-                <tr>
+                <tr bind:onclick="onRowClick($event, tr)">
                     <template is="dom-repeat" bind:items="configuration(columns)" item="td">
                         <td>
-                            <slot is="dom-slot" implicit="tr" selector="tbody tr td *" bind:index="td.index" import="true" resilient="true"></slot>
+                            <slot is="dom-slot" implicit="tr" selector="tbody tr td > *" bind:index="td.index" import="true" resilient="true"></slot>
                         </td>
                     </template>
                 </tr>

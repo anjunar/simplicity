@@ -7,18 +7,26 @@
 <body>
     <template>
         <template is="dom-switch" bind:predicate="model.type">
-            <mat-image-upload case="image" style="width: 320px; height: 200px" bind:name="model.name"></mat-image-upload>
-            <mat-checkbox-container case="checkbox" bind:placeholder="model.name">
-                <input is="dom-input" type="checkbox" bind:name="model.name">
-            </mat-checkbox-container>
-            <mat-input-container case="default" bind:placeholder="model.name">
-                <input is="dom-input" bind:type="model.type" bind:name="model.name">
-            </mat-input-container>
-            <mat-input-container case="lazyselect" bind:placeholder="model.name">
-                <dom-lazy-select bind:items="domLazySelect(model)">
-                    <div let="data">{{data.firstName}}</div>
-                </dom-lazy-select>
-            </mat-input-container>
+            <case value="image">
+                <mat-image-upload style="width: 320px; height: 200px" bind:name="model.name"></mat-image-upload>
+            </case>
+            <case value="checkbox">
+                <mat-checkbox-container bind:placeholder="model.name">
+                    <input is="dom-input" type="checkbox" bind:name="model.name">
+                </mat-checkbox-container>
+            </case>
+            <case value="lazyselect">
+                <mat-input-container bind:placeholder="model.name">
+                    <dom-lazy-select bind:items="domLazySelect(model)">
+                        <div let="data">{{data.firstName}}</div>
+                    </dom-lazy-select>
+                </mat-input-container>
+            </case>
+            <case value="default">
+                <mat-input-container bind:placeholder="model.name">
+                    <input is="dom-input" bind:type="model.type" bind:name="model.name">
+                </mat-input-container>
+            </case>
         </template>
     </template>
 </body>

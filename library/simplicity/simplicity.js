@@ -65,7 +65,7 @@ function createProcessors(element) {
     }
 }
 
-export function createProcessorTree(element) {
+function createProcessorTree(element) {
     if (element.component) {
         createProcessors(element);
     }
@@ -224,16 +224,55 @@ document.importComponent = function (node) {
 
 function buildContent(element) {
     let fragment = document.createDocumentFragment();
-    templateBinding(fragment)
+    let mutationObserver1 = new MutationObserver((records) => {
+        for (const mutationRecord of records) {
+            for (const addedNode of mutationRecord.addedNodes) {
+                if (addedNode.nodeType === Node.ELEMENT_NODE) {
+                    let templates = [];
+                    if (addedNode instanceof HTMLTemplateElement && addedNode.hasAttribute("is")) {
+                        templates.push(addedNode)
+                    } else {
+                        templates = addedNode.querySelectorAll("template[is]");
+                    }
+                    for (const template of templates) {
+                        let component = template.queryUpwards((element) => element.localName.indexOf("-") > -1);
+                        if (!component) {
+                            // Call connnectedCallback because it is not triggered when placed inside a Template
+                            template.connectedCallback(true);
+                            // Bind Components to the template
+                            let nextElementSibling = template.nextElementSibling;
+                            while (nextElementSibling) {
+                                createProcessorTree(nextElementSibling)
+                                nextElementSibling = nextElementSibling.nextElementSibling;
+                            }
+                            // Event for Dom-Slot, because the MutationObserver is async
+                            fragment.dispatchEvent(new CustomEvent("contentChanged"))
+                        }
+                    }
+                }
+            }
+        }
+        if (element.render) {
+            element.render();
+        }
+    })
+    mutationObserver1.observe(fragment, {subtree: true, childList: true});
+
     for (const child of Array.from(element.children)) {
         fragment.root = element;
         fragment.appendChild(child);
     }
+    
     return fragment;
 }
 
-function buildContext(root, template) {
-    let fragment = document.importNode(template.content, true)
+function buildContext(root, template, clone = true) {
+    let fragment;
+    if (clone) {
+        fragment = document.importNode(template, true)
+    } else {
+        fragment = template;
+    }
 
     function createLink(root, clone) {
         let iterator = document.createNodeIterator(clone, NodeFilter.SHOW_ELEMENT);
@@ -290,34 +329,6 @@ function variableBinding(root, fragment) {
     }
 }
 
-export function templateBinding(content) {
-    let mutationObserver = new MutationObserver((records) => {
-        let mutationRecords = records.filter((record) => record.addedNodes.length > 0);
-        for (const mutationRecord of mutationRecords) {
-            for (const addedNode of mutationRecord.addedNodes) {
-                if (addedNode.nodeType === Node.ELEMENT_NODE) {
-                    let templates = [];
-                    if (addedNode instanceof HTMLTemplateElement && addedNode.hasAttribute("is")) {
-                        templates.push(addedNode)
-                    } else {
-                        templates = addedNode.querySelectorAll("template[is]");
-                    }
-                    for (const template of templates) {
-                        let component = template.queryUpwards((element) => element.localName.indexOf("-") > -1);
-                        if (!component) {
-                            // Call connnectedCallback because it is not triggered when placed inside a Template
-                            template.connectedCallback(true);
-                            // Event for Dom-Slot, because the MutationObserver is async
-                            content.dispatchEvent(new CustomEvent("contentChanged"))
-                        }
-                    }
-                }
-            }
-        }
-    })
-    mutationObserver.observe(content, {subtree: true, childList: true});
-}
-
 const names = new Map();
 
 class Component {
@@ -326,14 +337,10 @@ class Component {
     initialized = false
     attributeBindings = []
     textNodeProcessors = []
-
     addContext(value) {
         this.context.push(value);
     }
 
-    hasContext() {
-        return this.context.length > 0;
-    }
 }
 
 export const customComponents = new class CustomComponents {
@@ -349,19 +356,6 @@ export const customComponents = new class CustomComponents {
             let css = html.querySelector("style");
             if (css) {
                 document.head.appendChild(css);
-            }
-            let i18nElement = html.querySelector("i18n");
-            if (i18nElement) {
-                for (const translation of i18nElement.children) {
-                    let source = translation.querySelector("origin");
-                    let targets = translation.querySelectorAll("destination");
-                    for (const target of targets) {
-                        let language = target.getAttribute("lang");
-                        let trim = source.textContent.trim().replaceAll(/\s+/g, " ");
-                        let message = i18nMessages[trim] = {};
-                        message[language] = target.textContent.trim();
-                    }
-                }
             }
             let scriptElement = html.querySelector("script");
             if (scriptElement) {
@@ -410,10 +404,10 @@ export const customComponents = new class CustomComponents {
                             this.content = buildContent(this);
 
                             if (clazz.components) {
-                                checker(clazz.components, templateElement, this.localName)
+                                checker(clazz.components, templateElement.content, this.localName)
                             }
 
-                            let fragment = buildContext(this, templateElement);
+                            let fragment = buildContext(this, templateElement.content);
 
                             variableBinding(this, fragment);
 
@@ -426,8 +420,30 @@ export const customComponents = new class CustomComponents {
                             this.appendChild(fragment);
 
                         } else {
-                            createProcessors(this)
+                            createProcessors(this);
+
+                            if (Reflect.has(this, "dynamicTemplate")) {
+                                this.component.addContext("template");
+                                this.isCompositeComponent = true;
+
+                                let template = document.createDocumentFragment();
+
+                                template.appendChild(this.dynamicTemplate)
+
+                                this.content = buildContent(this);
+
+                                if (clazz.components) {
+                                    checker(clazz.components, template, this.localName)
+                                }
+
+                                let fragment = buildContext(this, template, false);
+
+                                variableBinding(this, fragment);
+
+                                this.appendChild(fragment);
+                            }
                         }
+
 
                         if (this.initialize) {
                             this.initialize();
@@ -512,7 +528,7 @@ function checker(jsImports, html, path) {
             }
         }
 
-        traverse(html.content.children);
+        traverse(html.children);
 
         let sortedComponents = components.sort();
         let sortedJsImports = jsImports.map(item => names.get(item)).sort();

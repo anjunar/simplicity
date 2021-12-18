@@ -96,7 +96,7 @@ class DomSlot extends HTMLSlotElement {
             if (this.resilient === "true") {
                 this.appendChild(importNode);
             } else {
-                this.parentElement.replaceChild(importNode, this);
+                this.parentNode.replaceChild(importNode, this);
             }
 
 

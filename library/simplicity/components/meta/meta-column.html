@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <template is="dom-switch" bind:predicate="meta.type">
+        <case value="image">
+            <mat-image-upload bind:model="model" style="width: 320px; height: 200px"></mat-image-upload>
+        </case>
+        <case value="lazyselect">
+            <dom-lazy-select bind:items="domLazySelectSource(meta)" bind:model="model" bind:label="domLazySelectLabel(meta)">
+                <div let="data">{{domLazySelectOption(meta, data)}}</div>
+            </dom-lazy-select>
+        </case>
+        <case value="default">
+            <input is="dom-input" bind:type="meta.type" bind:model="model">
+        </case>
+    </template>
+</template>
+</body>
+</html>

@@ -8,13 +8,13 @@
   <template>
       <table is="mat-table" bind:items="items" bind:onRow="onRowClick($event)">
           <colgroup>
-              <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
+              <template is="dom-repeat" bind:items="model.columns" item="column">
                   <col bind:path="column.name">
               </template>
           </colgroup>
           <thead>
             <tr>
-                <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
+                <template is="dom-repeat" bind:items="model.columns" item="column">
                     <td>
                         <div>{{column.name}}</div>
                     </td>
@@ -23,9 +23,11 @@
           </thead>
           <tbody>
             <tr>
-                <template is="dom-repeat" bind:items="model.columns" item="column" immediate="true">
+                <template is="dom-repeat" bind:items="model.columns" item="column">
                     <td>
-                        <div let="data">{{renderCol(column.name)}}</div>
+                        <div let="data">
+                            <meta-column bind:meta="column" bind:model="data.${column.name}"></meta-column>
+                        </div>
                     </td>
                 </template>
             </tr>

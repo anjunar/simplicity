@@ -4,7 +4,6 @@ import DomRepeat from "../../directives/dom-repeat.js";
 import DomSlot from "../../directives/dom-slot.js";
 import DomIf from "../../directives/dom-if.js";
 import {windowManager} from "../../manager/window-manager.js";
-import table from "../../../../documentation/basic/tables/table.js";
 
 class MatTable extends HTMLTableElement {
 
@@ -16,7 +15,8 @@ class MatTable extends HTMLTableElement {
     window = [];
     columns = [];
 
-    initialize() {
+    render() {
+        this.columns = [];
         let colGroup = this.content.querySelectorAll("colgroup col")
         let length = this.body.length;
         for (let i = 0; i < length; i++) {
@@ -31,7 +31,13 @@ class MatTable extends HTMLTableElement {
             });
         }
 
-        this.load();
+        if (length > 0) {
+            this.load();
+        }
+    }
+
+    onRowClick(event, row) {
+        this.dispatchEvent(new CustomEvent("row", {detail : row}))
     }
 
     get header() {
