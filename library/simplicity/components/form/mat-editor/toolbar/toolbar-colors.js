@@ -8,11 +8,11 @@ class ToolbarColors extends HTMLElement {
 
     color = {
         value : "none",
-        click : (event) => {
+        click(event) {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("foreColor", false, event.target.value)
         },
-        handler : (event) => {
+        handler(event) {
             function rgbToHex(color) {
                 color = "" + color;
                 if (!color || color.indexOf("rgb") < 0) {
@@ -37,19 +37,19 @@ class ToolbarColors extends HTMLElement {
 
             let computedStyle = window.getComputedStyle(event.target);
 
-            this.color.value = rgbToHex(computedStyle.color) || "none";
+            this.value = rgbToHex(computedStyle.color) || "none";
         }
     };
 
     backGroundColor = {
         value : "rgba(0, 0, 0, 0)",
-        click : (event) => {
+        click(event) {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("backColor", false, event.target.value);
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.backGroundColor.value = computedStyle.backgroundColor || "none";
+            this.value = computedStyle.backgroundColor || "none";
         }
     };
 

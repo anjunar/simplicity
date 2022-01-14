@@ -21,11 +21,9 @@
 <body>
     <template>
         <div style="display: flex">
-            <template is="dom-repeat" bind:items="tasks" item="task">
-                <div class="task" bind:onclick="onClick(task)">
-                    {{task.configuration.header}}
-                </div>
-            </template>
+            <div bind:for="let task of tasks" class="task" bind:onclick="onClick(task)">
+                {{task.configuration.header}}
+            </div>
         </div>
     </template>
 </body>

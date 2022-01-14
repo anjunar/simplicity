@@ -1,5 +1,3 @@
-import {findProperty} from "../simplicity.js";
-
 function tokenizer(expression) {
 
     let tags = [
@@ -9,7 +7,7 @@ function tokenizer(expression) {
         },
         {
             type : "placeholder",
-            regex: /\$event|\$value/y
+            regex: /\$event|\$value|\$children/y
         },
         {
             type : "property",
@@ -355,7 +353,7 @@ function transformator(node, parent, callback) {
         case "PlaceholderLiteral" :
             return {
                 type : node.type,
-                value : `context.${node.value}`
+                value : `args.${node.value}`
             }
         case "StringLiteral" :
             return node
@@ -457,83 +455,11 @@ export function compiler(expression, callback) {
     return codeGenerator(transformed);
 }
 
-/*
-export function evaluation(expression, element, context) {
-    let scopes = [];
+export function evaluation(expression, context, args) {
 
     let output = compiler(expression, (property) => {
-        scopes.push(element.findProperty(property, element.template));
-        let index = scopes.length - 1;
-        if (index === -1) {
-            throw new Error(`${expression} not found on element: ${element.localName} is: ${element.getAttribute("is")}`)
-        }
-        return `scopes[${index}].${property}`
+        return `context.variable('${property}').${property}`
     });
 
     return eval(output)
 }
-*/
-
-const cache = new Map();
-
-export function evaluation(expression, element, context) {
-
-    let elementCache = cache.get(element)
-
-    if (elementCache) {
-        let expressionCache = elementCache.get(expression);
-
-        if (expressionCache) {
-            let scopes = expressionCache.scopes;
-            let processedExpression = expressionCache.expression;
-            return eval(processedExpression);
-        } else {
-            let scopes = [];
-
-            let output = compiler(expression, (property) => {
-                scopes.push(findProperty(property, element.template, element));
-                let index = scopes.length - 1;
-                if (index === -1) {
-                    throw new Error(`${expression} not found on element: ${element.localName} is: ${element.getAttribute("is")}`)
-                }
-                return `scopes[${index}].${property}`
-            });
-
-            expressionCache = {
-                scopes : scopes,
-                expression : output
-            };
-
-            elementCache.set(expression, expressionCache)
-
-            return eval(output)
-        }
-    } else {
-        elementCache = new Map();
-        cache.set(element, elementCache)
-
-        let scopes = [];
-
-        let output = compiler(expression, (property) => {
-            scopes.push(findProperty(property, element.template, element));
-            let index = scopes.length - 1;
-            if (index === -1) {
-                throw new Error(`${expression} not found on element: ${element.localName} is: ${element.getAttribute("is")}`)
-            }
-            return `scopes[${index}].${property}`
-        });
-
-        let expressionCache = {
-            scopes : scopes,
-            expression : output
-        };
-
-        elementCache.set(expression, expressionCache)
-
-        return eval(output)
-
-    }
-
-}
-
-

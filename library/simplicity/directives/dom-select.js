@@ -42,7 +42,7 @@ class DomSelect extends HTMLSelectElement {
     initialize() {
         let options = Array.from(this.options);
 
-        let option = options.find(option => option.value === this.value);
+        let option = options.find(option => option.value === this.model);
 
         this.selectedIndex = options.indexOf(option)
     }

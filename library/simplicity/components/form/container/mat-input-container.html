@@ -95,13 +95,13 @@
                   bind:class="hasFocus() ? 'focus' : ''; hasErrors() ? 'error' : ''">{{placeholder}}</span>
             </div>
             <div style="display: flex">
-                <slot is="dom-slot" name="prefix"></slot>
-                <slot is="dom-slot" tag="isInput"></slot>
-                <slot is="dom-slot" name="suffix"></slot>
+                <slot name="prefix"></slot>
+                <slot tag="isInput"></slot>
+                <slot name="suffix"></slot>
             </div>
             <hr bind:class="hasFocus() ? 'focus' : ''; hasErrors() ? 'error' : ''"/>
             <div class="error">
-                <slot is="dom-slot" class="errorContainer" name="error"></slot>
+                <slot class="errorContainer" name="error"></slot>
             </div>
         </div>
     </template>

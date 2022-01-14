@@ -1,5 +1,4 @@
 import {customComponents} from "../../simplicity.js";
-import DomSlot from "../../directives/dom-slot.js";
 import {loader} from "../../processors/loader-processor.js";
 import MatScrollbarHorizontal from "../navigation/scrollbar/mat-scrollbar-horizontal.js";
 import MatScrollbarVertical from "../navigation/scrollbar/mat-scrollbar-vertical.js";
@@ -99,7 +98,7 @@ class MatScrollArea extends HTMLElement {
     }
 
     static get components() {
-        return [DomSlot, MatScrollbarHorizontal, MatScrollbarVertical]
+        return [MatScrollbarHorizontal, MatScrollbarVertical]
     }
 
     static get template() {

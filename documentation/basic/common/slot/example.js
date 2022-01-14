@@ -1,7 +1,5 @@
 import {loader} from "../../../../library/simplicity/processors/loader-processor.js";
 import {customComponents} from "../../../../library/simplicity/simplicity.js";
-import DomRepeat from "../../../../library/simplicity/directives/dom-repeat.js";
-import DomSlot from "../../../../library/simplicity/directives/dom-slot.js";
 
 class CommonExample extends HTMLElement {
 
@@ -16,7 +14,7 @@ class CommonExample extends HTMLElement {
     }
 
     static get components() {
-        return [DomRepeat, DomSlot]
+        return []
     }
 
     static get observedAttributes() {

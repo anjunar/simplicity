@@ -1,5 +1,6 @@
 import {customComponents} from "../simplicity.js";
 import {debounce} from "../services/tools.js";
+import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 class DomForm extends HTMLFormElement {
 
@@ -27,18 +28,16 @@ class DomForm extends HTMLFormElement {
         }
         Promise.all(results)
             .then(() => {
-                document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "validate"}}))
+                lifeCycle();
             })
             .catch(() => {
-                document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "validate"}}))
+                lifeCycle();
             })
     }
 
     initialize() {
         if (this.name) {
-            let domForm = this.queryUpwards((element) => {
-                return (element instanceof DomForm) && (element !== this);
-            });
+            let domForm = this.parentElement.queryUpwards((element) => element instanceof DomForm);
             if (domForm) {
                 domForm.register(this);
             }
@@ -63,12 +62,10 @@ class DomForm extends HTMLFormElement {
 
         component.addEventListener("model", debounce(this.validationHandler.bind(this), 300))
 
-        for (const component of this.components) {
-            let value = this.model[component.name];
-            component.model = value;
-            component.value = value;
-            component.defaultValue = value;
-        }
+        let value = this.model[component.name];
+        component.model = value;
+        component.value = value;
+        component.defaultValue = value;
 
         component.formular = this;
     }

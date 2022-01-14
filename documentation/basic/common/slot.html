@@ -144,6 +144,7 @@
 
         </div>
 
+<!--
         <div style="flex: 1; padding: 20px;">
             <h2>Source Code</h2>
             <hr>
@@ -224,11 +225,9 @@
                                 <code is="dom-code" lang="html5">
                                     <template>
                                         <iframe>
-                                            <template is="dom-repeat" bind:items="items" item="item">
-                                                <div>
-                                                    <slot is="dom-slot" implicit="item"></slot>
-                                                </div>
-                                            </template>
+                                            <div bind:for="let item of items">
+                                                <slot implicit="item"></slot>
+                                            </div>
                                         </iframe>
                                     </template>
                                 </code>
@@ -286,6 +285,7 @@
                 </mat-page>
             </mat-pages>
         </div>
+-->
     </div>
 </template>
 </body>

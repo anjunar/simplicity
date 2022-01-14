@@ -9,7 +9,7 @@ class ToolbarInserts extends HTMLElement {
     link = {
         value: "",
         active: false,
-        click: (link) => {
+        click(link) {
             let selection = document.getSelection();
             let rangeAt = selection.getRangeAt(0);
 
@@ -27,22 +27,22 @@ class ToolbarInserts extends HTMLElement {
                 })
             });
         },
-        handler: (event) => {
+        handler(event) {
 
         }
     }
     unLink = {
         active: false,
-        click: (event) => {
+        click(event) {
             document.execCommand("unlink")
         },
-        handler: (event) => {
+        handler(event) {
 
         }
     }
     insertDivFlex = {
         disabled: false,
-        click: (columns = 2) => {
+        click(columns = 2) {
             let columnsHTML = ""
             for (let i = 0; i < columns; i++) {
                 columnsHTML += "<div></div>"
@@ -54,7 +54,7 @@ class ToolbarInserts extends HTMLElement {
         }
     }
     insertTable = {
-        click: (columns = 2, rows = 2) => {
+        click(columns = 2, rows = 2) {
             let columnsHTML = "";
             for (let i = 0; i < columns; i++) {
                 columnsHTML += "<td></td>"
@@ -72,7 +72,7 @@ class ToolbarInserts extends HTMLElement {
     }
     image = {
         active: false,
-        click: (event) => {
+        click(event) {
             let selection = document.getSelection();
             let rangeAt = selection.getRangeAt(0);
 
@@ -98,16 +98,16 @@ class ToolbarInserts extends HTMLElement {
     }
     horizontalRule = {
         active: false,
-        click: (event) => {
+        click(event) {
             document.execCommand("insertHorizontalRule")
         },
-        handler: (event) => {
+        handler(event) {
 
         }
     }
     text = {
         active: false,
-        click: (event) => {
+        click(event) {
             let selection = document.getSelection();
             let rangeAt = selection.getRangeAt(0);
 
@@ -127,34 +127,34 @@ class ToolbarInserts extends HTMLElement {
                 })
             });
         },
-        handler: (event) => {
+        handler(event) {
 
         }
     }
     orderedList = {
         active: false,
-        click: (event) => {
+        click(event) {
             document.execCommand("insertOrderedList")
         },
-        handler: (event) => {
+        handler(event) {
 
         }
     }
     unOrderedList = {
         active: false,
-        click: (event) => {
+        click(event) {
             document.execCommand("insertUnorderedList")
         },
-        handler: (event) => {
+        handler(event) {
 
         }
     }
     paragraph = {
         active: false,
-        click: (event) => {
+        click(event) {
             document.execCommand("insertParagraph")
         },
-        handler: (event) => {
+        handler(event) {
 
         }
     }

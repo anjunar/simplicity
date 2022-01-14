@@ -1,40 +1,38 @@
 import {customComponents} from "../../simplicity.js";
-import DomSlot from "../../directives/dom-slot.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomRepeat from "../../directives/dom-repeat.js";
+import {contentManager} from "../../manager/content-manager.js";
+import {lifeCycle} from "../../processors/life-cycle-processor.js";
 
 class MatTabs extends HTMLElement {
 
     page = 0;
 
     get tabs() {
-        return Array.from(this.content.querySelectorAll("mat-tab"));
+        let container = contentManager.instance(this);
+        return Array.from(container.querySelectorAll("mat-tab"))
     }
 
-    render() {
-        let tabs = Array.from(this.querySelectorAll("mat-tab"));
-        for (const tab of tabs) {
+    rendered(children) {
+        for (const child of children) {
+            let tab = child.querySelector("mat-tab")
             tab.selected = false;
+            tab.addEventListener("click", (event) => {
+                event.stopPropagation();
+                for (const child of children) {
+                    let tab = child.querySelector("mat-tab")
+                    tab.selected = false;
+                }
+                tab.selected = true;
+                this.page = children.indexOf(child);
+                this.dispatchEvent(new CustomEvent("page"))
+                return false;
+            })
         }
-        if (tabs.length > 0) {
-            let tab = tabs[this.page];
+        if (children.length > 0) {
+            let child = children[this.page];
+            let tab = child.querySelector("mat-tab")
             tab.selected = true;
         }
-    }
-
-    register(tab) {
-        tab.addEventListener("click", (event) => {
-            event.stopPropagation();
-            let tabs = Array.from(this.querySelectorAll("mat-tab"));
-
-            for (const tab of tabs) {
-                tab.selected = false;
-            }
-            tab.selected = true;
-            this.page = tabs.indexOf(tab);
-            this.dispatchEvent(new CustomEvent("page"))
-            return false;
-        })
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -55,7 +53,7 @@ class MatTabs extends HTMLElement {
     }
 
     static get components() {
-        return [DomSlot, DomRepeat]
+        return []
     }
 
     static get template() {

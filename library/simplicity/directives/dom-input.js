@@ -1,6 +1,7 @@
 import {customComponents} from "../simplicity.js";
 import DomForm from "./dom-form.js";
 import {debounce} from "../services/tools.js";
+import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 class DomInput extends HTMLInputElement {
 
@@ -33,10 +34,10 @@ class DomInput extends HTMLInputElement {
 
                 Promise.all(results)
                     .then(() => {
-                        document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "validate"}}))
+                        lifeCycle();
                     })
                     .catch(() => {
-                        document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "validate"}}))
+                        lifeCycle();
                     })
             }
         }
@@ -82,24 +83,24 @@ class DomInput extends HTMLInputElement {
 
         switch (this.type) {
             case "checkbox" : {
-                this.addEventListener("input", selectedChangeHandler, {lifeCylce: false});
+                this.addEventListener("input", selectedChangeHandler);
             }
                 break
             case "file" : {
-                this.addEventListener("input", fileChangeHandler, {lifeCylce: false});
+                this.addEventListener("input", fileChangeHandler);
             }
                 break;
             case "radio" : {
-                this.addEventListener("input", valueChangeHandler, {lifeCylce: false});
+                this.addEventListener("input", valueChangeHandler);
             }
                 break;
             default : {
-                this.addEventListener("input", valueChangeHandler, {lifeCylce: false});
-                this.addEventListener("change", valueChangeHandler, {lifeCylce: false});
-                this.addEventListener("model", debounce(asyncValidationHandler, 300), {lifeCylce: false});
+                this.addEventListener("input", valueChangeHandler);
+                this.addEventListener("change", valueChangeHandler);
+                this.addEventListener("model", debounce(asyncValidationHandler, 300));
                 this.addEventListener("focus", () => {
-                    document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "focus"}}));
-                }, {lifeCylce: false});
+                    lifeCycle();
+                });
             }
                 break;
         }
@@ -110,6 +111,28 @@ class DomInput extends HTMLInputElement {
             });
             if (domForm) {
                 domForm.register(this);
+            }
+        }
+
+        this.render();
+    }
+
+    render() {
+        switch (this.type) {
+            case "radio" : {
+                if (this.model === this.value) {
+                    this.checked = true;
+                }
+            }
+                break;
+            case "checkbox" : {
+                if (this.model) {
+                    this.checked = true
+                }
+            }
+                break;
+            default : {
+                this.value = this.model;
             }
         }
     }
@@ -161,23 +184,6 @@ class DomInput extends HTMLInputElement {
         switch (name) {
             case "model" : {
                 this.model = newValue;
-                switch (this.type) {
-                    case "radio" : {
-                        if (newValue === this.value) {
-                            this.checked = true;
-                        }
-                    }
-                        break;
-                    case "checkbox" : {
-                        if (newValue) {
-                            this.checked = true
-                        }
-                    }
-                        break;
-                    default : {
-                        this.value = newValue;
-                    }
-                }
             }
                 break;
         }

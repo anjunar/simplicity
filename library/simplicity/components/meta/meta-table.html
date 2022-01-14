@@ -8,28 +8,22 @@
   <template>
       <table is="mat-table" bind:items="items" bind:onRow="onRowClick($event)">
           <colgroup>
-              <template is="dom-repeat" bind:items="model.columns" item="column">
-                  <col bind:path="column.name">
-              </template>
+              <col bind:for="let column of model.columns" bind:path="column.name">
           </colgroup>
           <thead>
             <tr>
-                <template is="dom-repeat" bind:items="model.columns" item="column">
-                    <td>
-                        <div>{{column.name}}</div>
-                    </td>
-                </template>
+                <td bind:for="let column of model.columns">
+                    <div>{{column.name}}</div>
+                </td>
             </tr>
           </thead>
           <tbody>
             <tr>
-                <template is="dom-repeat" bind:items="model.columns" item="column">
-                    <td>
-                        <div let="data">
-                            <meta-column bind:meta="column" bind:model="data.${column.name}"></meta-column>
-                        </div>
-                    </td>
-                </template>
+                <td bind:for="let column of model.columns">
+                    <div let="data">
+                        <meta-column bind:meta="column" bind:model="data.${column.name}"></meta-column>
+                    </div>
+                </td>
             </tr>
           </tbody>
       </table>

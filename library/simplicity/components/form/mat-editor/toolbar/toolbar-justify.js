@@ -6,83 +6,91 @@ class ToolbarJustify extends HTMLElement {
     contents;
 
     justify = {
+        outer : this,
         active : false,
-        click : (event) => {
+        click(event) {
             document.execCommand("justifyFull");
-            this.justify.active = true;
-            this.justifyLeft.active = false;
-            this.justifyRight.active = false;
-            this.justifyCenter.active = false;
+            this.active = true;
+
+            this.outer.justifyLeft.active = false;
+            this.outer.justifyRight.active = false;
+            this.outer.justifyCenter.active = false;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.justify.active = computedStyle.textAlign === "justify";
+            this.active = computedStyle.textAlign === "justify";
         }
     }
     justifyLeft = {
+        outer : this,
         active : false,
-        click : (event) => {
+        click(event) {
             document.execCommand("justifyLeft");
-            this.justify.active = false;
-            this.justifyLeft.active = true;
-            this.justifyRight.active = false;
-            this.justifyCenter.active = false;
+            this.active = true
+
+            this.outer.justify.active = false;
+            this.outer.justifyRight.active = false;
+            this.outer.justifyCenter.active = false;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.justifyLeft.active = computedStyle.textAlign === "left";
+            this.active = computedStyle.textAlign === "left";
         }
     }
     justifyRight = {
+        outer : this,
         active : false,
-        click : (event) => {
+        click(event) {
             document.execCommand("justifyRight");
-            this.justify.active = false;
-            this.justifyLeft.active = false;
-            this.justifyRight.active = true;
-            this.justifyCenter.active = false;
+            this.active = true
+
+            this.outer.justify.active = false;
+            this.outer.justifyLeft.active = false;
+            this.outer.justifyCenter.active = false;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.justifyRight.active = computedStyle.textAlign === "right";
+            this.active = computedStyle.textAlign === "right";
         }
     }
     justifyCenter = {
+        outer : this,
         active : false,
-        click : (event) => {
+        click(event) {
             document.execCommand("justifyCenter");
-            this.justify.active = false;
-            this.justifyLeft.active = false;
-            this.justifyRight.active = false;
-            this.justifyCenter.active = true;
+            this.active = true
+
+            this.outer.justify.active = false;
+            this.outer.justifyLeft.active = false;
+            this.outer.justifyRight.active = false;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.justifyCenter.active = computedStyle.textAlign === "center";
+            this.active = computedStyle.textAlign === "center";
         }
     }
 
     indent = {
         active : false,
-        click : (event) => {
+        click(event) {
             document.execCommand("indent");
         },
-        handler : (event) => {
+        handler(event) {
             //Todo: Needs to be implemented
         }
     }
     outdent = {
         active : false,
-        click : (event) => {
+        click(event) {
             document.execCommand("outdent");
         },
-        handler : (event) => {
+        handler(event) {
             //Todo: Needs to be implemented
         }
     }
     floatLeft = {
         active : false,
-        click : (event) => {
+        click(event) {
             let selection = window.getSelection();
             let parentElement = selection.anchorNode.parentElement;
 
@@ -97,14 +105,14 @@ class ToolbarJustify extends HTMLElement {
                 this.floatRight.active = false;
             }
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.floatLeft.active = computedStyle.float === "left"
+            this.active = computedStyle.float === "left"
         }
     }
     floatRight = {
         active : false,
-        click : (event) => {
+        click(event) {
             let selection = window.getSelection();
             let parentElement = selection.anchorNode.parentElement;
 
@@ -119,9 +127,9 @@ class ToolbarJustify extends HTMLElement {
                 this.floatRight.active = true;
             }
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.floatRight.active = computedStyle.float === "right"
+            this.active = computedStyle.float === "right"
         }
     }
 

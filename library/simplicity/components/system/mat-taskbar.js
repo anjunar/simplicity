@@ -1,5 +1,4 @@
 import {customComponents} from "../../simplicity.js";
-import DomRepeat from "../../directives/dom-repeat.js";
 import {loader} from "../../processors/loader-processor.js";
 import {windowManager} from "../../manager/window-manager.js";
 
@@ -14,7 +13,7 @@ class MatTaskbar extends HTMLElement {
     }
 
     static get components() {
-        return [DomRepeat]
+        return []
     }
 
     static get template() {

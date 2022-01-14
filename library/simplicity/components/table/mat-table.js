@@ -1,9 +1,8 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomRepeat from "../../directives/dom-repeat.js";
-import DomSlot from "../../directives/dom-slot.js";
-import DomIf from "../../directives/dom-if.js";
 import {windowManager} from "../../manager/window-manager.js";
+import {contentManager} from "../../manager/content-manager.js";
+import {lifeCycle} from "../../processors/life-cycle-processor.js";
 
 class MatTable extends HTMLTableElement {
 
@@ -15,9 +14,10 @@ class MatTable extends HTMLTableElement {
     window = [];
     columns = [];
 
-    render() {
+    preInitialize() {
         this.columns = [];
-        let colGroup = this.content.querySelectorAll("colgroup col")
+        let content = contentManager.instance(this);
+        let colGroup = content.querySelectorAll("colgroup col")
         let length = this.body.length;
         for (let i = 0; i < length; i++) {
             let colElement = colGroup[i];
@@ -41,11 +41,13 @@ class MatTable extends HTMLTableElement {
     }
 
     get header() {
-        return Array.from(this.content.querySelectorAll("thead tr td"))
+        let template = contentManager.instance(this);
+        return Array.from(template.querySelectorAll("thead tr td"))
     }
 
     get body() {
-        return Array.from(this.content.querySelectorAll("tbody tr td"))
+        let template = contentManager.instance(this);
+        return Array.from(template.querySelectorAll("tbody tr td"))
     }
 
     desc(td) {
@@ -94,7 +96,7 @@ class MatTable extends HTMLTableElement {
             this.window = data;
             this.size = size;
             this.open = true;
-            document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "items"}}))
+            lifeCycle()
         })
     }
 
@@ -177,7 +179,7 @@ class MatTable extends HTMLTableElement {
     }
 
     static get components() {
-        return [DomRepeat, DomSlot, DomIf]
+        return []
     }
 
     static get template() {

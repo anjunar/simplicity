@@ -2,42 +2,21 @@ import {evaluation} from "./js-compiler-processor.js";
 import {isEqual} from "../simplicity.js";
 import {appManager} from "../manager/app-manager.js";
 
-class BindInterpolationProcessor {
-    attribute;
-    element;
-    matched = false;
-
-    constructor(attribute, element) {
-        this.attribute = attribute;
-        this.element = element;
-
-        let interpolationRegExp = /\${([^}]+)}/g;
-
-        let result = interpolationRegExp.exec(this.attribute.value);
-        if (result) {
-            this.matched = true;
-            let variable = result[1];
-
-            let value = evaluation(variable, this.element);
-            let replace = attribute.value.replace(interpolationRegExp, value);
-            attribute.value = replace;
-        }
-    }
-
-    process() {}
-}
-
 class StyleAttributeProcessor {
-    attribute;
+    name;
+    value;
     element;
+    context;
     matched = false;
     runOnce = false;
 
-    constructor(attribute, element) {
-        this.attribute = attribute;
+    constructor(name, value, element, context) {
+        this.context = context;
         this.element = element;
+        this.name = name;
+        this.value = value;
 
-        let result = attribute.name === "bind:style"
+        let result = name === "bind:style"
         if (result) {
             this.matched = true;
             this.process();
@@ -45,7 +24,7 @@ class StyleAttributeProcessor {
     }
 
     process() {
-        let cssExpressions = this.attribute.value.split(";");
+        let cssExpressions = this.value.split(";");
         for (const cssExpression of cssExpressions) {
             let indexOf = cssExpression.indexOf(":");
             let key = cssExpression.substring(0, indexOf).trim();
@@ -64,27 +43,28 @@ class StyleAttributeProcessor {
                 last = char;
             }
 
-            try {
-                this.element.style[keyString] = evaluation(value, this.element);
-            } catch (e) {
-                this.runOnce = true;
-            }
+            let cssValue = evaluation(value, this.context);
+            this.element.style[keyString] = cssValue;
         }
     }
 }
 
 class ClassAttributeProcessor {
 
-    attribute;
+    name;
+    value;
     element;
+    context;
     matched = false;
     runOnce = false;
 
-    constructor(attribute, element) {
-        this.attribute = attribute;
+    constructor(name, value, element, context) {
+        this.context = context;
         this.element = element;
+        this.name = name;
+        this.value = value;
 
-        let result = attribute.name === "bind:class"
+        let result = name === "bind:class"
         if (result) {
             this.matched = true;
             this.process();
@@ -92,32 +72,31 @@ class ClassAttributeProcessor {
     }
 
     process() {
-        try {
-            let classList = this.attribute.value.split(";");
-            let result = [];
-            for (const classListElement of classList) {
-                result.push(evaluation(classListElement.trim(), this.element));
-            }
-            this.element.className = result.join(" ");
-        } catch (e) {
-            this.runOnce = true
+        let classList = this.value.split(";");
+        let result = [];
+        for (const classListElement of classList) {
+            result.push(evaluation(classListElement.trim(), this.context));
         }
+        this.element.className = result.join(" ");
     }
 }
 
 class EventAttributeProcessor {
-    attribute;
-    element;
-    matched = false;
     name;
+    value;
+    element;
+    context;
+    matched = false;
     runOnce = true;
 
-    constructor(attribute, element) {
-        this.attribute = attribute;
+    constructor(name, value, element, context) {
+        this.context = context;
         this.element = element;
+        this.name = name;
+        this.value = value;
 
         let regex = /bind:on(\w+)/g;
-        let result = regex.exec(attribute.name);
+        let result = regex.exec(name);
         if (result) {
             this.matched = true;
             this.name = result[1];
@@ -127,24 +106,26 @@ class EventAttributeProcessor {
 
     process() {
         this.element.addEventListener(this.name, ($event) => {
-            evaluation(this.attribute.value, this.element, {$event: $event})
+            evaluation(this.value, this.context, {$event: $event})
         })
     }
 }
 
 class DynamicBindingAttributeProcessor {
-    attribute;
-    element;
-    matched = false;
     name;
+    value;
+    element;
+    context;
+    matched = false;
     type;
     runOnce = false;
     oldValue = null;
 
-    constructor(attribute, element) {
-        this.attribute = attribute;
+    constructor(name, value, element, context) {
+        this.context = context;
         this.element = element;
-        this.name = attribute.name.split(":")[1]
+        this.value = value;
+        this.name = name.split(":")[1]
 
         let observedBindAttributes = element.constructor.observedBindAttributes;
         if (observedBindAttributes) {
@@ -157,8 +138,8 @@ class DynamicBindingAttributeProcessor {
                 if (this.type === "two-way") {
                     this.element.addEventListener(this.name, (event) => {
                         let $value = event.target[this.name]
-                        let expression = attribute.value + " = " + "$value"
-                        evaluation(expression, element, {$value: $value})
+                        let expression = value + " = " + "$value"
+                        evaluation(expression, context, {$value: $value})
                     })
                 }
             }
@@ -166,38 +147,36 @@ class DynamicBindingAttributeProcessor {
     }
 
     process() {
-        try {
-            let result = evaluation(this.attribute.value, this.element);
-            if (this.element.attributeChangedCallback) {
-                if (!isEqual(this.oldValue, result)) {
-                    this.element.attributeChangedCallback(this.name, this.oldValue, result);
-                    if (result instanceof Array) {
-                        this.oldValue = Array.from(result);
-                    } else {
-                        this.oldValue = result;
-                    }
+        let result = evaluation(this.value, this.context);
+        if (this.element.attributeChangedCallback) {
+            if (!isEqual(this.oldValue, result)) {
+                this.element.attributeChangedCallback(this.name, this.oldValue, result);
+                if (result instanceof Array) {
+                    this.oldValue = Array.from(result);
+                } else {
+                    this.oldValue = result;
                 }
             }
-        } catch (e) {
-            this.runOnce = true
         }
     }
 }
 
 class DomAttributesProcessor {
-    attribute;
-    element;
-    matched = false;
     name;
+    value;
+    element;
+    context;
+    matched = false;
     type;
     runOnce = false;
     oldValue = null;
 
 
-    constructor(attribute, element) {
-        this.attribute = attribute;
+    constructor(name, value, element, context) {
+        this.context = context;
         this.element = element;
-        this.name = attribute.name.split(":")[1]
+        this.value = value;
+        this.name = name.split(":")[1]
 
         switch (this.name) {
             case "colspan" : {
@@ -219,29 +198,29 @@ class DomAttributesProcessor {
     }
 
     process() {
-        try {
-            let element = this.element;
-            let result = evaluation(this.attribute.value, element);
-            if (this.element[this.name] !== result) {
-                this.element[this.name] = result;
-            }
-        } catch (e) {
-            this.runOnce = true;
+        let result = evaluation(this.value, this.context);
+        if (this.element[this.name] !== result) {
+            this.element[this.name] = result;
         }
     }
 }
 
 class i18nAttributeProcessor {
-    attribute;
+    name;
+    value;
     element;
+    context;
     matched = false;
     text;
     lastLanguage;
+    runOnce = false;
 
-    constructor(attribute, element) {
-        this.attribute = attribute;
+    constructor(name, value, element, context) {
+        this.context = context;
         this.element = element;
-        if (this.attribute.name === "i18n") {
+        this.name = name;
+        this.value = value;
+        if (name === "i18n") {
             this.matched = true;
             this.text = element.textContent.trim().replaceAll(/\s+/g, " ");
             this.process();
@@ -255,7 +234,8 @@ class i18nAttributeProcessor {
             if (language === "en") {
                 this.element.textContent = this.text;
             } else {
-                let text = this.element.template.i18n(this.text, this.attribute.value);
+                let context = this.context.variable("i18n");
+                let text = context.i18n(this.text, this.value);
                 this.element.textContent = text;
             }
 
@@ -265,7 +245,6 @@ class i18nAttributeProcessor {
 }
 
 export const attributeProcessorRegistry = [
-    BindInterpolationProcessor,
     StyleAttributeProcessor,
     ClassAttributeProcessor,
     EventAttributeProcessor,

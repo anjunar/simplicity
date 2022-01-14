@@ -23,12 +23,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                <template is="dom-repeat" bind:items="performanceLifeCycle" item="performance">
-                    <tr nolifecycle>
-                        <td nolifecycle>{{performance.latency}}ms</td>
-                        <td nolifecycle>{{performance.avgLatency}}ms</td>
-                    </tr>
-                </template>
+                <tr bind:for="let performance of performanceLifeCycle" nolifecycle>
+                    <td nolifecycle>{{performance.latency}}ms</td>
+                    <td nolifecycle>{{performance.avgLatency}}ms</td>
+                </tr>
                 </tbody>
             </table>
             <table style="table-layout: fixed">
@@ -38,11 +36,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <template is="dom-repeat" bind:items="performancePageLoad" item="performance">
-                    <tr nolifecycle>
-                        <td nolifecycle>{{performance}}ms</td>
-                    </tr>
-                </template>
+                <tr bind:for="let performance of performancePageLoad" nolifecycle>
+                    <td nolifecycle>{{performance}}ms</td>
+                </tr>
                 </tbody>
             </table>
         </div>

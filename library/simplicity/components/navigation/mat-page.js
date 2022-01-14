@@ -1,11 +1,10 @@
 import {customComponents} from "../../simplicity.js";
-import DomSlot from "../../directives/dom-slot.js";
 import {loader} from "../../processors/loader-processor.js";
 
 class MatPage extends HTMLElement {
 
     static get components() {
-        return [DomSlot]
+        return []
     }
 
     static get template() {

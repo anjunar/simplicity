@@ -12,31 +12,27 @@
 <body>
     <template>
         <mat-tabs bind:page="page">
-            <template is="dom-repeat" bind:items="table.configuration(table.columns, true)" item="td">
-                <mat-tab>
-                    <div>
-                        <slot is="dom-slot" bind:source="table" selector="thead tr td *" bind:index="td.index" import="true"></slot>
-                    </div>
-                </mat-tab>
-            </template>
+            <mat-tab bind:for="let td of table.configuration(table.columns, true)">
+                <div>
+                    <slot bind:source="table" selector="thead tr td *" bind:index="td.index" import="true"></slot>
+                </div>
+            </mat-tab>
         </mat-tabs>
         <mat-pages bind:page="page">
-            <template is="dom-repeat" bind:items="table.configuration(table.columns, true)" item="td">
-                <mat-page>
-                    <div>
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px">
-                            <mat-checkbox-container placeholder="Visible">
-                                <input is="dom-input" type="checkbox" bind:model="td.visible">
-                            </mat-checkbox-container>
-                            <input is="dom-input" type="text" bind:onvalue="table.load(td.path, $event)" placeholder="Search" style="margin-left: 5px; margin-right: 5px">
-                            <div style="display: flex">
-                                <button type="button" class="material-icons" translate="no" bind:onclick="left(index)" bind:disabled="index === 0">chevron_left</button>
-                                <button type="button" class="material-icons" translate="no" bind:onclick="right(index)" bind:disabled="index === length - 1">chevron_right</button>
-                            </div>
+            <mat-page bind:for="let td of table.configuration(table.columns, true)">
+                <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px">
+                        <mat-checkbox-container placeholder="Visible">
+                            <input is="dom-input" type="checkbox" bind:model="td.visible">
+                        </mat-checkbox-container>
+                        <input is="dom-input" type="text" bind:onvalue="table.load(td.path, $event)" placeholder="Search" style="margin-left: 5px; margin-right: 5px">
+                        <div style="display: flex">
+                            <button type="button" class="material-icons" translate="no" bind:onclick="left(index)" bind:disabled="index === 0">chevron_left</button>
+                            <button type="button" class="material-icons" translate="no" bind:onclick="right(index)" bind:disabled="index === length - 1">chevron_right</button>
                         </div>
                     </div>
-                </mat-page>
-            </template>
+                </div>
+            </mat-page>
         </mat-pages>
     </template>
 </body>

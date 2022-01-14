@@ -7,12 +7,8 @@
 <body>
     <template>
         <form is="dom-form" bind:model="model">
-            <template is="dom-repeat" bind:items="model.meta.properties" item="property">
-                <meta-input bind:model="property"></meta-input>
-            </template>
-            <template is="dom-repeat" bind:items="model.actions" item="action">
-                <button type="button" bind:onclick="send(action)">{{action.rel}}</button>
-            </template>
+            <meta-input bind:for="let property of model.meta.properties" bind:model="property"></meta-input>
+            <button bind:for="let action of model.actions" type="button" bind:onclick="send(action)">{{action.rel}}</button>
         </form>
     </template>
 </body>

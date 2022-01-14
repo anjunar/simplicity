@@ -1,7 +1,5 @@
-import {customComponents, customViews} from "../../simplicity.js";
+import {customViews} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomRepeat from "../../directives/dom-repeat.js";
-import DomSlot from "../../directives/dom-slot.js";
 import MatTabs from "../navigation/mat-tabs.js";
 import MatTab from "../navigation/mat-tab.js";
 import MatPages from "../navigation/mat-pages.js";
@@ -25,7 +23,7 @@ class MatTableConfiguration extends HTMLElement {
     }
 
     static get components() {
-        return [DomRepeat, DomSlot, DomInput, MatTabs, MatTab, MatPages, MatPage, MatCheckboxContainer]
+        return [DomInput, MatTabs, MatTab, MatPages, MatPage, MatCheckboxContainer]
     }
 
     static get template() {

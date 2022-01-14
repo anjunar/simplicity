@@ -31,38 +31,30 @@
 </head>
 <body>
     <template>
-        <template is="dom-if" bind:predicate="header.length > 0">
-            <thead>
-                <tr>
-                    <template is="dom-repeat" bind:items="configuration(columns)" item="td">
-                        <td >
-                            <div style="display: flex; align-items: center;">
-                                <div bind:onclick="showConfiguration()">
-                                    <strong>
-                                        <slot is="dom-slot" selector="thead tr td *" bind:index="td.index" import="true" resilient="true"></slot>
-                                    </strong>
-                                </div>
-                                <div style="flex: 1"></div>
-                                <button bind:style="display : td.sort === undefined ? 'block' : 'none'" class="material-icons" translate="no" bind:onclick="asc(td)" style="width: 32px;">sort</button>
-                                <button bind:style="display : td.sort === 'asc' ? 'block' : 'none'" class="material-icons" translate="no" bind:onclick="desc(td)" style="width: 32px;">expand_more</button>
-                                <button bind:style="display : td.sort === 'desc' ? 'block' : 'none'" class="material-icons" translate="no" bind:onclick="none(td)" style="width: 32px;">expand_less</button>
-                                <div style="flex: 1"></div>
-                            </div>
-                        </td>
-                    </template>
-                </tr>
-            </thead>
-        </template>
+        <thead bind:if="header.length > 0">
+        <tr>
+            <td bind:for="let td of configuration(columns)">
+                <div style="display: flex; align-items: center;">
+                    <div bind:onclick="showConfiguration()">
+                        <strong>
+                            <slot selector="thead tr td *" bind:index="td.index"></slot>
+                        </strong>
+                    </div>
+                    <div style="flex: 1"></div>
+                    <button test bind:style="display : td.sort === undefined ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="asc(td)">sort</button>
+                    <button test bind:style="display : td.sort === 'asc' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="desc(td)">expand_more</button>
+                    <button test bind:style="display : td.sort === 'desc' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="none(td)">expand_less</button>
+                    <div style="flex: 1"></div>
+                </div>
+            </td>
+        </tr>
+        </thead>
         <tbody>
-            <template is="dom-repeat" bind:items="window" item="tr">
-                <tr bind:onclick="onRowClick($event, tr)">
-                    <template is="dom-repeat" bind:items="configuration(columns)" item="td">
-                        <td>
-                            <slot is="dom-slot" implicit="tr" selector="tbody tr td > *" bind:index="td.index" import="true" resilient="true"></slot>
-                        </td>
-                    </template>
-                </tr>
-            </template>
+        <tr bind:for="let tr of window" bind:onclick="onRowClick($event, tr)">
+            <td bind:for="let td of configuration(columns)">
+                <slot bind:implicit="tr" selector="tbody tr td > *" bind:index="td.index"></slot>
+            </td>
+        </tr>
         </tbody>
         <tfoot>
         <tr>

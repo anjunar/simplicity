@@ -91,11 +91,9 @@
                 <mat-checkbox-container placeholder="Checkbox">
                     <input is="dom-input" type="checkbox" bind:model="checked"/>
                 </mat-checkbox-container>
-                <template is="dom-if" bind:predicate="checked">
-                    <div>
-                        Checked
-                    </div>
-                </template>
+                <div bind:if="checked">
+                    Checked
+                </div>
             </div>
 
 
@@ -116,11 +114,9 @@
                                     <input is="dom-input" type="checkbox" bind:model="checked"/>
                                 </mat-checkbox-container>
 
-                                <template is="dom-if" bind:predicate="checked">
-                                    <div>
-                                        Checked
-                                    </div>
-                                </template
+                                <div bind:if="checked">
+                                    Checked
+                                </div>
                             </iframe>
                         </template>
                     </code>

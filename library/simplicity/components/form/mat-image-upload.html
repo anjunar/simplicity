@@ -34,9 +34,7 @@
 <body>
   <template>
       <div class="area" bind:onclick="input.click()">
-          <template is="dom-if" bind:predicate="! model.name">
-              <div class="center">{{placeholder}}</div>
-          </template>
+          <div bind:if="! model.name" class="center">{{placeholder}}</div>
           <img bind:src="model.data"/>
       </div>
       <input bind:variable="input" bind:onload="onLoad($event)" is="dom-input" type="file" style="display: none">

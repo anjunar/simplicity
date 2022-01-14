@@ -1,7 +1,6 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {appManager} from "../../manager/app-manager.js";
-import DomRepeat from "../../directives/dom-repeat.js";
 
 class MatPerformance extends HTMLElement {
 
@@ -24,7 +23,7 @@ class MatPerformance extends HTMLElement {
     }
 
     static get components() {
-        return [DomRepeat]
+        return []
     }
 
     static get template() {

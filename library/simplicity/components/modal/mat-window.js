@@ -1,5 +1,4 @@
 import {customComponents} from "../../simplicity.js";
-import DomSlot from "../../directives/dom-slot.js";
 import {loader} from "../../processors/loader-processor.js";
 import MatScrollArea from "./mat-scroll-area.js";
 import {windowManager} from "../../manager/window-manager.js";
@@ -382,7 +381,7 @@ class MatWindow extends HTMLElement {
     }
 
     static get components() {
-        return [DomSlot, MatScrollArea]
+        return [MatScrollArea]
     }
 
     static get template() {

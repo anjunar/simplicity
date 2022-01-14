@@ -1,7 +1,6 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
-import DomIf from "../../directives/dom-if.js";
 import DomForm from "../../directives/dom-form.js";
 
 class MatImageUpload extends HTMLElement {
@@ -59,7 +58,7 @@ class MatImageUpload extends HTMLElement {
     }
 
     static get components() {
-        return [DomInput, DomIf]
+        return [DomInput]
     }
 
     static get template() {

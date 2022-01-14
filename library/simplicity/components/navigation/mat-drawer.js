@@ -1,6 +1,5 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomSlot from "../../directives/dom-slot.js";
 
 class MatDrawer extends HTMLElement {
 
@@ -24,7 +23,7 @@ class MatDrawer extends HTMLElement {
     }
 
     static get components() {
-        return [DomSlot]
+        return []
     }
 
     static get template() {

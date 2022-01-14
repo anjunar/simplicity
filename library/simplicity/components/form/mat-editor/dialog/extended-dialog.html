@@ -12,27 +12,21 @@
 <body>
     <template>
         <mat-tabs bind:page="page">
-            <template is="dom-repeat" bind:items="path" item="segment">
-                <mat-tab>
-                    <div>
-                        {{segment.localName}}
-                    </div>
-                </mat-tab>
-            </template>
+            <mat-tab bind:for="let segment of path">
+                <div>
+                    {{segment.localName}}
+                </div>
+            </mat-tab>
         </mat-tabs>
         <mat-pages bind:page="page">
-            <template is="dom-repeat" bind:items="path" item="segment">
-                <mat-page>
-                    <div>
-                        <margins-node bind:node="segment"></margins-node>
-                        <padding-node bind:node="segment"></padding-node>
-                        <sizing-node bind:node="segment"></sizing-node>
-                        <template is="dom-if" bind:predicate="segment.className === 'flex'">
-                            <flex-box-node bind:node="segment"></flex-box-node>
-                        </template>
-                    </div>
-                </mat-page>
-            </template>
+            <mat-page bind:for="let segment of path">
+                <div>
+                    <margins-node bind:node="segment"></margins-node>
+                    <padding-node bind:node="segment"></padding-node>
+                    <sizing-node bind:node="segment"></sizing-node>
+                    <flex-box-node bind:if="segment.className === 'flex'" bind:node="segment"></flex-box-node>
+                </div>
+            </mat-page>
         </mat-pages>
     </template>
 </body>

@@ -85,11 +85,9 @@
             <div style="margin: 20px;">
                 <button class="thin" bind:onclick="show = ! show">Toggle</button>
 
-                <template is="dom-if" bind:predicate="show">
-                    <div>
-                        {{i18n('Text to be shown')}}
-                    </div>
-                </template>
+                <div bind:if="show">
+                    {{i18n('Text to be shown')}}
+                </div>
             </div>
 
 
@@ -108,11 +106,9 @@
                             <iframe>
                                 <button class="thin" bind:onclick="show = ! show">Toggle</button>
 
-                                <template is="dom-if" bind:predicate="show">
-                                    <div>
-                                        Text to be shown
-                                    </div>
-                                </template>
+                                <div bind:if="show">
+                                    Text to be shown
+                                </div>
                             </iframe>
                         </template>
                     </code>

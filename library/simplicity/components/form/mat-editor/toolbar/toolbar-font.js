@@ -7,21 +7,21 @@ class ToolbarFont extends HTMLElement {
     contents;
 
     fontName = {
-        value : "Helvetica, serif",
-        click : (event) => {
+        value: "Helvetica, serif",
+        click(event) {
             document.execCommand("fontname", false, event.target.value);
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.fontName.value = computedStyle.fontFamily.replace(/"/g, "") || "none";
+            this.value = computedStyle.fontFamily.replace(/"/g, "") || "none";
         }
     }
     fontSize = {
-        value : "3",
-        click : (event) => {
+        value: "3",
+        click(event) {
             document.execCommand("fontSize", false, event.target.value);
         },
-        handler : (event) => {
+        handler(event) {
             function fontSizeTranslate(number) {
                 switch (number) {
                     case 9 :
@@ -40,91 +40,100 @@ class ToolbarFont extends HTMLElement {
                         return "none";
                 }
             }
+
             let computedStyle = window.getComputedStyle(event.target);
             let regex = /(\d+).*/
             let number = Number.parseInt(regex.exec(computedStyle.fontSize)[1]);
-            this.fontSize.value = fontSizeTranslate(number);
+            this.value = fontSizeTranslate(number);
         }
     }
     formatBlock = {
-        value : "none",
-        click : (event) => {
+        value: "none",
+        click(event) {
             document.execCommand("formatBlock", false, event.target.value)
         },
-        handler : (event) => {
+        handler(event) {
             function formatBlockRestriction(localName) {
                 switch (localName) {
-                    case "h1" : return "H1"
-                    case "h2" : return "H2"
-                    case "h3" : return "H3"
-                    case "h4" : return "H4"
-                    case "h5" : return "H5"
-                    case "h6" : return "H6"
-                    default : return "none";
+                    case "h1" :
+                        return "H1"
+                    case "h2" :
+                        return "H2"
+                    case "h3" :
+                        return "H3"
+                    case "h4" :
+                        return "H4"
+                    case "h5" :
+                        return "H5"
+                    case "h6" :
+                        return "H6"
+                    default :
+                        return "none";
                 }
             }
-            this.formatBlock.value = formatBlockRestriction(event.target.localName);
+
+            this.value = formatBlockRestriction(event.target.localName);
         }
     };
 
     bold = {
-        active : false,
-        click : () => {
+        active: false,
+        click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand('bold', false, null);
-            this.bold.active = true;
+            this.active = true;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.bold.active = computedStyle.fontWeight === "700";
+            this.active = computedStyle.fontWeight === "700";
         }
     }
     italic = {
-        active : false,
-        click : () => {
+        active: false,
+        click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("italic", false, null);
-            this.italic.active = true;
+            this.active = true;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.italic.active = computedStyle.fontStyle === "italic";
+            this.active = computedStyle.fontStyle === "italic";
         }
     }
     strikeThrough = {
-        active : false,
-        click : () => {
+        active: false,
+        click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("strikethrough", false, null);
-            this.strikeThrough.active = true;
+            this.active = true;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.strikeThrough.active = computedStyle.textDecorationLine === "line-through";
+            this.active = computedStyle.textDecorationLine === "line-through";
         }
     }
     subScript = {
-        active : false,
-        click : () => {
+        active: false,
+        click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("subscript", false, null);
-            this.subScript.active = true;
+            this.active = true;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.subScript.active = computedStyle.verticalAlign === "sub";
+            this.active = computedStyle.verticalAlign === "sub";
         }
     }
     superScript = {
-        active : false,
-        click : () => {
+        active: false,
+        click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("superscript", false, null);
-            this.superScript.active = true;
+            this.active = true;
         },
-        handler : (event) => {
+        handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
-            this.superScript.active = computedStyle.verticalAlign === "super";
+            this.active = computedStyle.verticalAlign === "super";
         }
     }
 

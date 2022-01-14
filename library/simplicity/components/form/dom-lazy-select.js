@@ -1,10 +1,8 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomRepeat from "../../directives/dom-repeat.js";
-import DomSlot from "../../directives/dom-slot.js";
-import DomIf from "../../directives/dom-if.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
+import {lifeCycle} from "../../processors/life-cycle-processor.js";
 
 class DomLazySelect extends HTMLElement {
 
@@ -38,11 +36,13 @@ class DomLazySelect extends HTMLElement {
     }
 
     render() {
-        let input = this.querySelector("input");
-        if (this.label instanceof Array) {
-            input.value = this.label.map((label) => this.model[label]).join(" ")
-        } else {
-            input.value = this.model[this.label]
+        if (this.model) {
+            let input = this.querySelector("input");
+            if (this.label instanceof Array) {
+                input.value = this.label.map((label) => this.model[label]).join(" ")
+            } else {
+                input.value = this.model[this.label]
+            }
         }
     }
 
@@ -55,7 +55,11 @@ class DomLazySelect extends HTMLElement {
     }
 
     inputWidth() {
-        return this.querySelector("input").offsetWidth;
+        let inputElement = this.querySelector("input");
+        if (inputElement) {
+            return inputElement.offsetWidth;
+        }
+        return 0;
     }
 
     onItemClicked(event, item) {
@@ -91,7 +95,7 @@ class DomLazySelect extends HTMLElement {
             this.window = data;
             this.size = size;
             this.open = true;
-            document.dispatchEvent(new CustomEvent("lifecycle", {detail : {target : this, event : "load"}}));
+            lifeCycle();
         })
     }
 
@@ -114,7 +118,7 @@ class DomLazySelect extends HTMLElement {
     }
 
     static get components() {
-        return [DomRepeat, DomSlot, DomIf, DomInput]
+        return [DomInput]
     }
 
     static get observedAttributes() {

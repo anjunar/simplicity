@@ -1,6 +1,7 @@
 import MatWindow from "../components/modal/mat-window.js";
 import {get, viewManager} from "./view-manager.js";
 import MatModal from "../components/modal/mat-modal.js";
+import {contentManager} from "./content-manager.js";
 
 const windowsRegistry = [];
 
@@ -13,9 +14,11 @@ export const windowManager = new class WindowManager {
     openWindow(url, options) {
         let executor = (resolve, reject) => {
             viewManager.load("#" + url).then((view) => {
+                view.setAttribute("slot", "content")
                 let configuration = get(view.localName);
 
                 let header = document.createElement("div")
+                header.setAttribute("slot", "header")
                 header.textContent = configuration.header;
 
                 if (options?.data) {
@@ -23,9 +26,8 @@ export const windowManager = new class WindowManager {
                 }
 
                 let matWindow = new MatWindow();
-                matWindow.header = header;
-                matWindow.contents = view;
 
+                contentManager.register(matWindow, [header, view]);
 
                 if (options?.width) {
                     matWindow.style.width = options.width;
