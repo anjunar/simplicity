@@ -63,13 +63,16 @@ export const customComponents = new class CustomComponents {
 
     define(name, clazz, options) {
 
-        let asts = new WeakMap();
-        let contents = [];
+        let fragments = new WeakMap();
         let html = clazz.template;
         let template;
         let i18nMessages = {};
 
         if (html) {
+            if (clazz.components) {
+                checker(clazz.components, clazz.template, name)
+            }
+
             let templateHMTL = html.querySelector("template");
             template = codeGenerator(templateHMTL.content.children);
 
@@ -112,16 +115,9 @@ export const customComponents = new class CustomComponents {
             }
 
             cycle() {
-                for (const content of contents) {
-                    for (const astElement of content.ast) {
-                        astElement.update();
-                    }
-                }
-                let ast = asts.get(this);
-                if (ast) {
-                    for (const segment of ast) {
-                        segment.update();
-                    }
+                let fragment = fragments.get(this);
+                if (fragment) {
+                    fragment.update();
                 }
             }
 
@@ -136,21 +132,17 @@ export const customComponents = new class CustomComponents {
                 if (! this.initialized && this.isConnected) {
                     this.initialized = true;
                     if (template) {
-                        let activeContentTemplate = (implicit) => {
-                            let instance = contentManager.instance(this, implicit);
-                            contents.push(instance);
-                            return instance;
-                        }
+                        let activeContentTemplate = (implicit) => contentManager.instance(this, implicit)
 
                         if (Reflect.has(this, "preInitialize")) {
                             membraneFactory(this).preInitialize();
                         }
 
-                        let container = compiler(template, this, activeContentTemplate);
+                        let fragment = compiler(template, this, activeContentTemplate);
 
-                        asts.set(this, container.ast);
+                        fragments.set(this, fragment);
 
-                        this.appendChild(container);
+                        this.appendChild(fragment);
                     }
 
                     if (Reflect.has(this, "initialize")) {
@@ -201,5 +193,49 @@ export const customViews = new class CustomViews {
         register(configuration.name, configuration)
 
         return customComponents.define(configuration.name, configuration.class)
+    }
+}
+
+function checker(jsImports, html, path) {
+    if (html) {
+        let components = [];
+
+        function traverse(elements) {
+            for (const element of elements) {
+                if (element.localName.indexOf("-") > -1) {
+                    let name = element.localName;
+                    if (components.indexOf(name) === -1) {
+                        components.push(name);
+                    }
+                }
+                if (element.hasAttribute("is")) {
+                    let name = element.getAttribute("is");
+                    if (!name.startsWith("native")) {
+                        if (components.indexOf(name) === -1) {
+                            components.push(name);
+                        }
+                    }
+                }
+
+                if (element instanceof HTMLTemplateElement && element.hasAttribute("is")) {
+                    traverse(element.content.children)
+                }
+
+                traverse(element.children);
+            }
+        }
+
+        traverse(html.children);
+
+        let sortedComponents = components.sort();
+        let sortedJsImports = jsImports.map(item => names.get(item)).sort();
+
+        if (!isEqual(sortedComponents, sortedJsImports)) {
+            let toMuch = sortedJsImports.filter((importz) => sortedComponents.indexOf(importz) === -1);
+            let missing = sortedComponents.filter((component) => sortedJsImports.indexOf(component) === -1)
+
+            console.log(`path: ${path} toMuch : ${toMuch.join(", ")} missing:  ${missing.join(", ")}`)
+        }
+
     }
 }

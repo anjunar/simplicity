@@ -5,15 +5,36 @@ import {lifeCycle} from "./life-cycle-processor.js";
 
 export const contentRegistry = new WeakMap();
 
+class Component {
+
+    ast;
+
+    constructor(ast) {
+        this.ast = ast;
+    }
+    build(container) {
+        for (const segment of this.ast) {
+            segment.build(container);
+        }
+    }
+    update() {
+        for (const segment of this.ast) {
+            segment.update();
+        }
+    }
+}
+
 export function content(element, implicit = "undefined") {
     let objects = contentRegistry.get(element)(implicit);
     let fragment = document.createDocumentFragment();
 
-    for (const object of objects) {
-        object.build(fragment)
+    let component = new Component(objects);
+    component.build(fragment);
+
+    fragment.update = function () {
+        component.update();
     }
 
-    fragment.ast = objects;
     return fragment;
 }
 
@@ -149,16 +170,6 @@ function htmlStatement(tagName, attributes, children) {
     let element = document.createElement(name, {is : extension});
 
     function generate() {
-        for (const attribute of attributes) {
-            if (typeof attribute === "string") {
-                let segments = attribute.split("=")
-                element.setAttribute(segments[0], segments[1])
-            } else {
-                attribute.build(element);
-                // element.setAttribute(attribute.name, attribute.value)
-            }
-        }
-
         for (const child of children) {
             if (typeof child === "string") {
                 element.appendChild(document.createTextNode(child))
@@ -173,6 +184,16 @@ function htmlStatement(tagName, attributes, children) {
                     }
 
                 }
+            }
+        }
+
+        for (const attribute of attributes) {
+            if (typeof attribute === "string") {
+                let segments = attribute.split("=")
+                element.setAttribute(segments[0], segments[1])
+            } else {
+                attribute.build(element);
+                // element.setAttribute(attribute.name, attribute.value)
             }
         }
 
@@ -409,17 +430,17 @@ function slotStatement(attributes, contents, context) {
             }
         }
 
-        return activeContent.ast;
+        return activeContent;
     }
 
-    let ast;
+    let fragment;
 
     return {
         type : "slot",
         ...attributeValues,
         children : children,
         build(parent) {
-            ast = generate();
+            fragment = generate();
             parent.appendChild(comment);
             parent.appendChild(container);
         },
@@ -431,12 +452,10 @@ function slotStatement(attributes, contents, context) {
                 for (const child of children) {
                     child.remove();
                 }
-                ast = generate();
+                fragment = generate();
                 comment.after(container);
             } else {
-                for (const segment of ast) {
-                    segment.update();
-                }
+                fragment.update();
             }
         }
     };
@@ -511,7 +530,7 @@ export function codeGenerator(nodes) {
                         return Array.from(node.attributes)
                             .filter((attribute) => attribute.name !== "bind:if" && attribute.name !== "bind:for" && attribute.name !== "bind:variable")
                             .map((attribute => {
-                            if (attribute.name.startsWith("bind")) {
+                            if (attribute.name.startsWith("bind") || attribute.name === "i18n") {
                                 return `bindStatement("${attribute.name}", "${attribute.value}", context)`
                             }
                             return `"${attribute.name}=${attribute.value}"`
@@ -556,11 +575,12 @@ export function compiler(template, instance, content, implicit) {
     let container = document.createDocumentFragment();
     let activeTemplate = template(new Context(instance), content, implicit);
 
-    for (const element of activeTemplate) {
-        element.build(container)
-    }
+    let component = new Component(activeTemplate);
+    component.build(container);
 
-    container.ast = activeTemplate;
+    container.update = function () {
+        component.update();
+    }
 
     return container;
 }

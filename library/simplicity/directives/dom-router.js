@@ -7,7 +7,6 @@ class DomRouter extends HTMLElement {
 
     constructor() {
         super();
-        // this.style.display = "block"
         this.handler = function (event) {
             if (this.isConnected) {
                 viewManager.load(event?.newURL || window.location.hash, this.level, false)
@@ -24,6 +23,7 @@ class DomRouter extends HTMLElement {
     }
 
     initialize() {
+        this.style.display = "block"
         window.addEventListener("hashchange", this.handler)
         this.handler();
     }

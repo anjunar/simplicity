@@ -10,16 +10,14 @@ export const contentManager = new class ContentManager {
     register(element, children) {
         function template(implicit) {
             return children.map((child) => {
-                let ast = {
+                return {
                     build(parent) {
                         parent.appendChild(child);
                     },
                     update() {
-                        console.log("update")
+                        // Todo : What could be done here?
                     }
-                };
-
-                return ast
+                }
             })
         }
 

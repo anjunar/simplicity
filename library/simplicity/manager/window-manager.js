@@ -14,11 +14,11 @@ export const windowManager = new class WindowManager {
     openWindow(url, options) {
         let executor = (resolve, reject) => {
             viewManager.load("#" + url).then((view) => {
-                view.setAttribute("slot", "content")
+                view.setAttribute("slot", "content");
                 let configuration = get(view.localName);
 
-                let header = document.createElement("div")
-                header.setAttribute("slot", "header")
+                let header = document.createElement("div");
+                header.setAttribute("slot", "header");
                 header.textContent = configuration.header;
 
                 if (options?.data) {
