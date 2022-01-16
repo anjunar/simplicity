@@ -34,7 +34,9 @@ class MatImageUpload extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {
-                this.model = newValue;
+                if (newValue) {
+                    this.model = newValue;
+                }
             }
                 break
             case "placeholder" : {

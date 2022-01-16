@@ -210,14 +210,12 @@ function checker(jsImports, html, path) {
                 }
                 if (element.hasAttribute("is")) {
                     let name = element.getAttribute("is");
-                    if (!name.startsWith("native")) {
-                        if (components.indexOf(name) === -1) {
-                            components.push(name);
-                        }
+                    if (components.indexOf(name) === -1) {
+                        components.push(name);
                     }
                 }
 
-                if (element instanceof HTMLTemplateElement && element.hasAttribute("is")) {
+                if (element instanceof HTMLTemplateElement) {
                     traverse(element.content.children)
                 }
 

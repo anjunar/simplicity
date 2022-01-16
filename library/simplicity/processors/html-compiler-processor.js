@@ -367,11 +367,13 @@ function bindStatement(name, value, context) {
                 processor = new AttributeProcessor(name, value, element, context);
                 if (processor.matched) {
                     break;
+                } else {
+                    processor = null
                 }
             }
         },
         update() {
-            if (! processor.runOnce) {
+            if (processor && ! processor.runOnce) {
                 processor.process();
             }
         }
@@ -461,6 +463,49 @@ function slotStatement(attributes, contents, context) {
     };
 }
 
+function switchStatement(bind, children, context) {
+
+    let container = document.createDocumentFragment();
+    let comment = document.createComment(`switch ${bind}`)
+
+    function generate() {
+        for (const child of children) {
+            child.build(container);
+        }
+    }
+
+    let element;
+    let value;
+
+    return {
+        build(parent) {
+            value = evaluation(bind, context);
+            generate();
+            element = container.querySelector(`case[value=${value}]`);
+            if (!element) {
+                element = container.querySelector(`case[value=default]`);
+            }
+            parent.appendChild(comment);
+            parent.appendChild(element);
+        },
+        update() {
+            let newValue = evaluation(bind, context);
+            if (! isEqual(value, newValue)) {
+                value = newValue;
+                container.appendChild(element);
+                element = container.querySelector(`case[value=${value}]`);
+                if (!element) {
+                    element = container.querySelector(`case[value=default]`);
+                }
+                comment.after(element);
+            }
+            for (const child of children) {
+                child.update();
+            }
+        }
+    }
+}
+
 function variableStatement(html, variable, context) {
 
     let element = html.element;
@@ -528,7 +573,7 @@ export function codeGenerator(nodes) {
 
                     function attributes(node) {
                         return Array.from(node.attributes)
-                            .filter((attribute) => attribute.name !== "bind:if" && attribute.name !== "bind:for" && attribute.name !== "bind:variable")
+                            .filter((attribute) => attribute.name !== "bind:if" && attribute.name !== "bind:for" && attribute.name !== "bind:variable" && attribute.name !== "bind:switch")
                             .map((attribute => {
                             if (attribute.name.startsWith("bind") || attribute.name === "i18n") {
                                 return `bindStatement("${attribute.name}", "${attribute.value}", context)`
@@ -553,6 +598,9 @@ export function codeGenerator(nodes) {
                     if (node.hasAttribute("bind:variable")) {
                         return `\n${tabs}variableStatement(html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]), "${node.getAttribute("bind:variable")}", context)`
                     }
+                    if (node.hasAttribute("bind:switch")) {
+                        return `\n${tabs}switchStatement("${node.getAttribute("bind:switch")}", [${intern(node.childNodes, ++level)}\n${tabs}], context)`
+                    }
                     if (node.localName === "slot") {
                         return `\n${tabs}slotStatement([${Array.from(node.attributes).map((attribute) => `"${attribute.name}=${attribute.value}"`)}], content, context)`
                     }
@@ -564,11 +612,11 @@ export function codeGenerator(nodes) {
     let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
     let func
     try {
-        func = Function(`return function(forStatement, slotStatement, html, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement) {return ${expression}}`);
+        func = Function(`return function(forStatement, slotStatement, html, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement) {return ${expression}}`);
     } catch (e) {
         console.log(e)
     }
-    return func()(forStatement, slotStatement, htmlStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement)
+    return func()(forStatement, slotStatement, htmlStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement)
 }
 
 export function compiler(template, instance, content, implicit) {

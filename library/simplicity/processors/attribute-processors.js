@@ -2,6 +2,41 @@ import {evaluation} from "./js-compiler-processor.js";
 import {isEqual} from "../simplicity.js";
 import {appManager} from "../manager/app-manager.js";
 
+class BindInterpolationProcessor {
+    element;
+    matched = false;
+    processor;
+
+    constructor(name, value, element, context) {
+        this.element = element;
+
+        let interpolationRegExp = /\${([^}]+)}/g;
+
+        let result = interpolationRegExp.exec(value);
+        if (result) {
+            this.matched = true;
+            let variable = result[1];
+
+            let value1 = evaluation(variable, context);
+            value = value.replace(interpolationRegExp, value1);
+
+            for (const AttributeProcessor of attributeProcessorRegistry) {
+                this.processor = new AttributeProcessor(name, value, element, context);
+                if (this.processor.matched) {
+                    break;
+                } else {
+                    this.processor = null
+                }
+            }
+
+        }
+    }
+
+    process() {
+        this.processor.process();
+    }
+}
+
 class StyleAttributeProcessor {
     name;
     value;
@@ -245,6 +280,7 @@ class i18nAttributeProcessor {
 }
 
 export const attributeProcessorRegistry = [
+    BindInterpolationProcessor,
     StyleAttributeProcessor,
     ClassAttributeProcessor,
     EventAttributeProcessor,
