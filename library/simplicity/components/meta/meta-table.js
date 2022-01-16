@@ -2,7 +2,6 @@ import {customComponents} from "../../simplicity.js";
 import MatTable from "../table/mat-table.js";
 import {jsonClient} from "../../services/client.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomRepeat from "../../directives/dom-repeat.js";
 import MetaColumn from "./meta-column.js";
 
 class MetaTable extends HTMLElement {
@@ -51,7 +50,7 @@ class MetaTable extends HTMLElement {
     }
 
     static get components() {
-        return [MatTable, MetaColumn, DomRepeat]
+        return [MatTable, MetaColumn]
     }
 
     static get template() {

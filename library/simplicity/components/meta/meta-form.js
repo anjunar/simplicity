@@ -1,6 +1,5 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomRepeat from "../../directives/dom-repeat.js";
 import MetaInput from "./meta-input.js";
 import DomForm from "../../directives/dom-form.js";
 import {jsonClient} from "../../services/client.js";
@@ -32,7 +31,7 @@ class MetaForm extends HTMLElement {
     }
 
     static get components() {
-        return [DomRepeat, DomForm, MetaInput]
+        return [DomForm, MetaInput]
     }
 
     static get template() {

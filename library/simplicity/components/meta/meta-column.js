@@ -1,7 +1,6 @@
 import {customComponents} from "../../simplicity.js";
 import {jsonClient} from "../../services/client.js";
 import DomInput from "../../directives/dom-input.js";
-import DomSwitch from "../../directives/dom-switch.js";
 import DomLazySelect from "../form/dom-lazy-select.js";
 import MatImageUpload from "../form/mat-image-upload.js";
 import {loader} from "../../processors/loader-processor.js";
@@ -22,12 +21,11 @@ class MetaColumn extends HTMLElement {
     }
 
     domLazySelectOption(meta, data) {
-        let naming = meta.properties.filter((property) => property.naming)
         return data.firstName + " " + data.lastName;
     }
 
     domLazySelectLabel(meta) {
-        return meta.properties.filter((property) => property.naming).map((property) => property.name)
+        return meta.name;
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -57,7 +55,7 @@ class MetaColumn extends HTMLElement {
     }
 
     static get components() {
-        return [DomInput, DomSwitch, DomLazySelect, MatImageUpload]
+        return [DomInput, DomLazySelect, MatImageUpload]
     }
 
     static get template() {

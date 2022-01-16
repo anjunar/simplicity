@@ -1,9 +1,7 @@
 import {customComponents} from "../../simplicity.js";
-import DomRepeat from "../../directives/dom-repeat.js";
 import {loader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import MatInputContainer from "../form/container/mat-input-container.js";
-import DomSwitch from "../../directives/dom-switch.js";
 import MatImageUpload from "../form/mat-image-upload.js";
 import MatCheckboxContainer from "../form/container/mat-checkbox-container.js";
 import {jsonClient} from "../../services/client.js";
@@ -42,7 +40,7 @@ class MetaInput extends HTMLElement {
     }
 
     static get components() {
-        return [DomInput, DomSwitch, DomLazySelect, MatInputContainer, MatCheckboxContainer, MatImageUpload]
+        return [DomInput, DomLazySelect, MatInputContainer, MatCheckboxContainer, MatImageUpload]
     }
 
     static get template() {

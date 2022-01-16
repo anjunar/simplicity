@@ -6,7 +6,7 @@
 </head>
 <body>
 <template>
-    <template is="dom-switch" bind:predicate="meta.type">
+    <div bind:switch="meta.type">
         <case value="image">
             <mat-image-upload bind:model="model" style="width: 320px; height: 200px"></mat-image-upload>
         </case>
@@ -18,7 +18,7 @@
         <case value="default">
             <input is="dom-input" bind:type="meta.type" bind:model="model">
         </case>
-    </template>
+    </div>
 </template>
 </body>
 </html>
