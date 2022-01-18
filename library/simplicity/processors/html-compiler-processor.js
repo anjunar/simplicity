@@ -25,7 +25,8 @@ class Component {
 }
 
 export function content(element, implicit = "undefined") {
-    let objects = contentRegistry.get(element)(implicit);
+    let func = contentRegistry.get(element);
+    let objects = func(implicit);
     let fragment = document.createDocumentFragment();
 
     let component = new Component(objects);
@@ -64,8 +65,11 @@ export function membraneFactory(instance) {
             return cachedProxy;
         } else {
             let proxy = new Proxy(instance, {
-                apply(target, thisArg, argArray) {
-                    return Reflect.apply(target, thisArg, argArray);
+                has(target, p) {
+                    if (p === "isProxy" || p === "resolve") {
+                        return true;
+                    }
+                    return Reflect.has(target, p)
                 },
                 set(target, p, value, receiver) {
                     let properties = findProperties(target);
@@ -193,7 +197,6 @@ function htmlStatement(tagName, attributes, children) {
                 element.setAttribute(segments[0], segments[1])
             } else {
                 attribute.build(element);
-                // element.setAttribute(attribute.name, attribute.value)
             }
         }
 
@@ -300,7 +303,8 @@ function forStatement(expressions, context, callback) {
                 for (const child of children) {
                     child.remove();
                 }
-                children = [];
+                children.length = 0;
+                ast.length = 0;
                 generate();
                 comment.after(container)
                 if (data.onRendered) {
@@ -315,10 +319,11 @@ function forStatement(expressions, context, callback) {
     }
 }
 
-function ifStatement(html, predicate, context) {
+function ifStatement(boundAttributes, html) {
 
-    let value = evaluation(predicate, context);
-    let comment = document.createComment("if " + predicate);
+    let values = boundAttributes();
+    let value = values.if;
+    let comment = document.createComment("if");
     let container = document.createDocumentFragment();
     let element;
 
@@ -328,7 +333,6 @@ function ifStatement(html, predicate, context) {
 
     return {
         type : "if",
-        predicate : predicate,
         element : html,
         build(parent) {
             generate();
@@ -338,7 +342,8 @@ function ifStatement(html, predicate, context) {
             }
         },
         update() {
-            let newValue = evaluation(predicate, context);
+            let values = boundAttributes();
+            let newValue = values.if;
             if (! isEqual(newValue, value)) {
                 value = newValue;
                 if (value) {
@@ -380,22 +385,9 @@ function bindStatement(name, value, context) {
     }
 }
 
-function slotStatement(attributes, contents, context) {
+function slotStatement(boundAttributes, contents) {
 
-    function values() {
-        let attributeValues = {};
-        for (const attribute of attributes) {
-            let attributePair = attribute.split("=");
-            if (attribute.startsWith("bind")) {
-                attributeValues[attributePair[0].split(":")[1]] = evaluation(attributePair[1], context)
-            } else {
-                attributeValues[attributePair[0]] = attributePair[1]
-            }
-        }
-        return attributeValues;
-    }
-
-    let attributeValues = values();
+    let values = boundAttributes();
 
     let container = document.createDocumentFragment();
     let comment = document.createComment("slot");
@@ -403,24 +395,24 @@ function slotStatement(attributes, contents, context) {
 
     function generate() {
         let activeContent;
-        let index = attributeValues.index || 0;
+        let index = values.index || 0;
 
-        let implicitValue = attributeValues.implicit;
-        if (Reflect.has(attributeValues, "source")) {
-            activeContent = content(attributeValues.source.resolve, implicitValue);
+        let implicitValue = values.implicit;
+        if (Reflect.has(values, "source")) {
+            activeContent = content(values.source.resolve, implicitValue);
         } else {
             activeContent = contents(implicitValue);
         }
 
 
-        if (attributeValues.name) {
-            let querySelector = activeContent.querySelectorAll(`[slot=${attributeValues.name}]`)[index];
+        if (values.name) {
+            let querySelector = activeContent.querySelectorAll(`[slot=${values.name}]`)[index];
             if (querySelector) {
                 container.appendChild(querySelector)
                 children.push(querySelector);
             }
-        } else if (attributeValues.selector) {
-            let querySelector = activeContent.querySelectorAll(attributeValues.selector)[index];
+        } else if (values.selector) {
+            let querySelector = activeContent.querySelectorAll(values.selector)[index];
             if (querySelector) {
                 container.appendChild(querySelector)
                 children.push(querySelector);
@@ -439,7 +431,7 @@ function slotStatement(attributes, contents, context) {
 
     return {
         type : "slot",
-        ...attributeValues,
+        ...values,
         children : children,
         build(parent) {
             fragment = generate();
@@ -447,13 +439,14 @@ function slotStatement(attributes, contents, context) {
             parent.appendChild(container);
         },
         update() {
-            let newValues = values();
-            let equal = isEqual(newValues, attributeValues);
+            let newValues = boundAttributes();
+            let equal = isEqual(newValues, values);
             if (! equal) {
-                attributeValues = newValues;
+                values = newValues;
                 for (const child of children) {
                     child.remove();
                 }
+                children.length = 0;
                 fragment = generate();
                 comment.after(container);
             } else {
@@ -463,10 +456,10 @@ function slotStatement(attributes, contents, context) {
     };
 }
 
-function switchStatement(bind, children, context) {
+function switchStatement(boundAttributes, children) {
 
     let container = document.createDocumentFragment();
-    let comment = document.createComment(`switch ${bind}`)
+    let comment = document.createComment("switch")
 
     function generate() {
         for (const child of children) {
@@ -479,7 +472,8 @@ function switchStatement(bind, children, context) {
 
     return {
         build(parent) {
-            value = evaluation(bind, context);
+            let values = boundAttributes();
+            value = values.switch;
             generate();
             element = container.querySelector(`case[value=${value}]`);
             if (!element) {
@@ -489,7 +483,8 @@ function switchStatement(bind, children, context) {
             parent.appendChild(element);
         },
         update() {
-            let newValue = evaluation(bind, context);
+            let values = boundAttributes();
+            let newValue = values.switch;
             if (! isEqual(value, newValue)) {
                 value = newValue;
                 container.appendChild(element);
@@ -506,7 +501,7 @@ function switchStatement(bind, children, context) {
     }
 }
 
-function variableStatement(html, variable, context) {
+function variableStatement(variable, context, html) {
 
     let element = html.element;
 
@@ -516,9 +511,10 @@ function variableStatement(html, variable, context) {
 
 }
 
-function letStatement(variable, implicit, context, callback) {
+function letStatement(boundAttributes, implicit, context, callback) {
+    let values = boundAttributes();
     let instance = {};
-    instance[variable] = implicit;
+    instance[values.let] = implicit;
     let newContext = new Context(instance, context);
     return callback(newContext);
 }
@@ -539,12 +535,108 @@ function isCompositeComponent(node) {
     return false;
 }
 
-export function codeGenerator(nodes) {
-    function intern(nodes, level = 1) {
-        let tabs = "";
-        for (let i = 0; i < level; i++) {
-            tabs += "\t"
+function boundAttributes(attributes, observed, context) {
+    function values() {
+        let attributeValues = {};
+        for (const attribute of attributes) {
+            let indexOf = attribute.indexOf("=");
+            let attributePair = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
+            if (attribute.startsWith("bind")) {
+                let string = attributePair[0].split(":")[1];
+                if (observed.indexOf(string) > -1) {
+                    attributeValues[string] = evaluation(attributePair[1], context)
+                }
+            } else {
+                attributeValues[attributePair[0]] = attributePair[1]
+            }
         }
+        return attributeValues;
+    }
+
+    return values;
+}
+
+class FunctionCall {
+
+    name;
+    args = [];
+
+    constructor(name) {
+        this.name = name;
+    }
+
+    addArgument(arg) {
+        this.args.push(arg);
+    }
+
+    render() {
+        return `${this.name}(${this.args.map((arg) => arg.render()).join(", ")})`
+    }
+}
+
+class RawArgument {
+
+    value;
+
+    constructor(value) {
+        this.value = value;
+    }
+
+    render() {
+        return this.value;
+    }
+
+}
+
+class AttributeArgument {
+
+    node
+    name;
+
+    constructor(node, name) {
+        this.node = node;
+        this.name = name;
+    }
+
+    render() {
+        return this.node.getAttribute(this.name);
+    }
+}
+
+function test(nodes) {
+
+}
+
+
+export function codeGenerator(nodes) {
+    function children(node, level) {
+        if (isCompositeComponent(node)) {
+            return `function(implicit) { return [${intern(node.childNodes, level)}]}`
+        }
+        if (node.localName === "template") {
+            return intern(node.content.childNodes, level)
+        }
+        return intern(node.childNodes, level)
+    }
+
+    function rawAttributes(node) {
+        return Array.from(node.attributes).map((attribute) => `"${attribute.name}=${attribute.value}"`);
+    }
+
+    function attributes(node) {
+        return Array.from(node.attributes)
+            .filter((attribute) => attribute.name !== "bind:if" && attribute.name !== "bind:for" && attribute.name !== "bind:variable" && attribute.name !== "bind:switch")
+            .map((attribute => {
+                if (attribute.name.startsWith("bind") || attribute.name === "i18n") {
+                    return `bindStatement("${attribute.name}", "${attribute.value}", context)`
+                }
+                return `"${attribute.name}=${attribute.value}"`
+            })).join(",")
+    }
+
+
+    function intern(nodes, level = 1) {
+        let tabs = "\t".repeat(level);
         return Array.from(nodes)
             .filter((node => (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) || node.nodeType === Node.ELEMENT_NODE))
             .map((node) => {
@@ -561,62 +653,37 @@ export function codeGenerator(nodes) {
                     }
                 } else {
 
-                    function children(node, level) {
-                        if (isCompositeComponent(node)) {
-                            return `function(implicit) { return [${intern(node.childNodes, level)}]}`
-                        }
-                        if (node.localName === "template") {
-                            return intern(node.content.childNodes, level)
-                        }
-                        return intern(node.childNodes, level)
-                    }
-
-                    function attributes(node) {
-                        return Array.from(node.attributes)
-                            .filter((attribute) => attribute.name !== "bind:if" && attribute.name !== "bind:for" && attribute.name !== "bind:variable" && attribute.name !== "bind:switch")
-                            .map((attribute => {
-                            if (attribute.name.startsWith("bind") || attribute.name === "i18n") {
-                                return `bindStatement("${attribute.name}", "${attribute.value}", context)`
-                            }
-                            return `"${attribute.name}=${attribute.value}"`
-                        })).join(",")
-                    }
-
                     let tagName = node.localName;
                     if (node.hasAttribute("is")) {
                         tagName += ":" + node.getAttribute("is")
                     }
-                    if (node.hasAttribute("let")) {
-                        return `\n${tabs}letStatement("${node.getAttribute("let")}", implicit, context, context => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
-                    }
                     if (node.hasAttribute("bind:for")) {
                         return `\n${tabs}forStatement("${node.getAttribute("bind:for")}", context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
                     }
-                    if (node.hasAttribute("bind:if")) {
-                        return `\n${tabs}ifStatement(html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]), "${node.getAttribute("bind:if")}", context)`
-                    }
                     if (node.hasAttribute("bind:variable")) {
-                        return `\n${tabs}variableStatement(html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]), "${node.getAttribute("bind:variable")}", context)`
+                        return `\n${tabs}variableStatement("${node.getAttribute("bind:variable")}", context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
+                    }
+
+                    if (node.hasAttribute("let")) {
+                        return `\n${tabs}letStatement(boundAttributes([${rawAttributes(node)}], ["let"], context), implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
+                    }
+                    if (node.hasAttribute("bind:if")) {
+                        return `\n${tabs}ifStatement(boundAttributes([${rawAttributes(node)}], ["if"], context), html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:switch")) {
-                        return `\n${tabs}switchStatement("${node.getAttribute("bind:switch")}", [${intern(node.childNodes, ++level)}\n${tabs}], context)`
+                        return `\n${tabs}switchStatement(boundAttributes([${rawAttributes(node)}], ["switch"], context), [${intern(node.childNodes, ++level)}\n${tabs}])`
                     }
                     if (node.localName === "slot") {
-                        return `\n${tabs}slotStatement([${Array.from(node.attributes).map((attribute) => `"${attribute.name}=${attribute.value}"`)}], content, context)`
+                        return `\n${tabs}slotStatement(boundAttributes([${rawAttributes(node)}], ["index", "selector", "implicit", "source"], context), content)`
                     }
                     return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])`
                 }
-            }).join(",")
+            }).join(", ")
     }
 
     let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
-    let func
-    try {
-        func = Function(`return function(forStatement, slotStatement, html, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement) {return ${expression}}`);
-    } catch (e) {
-        console.log(e)
-    }
-    return func()(forStatement, slotStatement, htmlStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement)
+    let func = Function(`return function(forStatement, slotStatement, html, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, boundAttributes) {return ${expression}}`);
+    return func()(forStatement, slotStatement, htmlStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, boundAttributes)
 }
 
 export function compiler(template, instance, content, implicit) {

@@ -455,11 +455,53 @@ export function compiler(expression, callback) {
     return codeGenerator(transformed);
 }
 
+const proxyCache = new WeakMap();
+
 export function evaluation(expression, context, args) {
 
+    let proxy = proxyCache.get(context);
+
+    if (! proxy) {
+        proxy = new Proxy(context, {
+            get(target, p, receiver) {
+                let cursor = target;
+
+                function scope(target) {
+                    if (Reflect.has(target.instance, p)) {
+                        let result = Reflect.get(target.instance, p, target.instance);
+                        if (result instanceof Function) {
+                            return (...args) => result.apply(target.instance, args);
+                        }
+                        return result;
+                    }
+                    cursor = cursor.parent;
+                    return scope(cursor);
+                }
+
+                return scope(cursor);
+            },
+            set(target, p, value, receiver) {
+                let cursor = target;
+
+                function scope(target) {
+                    if (Reflect.has(target.instance, p)) {
+                        return Reflect.set(target.instance, p, value, target.instance);
+                    }
+                    cursor = cursor.parent;
+                    return scope(cursor);
+                }
+
+                return scope(cursor);
+            }
+        });
+
+        proxyCache.set(context, proxy);
+    }
+
     let output = compiler(expression, (property) => {
-        return `context.variable('${property}').${property}`
+        return `context.${property}`
     });
 
-    return eval(output)
+    let func = Function(`return function(context, args) {return ${output}}`);
+    return func()(proxy, args)
 }

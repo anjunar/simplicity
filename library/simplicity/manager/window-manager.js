@@ -2,8 +2,9 @@ import MatWindow from "../components/modal/mat-window.js";
 import {get, viewManager} from "./view-manager.js";
 import MatModal from "../components/modal/mat-modal.js";
 import {contentManager} from "./content-manager.js";
+import {membraneFactory} from "../processors/html-compiler-processor.js";
 
-const windowsRegistry = [];
+const windowsRegistry = membraneFactory([]);
 
 function zIndexSorted() {
     return windowsRegistry.sort((lhs, rhs) => Number.parseInt(lhs.style.zIndex) - Number.parseInt(rhs.style.zIndex));
@@ -124,6 +125,9 @@ export const windowManager = new class WindowManager {
     }
 
     close(matWindow) {
+        if (matWindow.isProxy) {
+            matWindow = matWindow.resolve;
+        }
         let indexOf = windowsRegistry.indexOf(matWindow);
         windowsRegistry.splice(indexOf)
         matWindow.remove();
