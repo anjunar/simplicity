@@ -38,8 +38,8 @@
                     <slot name="content"></slot>
                 </mat-scroll-area>
                 <div style="height: 20px; background-color: var(--main-dark1-color)">
-                    <button style="float: right" class="thin" type="button" bind:onclick="close()">Cancel</button>
-                    <button style="float: right" class="thin" type="button" bind:onclick="ok()">Ok</button>
+                    <button style="float: right" class="thin" type="button" bind:onclick="close($event)">Cancel</button>
+                    <button style="float: right" class="thin" type="button" bind:onclick="ok($event)">Ok</button>
                 </div>
             </div>
             <div style="width: 20px; margin: -10px">

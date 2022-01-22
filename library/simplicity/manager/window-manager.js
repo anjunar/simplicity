@@ -52,12 +52,13 @@ export const windowManager = new class WindowManager {
                     matWindow.resizable = false;
                     matWindow.draggable = false;
                     let modal = new MatModal();
-                    modal.appendChild(matWindow);
-                    let viewport = document.querySelector("viewport");
-                    viewport.appendChild(modal);
+                    contentManager.register(modal, [matWindow]);
                     matWindow.addEventListener("close", () => {
                         modal.remove();
                     })
+
+                    let viewport = document.querySelector("viewport");
+                    viewport.appendChild(modal);
                 } else {
                     let viewport = document.querySelector("viewport");
                     viewport.appendChild(matWindow);

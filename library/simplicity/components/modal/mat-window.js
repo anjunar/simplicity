@@ -10,19 +10,9 @@ class MatWindow extends HTMLElement {
     maximized = false;
     minimized = false;
 
-    set header(value) {
-        value.setAttribute("slot", "header");
-        this.appendChild(value);
-    }
-
     get contents() {
         let element = this.querySelector("div.content *");
         return element
-    }
-
-    set contents(value) {
-        value.setAttribute("slot", "content");
-        this.appendChild(value)
     }
 
     minimize() {
