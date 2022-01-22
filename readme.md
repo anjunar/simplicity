@@ -31,7 +31,7 @@ app.html
 </head>
 <body>
     <template>
-        <div>${text}</div>
+        <div>{{text}}</div>
     </template>
 </body>
 </html>

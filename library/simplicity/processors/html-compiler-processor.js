@@ -556,58 +556,6 @@ function boundAttributes(attributes, observed, context) {
     return values;
 }
 
-class FunctionCall {
-
-    name;
-    args = [];
-
-    constructor(name) {
-        this.name = name;
-    }
-
-    addArgument(arg) {
-        this.args.push(arg);
-    }
-
-    render() {
-        return `${this.name}(${this.args.map((arg) => arg.render()).join(", ")})`
-    }
-}
-
-class RawArgument {
-
-    value;
-
-    constructor(value) {
-        this.value = value;
-    }
-
-    render() {
-        return this.value;
-    }
-
-}
-
-class AttributeArgument {
-
-    node
-    name;
-
-    constructor(node, name) {
-        this.node = node;
-        this.name = name;
-    }
-
-    render() {
-        return this.node.getAttribute(this.name);
-    }
-}
-
-function test(nodes) {
-
-}
-
-
 export function codeGenerator(nodes) {
     function children(node, level) {
         if (isCompositeComponent(node)) {
