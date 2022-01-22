@@ -193,7 +193,8 @@ function htmlStatement(tagName, attributes, children) {
 
         for (const attribute of attributes) {
             if (typeof attribute === "string") {
-                let segments = attribute.split("=")
+                let indexOf = attribute.indexOf("=");
+                let segments = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
                 element.setAttribute(segments[0], segments[1])
             } else {
                 attribute.build(element);

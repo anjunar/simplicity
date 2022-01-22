@@ -29,11 +29,11 @@
     <script>
         function i18n() {
             return [{
-                en : `Basic`,
-                de : `Grundlegend`
+                en : `Components`,
+                de : `Komponenten`
             }, {
-                en : `Advanced`,
-                de : `Fortgeschritten`
+                en : `Basic`,
+                de : `Grundlagen`
             }]
         }
     </script>
@@ -44,10 +44,10 @@
     <mat-toolbar style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <div slot="left">
             <div style="display: flex">
-                <a class="test" href="#/documentation/basic/index#/documentation/basic/started"
+                <a class="normal" href="#/documentation/basic/index#/documentation/basic/started"
                    bind:class="active('basic') ? 'normal active' : 'normal'" i18n>Basic</a>
-                <a class="normal" href="#/documentation/advanced/index#/documentation/advanced/common/custom-component"
-                   bind:class="active('advanced') ? 'normal active' : 'normal'" i18n>Advanced</a>
+                <a class="test" href="#/documentation/components/index#/documentation/components/form/checkbox"
+                   bind:class="active('components') ? 'normal active' : 'normal'" i18n>Components</a>
             </div>
         </div>
         <div slot="middle">

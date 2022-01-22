@@ -15,6 +15,6 @@ class AppIntroduction extends HTMLElement {
 }
 
 export default customViews.define({
-    name: "basic-getting-started",
+    name: "advanced-getting-started",
     class: AppIntroduction
 });

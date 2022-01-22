@@ -1,5 +1,6 @@
 import {customComponents} from "../simplicity.js";
 import {viewManager} from "../manager/view-manager.js";
+import {lifeCycle} from "../processors/life-cycle-processor.js";
 
 class DomRouter extends HTMLElement {
 
@@ -15,6 +16,7 @@ class DomRouter extends HTMLElement {
                             child.remove();
                         }
                         this.appendChild(view);
+                        lifeCycle();
                     })
             } else {
                 window.removeEventListener("hashchange", this.handler)

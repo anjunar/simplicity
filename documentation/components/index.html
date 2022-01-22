@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Index Components</title>
+    <style>
+        app-basic {
+            display: block;
+        }
+    </style>
+    <script>
+        function i18n() {
+            return [{
+                en: `Content`,
+                de: `Inhalt`
+            }, {
+                en: `Getting Started`,
+                de: `Erste Schritte`
+            }, {
+                en: `Common`,
+                de: `Üblich`
+            }, {
+                en: `Form`,
+                de: `Formular`
+            }, {
+                en: `Modals`,
+                de: `Modalitäten`
+            }, {
+                en: `Tables`,
+                de: `Tabellen`
+            }, {
+                en: `Indicators`,
+                de: `Indikatoren`
+            }, {
+                en: `Nested Forms`,
+                de: `Verschachtelte Formulare`
+            }, {
+                en: `Form Validation`,
+                de: `Formular Validation`
+            }]
+        }
+    </script>
+</head>
+<body>
+<template>
+    <mat-toolbar style="z-index: 8000; position:relative;">
+        <div slot="left">
+            <button translate="no" class="material-icons" type="button" bind:onclick="open = ! open">menu</button>
+        </div>
+    </mat-toolbar>
+
+    <mat-drawer-container>
+        <mat-drawer bind:open="open">
+            <div style="width: 300px">
+                <div style="padding-top: 20px">
+                    <h2 i18n>Content</h2>
+                </div>
+
+                <hr class="line">
+
+                <nav>
+                    <ul>
+                        <li>
+                            <div>
+                                <div class="row">
+                                    <h4 i18n>Form</h4>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/form/editor">
+                                        <div class="row">
+                                            <span>Editor</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/form/checkbox">
+                                        <div class="row">
+                                            <span>Checkbox</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/form/select">
+                                        <div class="row">
+                                            <span>Select</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/form/lazy-select">
+                                        <div class="row">
+                                            <span>lazy Select</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/form/input">
+                                        <div class="row">
+                                            <span>Text Input</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/form/upload">
+                                        <div class="row">
+                                            <span>Image Upload</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/form/radio">
+                                        <div class="row">
+                                            <span>Radio</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/form/form">
+                                        <div class="row">
+                                            <span>Form</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <div>
+                                <div class="row">
+                                    <h4 i18n>Modals</h4>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/modals/dialog">
+                                        <div class="row">
+                                            <span>Dialog</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/modals/window">
+                                        <div class="row">
+                                            <span>Window</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <h4 i18n>Tables</h4>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/tables/table">
+                                        <div class="row">
+                                            <span>Table</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <div>
+                                <div class="row">
+                                    <h4 i18n>Indicators</h4>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/indicators/spinner">
+                                        <div class="row">
+                                            <span>Spinner</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/indicators/progress">
+                                        <div class="row">
+                                            <span>Progress</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <div>
+                                <div class="row">
+                                    <h4>Navigation</h4>
+
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/navigation/drawer">
+                                        <div class="row">
+                                            <span>Drawer</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/navigation/router#/documentation/components/navigation/router/example">
+                                        <div class="row">
+                                            <span>Router</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/components/index#/documentation/components/navigation/tabs">
+                                        <div class="row">
+                                            <span>Tabs</span>
+
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content>
+            <viewport style="display: block; position: relative">
+                <dom-router level="1"></dom-router>
+            </viewport>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</template>
+</body>
+</html>
