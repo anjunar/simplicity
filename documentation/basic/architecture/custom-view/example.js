@@ -7,13 +7,13 @@ class Example extends HTMLElement {
     material;
 
     static get template() {
-        return loader("documentation/basic/custom-view/custom-view/example.html");
+        return loader("documentation/basic/architecture/custom-view/example.html");
     }
 
 }
 
 export default customViews.define({
-    name : "examples-custom-page",
+    name : "architecture-custom-page",
     class : Example,
     guard(activeRoute) {
         return {

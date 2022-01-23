@@ -14,13 +14,13 @@ class Repeat extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/common/repeat.html")
+        return loader("documentation/basic/control-structure/repeat.html")
     }
 
 }
 
 export default customViews.define({
-    name: "common-repeat",
+    name: "control-structures-repeat",
     class: Repeat,
     header: "Repeat",
     guard(activeRoute) {

@@ -27,9 +27,9 @@ class CommonExample extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/common/slot/example.html");
+        return loader("documentation/basic/control-structure/slot/example.html");
     }
 
 }
 
-export default customComponents.define("common-example", CommonExample)
+export default customComponents.define("control-structures-example", CommonExample)

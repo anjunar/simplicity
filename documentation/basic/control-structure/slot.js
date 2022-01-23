@@ -19,13 +19,13 @@ class CommonImplicit extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/common/slot.html")
+        return loader("documentation/basic/control-structure/slot.html")
     }
 
 }
 
 export default customViews.define({
-    name : "common-implicit",
+    name : "control-structures-implicit",
     class : CommonImplicit,
     guard(activeRoute) {
         return {

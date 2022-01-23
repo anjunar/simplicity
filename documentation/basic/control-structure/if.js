@@ -2,22 +2,22 @@ import {customViews} from "../../../library/simplicity/simplicity.js";
 import {loader} from "../../../library/simplicity/processors/loader-processor.js";
 import DomCode from "../../../library/simplicity/directives/dom-code.js";
 
-class CommonBindings extends HTMLElement {
+class If extends HTMLElement {
 
-    showDisplay = false;
-    showClass = false;
+    page = 0;
+    show = true;
 
     static get components() {
-        return [DomCode];
+        return [DomCode]
     }
 
     static get template() {
-        return loader("documentation/basic/common/bindings.html")
+        return loader("documentation/basic/control-structure/if.html")
     }
 
 }
 
 export default customViews.define({
-    name: "common-bindings",
-    class: CommonBindings
-});
+    name: "control-structures-if",
+    class: If
+})

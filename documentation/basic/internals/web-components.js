@@ -1,17 +1,15 @@
 import {customViews} from "../../../library/simplicity/simplicity.js";
 import {loader} from "../../../library/simplicity/processors/loader-processor.js";
 
-class Switch extends HTMLElement {
-
-    value = "test1"
+class WebComponents extends HTMLElement {
 
     static get template() {
-        return loader("documentation/basic/common/switch.html")
+        return loader("documentation/basic/internals/web-components.html")
     }
 
 }
 
 export default customViews.define({
-    name : "common-switch",
-    class : Switch
+    name : "internals-web-components",
+    class : WebComponents
 })

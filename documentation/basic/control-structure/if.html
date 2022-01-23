@@ -18,14 +18,12 @@
     <script>
         function i18n() {
             return [{
-                en : `An If-Statement is essential in programming and therefore also in this framework as a template
-                available. The difference to display:none or display:block is that the corresponding element is only
-                is rendered when the Predicate evaluates to true. The element becomes the template as a nextElementSibling
-                rendered.`,
-                de : `Ein If-Statement ist essenziell in der Programmierung und somit auch in diesen Framework als template
-                vorhanden. Der Unterschied zu display:none oder display:block ist, dass das entsprechende Element erst
-                gerendert wird, wenn das Predicate zu true evaluiert. Das Element wird als nextElementSibling zum Template
-                gerendert.`
+                en : `An if statement is essential in programming and therefore also in this framework as a binding
+                accessible. The difference to display:none or display:block is that the corresponding element is first
+                is rendered if the predicate evaluates to true.`,
+                de : `Ein If-Statement ist essenziell in der Programmierung und somit auch in diesen Framework als binding
+                verfügbar. Der Unterschied zu display:none oder display:block ist, dass das entsprechende Element erst
+                gerendert wird, wenn das Prädikat zu true evaluiert.`
             }, {
                 en : `Element`,
                 de : `Element`
@@ -39,8 +37,8 @@
                 en : `The predicate to eval`,
                 de : `Das Prädikat zum evaluieren`
             }, {
-                en : `Text to be shown`,
-                de : `Der Text, der hier angezeigt wird`
+                en : `Toggle me`,
+                de : `Schalte mich um`
             }, {
                 en : `The rest of the HTML file is not displayed`,
                 de : `Der rest der HTML Datei wird nicht angezeigt`
@@ -58,10 +56,9 @@
             <hr class="line">
 
             <p i18n>
-                An If-Statement is essential in programming and therefore also in this framework as a template
-                available. The difference to display:none or display:block is that the corresponding element is only
-                is rendered when the Predicate evaluates to true. The element becomes the template as a nextElementSibling
-                rendered.
+                An if statement is essential in programming and therefore also in this framework as a binding
+                accessible. The difference to display:none or display:block is that the corresponding element is first
+                is rendered if the predicate evaluates to true.
             </p>
 
             <h3>DOM-API</h3>
@@ -86,7 +83,7 @@
                 <button class="thin" bind:onclick="show = ! show">Toggle</button>
 
                 <div bind:if="show">
-                    {{i18n('Text to be shown')}}
+                    {{i18n('Toggle me')}}
                 </div>
             </div>
 
@@ -107,7 +104,7 @@
                                 <button class="thin" bind:onclick="show = ! show">Toggle</button>
 
                                 <div bind:if="show">
-                                    Text to be shown
+                                    Toggle me
                                 </div>
                             </iframe>
                         </template>

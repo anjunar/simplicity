@@ -12,12 +12,12 @@ class CustomComponent extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/custom-component/custom-component.html")
+        return loader("documentation/basic/architecture/custom-component.html")
     }
 
 }
 
 export default customViews.define({
-    name: "common-custom-component",
+    name: "architecture-custom-component",
     class: CustomComponent
 })

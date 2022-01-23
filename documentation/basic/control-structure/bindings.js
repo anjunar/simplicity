@@ -2,19 +2,22 @@ import {customViews} from "../../../library/simplicity/simplicity.js";
 import {loader} from "../../../library/simplicity/processors/loader-processor.js";
 import DomCode from "../../../library/simplicity/directives/dom-code.js";
 
-class CustomView extends HTMLElement {
+class CommonBindings extends HTMLElement {
+
+    showDisplay = false;
+    showClass = false;
 
     static get components() {
-        return [DomCode]
+        return [DomCode];
     }
 
     static get template() {
-        return loader("documentation/basic/custom-view/custom-view.html");
+        return loader("documentation/basic/control-structure/bindings.html")
     }
 
 }
 
 export default customViews.define({
-    name: "common-custom-view",
-    class: CustomView
-})
+    name: "control-structures-bindings",
+    class: CommonBindings
+});

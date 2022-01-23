@@ -109,6 +109,8 @@ export const customComponents = new class CustomComponents {
                     let i18nMessage = i18nMessages[text];
                     if (i18nMessage) {
                         return i18nMessage[language]
+                    } else {
+                        console.warn("no translation found: " + text)
                     }
                     return text;
                 }

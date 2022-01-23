@@ -11,17 +11,23 @@
     <script>
         function i18n() {
             return [{
-                en : `Content`,
-                de : `Inhalt`
+                en: `Getting Started`,
+                de: `Erste Schritte`
             }, {
-                en : `Common`,
-                de : `Üblich`
+                en: `Content`,
+                de: `Inhalt`
             }, {
-                en : `Custom Component`,
-                de : `Eigene Komponente`
+                en: `Control Structures`,
+                de: `Kontrollstrukturen`
             }, {
-                en : `Custom View`,
-                de : `Eigene View`
+                en: `Custom Component`,
+                de: `Eigene Komponente`
+            }, {
+                en: `Custom View`,
+                de: `Eigene View`
+            }, {
+                en: `Architecture`,
+                de: `Architektur`
             }]
         }
     </script>
@@ -55,19 +61,53 @@
                         <li>
                             <div>
                                 <div class="row">
-                                    <h4 i18n>Common</h4>
+                                    <h4>Internals</h4>
                                 </div>
                             </div>
                             <ul>
                                 <li>
-                                    <a href="#/documentation/basic/index#/documentation/basic/common/bindings">
+                                    <a href="#/documentation/basic/index#/documentation/basic/internals/dirty-checking">
+                                        <div class="row"><span>Dirty checking</span></div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/basic/index#/documentation/basic/internals/proxy">
+                                        <div class="row"><span>Proxy</span></div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/basic/index#/documentation/basic/internals/membrane">
+                                        <div class="row"><span>Membrane</span></div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/basic/index#/documentation/basic/internals/es6-modules">
+                                        <div class="row"><span>ES6 Modules</span></div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/basic/index#/documentation/basic/internals/web-components">
+                                        <div class="row"><span>Web Components</span></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="row">
+                                    <h4 i18n>Control Structures</h4>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/basic/index#/documentation/basic/control-structure/bindings">
                                         <div class="row">
                                             <span>Bindings</span>
                                         </div>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#/documentation/basic/index#/documentation/basic/common/if">
+                                    <a href="#/documentation/basic/index#/documentation/basic/control-structure/if">
                                         <div class="row">
                                             <span>If</span>
 
@@ -75,7 +115,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#/documentation/basic/index#/documentation/basic/common/repeat">
+                                    <a href="#/documentation/basic/index#/documentation/basic/control-structure/repeat">
                                         <div class="row">
                                             <span>Repeat</span>
 
@@ -83,7 +123,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#/documentation/basic/index#/documentation/basic/common/slot">
+                                    <a href="#/documentation/basic/index#/documentation/basic/control-structure/slot">
                                         <div class="row">
                                             <span>Slot</span>
 
@@ -91,7 +131,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#/documentation/basic/index#/documentation/basic/common/switch">
+                                    <a href="#/documentation/basic/index#/documentation/basic/control-structure/switch">
                                         <div class="row">
                                             <span>Switch</span>
 
@@ -103,42 +143,24 @@
                         <li>
                             <div>
                                 <div class="row">
-                                    <h4 i18n>Custom Component</h4>
+                                    <h4 i18n>Architecture</h4>
                                 </div>
                             </div>
                             <ul>
                                 <li>
-                                    <a href="#/documentation/basic/index#/documentation/basic/custom-component/custom-component">
+                                    <a href="#/documentation/basic/index#/documentation/basic/architecture/custom-component">
                                         <div class="row">
                                             <span i18n>Custom Component</span>
                                         </div>
                                     </a>
                                 </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div>
-                                <div class="row">
-                                    <h4 i18n>Custom View</h4>
-                                </div>
-                            </div>
-                            <ul>
                                 <li>
-                                    <a href="#/documentation/basic/index#/documentation/basic/custom-view/custom-view">
+                                    <a href="#/documentation/basic/index#/documentation/basic/architecture/custom-view">
                                         <div class="row">
                                             <span i18n>Custom View</span>
                                         </div>
                                     </a>
                                 </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div>
-                                <div class="row">
-                                    <h4>Forms</h4>
-                                </div>
-                            </div>
-                            <ul>
                             </ul>
                         </li>
                     </ul>
