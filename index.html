@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Simplicity 3.0 beta</title>
-
     <link rel="stylesheet" href="library/highlight/androidstudio.min.css">
     <script src="library/highlight/highlight.js"></script>
     <script src="library/highlight/languages/javascript.min.js"></script>
@@ -15,6 +14,18 @@
         if (window.location.hash === "") {
             window.location.hash = "#/documentation/components/index#/documentation/components/started"
         }
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CVD1HXBNE3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-CVD1HXBNE3');
+        window.addEventListener("hashchange", (event) => {
+            let indexOf = event.newURL.indexOf("#");
+            let url = event.newURL.substr(indexOf + 1)
+            gtag('set', 'page', url);
+        })
     </script>
 </head>
 <body style="height: calc(100vh - 78px); overflow: hidden">
