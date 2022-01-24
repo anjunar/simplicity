@@ -596,7 +596,10 @@ export function codeGenerator(nodes) {
                         return `\n${tabs}\`${node.textContent}\``
                     }
                     if (interpolationRegExp.test(node.textContent)) {
-                        return `\n${tabs}interpolationStatement(\`${node.textContent}\`, context)`
+                        if (! (node.parentElement instanceof HTMLScriptElement)) {
+                            return `\n${tabs}interpolationStatement(\`${node.textContent}\`, context)`
+                        }
+                        return `\n${tabs}\`${node.textContent}\``
                     } else {
                         return `\n${tabs}\`${node.textContent}\``
                     }

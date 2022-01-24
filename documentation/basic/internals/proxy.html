@@ -3,10 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        function i18n() {
+            return [
+                {
+                    en: `The Proxy object enables you to create a proxy for another object, which can intercept and redefine
+                    fundamental operations for that object.`,
+                    de: `Mit dem Proxy-Objekt können Sie einen Proxy für ein anderes Objekt erstellen, das abfangen und neu definieren kann
+                    grundlegende Operationen für dieses Objekt bereitstellen.`
+                },
+                {
+                    en: `A Proxy is created with two parameters:
+                    <ul>
+                        <li><code>target</code>: the original object which you want to proxy</li>
+                        <li><code>handler</code>: an object that defines which operations will be intercepted and how to redefine intercepted operations.</li>
+                    </ul>
+                    For example, this code defines a simple target with just two properties, and an even simpler handler with no properties.
+                    Because the handler is empty, this proxy behaves just like the original target.`,
+                    de: `Ein Proxy wird mit zwei Parametern erstellt:
+                    <ul>
+                        <li><code>target</code>: das ursprüngliche Objekt, das Sie als Proxy verwenden möchten  </li>
+                        <li><code>handler</code>: ein Objekt, das definiert, welche Operationen abgefangen werden und wie abgefangene Operationen neu definiert werden.</li>
+                    </ul>
+                    Dieser Code definiert beispielsweise ein einfaches Ziel mit nur zwei Eigenschaften und einen noch einfacheren Handler ohne Eigenschaften.
+                    Da der Handler leer ist, verhält sich dieser Proxy genauso wie das ursprüngliche Ziel.`
+                }, {
+                    en : `To customise the proxy, we define functions on the handler object: Here we've provided an implementation
+                    of the get() handler, which intercepts attempts to access properties in the target. Handler functions are
+                    sometimes called traps, presumably because they trap calls to the target object. The very simple trap in
+                    handler2 above redefines all property accessors.`,
+                    de : `Um den Proxy anzupassen, definieren wir Funktionen für das Handler-Objekt: Hier haben wir eine Implementierung bereitgestellt
+                    des get()-Handlers, der Versuche abfängt, auf Eigenschaften im Ziel zuzugreifen. Handler-Funktionen sind
+                    manchmal Traps genannt, vermutlich weil sie Aufrufe an das Zielobjekt abfangen. Die ganz einfache Falle in
+                    handler2 oben definiert alle Eigenschaftszugriffsmethoden neu.`
+                }
+            ]
+        }
+    </script>
 </head>
 <body>
-    <template>
-        <div>Proxy</div>
-    </template>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Proxy</h2>
+            <hr class="line">
+
+            <p i18n>
+                The Proxy object enables you to create a proxy for another object, which can intercept and redefine
+                fundamental operations for that object.
+            </p>
+
+            <div i18n>
+                A Proxy is created with two parameters:
+                <ul>
+                    <li><code>target</code>: the original object which you want to proxy</li>
+                    <li><code>handler</code>: an object that defines which operations will be intercepted and how to
+                        redefine intercepted operations.
+                    </li>
+                </ul>
+                For example, this code defines a simple target with just two properties, and an even simpler handler
+                with no properties. Because the handler is empty, this proxy behaves just like the original target.
+            </div>
+
+        </div>
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                const target = {
+                                    message1: "hello",
+                                    message2: "everyone"
+                                };
+
+                                const handler1 = {};
+
+                                const proxy1 = new Proxy(target, handler1);
+
+                                console.log(proxy1.message1); // hello
+                                console.log(proxy1.message2); // everyone
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="flex-wrap: wrap; display: flex">
+        <div style="flex: 1; padding: 20px;">
+
+        <p i18n>
+            To customise the proxy, we define functions on the handler object: Here we've provided an implementation
+            of the get() handler, which intercepts attempts to access properties in the target. Handler functions are
+            sometimes called traps, presumably because they trap calls to the target object. The very simple trap in
+            handler2 above redefines all property accessors.
+        </p>
+
+    </div>
+        <div style="flex: 1; padding: 20px;">
+        <div>
+            <div>
+                <code is="dom-code" lang="javascript">
+                    <template>
+                        <script>
+                            const target = {
+                                message1: "hello",
+                                message2: "everyone"
+                            };
+
+                            const handler3 = {
+                                get: function (target, prop, receiver) {
+                                    if (prop === "message2") {
+                                        return "world";
+                                    }
+                                    return Reflect.get(...arguments);
+                                },
+                            };
+
+                            const proxy3 = new Proxy(target, handler3);
+
+                            console.log(proxy3.message1); // hello
+                            console.log(proxy3.message2); // world
+                        </script>
+                    </template>
+                </code>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</template>
 </body>
 </html>

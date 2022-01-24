@@ -1,19 +1,149 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>If</title>
+    <style>
+        common-if {
+            display: block;
+        }
+    </style>
+    <script>
+        function i18n() {
+            return [{
+                en : `An switch statement is essential in programming and therefore also in this framework as a binding
+                accessible. The difference to display:none or display:block is that the corresponding element is first
+                is rendered if the predicate evaluates to true.`,
+                de : `Ein Switch-Statement ist essenziell in der Programmierung und somit auch in diesen Framework als binding
+                verfügbar. Der Unterschied zu display:none oder display:block ist, dass das entsprechende Element erst
+                gerendert wird, wenn das Prädikat zu true evaluiert.`
+            }, {
+                en : `Element`,
+                de : `Element`
+            }, {
+                en : `Attribute`,
+                de : `Attribut`
+            }, {
+                en : `Description`,
+                de : `Beschreibung`
+            }, {
+                en : `The predicate to eval`,
+                de : `Das Prädikat zum evaluieren`
+            }, {
+                en : `Toggle me`,
+                de : `Schalte mich um`
+            }, {
+                en : `The rest of the HTML file is not displayed`,
+                de : `Der rest der HTML Datei wird nicht angezeigt`
+            }]
+        }
+    </script>
 </head>
 <body>
 <template>
-  <div bind:switch="value">
-      <case value="test1">
-          <div>1</div>
-      </case>
-      <case value="test2">
-          <div>2</div>
-      </case>
-  </div>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Dom Switch</h2>
+            <hr class="line">
+
+            <p i18n>
+                An switch statement is essential in programming and therefore also in this framework as a binding
+                accessible. The difference to display:none or display:block is that the corresponding element is first
+                is rendered if the predicate evaluates to true.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>template</td>
+                    <td>predicate</td>
+                    <td i18n>The predicate to eval</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <div bind:switch="value">
+                    <case value="test1">
+                        <div>1</div>
+                    </case>
+                    <case value="test2">
+                        <div>2</div>
+                    </case>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p i18n>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <template>
+                            <iframe>
+                                <div bind:switch="value">
+                                    <case value="test1">
+                                        <div>1</div>
+                                    </case>
+                                    <case value="test2">
+                                        <div>2</div>
+                                    </case>
+                                </div>
+                            </iframe>
+                        </template>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                import {customViews} from "../../library/simplicity/simplicity.js";
+                                import {loader} from "../../library/simplicity/processors/loader-processor.js";
+
+                                class If extends HTMLElement {
+
+                                    value = "test1"
+
+                                    static get components() {
+                                        return [];
+                                    }
+
+                                    static get template() {
+                                        return loader("documentation/common/switch.html");
+                                    }
+
+                                }
+
+                                export default customViews.define({
+                                    name: "common-switch",
+                                    class: If
+                                });
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 </body>
 </html>

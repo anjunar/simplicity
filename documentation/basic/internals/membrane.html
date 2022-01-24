@@ -3,10 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        function i18n() {
+            return [
+                {
+                    en : `A membrane is a wrapper around an entire object graph, as opposed to a wrapper for just a single object.
+                    Typically, the creator of a membrane starts out wrapping just a single object in a membrane.
+                    The key idea is that any object reference that crosses the membrane is itself transitively wrapped in the same membrane.
+                    Object references typically cross the membrane in one direction (out->in) by passing parameters to an object’s method,
+                    and in the opposite direction (in->out) by being returned as a value from a method or by being thrown as an exception.`,
+                    de : `Eine Membran ist ein Wrapper um einen ganzen Objektgraphen, im Gegensatz zu einem Wrapper für nur ein einzelnes Objekt.
+                    Typischerweise beginnt der Ersteller einer Membran damit, nur ein einzelnes Objekt in eine Membran einzuwickeln.
+                    Die Schlüsselidee ist, dass jede Objektreferenz, die die Membran durchquert, selbst transitiv in dieselbe Membran eingewickelt wird.
+                    Objektreferenzen durchqueren die Membran typischerweise in einer Richtung (out->in), indem sie Parameter an die Methode eines Objekts übergeben,
+                    und in die entgegengesetzte Richtung (in->out), indem es als Wert von einer Methode zurückgegeben oder als Ausnahme ausgelöst wird.`
+                }, {
+                    en : `To ease speaking about membranes, I will use the term “wet objects” for objects that live inside of the membrane,
+                    and the term “dry objects” to refer to objects that live outside of the membrane. The key thing about membranes
+                    is that they convert any outbound reference to a wet object that crosses them into a proxy, which is a dry object
+                    representing the corresponding wet object on the other side of the membrane. Similarly, the membrane converts any
+                    inbound dry object reference into a proxy which is a wet object that represents the corresponding dry object on the
+                    other side of the membrane.`,
+                    de : `Um das Sprechen über Membranen zu erleichtern, werde ich den Begriff „wet Objects“ für Objekte verwenden, die innerhalb der Membran leben,
+                    und der Begriff „dry Objects“ bezieht sich auf Objekte, die außerhalb der Membran leben. Das Wichtigste an Membranen
+                    besteht darin, dass sie jeden ausgehenden Verweis auf ein wet Object, das sie kreuzt, in einen Proxy umwandeln, der ein dry Object ist
+                    die das entsprechende wet Object auf der anderen Seite der Membran darstellt. Ebenso wandelt die Membran jede um
+                    eingehende dry-objektreferenz in einen Proxy, der ein wet Object ist, das das entsprechende dry Object auf dem darstellt
+                    andere Seite der Membran.`
+                }
+            ]
+        }
+    </script>
 </head>
 <body>
-    <template>
-        <div>Membrane</div>
-    </template>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Membrane</h2>
+            <hr class="line">
+
+            <p i18n>
+                A membrane is a wrapper around an entire object graph, as opposed to a wrapper for just a single object.
+                Typically, the creator of a membrane starts out wrapping just a single object in a membrane.
+                The key idea is that any object reference that crosses the membrane is itself transitively wrapped in the same membrane.
+                Object references typically cross the membrane in one direction (out->in) by passing parameters to an object’s method,
+                and in the opposite direction (in->out) by being returned as a value from a method or by being thrown as an exception.
+            </p>
+
+            <p i18n>
+                To ease speaking about membranes, I will use the term “wet objects” for objects that live inside of the membrane,
+                and the term “dry objects” to refer to objects that live outside of the membrane. The key thing about membranes
+                is that they convert any outbound reference to a wet object that crosses them into a proxy, which is a dry object
+                representing the corresponding wet object on the other side of the membrane. Similarly, the membrane converts any
+                inbound dry object reference into a proxy which is a wet object that represents the corresponding dry object on the
+                other side of the membrane.
+            </p>
+
+        </div>
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                const target = {
+                                    message1: "hello",
+                                    message2: "everyone",
+                                    text : {
+                                        message3: "hello",
+                                        message4: "everyone",
+                                    }
+                                };
+
+                                function membraneFactory(object) {
+                                    if (object instanceof Object) {
+                                        return new Proxy(object, {
+                                            set(target, p, value, receiver) {
+                                                console.log(p);
+                                                return Reflect.set(target, p, value, receiver);
+                                            },
+                                            get(target, p, receiver) {
+                                                let result = Reflect.get(target, p, receiver);
+                                                return membraneFactory(result);
+                                            }
+                                        });
+                                    }
+                                    return object;
+                                }
+
+                                let proxy = membraneFactory(target);
+
+                                console.log(proxy.message1); // hello
+                                console.log(proxy.message2); // everyone
+
+                                proxy.message1 = "test"; // message1
+                                proxy.text.message3 = "test" // message3
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
 </body>
 </html>

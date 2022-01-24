@@ -32,4 +32,4 @@ class CommonExample extends HTMLElement {
 
 }
 
-export default customComponents.define("control-structures-example", CommonExample)
+export default customComponents.define("common-example", CommonExample)

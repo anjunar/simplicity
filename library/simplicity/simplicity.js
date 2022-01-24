@@ -58,23 +58,25 @@ Node.prototype.queryUpwards = function (callback) {
 }
 
 const names = new Map();
+const domParser = new DOMParser();
 
 export const customComponents = new class CustomComponents {
 
     define(name, clazz, options) {
 
         let fragments = new WeakMap();
-        let html = clazz.template;
         let template;
         let i18nMessages = {};
 
-        if (html) {
-            if (clazz.components) {
-                checker(clazz.components, clazz.template, name)
-            }
+        if (clazz.template) {
+            let html = domParser.parseFromString(clazz.template, "text/html");
 
             let templateHMTL = html.querySelector("template");
             template = codeGenerator(templateHMTL.content.children);
+
+            if (clazz.components) {
+                checker(clazz.components, template.content, name)
+            }
 
             let css = html.querySelector("style");
             if (css) {
@@ -87,7 +89,8 @@ export const customComponents = new class CustomComponents {
                 let rawMessagesFunction = eval("(" + textContent + ")")
                 let rawMessages = rawMessagesFunction();
                 for (const rawMessage of rawMessages) {
-                    let message = i18nMessages[rawMessage["en"]] = {}
+                    let withoutSpaces = rawMessage["en"].replaceAll(" ", "");
+                    let message = i18nMessages[withoutSpaces] = {}
                     message["de"] = rawMessage["de"];
                 }
             }
@@ -106,7 +109,8 @@ export const customComponents = new class CustomComponents {
                 if (language === "en") {
                     return text;
                 } else {
-                    let i18nMessage = i18nMessages[text];
+                    let withoutSpaces = text.replaceAll(" ", "");
+                    let i18nMessage = i18nMessages[withoutSpaces];
                     if (i18nMessage) {
                         return i18nMessage[language]
                     } else {

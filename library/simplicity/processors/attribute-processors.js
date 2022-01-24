@@ -257,7 +257,11 @@ class i18nAttributeProcessor {
         this.value = value;
         if (name === "i18n") {
             this.matched = true;
-            this.text = element.textContent.trim().replaceAll(/\s+/g, " ");
+            this.text = element.innerHTML.trim()
+                .replaceAll(/\s+/g, " ")
+                .replace(/&lt;/g,'<')
+                .replace(/&gt;/g,'>')
+                .replace(/&amp;/g,'&');
             this.process();
         }
     }
@@ -267,11 +271,11 @@ class i18nAttributeProcessor {
 
         if (language !== this.lastLanguage) {
             if (language === "en") {
-                this.element.textContent = this.text;
+                this.element.innerHTML = this.text;
             } else {
                 let context = this.context.variable("i18n");
                 let text = context.i18n(this.text, this.value);
-                this.element.textContent = text;
+                this.element.innerHTML = text;
             }
 
             this.lastLanguage = language;
