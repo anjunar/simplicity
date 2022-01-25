@@ -13,7 +13,7 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         }
 
         window.setTimeout(() => {
-            this.dispatchEvent(new CustomEvent("model"));
+            this.asyncValidationHandler();
         }, 300)
     }
 
@@ -22,11 +22,7 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         component.addEventListener("model", () => {
             let name = component.name;
             this.model[name] = component.model;
-            this.dispatchEvent(new CustomEvent("model"));
-        })
-
-        component.addEventListener("model", () => {
-            this.dispatchEvent(new CustomEvent("model"));
+            this.asyncValidationHandler();
         })
 
         let value = this.model[component.name];
@@ -54,11 +50,13 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
 
                 for (const component of this.components) {
                     let value = this.model[component.name];
-                    component.model = value;
-                    component.value = value;
+                    if (value !== component.model) {
+                        component.model = value;
+                        component.value = value;
+                    }
                 }
 
-                this.dispatchEvent(new CustomEvent("model"));
+                this.asyncValidationHandler();
             }
                 break;
         }

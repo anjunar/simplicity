@@ -28,37 +28,37 @@ export const Input = (superclass) => class extends superclass {
     constructor() {
         super();
 
-        let asyncValidationHandler = () => {
-            if (this.asyncValidators.length > 0) {
-                let results = [];
-                for (const validator of this.asyncValidators) {
-                    let result = validator.validate(this)
-                        .then((result) => {
-                            let indexOf = this.errors.indexOf(result);
-                            if (indexOf > -1) {
-                                this.errors.splice(indexOf, 1);
-                            }
-                        })
-                        .catch((reason) => {
-                            let indexOf = this.errors.indexOf(reason);
-                            if (indexOf === -1) {
-                                this.errors.push(reason)
-                            }
-                        })
-                    results.push(result);
-                }
+        this.addEventListener("model", debounce(this.asyncValidationHandler, 300));
+    }
 
-                Promise.all(results)
-                    .then(() => {
-                        lifeCycle();
+    asyncValidationHandler() {
+        if (this.asyncValidators.length > 0) {
+            let results = [];
+            for (const validator of this.asyncValidators) {
+                let result = validator.validate(this)
+                    .then((result) => {
+                        let indexOf = this.errors.indexOf(result);
+                        if (indexOf > -1) {
+                            this.errors.splice(indexOf, 1);
+                        }
                     })
-                    .catch(() => {
-                        lifeCycle();
+                    .catch((reason) => {
+                        let indexOf = this.errors.indexOf(reason);
+                        if (indexOf === -1) {
+                            this.errors.push(reason)
+                        }
                     })
+                results.push(result);
             }
-        }
 
-        this.addEventListener("model", debounce(asyncValidationHandler, 300));
+            Promise.all(results)
+                .then(() => {
+                    lifeCycle();
+                })
+                .catch(() => {
+                    lifeCycle();
+                })
+        }
     }
 
     get isInput() {
