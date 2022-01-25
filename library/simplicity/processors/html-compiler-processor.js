@@ -457,44 +457,73 @@ function slotStatement(boundAttributes, contents) {
     };
 }
 
-function switchStatement(boundAttributes, children) {
+function switchStatement(boundAttributes, cases) {
 
     let container = document.createDocumentFragment();
     let comment = document.createComment("switch")
 
     function generate() {
-        for (const child of children) {
-            child.build(container);
+        return caseSegment.build(container);
+    }
+
+    function findCase(value) {
+        for (const caseSegment of cases) {
+            if (caseSegment.value === value) {
+                return caseSegment;
+            }
+        }
+        for (const caseSegment of cases) {
+            if (caseSegment.value === "default") {
+                return caseSegment;
+            }
         }
     }
 
-    let element;
+    let caseSegment;
     let value;
+    let elements;
 
     return {
         build(parent) {
             let values = boundAttributes();
             value = values.switch;
-            generate();
-            element = container.querySelector(`case[value=${value}]`);
-            if (!element) {
-                element = container.querySelector(`case[value=default]`);
-            }
+            caseSegment = findCase(value);
+            elements = generate();
             parent.appendChild(comment);
-            parent.appendChild(element);
+            parent.appendChild(container);
         },
         update() {
             let values = boundAttributes();
             let newValue = values.switch;
             if (! isEqual(value, newValue)) {
                 value = newValue;
-                container.appendChild(element);
-                element = container.querySelector(`case[value=${value}]`);
-                if (!element) {
-                    element = container.querySelector(`case[value=default]`);
+                for (const element of elements) {
+                    element.remove();
                 }
-                comment.after(element);
+                caseSegment = findCase(value);
+                elements = generate();
+                comment.after(container);
+            } else {
+                caseSegment.update();
             }
+        }
+    }
+}
+
+function caseStatement(boundAttributes, children) {
+    let values = boundAttributes();
+
+    return {
+        type : "case",
+        value : values.value,
+        build(parent) {
+            let elements = [];
+            for (const child of children) {
+                elements.push(child.build(parent));
+            }
+            return elements;
+        },
+        update() {
             for (const child of children) {
                 child.update();
             }
@@ -623,10 +652,13 @@ export function codeGenerator(nodes) {
                         return `\n${tabs}ifStatement(boundAttributes([${rawAttributes(node)}], ["if"], context), html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:switch")) {
-                        return `\n${tabs}switchStatement(boundAttributes([${rawAttributes(node)}], ["switch"], context), [${intern(node.childNodes, ++level)}\n${tabs}])`
+                        return `\n${tabs}switchStatement(boundAttributes([${rawAttributes(node)}], ["switch"], context), [${intern(node.childNodes, ++level)}\n${tabs}])`;
+                    }
+                    if (node.localName === "case") {
+                        return `\n${tabs}caseStatement(boundAttributes([${rawAttributes(node)}], ["value"], context), [${intern(node.childNodes, ++level)}\n${tabs}])`;
                     }
                     if (node.localName === "slot") {
-                        return `\n${tabs}slotStatement(boundAttributes([${rawAttributes(node)}], ["index", "selector", "implicit", "source"], context), content)`
+                        return `\n${tabs}slotStatement(boundAttributes([${rawAttributes(node)}], ["index", "selector", "implicit", "source"], context), content)`;
                     }
                     return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])`
                 }
@@ -634,8 +666,8 @@ export function codeGenerator(nodes) {
     }
 
     let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
-    let func = Function(`return function(forStatement, slotStatement, html, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, boundAttributes) {return ${expression}}`);
-    return func()(forStatement, slotStatement, htmlStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, boundAttributes)
+    let func = Function(`return function(forStatement, slotStatement, html, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement, boundAttributes) {return ${expression}}`);
+    return func()(forStatement, slotStatement, htmlStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement, boundAttributes)
 }
 
 export function compiler(template, instance, content, implicit) {
