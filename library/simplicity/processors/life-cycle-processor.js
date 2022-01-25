@@ -4,7 +4,7 @@ import {appManager} from "../manager/app-manager.js";
 let lifeCycles = 0;
 let avgLatency = 0;
 
-export const lifeCycle = debounce(function lifeCycle() {
+export const lifeCycle = debounce(function lifeCycle(target = {localName : "none"}, p = "none", value = undefined) {
 
     let timeStart = performance.now();
 
@@ -15,12 +15,15 @@ export const lifeCycle = debounce(function lifeCycle() {
         if (Reflect.has(node, "cycle")) {
             node.cycle();
         }
+
         if (Reflect.has(node, "render")) {
             if (node.attributesChanged) {
-                node.attributesChanged = false;
                 node.render();
             }
         }
+
+        node.attributesChanged = false;
+
         if (Reflect.has(node, "update")) {
             node.update();
         }
@@ -30,7 +33,7 @@ export const lifeCycle = debounce(function lifeCycle() {
     let timeEnd = performance.now();
     let delta = timeEnd - timeStart;
     avgLatency = (avgLatency + delta);
-    console.log(`Latency ${Math.round(delta)} ms - avg Latency: ${Math.round(avgLatency / lifeCycles)} ms`);
+    console.log(`Latency ${Math.round(delta)} ms - avg Latency: ${Math.round(avgLatency / lifeCycles)} ms ${target.localName || target} ${p} ${JSON.stringify(value)}`);
 
     let lifeCycle = appManager.performance.lifeCycle;
 

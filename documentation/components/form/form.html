@@ -142,12 +142,12 @@
             </table>
 
             <div style="margin: 20px;">
-                <form is="dom-form" bind:model="person" bind:variable="form">
+                <form is="dom-form" bind:model="person" bind:variable="simpleForm">
                     <mat-input-container bind:placeholder="i18n('First Name')">
                         <input is="dom-input" type="text" name="firstName"/>
                     </mat-input-container>
-                    <button type="button" bind:style="display : form.dirty ? 'inline' : 'none'"
-                            bind:onclick="form.reset()">Reset
+                    <button type="button" bind:style="display : simpleForm.dirty ? 'inline' : 'none'"
+                            bind:onclick="simpleForm.reset()">Reset
                     </button>
                 </form>
             </div>

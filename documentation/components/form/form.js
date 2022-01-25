@@ -16,10 +16,11 @@ class Form extends HTMLElement {
         }
     }
 
+    simpleForm;
     form;
 
     initialize() {
-        this.form.addValidator({
+        this.form.addAsyncValidator({
             validate: (element) => {
                 let executor = (resolve, reject) => {
                     if (this.person.firstName === "Max" && this.person.lastName === "Mustermann") {

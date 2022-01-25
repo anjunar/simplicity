@@ -1,48 +1,11 @@
-import {customComponents} from "../simplicity.js";
+import {customComponents, mix, Input} from "../simplicity.js";
 import DomForm from "./dom-form.js";
-import {debounce} from "../services/tools.js";
 import {lifeCycle} from "../processors/life-cycle-processor.js";
 
-class DomInput extends HTMLInputElement {
 
-    model = "";
-
-    errors = [];
-    asyncValidators = [];
+class DomInput extends mix(HTMLInputElement).with(Input) {
 
     initialize() {
-
-        let asyncValidationHandler = () => {
-            if (this.asyncValidators.length > 0) {
-                let results = [];
-                for (const validator of this.asyncValidators) {
-                    let result = validator.validate(this)
-                        .then((result) => {
-                            let indexOf = this.errors.indexOf(result);
-                            if (indexOf > -1) {
-                                this.errors.splice(indexOf, 1);
-                            }
-                        })
-                        .catch((reason) => {
-                            let indexOf = this.errors.indexOf(reason);
-                            if (indexOf === -1) {
-                                this.errors.push(reason)
-                            }
-                        })
-                    results.push(result);
-                }
-
-                Promise.all(results)
-                    .then(() => {
-                        lifeCycle();
-                    })
-                    .catch(() => {
-                        lifeCycle();
-                    })
-            }
-        }
-
-        asyncValidationHandler();
 
         let valueChangeHandler = () => {
             if (this.type === "number") {
@@ -96,8 +59,6 @@ class DomInput extends HTMLInputElement {
                 break;
             default : {
                 this.addEventListener("input", valueChangeHandler);
-                this.addEventListener("change", valueChangeHandler);
-                this.addEventListener("model", debounce(asyncValidationHandler, 300));
                 this.addEventListener("focus", () => {
                     lifeCycle();
                 });
@@ -154,30 +115,6 @@ class DomInput extends HTMLInputElement {
                 return Object.keys(target).concat(this.errors);
             }
         })
-    }
-
-    addAsyncValidator(value) {
-        this.asyncValidators.push(value);
-    }
-
-    get isInput() {
-        return true;
-    }
-
-    get dirty() {
-        return this.defaultValue !== this.value;
-    }
-
-    get pristine() {
-        return !this.dirty;
-    }
-
-    get valid() {
-        return this.validity.valid && this.errors.length === 0;
-    }
-
-    reset() {
-        this.value = this.defaultValue;
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

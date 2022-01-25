@@ -52,16 +52,20 @@ export function create(html) {
     return parser.parseFromString(html, "text/html").querySelector("body").firstChild
 }
 
-export function debounce(func, wait) {
+export function debounce(func, wait, immediate, disable) {
+    if (disable) {
+        return func;
+    }
     let timeout;
     return function () {
-        let args = arguments;
+        const context = this, args = arguments;
         const later = function () {
-            clearTimeout(timeout)
-            func.apply(this, args);
+            timeout = null;
+            if (!immediate) func.apply(context, args);
         };
+        const callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
     };
 }
-

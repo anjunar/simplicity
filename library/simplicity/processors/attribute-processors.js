@@ -182,12 +182,16 @@ class DynamicBindingAttributeProcessor {
     }
 
     process() {
-        let result = evaluation(this.value, this.context);
         if (this.element.attributeChangedCallback) {
+            let result = evaluation(this.value, this.context);
             if (!isEqual(this.oldValue, result)) {
                 this.element.attributeChangedCallback(this.name, this.oldValue, result);
                 if (result instanceof Array) {
                     this.oldValue = Array.from(result);
+                } else if (result instanceof Function) {
+                    this.oldValue = result;
+                } else if (result instanceof Object){
+                    this.oldValue = JSON.parse(JSON.stringify(result));
                 } else {
                     this.oldValue = result;
                 }

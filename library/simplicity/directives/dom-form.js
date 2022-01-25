@@ -1,39 +1,8 @@
-import {customComponents} from "../simplicity.js";
-import {debounce} from "../services/tools.js";
-import {lifeCycle} from "../processors/life-cycle-processor.js";
+import {customComponents, Input, mix} from "../simplicity.js";
 
-class DomForm extends HTMLFormElement {
+class DomForm extends mix(HTMLFormElement).with(Input) {
 
-    model = {};
     components = [];
-    validators = [];
-    errors = [];
-
-    validationHandler() {
-        let results = [];
-        for (const validator of this.validators) {
-            results.push(validator.validate(this)
-                .then((result) => {
-                    let indexOf = this.errors.indexOf(result);
-                    if (indexOf > -1) {
-                        this.errors.splice(indexOf, 1);
-                    }
-                })
-                .catch((reason) => {
-                    let indexOf = this.errors.indexOf(reason);
-                    if (indexOf === -1) {
-                        this.errors.push(reason)
-                    }
-                }))
-        }
-        Promise.all(results)
-            .then(() => {
-                lifeCycle();
-            })
-            .catch(() => {
-                lifeCycle();
-            })
-    }
 
     initialize() {
         if (this.name) {
@@ -44,12 +13,8 @@ class DomForm extends HTMLFormElement {
         }
 
         window.setTimeout(() => {
-            this.validationHandler();
+            this.dispatchEvent(new CustomEvent("model"));
         }, 300)
-    }
-
-    addValidator(value) {
-        this.validators.push(value);
     }
 
     register(component) {
@@ -60,7 +25,9 @@ class DomForm extends HTMLFormElement {
             this.dispatchEvent(new CustomEvent("model"));
         })
 
-        component.addEventListener("model", debounce(this.validationHandler.bind(this), 300))
+        component.addEventListener("model", () => {
+            this.dispatchEvent(new CustomEvent("model"));
+        })
 
         let value = this.model[component.name];
         component.model = value;
@@ -74,10 +41,6 @@ class DomForm extends HTMLFormElement {
         return this.components.some((component) => component.dirty)
     }
 
-    get pristine() {
-        return ! this.dirty
-    }
-
     reset() {
         for (const component of this.components) {
             component.reset();
@@ -88,7 +51,16 @@ class DomForm extends HTMLFormElement {
         switch (name) {
             case "model" : {
                 this.model = newValue;
-            } break;
+
+                for (const component of this.components) {
+                    let value = this.model[component.name];
+                    component.model = value;
+                    component.value = value;
+                }
+
+                this.dispatchEvent(new CustomEvent("model"));
+            }
+                break;
         }
     }
 
@@ -103,4 +75,4 @@ class DomForm extends HTMLFormElement {
 
 }
 
-export default customComponents.define("dom-form", DomForm, {extends : "form"})
+export default customComponents.define("dom-form", DomForm, {extends: "form"})

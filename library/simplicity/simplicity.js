@@ -2,6 +2,90 @@ import {register} from "./manager/view-manager.js";
 import {codeGenerator, compiler, membraneFactory} from "./processors/html-compiler-processor.js";
 import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
+import {lifeCycle} from "./processors/life-cycle-processor.js";
+import {debounce} from "./services/tools.js";
+
+export const mix = (superclass) => new MixinBuilder(superclass);
+
+class MixinBuilder {
+    constructor(superclass) {
+        this.superclass = superclass;
+    }
+
+    with(...mixins) {
+        return mixins.reduce((c, mixin) => mixin(c), this.superclass);
+    }
+}
+
+export const Input = (superclass) => class extends superclass {
+
+    model = "";
+
+    asyncValidators = [];
+
+    errors = [];
+
+    constructor() {
+        super();
+
+        let asyncValidationHandler = () => {
+            if (this.asyncValidators.length > 0) {
+                let results = [];
+                for (const validator of this.asyncValidators) {
+                    let result = validator.validate(this)
+                        .then((result) => {
+                            let indexOf = this.errors.indexOf(result);
+                            if (indexOf > -1) {
+                                this.errors.splice(indexOf, 1);
+                            }
+                        })
+                        .catch((reason) => {
+                            let indexOf = this.errors.indexOf(reason);
+                            if (indexOf === -1) {
+                                this.errors.push(reason)
+                            }
+                        })
+                    results.push(result);
+                }
+
+                Promise.all(results)
+                    .then(() => {
+                        lifeCycle();
+                    })
+                    .catch(() => {
+                        lifeCycle();
+                    })
+            }
+        }
+
+        this.addEventListener("model", debounce(asyncValidationHandler, 300));
+    }
+
+    get isInput() {
+        return true;
+    }
+
+    get dirty() {
+        return this.defaultValue !== this.value;
+    }
+
+    get pristine() {
+        return !this.dirty;
+    }
+
+    get valid() {
+        return this.validity.valid && this.errors.length === 0;
+    }
+
+    reset() {
+        this.value = this.defaultValue;
+    }
+
+    addAsyncValidator(value) {
+        this.asyncValidators.push(value);
+    }
+
+};
 
 Object.prototype.equals = function (lhs, rhs) {
     if (lhs instanceof Object && rhs instanceof Object) {
@@ -128,10 +212,8 @@ export const customComponents = new class CustomComponents {
             }
 
             attributeChangedCallback(name, oldValue, newValue) {
-                if (!isEqual(oldValue, newValue)) {
-                    this.attributesChanged = true;
-                    super.attributeChangedCallback(name, oldValue, newValue)
-                }
+                this.attributesChanged = true;
+                super.attributeChangedCallback(name, oldValue, newValue)
             }
 
             connectedCallback() {

@@ -24,21 +24,23 @@ class MatInputContainer extends HTMLElement {
 
         let input = this.querySelector("input");
 
-        for (const validity in input.validity) {
-            if (input.validity[validity] === true) {
-                let errorElement = this.querySelector(`*[slot=error] *[name=${validity}]`);
-                if (errorElement) {
-                    errorElement.style.display = "inline"
+        if (input) {
+            for (const validity in input.validity) {
+                if (input.validity[validity] === true) {
+                    let errorElement = this.querySelector(`*[slot=error] *[name=${validity}]`);
+                    if (errorElement) {
+                        errorElement.style.display = "inline"
+                    }
                 }
             }
-        }
 
-        if (input?.formular) {
-            for (const error of input.formular.errors) {
-                let errorElement = this.querySelector(`*[slot=error] *[name=${error}]`);
-                if (errorElement) {
-                    if (input.formular.errors.length > 0) {
-                        errorElement.style.display = "inline";
+            if (input.formular) {
+                for (const error of input.formular.errors) {
+                    let errorElement = this.querySelector(`*[slot=error] *[name=${error}]`);
+                    if (errorElement) {
+                        if (input.formular.errors.length > 0) {
+                            errorElement.style.display = "inline";
+                        }
                     }
                 }
             }
@@ -62,7 +64,7 @@ class MatInputContainer extends HTMLElement {
     hasErrors() {
         let element = this.querySelector("input");
         if (element) {
-            return element.errors.length > 0 || ! element.validity.valid
+            return element.errors.length > 0 || element.formular?.errors.length > 0 || ! element.validity.valid;
         }
     }
 

@@ -75,7 +75,7 @@ export function membraneFactory(instance) {
                     let properties = findProperties(target);
                     if (properties.indexOf(p) > - 1) {
                         let result = Reflect.set(target, p, value, receiver);
-                        lifeCycle();
+                        lifeCycle(target, p, value);
                         return result;
                     }
                     return Reflect.set(target, p, value, target);
@@ -227,6 +227,66 @@ function htmlStatement(tagName, attributes, children) {
         }
     }
 }
+
+function svgStatement(tagName, attributes, children) {
+
+    let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+
+    function generate() {
+        for (const child of children) {
+            if (typeof child === "string") {
+                element.appendChild(document.createTextNode(child))
+            } else {
+                if (child instanceof Function) {
+                    contentRegistry.set(element, child);
+                } else {
+                    if (element instanceof HTMLTemplateElement) {
+                        child.build(element.content)
+                    } else {
+                        child.build(element)
+                    }
+
+                }
+            }
+        }
+
+        for (const attribute of attributes) {
+            if (typeof attribute === "string") {
+                let indexOf = attribute.indexOf("=");
+                let segments = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
+                element.setAttribute(segments[0], segments[1])
+            } else {
+                attribute.build(element);
+            }
+        }
+
+        return element;
+    }
+
+    return {
+        type : "svg",
+        element : element,
+        children : children,
+        build(parent) {
+            generate();
+            parent.appendChild(element);
+            return element;
+        },
+        update() {
+            for (const attribute of attributes) {
+                if (attribute instanceof Object) {
+                    attribute.update();
+                }
+            }
+            for (const child of children) {
+                if (child instanceof Object && ! (child instanceof Function)) {
+                    child.update();
+                }
+            }
+        }
+    }
+}
+
 
 function forExpressions(expressions) {
     let letRegex = /let\s+(\w[\w\d]+)\s+of\s+(\w[\w\d.,()\s]+)/;
@@ -587,14 +647,14 @@ function boundAttributes(attributes, observed, context) {
 }
 
 export function codeGenerator(nodes) {
-    function children(node, level) {
+    function children(node, level, isSvg = false) {
         if (isCompositeComponent(node)) {
             return `function(implicit) { return [${intern(node.childNodes, level)}]}`
         }
         if (node.localName === "template") {
             return intern(node.content.childNodes, level)
         }
-        return intern(node.childNodes, level)
+        return intern(node.childNodes, level, isSvg)
     }
 
     function rawAttributes(node) {
@@ -613,7 +673,7 @@ export function codeGenerator(nodes) {
     }
 
 
-    function intern(nodes, level = 1) {
+    function intern(nodes, level = 1, isSvg = false) {
         let tabs = "\t".repeat(level);
         return Array.from(nodes)
             .filter((node => (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) || node.nodeType === Node.ELEMENT_NODE))
@@ -660,14 +720,17 @@ export function codeGenerator(nodes) {
                     if (node.localName === "slot") {
                         return `\n${tabs}slotStatement(boundAttributes([${rawAttributes(node)}], ["index", "selector", "implicit", "source"], context), content)`;
                     }
+                    if (node.localName === "svg" || isSvg) {
+                        return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true)}\n${tabs}])`
+                    }
                     return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])`
                 }
             }).join(", ")
     }
 
     let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
-    let func = Function(`return function(forStatement, slotStatement, html, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement, boundAttributes) {return ${expression}}`);
-    return func()(forStatement, slotStatement, htmlStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement, boundAttributes)
+    let func = Function(`return function(forStatement, slotStatement, html, svg, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement, boundAttributes) {return ${expression}}`);
+    return func()(forStatement, slotStatement, htmlStatement, svgStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement, boundAttributes)
 }
 
 export function compiler(template, instance, content, implicit) {
