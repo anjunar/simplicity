@@ -1,10 +1,11 @@
-import {customComponents} from "../../simplicity.js";
+import {customComponents, Input, mix} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {windowManager} from "../../manager/window-manager.js";
 import {contentManager} from "../../manager/content-manager.js";
 import {lifeCycle} from "../../processors/life-cycle-processor.js";
+import DomForm from "../../directives/dom-form.js";
 
-class MatTable extends HTMLTableElement {
+class MatTable extends mix(HTMLTableElement).with(Input) {
 
     index = 0;
     limit = 5;
@@ -13,6 +14,8 @@ class MatTable extends HTMLTableElement {
     items = () => {};
     window = [];
     columns = [];
+
+    name;
 
     preInitialize() {
         this.columns = [];
@@ -36,8 +39,20 @@ class MatTable extends HTMLTableElement {
         }
     }
 
+    initialize() {
+        if (this.name) {
+            let domForm = this.queryUpwards((element) => {
+                return element instanceof DomForm
+            });
+            if (domForm) {
+                domForm.register(this);
+            }
+        }
+    }
+
     onRowClick(event, row) {
-        this.dispatchEvent(new CustomEvent("row", {detail : row}))
+        this.model = row;
+        this.dispatchEvent(new CustomEvent("model", {detail : row}))
     }
 
     get header() {
@@ -166,6 +181,9 @@ class MatTable extends HTMLTableElement {
                 this.items = newValue;
             }
                 break;
+            case "name" : {
+                this.name = newValue;
+            }
         }
     }
 
@@ -174,12 +192,11 @@ class MatTable extends HTMLTableElement {
             {
                 name: "items",
                 type: "input"
+            }, {
+                name : "name",
+                type : "input"
             }
         ]
-    }
-
-    static get components() {
-        return []
     }
 
     static get template() {

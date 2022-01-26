@@ -1,11 +1,12 @@
-import {customComponents} from "../../simplicity.js";
+import {customComponents, mix, Input} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import EditorToolbar from "./mat-editor/editor-toolbar.js";
-import {windowManager} from "../../manager/window-manager.js";
 import DomForm from "../../directives/dom-form.js";
 import {contextManager} from "../../manager/context-manager.js";
 
-class MatEditor extends HTMLElement {
+class MatEditor extends mix(HTMLElement).with(Input) {
+
+    name;
 
     model = {
         html: "",
@@ -70,6 +71,9 @@ class MatEditor extends HTMLElement {
                 this.placeholder = newValue;
             }
                 break
+            case "name" : {
+                this.name = newValue;
+            }
         }
     }
 
@@ -86,6 +90,10 @@ class MatEditor extends HTMLElement {
             {
                 name: "placeholder",
                 type: "input"
+            },
+            {
+                name : "name",
+                type : "input"
             }
         ]
     }

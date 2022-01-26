@@ -1,24 +1,21 @@
-import {customComponents} from "../../simplicity.js";
+import {customComponents, mix, Input} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
 import {lifeCycle} from "../../processors/life-cycle-processor.js";
 
-class DomLazySelect extends HTMLElement {
+class DomLazySelect extends mix(HTMLElement).with(Input) {
 
     index = 0;
     limit = 5;
     size;
 
-    model;
     window = [];
     items = () => {}
     open = false;
     label = "name";
 
-    get isInput() {
-        return true;
-    }
+    defaultValue = "";
 
     initialize() {
         window.addEventListener("click", () => {

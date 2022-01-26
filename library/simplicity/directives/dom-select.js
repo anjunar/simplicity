@@ -1,42 +1,12 @@
-import {customComponents} from "../simplicity.js";
+import {customComponents, Input, mix} from "../simplicity.js";
 
-class DomSelect extends HTMLSelectElement {
-
-    defaultValue;
-    initialized = false;
-    model;
+class DomSelect extends mix(HTMLSelectElement).with(Input) {
 
     constructor() {
         super();
         this.addEventListener("input", () => {
-            if (! this.initialized) {
-                this.initialized = true;
-                this.defaultValue = this.value;
-            }
-            this.model = this.value;
             this.dispatchEvent(new CustomEvent("model"));
-        }, {lifeCycle : false})
-    }
-
-    isInput() {
-        return true;
-    }
-
-    get dirty() {
-        return !this.pristine;
-    }
-
-    get pristine() {
-        return this.defaultValue === this.value;
-    }
-
-    reset() {
-        this.value = this.defaultValue;
-        this.dispatchEvent(new Event("input"));
-    }
-
-    get valid() {
-        return true;
+        })
     }
 
     initialize() {

@@ -1,26 +1,18 @@
-import {customComponents} from "../simplicity.js";
+import {customComponents, Input, mix} from "../simplicity.js";
 import DomForm from "./dom-form.js";
 
-class DomTextarea extends HTMLTextAreaElement {
+class DomTextarea extends mix(HTMLTextAreaElement).with(Input) {
 
-    initialized = false;
 
-    get isInput() {
-        return true;
+    constructor() {
+        super();
+
+        this.addEventListener("input", () => {
+            this.dispatchEvent(new CustomEvent("model"))
+        })
     }
 
     initialize() {
-        let valueChangeHandler = () => {
-            if (! this.initialized) {
-                this.defaultValue = this.value;
-                this.initialized = true;
-            }
-            this.dispatchEvent(new CustomEvent("value"))
-        }
-
-        this.addEventListener("keyup", valueChangeHandler)
-        this.addEventListener("change", valueChangeHandler)
-
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
                 return element instanceof DomForm
@@ -31,21 +23,10 @@ class DomTextarea extends HTMLTextAreaElement {
         }
     }
 
-    get dirty() {
-        return this.defaultValue !== this.value;
-    }
-
-    get pristine() {
-        return ! this.dirty;
-    }
-
-    reset() {
-        this.value = this.defaultValue;
-    }
-
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "value" : {
+            case "model" : {
+                this.model = newValue;
                 this.value = newValue;
             } break
         }

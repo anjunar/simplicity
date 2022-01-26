@@ -17,11 +17,12 @@ class MixinBuilder {
     }
 }
 
-export const Input = (superclass) => class extends superclass {
+export const Input = (superclass) => class InputMixin extends superclass {
 
     model = "";
 
     asyncValidators = [];
+    syncValidators = [];
 
     errors = [];
 
@@ -29,6 +30,7 @@ export const Input = (superclass) => class extends superclass {
         super();
 
         this.addEventListener("model", debounce(this.asyncValidationHandler, 300));
+        this.addEventListener("model", this.syncValidationHandler);
     }
 
     asyncValidationHandler() {
@@ -61,12 +63,57 @@ export const Input = (superclass) => class extends superclass {
         }
     }
 
+    syncValidationHandler() {
+        for (const validator of this.syncValidators) {
+            let result = validator.validate(this);
+            let errorName = Object.keys(result)[0];
+            if (result[errorName]) {
+                let indexOf = this.errors.indexOf(errorName);
+                if (indexOf === - 1) {
+                    this.errors.push(errorName);
+                }
+            } else {
+                let indexOf = this.errors.indexOf(errorName);
+                if (indexOf > - 1) {
+                    this.errors.splice(indexOf, 1);
+                }
+            }
+        }
+    }
+
+    get validity() {
+        let validity = super.validity;
+
+        return new Proxy(validity, {
+            get : (target, p, receiver) => {
+                if (this.errors.indexOf(p) > -1) {
+                    return true;
+                }
+                if (validity) {
+                    return target[p]
+                }
+                return undefined;
+            },
+
+            getOwnPropertyDescriptor: function(target, key) {
+                return { enumerable: true, configurable: true };
+            },
+
+            ownKeys : (target) => {
+                if (validity) {
+                    return Object.keys(target).concat(this.errors);
+                }
+                return this.errors;
+            }
+        })
+    }
+
     get isInput() {
         return true;
     }
 
     get dirty() {
-        return this.defaultValue !== this.value;
+        return isEqual(this.defaultValue, this.model)
     }
 
     get pristine() {
@@ -79,10 +126,15 @@ export const Input = (superclass) => class extends superclass {
 
     reset() {
         this.value = this.defaultValue;
+        this.dispatchEvent(new Event("input"));
     }
 
     addAsyncValidator(value) {
         this.asyncValidators.push(value);
+    }
+
+    addSyncValidator(value) {
+        this.syncValidators.push(value);
     }
 
 };
