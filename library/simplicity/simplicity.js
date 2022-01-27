@@ -113,11 +113,11 @@ export const Input = (superclass) => class InputMixin extends superclass {
     }
 
     get dirty() {
-        return isEqual(this.defaultValue, this.model)
+        return ! this.pristine
     }
 
     get pristine() {
-        return !this.dirty;
+        return isEqual(this.defaultValue, this.model)
     }
 
     get valid() {
