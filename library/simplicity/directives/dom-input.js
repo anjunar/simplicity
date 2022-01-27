@@ -76,28 +76,30 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
         }
     }
 
+    render() {
+        switch (this.type) {
+            case "radio" : {
+                if (this.model === this.value) {
+                    this.checked = true;
+                }
+            }
+                break;
+            case "checkbox" : {
+                if (this.model) {
+                    this.checked = true
+                }
+            }
+                break;
+            default : {
+                this.value = this.model;
+            }
+        }
+    }
+
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {
                 this.model = newValue;
-
-                switch (this.type) {
-                    case "radio" : {
-                        if (this.model === this.value) {
-                            this.checked = true;
-                        }
-                    }
-                        break;
-                    case "checkbox" : {
-                        if (this.model) {
-                            this.checked = true
-                        }
-                    }
-                        break;
-                    default : {
-                        this.value = this.model;
-                    }
-                }
             }
                 break;
         }

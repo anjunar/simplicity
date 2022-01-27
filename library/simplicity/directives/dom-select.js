@@ -5,6 +5,7 @@ class DomSelect extends mix(HTMLSelectElement).with(Input) {
     constructor() {
         super();
         this.addEventListener("input", () => {
+            this.model = this.value;
             this.dispatchEvent(new CustomEvent("model"));
         })
     }
