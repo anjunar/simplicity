@@ -6,9 +6,7 @@ import {lifeCycle} from "../processors/life-cycle-processor.js";
 class DomInput extends mix(HTMLInputElement).with(Input) {
 
 
-    constructor() {
-        super();
-
+    initialize() {
         let valueChangeHandler = () => {
             if (this.type === "number") {
                 this.model = this.valueAsNumber;
@@ -67,9 +65,7 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
             }
                 break;
         }
-    }
 
-    initialize() {
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
                 return element instanceof DomForm
