@@ -74,6 +74,8 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
                 domForm.register(this);
             }
         }
+
+        this.render();
     }
 
     render() {

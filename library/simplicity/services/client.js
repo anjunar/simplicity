@@ -14,7 +14,8 @@ export const htmlClient = new class HTMLClient {
         let parser = new DOMParser();
 
         request.open(method, url);
-        request.setRequestHeader("content-type", "html/text");
+        request.setRequestHeader("Content-Type", "html/text");
+        request.setRequestHeader("Accept", "html/text")
 
         let executor = (resolve, reject) => {
             request.addEventListener("loadend", (event) => {
@@ -81,7 +82,78 @@ export const jsonClient = new class JSONClient {
         let request = new XMLHttpRequest();
 
         request.open(method, url);
-        request.setRequestHeader("content-type", "application/json");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.setRequestHeader("Accept", "application/json")
+
+        if (options?.headers) {
+            for (const key of Object.keys(options.headers)) {
+                request.setRequestHeader(key, options.headers[key]);
+            }
+        }
+
+        let executor = (resolve, reject) => {
+            request.addEventListener("loadend", (event) => {
+                let status = event.target.status;
+
+                if (status >= 200 && status < 300) {
+                    if (event.target.responseText.length > 0) {
+                        let response = JSON.parse(event.target.responseText);
+                        resolve(response)
+                    } else {
+                        resolve("")
+                    }
+                } else {
+                    reject(event.target);
+                    for (const exceptionHandler of exceptionHandlers) {
+                        exceptionHandler(event.target);
+                    }
+                }
+
+            });
+        };
+
+        let promise = new Promise(executor);
+
+        if (options && options.body) {
+            request.send(JSON.stringify(options.body));
+        } else {
+            request.send();
+        }
+
+        return promise;
+    }
+
+    get(url, options) {
+        return this.action("GET", url, options)
+    }
+
+    put(url, options) {
+        return this.action("PUT", url, options)
+    }
+
+    delete(url, options) {
+        return this.action("DELETE", url, options)
+    }
+
+    post(url, options) {
+        return this.action("POST", url, options)
+    }
+
+    options(url, options) {
+        return this.action("OPTIONS", url, options)
+    }
+
+}
+
+export const jsonSchemaClient = new class JSONClient {
+
+    action(method, url, options) {
+
+        let request = new XMLHttpRequest();
+
+        request.open(method, url);
+        request.setRequestHeader("Content-Type", "application/schema+json");
+        request.setRequestHeader("Accept", "application/schema+json")
 
         if (options?.headers) {
             for (const key of Object.keys(options.headers)) {
@@ -213,7 +285,8 @@ export const rawClient = new class JSONClient {
         let request = new XMLHttpRequest();
 
         request.open(method, url);
-        request.setRequestHeader("content-type", "application/json");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.setRequestHeader("Accept", "application/json")
 
         if (options?.headers) {
             for (const key of Object.keys(options.headers)) {

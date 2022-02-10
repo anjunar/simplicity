@@ -62,9 +62,16 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     onItemClicked(event, item) {
         event.stopPropagation();
         this.model = item;
-        let value = item[this.label];
+
+        let value;
+        if (this.label instanceof Array) {
+            value = this.label.map((label) => item[label]).join(" ")
+        } else {
+            value = item[this.label];
+        }
         let input = this.querySelector("input");
         input.value = value;
+
         this.open = false;
         this.dispatchEvent(new CustomEvent("model"))
         return false;

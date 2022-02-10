@@ -11,7 +11,7 @@ function tokenizer(expression) {
         },
         {
             type : "property",
-            regex : /[a-zA-Z][a-zA-Z\d]*/y
+            regex : /[a-zA-Z$_][a-zA-Z\d_$]*/y
         },
         {
             type : "point",

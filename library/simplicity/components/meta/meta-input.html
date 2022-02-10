@@ -6,7 +6,7 @@
 </head>
 <body>
     <template>
-        <div bind:switch="model.type">
+        <div bind:switch="model.widget">
             <case value="image">
                 <mat-image-upload style="width: 320px; height: 200px" bind:name="model.name"></mat-image-upload>
             </case>
@@ -17,14 +17,24 @@
             </case>
             <case value="lazyselect">
                 <mat-input-container bind:placeholder="model.name">
-                    <dom-lazy-select bind:items="domLazySelect(model)">
-                        <div let="data">{{data.firstName}}</div>
+                    <dom-lazy-select bind:items="domLazySelect(model)" bind:label="domLazySelectLabel(meta)">
+                        <div let="data">{{domLazySelectOption(meta, data)}}</div>
                     </dom-lazy-select>
                 </mat-input-container>
             </case>
+            <case value="lazymultiselect">
+                <mat-input-container bind:placeholder="model.name">
+                    <dom-lazy-multi-select bind:items="domLazySelect(model)" bind:label="domLazySelectLabel(meta)">
+                        <div let="data">{{domLazySelectOption(meta, data)}}</div>
+                    </dom-lazy-multi-select>
+                </mat-input-container>
+            </case>
+            <case value="editor">
+                <mat-editor style="height: 300px" bind:name="model.name"></mat-editor>
+            </case>
             <case value="default">
                 <mat-input-container bind:placeholder="model.name">
-                    <input is="dom-input" bind:type="model.type" bind:name="model.name">
+                    <input is="dom-input" bind:type="model.widget" bind:name="model.name">
                 </mat-input-container>
             </case>
         </div>

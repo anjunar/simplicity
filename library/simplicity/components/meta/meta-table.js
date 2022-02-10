@@ -8,6 +8,17 @@ class MetaTable extends HTMLElement {
 
     model;
 
+    properties() {
+        let result = [];
+        for (const property of Object.keys(this.model.$schema.properties.rows.items.properties)) {
+            let value = {};
+            Object.assign(value, this.model.$schema.properties.rows.items.properties[property])
+            value.name = property;
+            result.push(value)
+        }
+        return result;
+    }
+
     renderCol(name) {
         return "{{data." + name + "}}"
     }
@@ -16,14 +27,12 @@ class MetaTable extends HTMLElement {
         return "data." + name;
     }
 
-    onRowClick(event) {
-        let row = event.detail;
-        let link = row.actions.find((link) => link.rel === "read");
-        window.location.hash = `#/hive/navigator/navigator?link=${btoa(link.url)}`
+    onModel(event) {
+        this.dispatchEvent(new CustomEvent("model", {detail : event.detail}))
     }
 
     items = (query, callback) => {
-        let link = this.model.sources.find((link) => link.rel === "list")
+        let link = this.model.links.find((link) => link.rel === "list")
 
         jsonClient.action(link.method, `${link.url}`)
             .then((result) => {
@@ -31,12 +40,25 @@ class MetaTable extends HTMLElement {
             })
     }
 
+    onCreate() {
+        let link = this.model.links.find((link) => link.rel === "create");
+        window.location.hash = `#/hive/navigator/navigator?link=${encodeURIComponent(link.url)}`
+    }
+
+    get create() {
+        return this.model.links.find((link) => link.rel === "create");
+    }
+
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {
                 this.model = newValue;
             }
-                break
+                break;
+            case "create" : {
+                this.create = newValue === "true";
+            }
+                break;
         }
     }
 
@@ -45,6 +67,9 @@ class MetaTable extends HTMLElement {
             {
                 name: "model",
                 type: "input"
+            }, {
+                name : "create",
+                type : "input"
             }
         ]
     }

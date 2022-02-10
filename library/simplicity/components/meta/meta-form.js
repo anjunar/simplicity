@@ -6,7 +6,18 @@ import {jsonClient} from "../../services/client.js";
 
 class MetaForm extends HTMLElement {
 
-    model;
+    model = {};
+
+    properties() {
+        let result = [];
+        for (const property of Object.keys(this.model.$schema.properties)) {
+            let value = {};
+            Object.assign(value, this.model.$schema.properties[property])
+            value.name = property;
+            result.push(value)
+        }
+        return result;
+    }
 
     send(action) {
         jsonClient.action(action.method, action.url, {body : this.model})

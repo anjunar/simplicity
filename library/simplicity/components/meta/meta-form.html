@@ -7,7 +7,7 @@
 <body>
     <template>
         <form is="dom-form" bind:model="model">
-            <meta-input bind:for="let property of model.meta.properties" bind:model="property"></meta-input>
+            <meta-input bind:for="let property of properties()" bind:model="property"></meta-input>
             <button bind:for="let action of model.actions" type="button" bind:onclick="send(action)">{{action.rel}}</button>
         </form>
     </template>

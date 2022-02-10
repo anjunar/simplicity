@@ -6,6 +6,8 @@ import MatImageUpload from "../form/mat-image-upload.js";
 import MatCheckboxContainer from "../form/container/mat-checkbox-container.js";
 import {jsonClient} from "../../services/client.js";
 import DomLazySelect from "../form/dom-lazy-select.js";
+import DomLazyMultiSelect from "../form/dom-lazy-multi-select.js";
+import MatEditor from "../form/mat-editor.js";
 
 class MetaInput extends HTMLElement {
 
@@ -19,6 +21,14 @@ class MetaInput extends HTMLElement {
                     callback(response.rows, response.size)
                 })
         }
+    }
+
+    domLazySelectOption(meta, data) {
+        return meta.properties.filter((property) => property.naming).map((property) => data[property.name]).join(" ")
+    }
+
+    domLazySelectLabel(meta) {
+        return meta.properties.filter((property) => property.naming).map((property) => property.name)
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -40,7 +50,7 @@ class MetaInput extends HTMLElement {
     }
 
     static get components() {
-        return [DomInput, DomLazySelect, MatInputContainer, MatCheckboxContainer, MatImageUpload]
+        return [DomInput, DomLazySelect, DomLazyMultiSelect, MatInputContainer, MatCheckboxContainer, MatImageUpload, MatEditor]
     }
 
     static get template() {

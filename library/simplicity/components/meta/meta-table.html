@@ -6,20 +6,20 @@
 </head>
 <body>
   <template>
-      <table is="mat-table" bind:items="items" bind:onRow="onRowClick($event)">
+      <table is="mat-table" bind:items="items" bind:onmodel="onModel($event)" bind:create="create" bind:oncreate="onCreate()">
           <colgroup>
-              <col bind:for="let column of model.columns" bind:path="column.name">
+              <col bind:for="let column of properties()" bind:path="column.name">
           </colgroup>
           <thead>
             <tr>
-                <td bind:for="let column of model.columns">
+                <td bind:for="let column of properties()">
                     <div>{{column.name}}</div>
                 </td>
             </tr>
           </thead>
           <tbody>
             <tr>
-                <td bind:for="let column of model.columns">
+                <td bind:for="let column of properties()">
                     <div let="data">
                         <meta-column bind:meta="column" bind:model="data.${column.name}"></meta-column>
                     </div>

@@ -17,6 +17,19 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         }, 300)
     }
 
+    update() {
+        for (const component of this.components) {
+            if (this.model) {
+                let value = this.model[component.name];
+                if (component.model !== value) {
+                    component.model = value;
+                    component.value = value;
+                    component.defaultValue = value;
+                }
+            }
+        }
+    }
+
     register(component) {
         this.components.push(component)
         component.addEventListener("model", () => {
@@ -25,10 +38,12 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
             this.asyncValidationHandler();
         })
 
-        let value = this.model[component.name];
-        component.model = value;
-        component.value = value;
-        component.defaultValue = value;
+        if (this.model) {
+            let value = this.model[component.name];
+            component.model = value;
+            component.value = value;
+            component.defaultValue = value;
+        }
 
         component.formular = this;
     }

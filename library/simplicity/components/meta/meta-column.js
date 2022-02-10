@@ -4,6 +4,7 @@ import DomInput from "../../directives/dom-input.js";
 import DomLazySelect from "../form/dom-lazy-select.js";
 import MatImageUpload from "../form/mat-image-upload.js";
 import {loader} from "../../processors/loader-processor.js";
+import DomLazyMultiSelect from "../form/dom-lazy-multi-select.js";
 
 class MetaColumn extends HTMLElement {
 
@@ -21,11 +22,11 @@ class MetaColumn extends HTMLElement {
     }
 
     domLazySelectOption(meta, data) {
-        return data.firstName + " " + data.lastName;
+        return meta.properties.filter((property) => property.naming).map((property) => data[property.name]).join(" ")
     }
 
     domLazySelectLabel(meta) {
-        return meta.name;
+        return meta.properties.filter((property) => property.naming).map((property) => property.name)
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -55,7 +56,7 @@ class MetaColumn extends HTMLElement {
     }
 
     static get components() {
-        return [DomInput, DomLazySelect, MatImageUpload]
+        return [DomInput, DomLazySelect, DomLazyMultiSelect, MatImageUpload]
     }
 
     static get template() {

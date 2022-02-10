@@ -13,7 +13,7 @@ class Window extends HTMLElement {
     page = 0;
 
     open() {
-        windowManager.openWindow("/documentation/basic/modals/window/example")
+        windowManager.openWindow("/documentation/components/modals/window/example")
     }
 
     static get components() {

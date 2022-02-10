@@ -89,7 +89,9 @@
                     </button>
                 </div>
             </td>
-            <td style="text-align: right"><button type="button" bind:onclick="createClick()">Create</button></td>
+            <td style="text-align: right">
+                <button bind:style="display : create ? 'inline' : 'none'" type="button" bind:onclick="createClick()">Create</button>
+            </td>
         </tr>
         </tfoot>
     </template>

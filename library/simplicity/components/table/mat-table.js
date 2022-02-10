@@ -16,6 +16,7 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     columns = [];
 
     name;
+    create = false;
 
     preInitialize() {
         this.columns = [];
@@ -175,6 +176,10 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         this.load();
     }
 
+    createClick() {
+        this.dispatchEvent(new CustomEvent("create"));
+    }
+
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "items" : {
@@ -183,7 +188,11 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 break;
             case "name" : {
                 this.name = newValue;
+            } break;
+            case "create" : {
+                this.create = newValue || newValue === "true";
             }
+                break;
         }
     }
 
@@ -194,6 +203,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 type: "input"
             }, {
                 name : "name",
+                type : "input"
+            }, {
+                name : "create",
                 type : "input"
             }
         ]

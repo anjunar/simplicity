@@ -154,7 +154,7 @@ export function isEqual(lhs, rhs) {
             for (let i = 0; i < lhs.length; i++) {
                 const lh = lhs[i];
                 const rh = rhs[i];
-                if (! Object.equals(lh,rh)) {
+                if (! isEqual(lh,rh)) {
                     return false;
                 }
             }

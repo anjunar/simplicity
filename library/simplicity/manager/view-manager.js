@@ -32,7 +32,7 @@ export const viewManager = new class ViewManager {
                 if (hashes[1]) {
                     let rawQueryParams = hashes[1].split("&");
                     for (const rawQueryParam of rawQueryParams) {
-                        let queryParamRegex = /(\w+)=([\w\d\-/?=]*)/g;
+                        let queryParamRegex = /(\w+)=([\w\d\-/?=%]*)/g;
                         let queryParameterRegexResult = queryParamRegex.exec(rawQueryParam);
                         result[queryParameterRegexResult[1]] = queryParameterRegexResult[2]
                     }
