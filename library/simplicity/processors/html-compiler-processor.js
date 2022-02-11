@@ -320,7 +320,10 @@ function forExpressions(expressions) {
     return result;
 }
 
-function forStatement(expressions, context, callback) {
+function forStatement(rawAttributes, context, callback) {
+
+    let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:for"))
+    let expressions = attribute.split("=")[1];
 
     let data = forExpressions(expressions);
 
@@ -380,9 +383,10 @@ function forStatement(expressions, context, callback) {
     }
 }
 
-function ifStatement(boundAttributes, html) {
+function ifStatement(rawAttributes, context, html) {
 
-    let values = boundAttributes();
+    let boundAttributesFunction = boundAttributes(rawAttributes, ["if"], context);
+    let values = boundAttributesFunction()
     let value = values.if;
     let comment = document.createComment("if");
     let container = document.createDocumentFragment();
@@ -403,7 +407,7 @@ function ifStatement(boundAttributes, html) {
             }
         },
         update() {
-            let values = boundAttributes();
+            let values = boundAttributesFunction()
             let newValue = values.if;
             if (! isEqual(newValue, value)) {
                 value = newValue;
@@ -446,9 +450,10 @@ function bindStatement(name, value, context) {
     }
 }
 
-function slotStatement(boundAttributes, contents) {
+function slotStatement(rawAttributes, context, contents) {
 
-    let values = boundAttributes();
+    let boundAttributesFunction = boundAttributes(rawAttributes, ["name", "index", "source", "selector", "implicit"], context);
+    let values = boundAttributesFunction()
 
     let container = document.createDocumentFragment();
     let comment = document.createComment("slot");
@@ -500,7 +505,7 @@ function slotStatement(boundAttributes, contents) {
             parent.appendChild(container);
         },
         update() {
-            let newValues = boundAttributes();
+            let newValues = boundAttributesFunction();
             let equal = isEqual(newValues, values);
             if (! equal) {
                 values = newValues;
@@ -517,7 +522,9 @@ function slotStatement(boundAttributes, contents) {
     };
 }
 
-function switchStatement(boundAttributes, cases) {
+function switchStatement(rawAttributes, context, cases) {
+
+    let boundAttributesFunction = boundAttributes(rawAttributes, ["switch"], context);
 
     let container = document.createDocumentFragment();
     let comment = document.createComment("switch")
@@ -545,7 +552,7 @@ function switchStatement(boundAttributes, cases) {
 
     return {
         build(parent) {
-            let values = boundAttributes();
+            let values = boundAttributesFunction();
             value = values.switch;
             caseSegment = findCase(value);
             elements = generate();
@@ -553,7 +560,7 @@ function switchStatement(boundAttributes, cases) {
             parent.appendChild(container);
         },
         update() {
-            let values = boundAttributes();
+            let values = boundAttributesFunction();
             let newValue = values.switch;
             if (! isEqual(value, newValue)) {
                 value = newValue;
@@ -570,8 +577,9 @@ function switchStatement(boundAttributes, cases) {
     }
 }
 
-function caseStatement(boundAttributes, children) {
-    let values = boundAttributes();
+function caseStatement(rawAttributes, context, children) {
+    let boundAttributesFunction = boundAttributes(rawAttributes, ["value"], context);
+    let values = boundAttributesFunction();
 
     return {
         type : "case",
@@ -591,7 +599,11 @@ function caseStatement(boundAttributes, children) {
     }
 }
 
-function variableStatement(variable, context, html) {
+function variableStatement(rawAttributes, context, html) {
+
+    let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:variable"))
+
+    let variable = attribute.split("=")[1];
 
     let element = html.element;
 
@@ -601,8 +613,9 @@ function variableStatement(variable, context, html) {
 
 }
 
-function letStatement(boundAttributes, implicit, context, callback) {
-    let values = boundAttributes();
+function letStatement(rawAttributes, implicit, context, callback) {
+    let boundAttributesFunction = boundAttributes(rawAttributes, ["let"], context);
+    let values = boundAttributesFunction();
     let instance = {};
     instance[values.let] = implicit;
     let newContext = new Context(instance, context);
@@ -699,26 +712,25 @@ export function codeGenerator(nodes) {
                         tagName += ":" + node.getAttribute("is")
                     }
                     if (node.hasAttribute("bind:for")) {
-                        return `\n${tabs}forStatement("${node.getAttribute("bind:for")}", context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
+                        return `\n${tabs}forStatement([${rawAttributes(node)}], context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
+                    }
+                    if (node.hasAttribute("let")) {
+                        return `\n${tabs}letStatement([${rawAttributes(node)}], implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
                     }
                     if (node.hasAttribute("bind:variable")) {
-                        return `\n${tabs}variableStatement("${node.getAttribute("bind:variable")}", context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
-                    }
-
-                    if (node.hasAttribute("let")) {
-                        return `\n${tabs}letStatement(boundAttributes([${rawAttributes(node)}], ["let"], context), implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
+                        return `\n${tabs}variableStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:if")) {
-                        return `\n${tabs}ifStatement(boundAttributes([${rawAttributes(node)}], ["if"], context), html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
+                        return `\n${tabs}ifStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:switch")) {
-                        return `\n${tabs}switchStatement(boundAttributes([${rawAttributes(node)}], ["switch"], context), [${intern(node.childNodes, ++level)}\n${tabs}])`;
+                        return `\n${tabs}switchStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level)}\n${tabs}])`;
                     }
                     if (node.localName === "case") {
-                        return `\n${tabs}caseStatement(boundAttributes([${rawAttributes(node)}], ["value"], context), [${intern(node.childNodes, ++level)}\n${tabs}])`;
+                        return `\n${tabs}caseStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level)}\n${tabs}])`;
                     }
                     if (node.localName === "slot") {
-                        return `\n${tabs}slotStatement(boundAttributes([${rawAttributes(node)}], ["index", "selector", "implicit", "source"], context), content)`;
+                        return `\n${tabs}slotStatement([${rawAttributes(node)}], context, content)`;
                     }
                     if (node.localName === "svg" || isSvg) {
                         return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true)}\n${tabs}])`
@@ -729,8 +741,8 @@ export function codeGenerator(nodes) {
     }
 
     let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
-    let func = Function(`return function(forStatement, slotStatement, html, svg, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement, boundAttributes) {return ${expression}}`);
-    return func()(forStatement, slotStatement, htmlStatement, svgStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement, boundAttributes)
+    let func = Function(`return function(forStatement, slotStatement, html, svg, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement) {return ${expression}}`);
+    return func()(forStatement, slotStatement, htmlStatement, svgStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement)
 }
 
 export function compiler(template, instance, content, implicit) {
