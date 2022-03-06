@@ -279,21 +279,17 @@ export function isEqual(lhs, rhs) {
         }
         return false;
     } else if (lhs instanceof Object && rhs instanceof Object) {
-        if (lhs.id && rhs.id) {
-            return Object.equals(lhs.id, rhs.id);
-        } else {
-            let lhsProperties = Object.keys(lhs);
+        let lhsProperties = Object.keys(lhs);
 
-            for (let i = 0; i < lhsProperties.length; i++) {
-                const lhsProperty = lhsProperties[i];
+        for (let i = 0; i < lhsProperties.length; i++) {
+            const lhsProperty = lhsProperties[i];
 
-                if (!isEqual(lhs[lhsProperty], rhs[lhsProperty])) {
-                    return false
-                }
+            if (!isEqual(lhs[lhsProperty], rhs[lhsProperty])) {
+                return false
             }
-
-            return true;
         }
+
+        return true;
     } else {
         return Object.equals(lhs, rhs);
     }
