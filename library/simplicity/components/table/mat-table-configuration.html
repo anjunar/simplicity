@@ -25,7 +25,9 @@
                         <mat-checkbox-container placeholder="Visible">
                             <input is="dom-input" type="checkbox" bind:model="td.visible">
                         </mat-checkbox-container>
-                        <slot bind:source="table.extension" selector="tsearch mat-table-search > *" bind:implicit="td" bind:index="td.index"></slot>
+                        <div bind:if="table.extension">
+                            <slot bind:source="table.extension" selector="tsearch mat-table-search > *" bind:implicit="td" bind:index="td.index"></slot>
+                        </div>
                         <div style="display: flex">
                             <button type="button" class="material-icons" translate="no" bind:onclick="left($event, index)" bind:disabled="index === 0">chevron_left</button>
                             <button type="button" class="material-icons" translate="no" bind:onclick="right($event, index)" bind:disabled="index === length - 1">chevron_right</button>

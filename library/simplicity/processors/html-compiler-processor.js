@@ -442,9 +442,9 @@ function ifStatement(rawAttributes, context, html) {
         type : "if",
         element : html,
         build(parent) {
-            generate();
             parent.appendChild(comment);
             if (value) {
+                generate();
                 parent.appendChild(container);
             }
         },
@@ -454,7 +454,12 @@ function ifStatement(rawAttributes, context, html) {
             if (! isEqual(newValue, value)) {
                 value = newValue;
                 if (value) {
-                    if (! element.isConnected) {
+                    if (element) {
+                        if (! element.isConnected) {
+                            comment.after(element);
+                        }
+                    } else {
+                        generate();
                         comment.after(element);
                     }
                 } else {
