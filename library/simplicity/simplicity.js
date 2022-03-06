@@ -2,142 +2,7 @@ import {register} from "./manager/view-manager.js";
 import {codeGenerator, compiler, membraneFactory} from "./processors/html-compiler-processor.js";
 import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
-import {lifeCycle} from "./processors/life-cycle-processor.js";
-import {debounce} from "./services/tools.js";
-
-export const mix = (superclass) => new MixinBuilder(superclass);
-
-class MixinBuilder {
-    constructor(superclass) {
-        this.superclass = superclass;
-    }
-
-    with(...mixins) {
-        return mixins.reduce((c, mixin) => mixin(c), this.superclass);
-    }
-}
-
-export const Input = (superclass) => class InputMixin extends superclass {
-
-    model = "";
-
-    asyncValidators = [];
-    syncValidators = [];
-
-    errors = [];
-
-    constructor() {
-        super();
-
-        this.addEventListener("model", debounce(this.asyncValidationHandler, 300));
-        this.addEventListener("model", this.syncValidationHandler);
-    }
-
-    asyncValidationHandler() {
-        if (this.asyncValidators.length > 0) {
-            let results = [];
-            for (const validator of this.asyncValidators) {
-                let result = validator.validate(this)
-                    .then((result) => {
-                        let indexOf = this.errors.indexOf(result);
-                        if (indexOf > -1) {
-                            this.errors.splice(indexOf, 1);
-                        }
-                    })
-                    .catch((reason) => {
-                        let indexOf = this.errors.indexOf(reason);
-                        if (indexOf === -1) {
-                            this.errors.push(reason)
-                        }
-                    })
-                results.push(result);
-            }
-
-            Promise.all(results)
-                .then(() => {
-                    lifeCycle();
-                })
-                .catch(() => {
-                    lifeCycle();
-                })
-        }
-    }
-
-    syncValidationHandler() {
-        for (const validator of this.syncValidators) {
-            let result = validator.validate(this);
-            let errorName = Object.keys(result)[0];
-            if (result[errorName]) {
-                let indexOf = this.errors.indexOf(errorName);
-                if (indexOf === - 1) {
-                    this.errors.push(errorName);
-                }
-            } else {
-                let indexOf = this.errors.indexOf(errorName);
-                if (indexOf > - 1) {
-                    this.errors.splice(indexOf, 1);
-                }
-            }
-        }
-    }
-
-    get validity() {
-        let validity = super.validity;
-
-        return new Proxy(validity, {
-            get : (target, p, receiver) => {
-                if (this.errors.indexOf(p) > -1) {
-                    return true;
-                }
-                if (validity) {
-                    return target[p]
-                }
-                return undefined;
-            },
-
-            getOwnPropertyDescriptor: function(target, key) {
-                return { enumerable: true, configurable: true };
-            },
-
-            ownKeys : (target) => {
-                if (validity) {
-                    return Object.keys(target).concat(this.errors);
-                }
-                return this.errors;
-            }
-        })
-    }
-
-    get isInput() {
-        return true;
-    }
-
-    get dirty() {
-        return ! this.pristine
-    }
-
-    get pristine() {
-        return isEqual(this.defaultValue, this.model)
-    }
-
-    get valid() {
-        return this.validity.valid && this.errors.length === 0;
-    }
-
-    reset() {
-        this.value = this.defaultValue;
-        this.dispatchEvent(new Event("input"));
-    }
-
-    addAsyncValidator(value) {
-        this.asyncValidators.push(value);
-    }
-
-    addSyncValidator(value) {
-        this.syncValidators.push(value);
-    }
-
-};
+import {evaluator, isEqual} from "./services/tools.js";
 
 Object.prototype.equals = function (lhs, rhs) {
     if (lhs instanceof Object && rhs instanceof Object) {
@@ -146,40 +11,6 @@ Object.prototype.equals = function (lhs, rhs) {
         return lhs === rhs;
     }
     return lhs === rhs;
-}
-
-export function isEqual(lhs, rhs) {
-    if (lhs instanceof Array && rhs instanceof Array) {
-        if (lhs && rhs && lhs.length === rhs.length) {
-            for (let i = 0; i < lhs.length; i++) {
-                const lh = lhs[i];
-                const rh = rhs[i];
-                if (! isEqual(lh,rh)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    } else if (lhs instanceof Object && rhs instanceof Object) {
-        let lhsProperties = Object.keys(lhs);
-        let rhsProperties = Object.keys(rhs);
-        if (lhsProperties.length === 0 && rhsProperties.length === 0) {
-            return true;
-        }
-        for (let i = 0; i < lhsProperties.length; i++) {
-            const lhsProperty = lhsProperties[i];
-            const rhsProperty = rhsProperties[i];
-
-            if (! isEqual(lhs[lhsProperty], rhs[rhsProperty])) {
-                return false
-            }
-        }
-
-        return true;
-    } else {
-        return Object.equals(lhs, rhs);
-    }
 }
 
 Node.prototype.queryUpwards = function (callback) {
@@ -204,7 +35,7 @@ export const customComponents = new class CustomComponents {
         let template;
         let i18nMessages = {};
 
-        if (clazz.template) {
+        if (Reflect.has(clazz, "template")) {
             let html = domParser.parseFromString(clazz.template, "text/html");
 
             let templateHMTL = html.querySelector("template");
@@ -222,7 +53,8 @@ export const customComponents = new class CustomComponents {
             let scriptElement = html.querySelector("script");
             if (scriptElement) {
                 let textContent = scriptElement.textContent.replaceAll(/\s+/g, " ");
-                let rawMessagesFunction = eval("(" + textContent + ")")
+                let arg = `return function(context, args) {return ${textContent}}`;
+                let rawMessagesFunction = evaluator(arg)()()
                 let rawMessages = rawMessagesFunction();
                 for (const rawMessage of rawMessages) {
                     let withoutSpaces = rawMessage["en"].replaceAll(" ", "");

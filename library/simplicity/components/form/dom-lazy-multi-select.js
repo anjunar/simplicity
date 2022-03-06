@@ -1,6 +1,8 @@
-import {customComponents, Input, isEqual, mix} from "../../simplicity.js";
+import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import DomLazySelect from "./dom-lazy-select.js";
+import DomForm from "../../directives/dom-form.js";
+import {Input, isEqual, mix} from "../../services/tools.js";
 
 class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
 
@@ -9,6 +11,18 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
     label = "name";
     placeholder;
     model = [];
+    name;
+
+    initialize() {
+        if (this.name) {
+            let domForm = this.queryUpwards((element) => {
+                return element instanceof DomForm
+            });
+            if (domForm) {
+                domForm.register(this);
+            }
+        }
+    }
 
     onItemClicked(event) {
         let item = event.target.model;
@@ -16,6 +30,7 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
         if (! find) {
             this.model.push(item)
         }
+        this.dispatchEvent(new CustomEvent("model"))
     }
 
     onDeleteItem(item) {
@@ -24,6 +39,7 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
         if (this.model.length === 0) {
             this.open = false;
         }
+        this.dispatchEvent(new CustomEvent("model"))
     }
 
     onToggle() {
@@ -36,7 +52,7 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {
-                this.model = newValue;
+                this.model = newValue || [];
             }
                 break
             case "placeholder" : {
@@ -51,6 +67,9 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
                 this.label = newValue;
             }
                 break;
+            case "name" : {
+                this.name = newValue
+            }
         }
     }
 
@@ -68,6 +87,9 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
             }, {
                 name: "label",
                 type: "input"
+            }, {
+                name : "name",
+                type : "input"
             }
         ]
     }

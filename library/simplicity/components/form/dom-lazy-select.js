@@ -1,8 +1,9 @@
-import {customComponents, mix, Input} from "../../simplicity.js";
+import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
 import {lifeCycle} from "../../processors/life-cycle-processor.js";
+import {Input, mix} from "../../services/tools.js";
 
 class DomLazySelect extends mix(HTMLElement).with(Input) {
 
@@ -16,6 +17,7 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     label = "name";
 
     defaultValue = "";
+    name;
 
     initialize() {
         window.addEventListener("click", () => {
@@ -30,6 +32,8 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 domForm.register(this);
             }
         }
+
+        this.render();
     }
 
     render() {
@@ -117,7 +121,10 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             } break;
             case "label" : {
                 this.label = newValue;
-            }
+            } break;
+            case "name" : {
+                this.name = newValue
+            } break;
         }
     }
 
@@ -138,6 +145,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 type : "input"
             }, {
                 name : "label",
+                type : "input"
+            }, {
+                name : "name",
                 type : "input"
             }
         ]

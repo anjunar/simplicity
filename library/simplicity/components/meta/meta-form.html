@@ -7,8 +7,8 @@
 <body>
     <template>
         <form is="dom-form" bind:model="model">
-            <meta-input bind:for="let property of properties()" bind:model="property"></meta-input>
-            <button bind:for="let action of model.actions" type="button" bind:onclick="send(action)">{{action.rel}}</button>
+            <meta-input bind:for="let [key, value] of model.$schema.properties" bind:schema="value" bind:name="key"></meta-input>
+            <button bind:for="let [key, action] of links(model.$schema.links)" type="button" bind:onclick="send(action)">{{key}}</button>
         </form>
     </template>
 </body>

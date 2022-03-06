@@ -1,3 +1,5 @@
+import {cachingProxy, evaluator} from "../services/tools.js";
+
 function tokenizer(expression) {
 
     let tags = [
@@ -8,6 +10,14 @@ function tokenizer(expression) {
         {
             type : "placeholder",
             regex: /\$event|\$value|\$children/y
+        },
+        {
+            type : "variableDeclaration",
+            regex: /let|const|var/y
+        },
+        {
+            type : "operation",
+            regex : /[+\-*/<>%=!&|]+|of/y
         },
         {
             type : "property",
@@ -24,10 +34,6 @@ function tokenizer(expression) {
         {
             type : "string",
             regex : /'[^']*'/y
-        },
-        {
-            type : "operation",
-            regex : /[+\-*/<>%=!&|]+/y
         },
         {
             type : "conditional",
@@ -50,6 +56,14 @@ function tokenizer(expression) {
             regex: /}/y
         },
         {
+            type : "leftSquareBracket",
+            regex: /\[/y
+        },
+        {
+            type : "rightSquareBracket",
+            regex: /\]/y
+        },
+        {
             type : "whitespace",
             regex : /\s+/y
         },
@@ -60,6 +74,10 @@ function tokenizer(expression) {
         {
             type : "comma",
             regex: /,/y
+        },
+        {
+            type : "semicolon",
+            regex: /;/y
         }
     ]
 
@@ -111,6 +129,11 @@ function parser(tokens) {
         let token = tokens[current];
 
         switch (token.type) {
+            case "semicolon" : {
+                current++
+
+                return walk(before)
+            }
             case "reserved" : {
                 current++
 
@@ -133,6 +156,41 @@ function parser(tokens) {
 
                 return node;
             }
+            case "variableDeclaration" : {
+                current++
+
+                let node = {
+                    type : "VariableDeclaration",
+                    kind : token.value,
+                    before : before,
+                    init : null,
+                    id : null
+                }
+
+                token = tokens[current];
+
+                if (token && token.type === "leftSquareBracket") {
+                    stack.push(node);
+                    node.id = walk(node);
+                }
+
+                if (token && token.type === "property") {
+                    stack.push(node);
+                    node.id = walk(node);
+                }
+
+                token = tokens[current];
+
+                if (token && token.type === "operation") {
+                    node.value = token.value
+                    current++
+                    node.init = walk(node);
+                }
+
+                stack.pop();
+
+                return node;
+            }
             case "string" : {
                 current++
 
@@ -144,6 +202,11 @@ function parser(tokens) {
 
                 token = tokens[current];
                 if (token && token.type === "operation") {
+                    stack.push(node);
+                    node = walk(node);
+                }
+
+                if (token && token.type === "conditional") {
                     stack.push(node);
                     node = walk(node);
                 }
@@ -184,6 +247,7 @@ function parser(tokens) {
                     }
                 }
 
+                let top = stack[stack.length -1];
                 if (before === null || before.type !== "Identifier") {
                     token = tokens[current];
 
@@ -197,7 +261,7 @@ function parser(tokens) {
                         node = walk(node);
                     }
 
-                    if (token && token.type === "operation") {
+                    if (token && token.type === "operation" && top?.type !== "VariableDeclaration") {
                         stack.push(node);
                         node = walk(node);
                     }
@@ -218,18 +282,33 @@ function parser(tokens) {
 
                     node.argument = walk(node)
                 } else {
-                    node = {
-                        type: "BinaryExpression",
-                        operator: token.value,
-                        before : before
-                    };
+                    if (token.value === "=") {
+                        node = {
+                            type : "AssignmentExpression",
+                            operator : token.value,
+                            left : stack.pop(),
+                        }
 
-                    node.left = stack.pop();
-                    node.right = walk(node);
+                        node.right = walk(node)
+                    } else {
+                        node = {
+                            type: "BinaryExpression",
+                            operator: token.value,
+                            before : before,
+                            left : stack.pop()
+                        };
+
+                        node.right = walk(node);
+                    }
                 }
 
                 token = tokens[current];
                 if (token && token.type === "operation") {
+                    stack.push(node);
+                    node = walk(node);
+                }
+
+                if (token && token.type === "conditional") {
                     stack.push(node);
                     node = walk(node);
                 }
@@ -305,6 +384,12 @@ function parser(tokens) {
                     }
 
                     current++
+                    token = tokens[current];
+
+                    if (token && token.type === "conditional") {
+                        stack.push(node);
+                        node = walk(node);
+                    }
 
                     if (token && token.type === "operation") {
                         stack.push(node);
@@ -312,6 +397,29 @@ function parser(tokens) {
                     }
 
                     return node;
+                }
+            }
+            case "leftSquareBracket" : {
+                current++
+                let top = stack[stack.length - 1];
+                if (top && top.type === "VariableDeclaration") {
+                    let node = {
+                        type : "ArrayPattern",
+                        elements : [],
+                        before : before
+                    }
+
+                    while (token.type !== "rightSquareBracket") {
+                        node.elements.push(walk(node))
+                        token = tokens[current];
+                    }
+
+                    current++
+                    token = tokens[current]
+
+                    return node;
+                } else {
+                    return before;
                 }
             }
             case "conditional" : {
@@ -335,19 +443,33 @@ function parser(tokens) {
 
                 return node;
             }
+            default : {
+                throw new Error("Nothing found for " + JSON.stringify(token))
+            }
         }
     }
 
-    while (current < tokens.length) {
-        stack.push(walk(null));
+    let ast = {
+        type : "Program",
+        body : []
     }
 
-    return stack.pop();
+    while (current < tokens.length) {
+        let items = walk(null);
+        ast.body.push(items)
+    }
+
+    return ast;
 
 }
 
-function transformator(node, parent, callback) {
+function transformator(node, parent, property, callback) {
     switch (node.type) {
+        case "Program" :
+            return {
+                type : node.type,
+                body : node.body.map(element => transformator(element, node, "body", callback))
+            }
         case "ReservedLiteral" :
             return node;
         case "PlaceholderLiteral" :
@@ -360,62 +482,87 @@ function transformator(node, parent, callback) {
         case "NumberLiteral" :
             return node
         case "Identifier" : {
-            if (parent === null || parent.type !== "ObjectExpression") {
+            if (parent === null || (parent.type !== "ObjectExpression" && (parent.type !== "VariableDeclaration" || property === "init"))) {
                 if (node.value !== "this") {
                     node.value = callback(node.value)
                 }
             }
             return node
         }
+        case "AssignmentExpression" : {
+            return {
+                type : node.type,
+                operator: node.operator,
+                left: transformator(node.left, node, "left", callback),
+                right: transformator(node.right, node, "right", callback)
+            }
+        }
+        case "ArrayPattern" : {
+            return {
+                type : node.type,
+                elements : node.elements.map((arg) => transformator(arg, node, "elements", callback))
+            }
+        }
+        case "VariableDeclaration" : {
+            return {
+                type : node.type,
+                kind : node.kind,
+                value : node.value,
+                id : transformator(node.id, node, "id", callback),
+                init : transformator(node.init, node, "init", callback)
+            }
+        }
         case "UnaryExpression" : {
             return {
                 type : node.type,
                 operator: node.operator,
-                argument: transformator(node.argument, node, callback)
+                argument: transformator(node.argument, node, "argument", callback)
             }
         }
         case "BinaryExpression" : {
             return {
                 type: node.type,
-                left : transformator(node.left, node, callback),
+                left : transformator(node.left, node, "left", callback),
                 operator : node.operator,
-                right : transformator(node.right, node, callback)
+                right : transformator(node.right, node, "right", callback)
             }
         }
         case "ConditionalExpression" :
             let result = {
                 type : node.type,
-                test: transformator(node.test, node, callback),
-                consequent: transformator(node.consequent, node, callback)
+                test: transformator(node.test, node, "test", callback),
+                consequent: transformator(node.consequent, node, "consequent", callback)
             };
 
             if (node.alternate) {
-                result.alternate = transformator(node.alternate, node, callback)
+                result.alternate = transformator(node.alternate, node, "alternate", callback)
             }
 
             return node
         case "CallExpression" :
             return {
                 type : node.type,
-                callee: transformator(node.callee, node, callback),
-                arguments: node.arguments.map((arg) => transformator(arg, node, callback))
+                callee: transformator(node.callee, node, "callee", callback),
+                arguments: node.arguments.map((arg) => transformator(arg, node, "arguments", callback))
             }
         case "ObjectExpression" :
             return {
                 type : node.type,
                 parameters : node.parameters.map((entry) => {
                     return {
-                        key : transformator(entry.key, node, callback),
-                        value : transformator(entry.value, node, callback)
+                        key : transformator(entry.key, node, "key", callback),
+                        value : transformator(entry.value, node, "value", callback)
                     }
                 })
             }
     }
 }
 
-function codeGenerator(node) {
+export function codeGenerator(node) {
 
     switch (node.type) {
+        case "Program" :
+            return node.body.map(element => codeGenerator(element)).join(";\n")
         case "ReservedLiteral" :
             return node.value;
         case "PlaceholderLiteral" :
@@ -431,6 +578,12 @@ function codeGenerator(node) {
             }
             return value
         }
+        case "AssignmentExpression" :
+            return codeGenerator(node.left) + " " + " " +  node.operator + " " + codeGenerator(node.right);
+        case "ArrayPattern" :
+            return "[" + node.elements.map((element) => codeGenerator(element)).join(", ") + "]"
+        case "VariableDeclaration" :
+            return node.kind + " " + codeGenerator(node.id) + " " + node.value + " " + codeGenerator(node.init)
         case "UnaryExpression" :
             return node.operator + " " + codeGenerator(node.argument)
         case "BinaryExpression" :
@@ -448,12 +601,17 @@ function codeGenerator(node) {
     }
 }
 
-export function compiler(expression, callback) {
+export function astGenerator(expression) {
     let tokens = tokenizer(expression);
-    let ast = parser(tokens);
-    let transformed = transformator(ast, null, callback)
-    return codeGenerator(transformed);
+    return parser(tokens);
 }
+
+export const compiler = cachingProxy(function(expression, callback) {
+        let ast = astGenerator(expression);
+        let transformed = transformator(ast, null, null, callback)
+        return codeGenerator(transformed);
+    }
+)
 
 const proxyCache = new WeakMap();
 
@@ -502,6 +660,12 @@ export function evaluation(expression, context, args) {
         return `context.${property}`
     });
 
-    let func = Function(`return function(context, args) {return ${output}}`);
-    return func()(proxy, args)
+    try {
+        let arg = `return function(context, args) {return ${output}}`;
+        let func = evaluator(arg)
+        return func()(proxy, args)
+    } catch (e) {
+        console.error(e)
+    }
+
 }

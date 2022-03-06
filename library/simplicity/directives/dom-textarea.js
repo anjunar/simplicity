@@ -1,13 +1,16 @@
-import {customComponents, Input, mix} from "../simplicity.js";
+import {customComponents} from "../simplicity.js";
 import DomForm from "./dom-form.js";
+import {Input, mix} from "../services/tools.js";
 
 class DomTextarea extends mix(HTMLTextAreaElement).with(Input) {
 
+    model;
 
     constructor() {
         super();
 
         this.addEventListener("input", () => {
+            this.model = this.value
             this.dispatchEvent(new CustomEvent("model"))
         })
     }
@@ -35,7 +38,7 @@ class DomTextarea extends mix(HTMLTextAreaElement).with(Input) {
     static get observedAttributes() {
         return [
             {
-                name: "value",
+                name: "model",
                 type: "two-way"
             }
         ]

@@ -1,7 +1,7 @@
-import {evaluation} from "./js-compiler-processor.js";
-import {isEqual} from "../simplicity.js";
+import {astGenerator, evaluation, codeGenerator as jsCodeGenerator} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
 import {lifeCycle} from "./life-cycle-processor.js";
+import {cachingProxy, evaluator, isEqual} from "../services/tools.js";
 
 export const contentRegistry = new WeakMap();
 
@@ -39,22 +39,21 @@ export function content(element, implicit = "undefined") {
     return fragment;
 }
 
+const findProperties = cachingProxy(function(object) {
+        let cursor = object;
 
-function findProperties(object) {
-    let cursor = object;
-
-    let result = [];
-    while (cursor !== null) {
-        let ownPropertyNames = Object.getOwnPropertyNames(cursor);
-        result.push(...ownPropertyNames);
-        cursor = Object.getPrototypeOf(cursor);
-        if (cursor && cursor.constructor.name.startsWith("HTML")) {
-            cursor = null
+        let result = [];
+        while (cursor !== null) {
+            let ownPropertyNames = Object.getOwnPropertyNames(cursor);
+            result.push(...ownPropertyNames);
+            cursor = Object.getPrototypeOf(cursor);
+            if (cursor && cursor.constructor.name.startsWith("HTML")) {
+                cursor = null
+            }
         }
+        return result;
     }
-
-    return result;
-}
+)
 
 const proxyCache = new WeakMap();
 
@@ -152,16 +151,20 @@ function interpolationStatement(text, context) {
         return document.createTextNode(expression);
     }
 
-    let textNode = generator();
+    let textNode;
 
     return {
         type : "interpolation",
         text : text,
         build(parent) {
+            textNode = generator();
             parent.appendChild(textNode);
         },
         update() {
-            textNode.textContent = evalText();
+            let textContent = evalText();
+            if (textContent !== textNode.textContent) {
+                textNode.textContent = textContent;
+            }
         }
     }
 }
@@ -289,30 +292,36 @@ function svgStatement(tagName, attributes, children) {
 
 
 function forExpressions(expressions) {
-    let letRegex = /let\s+(\w[\w\d]+)\s+of\s+(\w[\w\d.,()\s]+)/;
-    let onRenderedRegex = /onRendered\s+=\s+(\w[\w\d.]*\(\$children\))/;
+    let ast = astGenerator(expressions);
 
     let result = {};
 
-    let expressionList = expressions.split(";");
-    for (let expression of expressionList) {
-        expression = expression.trim();
-        if (letRegex.test(expression)) {
-            let regexResult = letRegex.exec(expression);
-            let variable = regexResult[1];
-            let source = regexResult[2]
-            result.for = {
-                expression : expression,
-                variable : variable,
-                source : source
+    for (const expression of ast.body) {
+        if (expression.type === "VariableDeclaration") {
+            if (expression.id.type === "ArrayPattern") {
+                result.for = {
+                    expression : jsCodeGenerator(expression),
+                    variable : expression.id.elements.map(element => element.value),
+                    source : jsCodeGenerator(expression.init)
+                }
+            } else {
+                result.for = {
+                    expression : jsCodeGenerator(expression),
+                    variable : expression.id.value,
+                    source : jsCodeGenerator(expression.init)
+                }
             }
         }
-        if (onRenderedRegex.test(expression)) {
-            let regexResult = onRenderedRegex.exec(expression);
-            let func = regexResult[1]
+        if (expression.type === "AssignmentExpression" && expression.left.value === "onRendered") {
             result.onRendered = {
-                expression : expression,
-                func : func
+                expression : jsCodeGenerator(expression),
+                func : jsCodeGenerator(expression.right)
+            }
+        }
+        if (expression.type === "AssignmentExpression" && expression.left.value === "force") {
+            result.force = {
+                expression : jsCodeGenerator(expression),
+                enabled : true
             }
         }
     }
@@ -323,28 +332,51 @@ function forExpressions(expressions) {
 function forStatement(rawAttributes, context, callback) {
 
     let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:for"))
-    let expressions = attribute.split("=")[1];
+    let indexOf = attribute.indexOf("=");
+    let expressions = attribute.substr(indexOf + 1)
 
     let data = forExpressions(expressions);
 
     let children = [];
-    let array = Array.from(evaluation(data.for.source, context));
+    let result = evaluation(data.for.source, context);
+    let array;
+    if (result instanceof Array) {
+        array = Array.from(result);
+    } else if (result instanceof Object) {
+        array = Object.entries(result);
+    } else {
+        console.log(`For loops data source is a ${typeof result} from path ${data.for.source}`)
+    }
+
     let ast = [];
-    
+
     let container = document.createDocumentFragment();
     let comment = document.createComment(data.for.expression);
 
     function generate() {
         array.forEach((item, index) => {
             let instance = {};
-            instance[data.for.variable] = item;
+            if (data.for.variable instanceof Array) {
+                let [key, value] = item;
+                instance[data.for.variable[0]] = key;
+                instance[data.for.variable[1]] = value;
+            } else {
+                instance[data.for.variable] = item;
+            }
+
             instance["index"] = index;
             instance["length"] = array.length;
-            let astLeaf = callback(new Context(instance, context));
+            let newContext = new Context(instance, context);
+            let astLeaf = callback(newContext);
             ast.push(astLeaf);
             let build = astLeaf.build(container);
             children.push(build);
+            newContext.instance = build;
+            Object.assign(build, instance)
         })
+
+        comment.children = children;
+
     }
 
     return {
@@ -361,8 +393,18 @@ function forStatement(rawAttributes, context, callback) {
             return children;
         },
         update: function () {
-            let newArray = Array.from(evaluation(data.for.source, context));
-            if (!isEqual(newArray, array)) {
+            let result = evaluation(data.for.source, context);
+            let newArray;
+            if (result instanceof Array) {
+                newArray = Array.from(result);
+            } else
+                if (result instanceof Object) {
+                    newArray = Object.entries(result);
+                } else {
+                    console.log(`For loops data source is a ${typeof result} from path ${data.for.source}`)
+                }
+
+            if (!isEqual(newArray, array) || data.force?.enabled) {
                 array = newArray;
                 for (const child of children) {
                     child.remove();
@@ -421,7 +463,9 @@ function ifStatement(rawAttributes, context, html) {
                     }
                 }
             }
-            html.update();
+            if (newValue) {
+                html.update();
+            }
         }
     }
 }
@@ -456,7 +500,20 @@ function slotStatement(rawAttributes, context, contents) {
     let values = boundAttributesFunction()
 
     let container = document.createDocumentFragment();
-    let comment = document.createComment("slot");
+    let data = "slot";
+    if (values.name) {
+        data += " name=" + values.name
+    }
+    if (values.index) {
+        data += " index=" + values.index
+    }
+    if (values.selector) {
+        data += " selector=" + values.selector
+    }
+    if (values.implicit) {
+        data += " implicit=" + values.implicit
+    }
+    let comment = document.createComment(data);
     let children = [];
 
     function generate() {
@@ -619,7 +676,18 @@ function letStatement(rawAttributes, implicit, context, callback) {
     let instance = {};
     instance[values.let] = implicit;
     let newContext = new Context(instance, context);
-    return callback(newContext);
+    let ast = callback(newContext);
+    return {
+        build(parent) {
+            let element = ast.build(parent);
+            newContext.instance = element;
+            Object.assign(element, instance)
+            return element
+        },
+        update() {
+            ast.update();
+        }
+    }
 }
 
 function isCompositeComponent(node) {
@@ -741,13 +809,14 @@ export function codeGenerator(nodes) {
     }
 
     let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
-    let func = Function(`return function(forStatement, slotStatement, html, svg, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement) {return ${expression}}`);
+    let arg = `return function(forStatement, slotStatement, html, svg, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement) {return ${expression}}`;
+    let func = evaluator(arg)
     return func()(forStatement, slotStatement, htmlStatement, svgStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement)
 }
 
 export function compiler(template, instance, content, implicit) {
     let container = document.createDocumentFragment();
-    let activeTemplate = template(new Context(instance), content, implicit);
+    let activeTemplate = template(new Context(instance, new Context(window)), content, implicit);
 
     let component = new Component(activeTemplate);
     component.build(container);

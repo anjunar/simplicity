@@ -1,6 +1,7 @@
-import {customComponents, mix, Input} from "../simplicity.js";
+import {customComponents} from "../simplicity.js";
 import DomForm from "./dom-form.js";
 import {lifeCycle} from "../processors/life-cycle-processor.js";
+import {Input, mix} from "../services/tools.js";
 
 
 class DomInput extends mix(HTMLInputElement).with(Input) {
@@ -9,7 +10,7 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
     initialize() {
         let valueChangeHandler = () => {
             if (this.type === "number") {
-                this.model = this.valueAsNumber;
+                this.model = this.valueAsNumber || "";
             } else {
                 this.model = this.value;
             }

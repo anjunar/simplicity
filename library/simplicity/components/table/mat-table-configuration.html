@@ -14,7 +14,7 @@
         <mat-tabs bind:page="page">
             <mat-tab bind:for="let td of table.configuration(table.columns, true)">
                 <div>
-                    <slot bind:source="table" selector="thead tr td *" bind:index="td.index" import="true"></slot>
+                    <slot bind:source="table" selector="thead tr td *" bind:index="td.index"></slot>
                 </div>
             </mat-tab>
         </mat-tabs>
@@ -25,10 +25,10 @@
                         <mat-checkbox-container placeholder="Visible">
                             <input is="dom-input" type="checkbox" bind:model="td.visible">
                         </mat-checkbox-container>
-                        <input is="dom-input" type="text" bind:onvalue="table.load(td.path, $event)" placeholder="Search" style="margin-left: 5px; margin-right: 5px">
+                        <slot bind:source="table.extension" selector="tsearch mat-table-search > *" bind:implicit="td" bind:index="td.index"></slot>
                         <div style="display: flex">
-                            <button type="button" class="material-icons" translate="no" bind:onclick="left(index)" bind:disabled="index === 0">chevron_left</button>
-                            <button type="button" class="material-icons" translate="no" bind:onclick="right(index)" bind:disabled="index === length - 1">chevron_right</button>
+                            <button type="button" class="material-icons" translate="no" bind:onclick="left($event, index)" bind:disabled="index === 0">chevron_left</button>
+                            <button type="button" class="material-icons" translate="no" bind:onclick="right($event, index)" bind:disabled="index === length - 1">chevron_right</button>
                         </div>
                     </div>
                 </div>

@@ -50,7 +50,7 @@ class MatInputContainer extends HTMLElement {
     inputEmpty() {
         let element = this.querySelector("input");
         if (element) {
-            return element.value === "" && element.type !== "local-datetime" && element.type !== "date"
+            return element.value === "" && element.type !== "datetime-local" && element.type !== "date"
         }
     }
 

@@ -8,19 +8,12 @@ class MetaForm extends HTMLElement {
 
     model = {};
 
-    properties() {
-        let result = [];
-        for (const property of Object.keys(this.model.$schema.properties)) {
-            let value = {};
-            Object.assign(value, this.model.$schema.properties[property])
-            value.name = property;
-            result.push(value)
-        }
-        return result;
-    }
-
     send(action) {
         jsonClient.action(action.method, action.url, {body : this.model})
+    }
+
+    links(links) {
+        return Object.entries(links).filter(([key, link]) => link.method !== "GET");
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

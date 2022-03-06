@@ -3,25 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        meta-column {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <template>
-    <div bind:switch="meta.type">
+    <div bind:switch="schema.type">
         <case value="image">
-            <mat-image-upload bind:model="model" style="width: 320px; height: 200px"></mat-image-upload>
+            <img style="max-width: 160px; max-height: 100px" bind:src="model.data"/>
         </case>
-        <case value="lazyselect">
-            <dom-lazy-select bind:items="domLazySelectSource(meta)" bind:model="model" bind:label="domLazySelectLabel(meta)">
-                <div let="data">{{domLazySelectOption(meta, data)}}</div>
-            </dom-lazy-select>
+        <case value="array">
+            <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">
+                {{multiSelect(model, schema)}}
+            </div>
         </case>
-        <case value="lazymultiselect">
-            <dom-lazy-multi-select bind:items="domLazySelectSource(meta)" bind:model="model" bind:label="domLazySelectLabel(meta)">
-                <div let="data">{{domLazySelectOption(meta, data)}}</div>
-            </dom-lazy-multi-select>
+        <case value="object">
+            <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">
+                {{select(model, schema)}}
+            </div>
         </case>
         <case value="default">
-            <input is="dom-input" bind:type="meta.type" bind:model="model">
+            <div bind:switch="schema.format">
+                <case value="date-time">
+                    <div>{{dateTime(model)}}</div>
+                </case>
+                <case value="date">
+                    <div>{{date(model)}}</div>
+                </case>
+                <case value="default">
+                    <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{model}}</div>
+                </case>
+            </div>
+
         </case>
     </div>
 </template>

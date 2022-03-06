@@ -1,7 +1,8 @@
-import {customComponents, Input, mix} from "../../simplicity.js";
+import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
+import {Input, mix} from "../../services/tools.js";
 
 class MatImageUpload extends mix(HTMLElement).with(Input) {
 

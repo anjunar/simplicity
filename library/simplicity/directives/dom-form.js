@@ -1,4 +1,5 @@
-import {customComponents, Input, mix} from "../simplicity.js";
+import {customComponents} from "../simplicity.js";
+import {Input, mix} from "../services/tools.js";
 
 class DomForm extends mix(HTMLFormElement).with(Input) {
 
@@ -21,10 +22,11 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         for (const component of this.components) {
             if (this.model) {
                 let value = this.model[component.name];
-                if (component.model !== value) {
-                    component.model = value;
-                    component.value = value;
-                    component.defaultValue = value;
+                if (value !== undefined) {
+                    if (component.model !== value) {
+                        component.model = value;
+                        component.value = value;
+                    }
                 }
             }
         }
@@ -40,9 +42,11 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
 
         if (this.model) {
             let value = this.model[component.name];
-            component.model = value;
-            component.value = value;
-            component.defaultValue = value;
+            if (value !== undefined) {
+                component.model = value;
+                component.value = value;
+                component.defaultValue = value;
+            }
         }
 
         component.formular = this;

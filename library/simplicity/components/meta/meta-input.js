@@ -1,56 +1,61 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomInput from "../../directives/dom-input.js";
-import MatInputContainer from "../form/container/mat-input-container.js";
-import MatImageUpload from "../form/mat-image-upload.js";
-import MatCheckboxContainer from "../form/container/mat-checkbox-container.js";
-import {jsonClient} from "../../services/client.js";
-import DomLazySelect from "../form/dom-lazy-select.js";
-import DomLazyMultiSelect from "../form/dom-lazy-multi-select.js";
-import MatEditor from "../form/mat-editor.js";
 
 class MetaInput extends HTMLElement {
 
-    model;
+    name;
+    schema;
 
-    domLazySelect = (model) => {
-        let link = model.links.find((link) => link.rel === "list");
-        return (query, callback) => {
-            jsonClient.action(link.method, link.url)
-                .then((response) => {
-                    callback(response.rows, response.size)
-                })
+    container;
+
+    load() {
+        switch (this.schema.widget) {
+            case "checkbox" : return import("./meta-input/meta-input-checkbox.js");
+            case "editor" : return import("./meta-input/meta-input-editor.js");
+            case "image" : return import("./meta-input/meta-input-image-upload.js");
+            case "lazy-multi-select" : return import("./meta-input/meta-input-lazy-multi-select.js");
+            case "lazy-select" : return import("./meta-input/meta-input-lazy-select.js");
+            case "textarea" : return import("./meta-input/meta-input-textarea.js");
+            default : return import("./meta-input/meta-input-input.js");
         }
     }
 
-    domLazySelectOption(meta, data) {
-        return meta.properties.filter((property) => property.naming).map((property) => data[property.name]).join(" ")
-    }
-
-    domLazySelectLabel(meta) {
-        return meta.properties.filter((property) => property.naming).map((property) => property.name)
+    initialize() {
+        this.load().then(result => {
+            let component = new result.default();
+            component.schema = this.schema;
+            component.name = this.name;
+            this.container.appendChild(component);
+        })
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "model" : {
-                this.model = newValue;
+            case "schema" : {
+                this.schema = newValue;
             }
-                break
+                break;
+            case "name" : {
+                this.name = newValue;
+            }
+                break;
         }
     }
 
     static get observedAttributes() {
         return [
             {
-                name: "model",
+                name: "schema",
+                type: "input"
+            }, {
+                name: "name",
                 type: "input"
             }
         ]
     }
 
     static get components() {
-        return [DomInput, DomLazySelect, DomLazyMultiSelect, MatInputContainer, MatCheckboxContainer, MatImageUpload, MatEditor]
+        return []
     }
 
     static get template() {

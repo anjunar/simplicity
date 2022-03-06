@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <mat-input-container bind:placeholder="schema.title">
+            <dom-lazy-multi-select bind:items="domLazySelect(schema)" bind:label="domLazySelectLabel(schema)" bind:name="name">
+                <div let="data">{{domLazySelectOption(schema, data)}}</div>
+            </dom-lazy-multi-select>
+        </mat-input-container>
+    </template>
+</body>
+</html>

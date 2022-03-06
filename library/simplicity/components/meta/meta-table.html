@@ -5,28 +5,34 @@
     <title>Title</title>
 </head>
 <body>
-  <template>
-      <table is="mat-table" bind:items="items" bind:onmodel="onModel($event)" bind:create="create" bind:oncreate="onCreate()">
-          <colgroup>
-              <col bind:for="let column of properties()" bind:path="column.name">
-          </colgroup>
-          <thead>
+<template>
+    <mat-table-extension>
+        <tsearch>
+            <div bind:for="let [key, column] of model.$schema.properties">
+                <mat-table-search bind:path="key" bind:sortable="column.type === 'string'">
+                    <meta-table-filter let=model bind:schema="column" bind:model="model" name="search" bind:onmodel="search()"></meta-table-filter>
+                </mat-table-search>
+            </div>
+        </tsearch>
+        <table is="mat-table" bind:items="items" bind:onmodel="onModel($event)">
+            <thead>
             <tr>
-                <td bind:for="let column of properties()">
-                    <div>{{column.name}}</div>
+                <td bind:for="let [key, column] of model.$schema.properties">
+                    <div>{{column.title}}</div>
                 </td>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             <tr>
-                <td bind:for="let column of properties()">
+                <td bind:for="let [key, column] of model.$schema.properties">
                     <div let="data">
-                        <meta-column bind:meta="column" bind:model="data.${column.name}"></meta-column>
+                        <meta-column bind:schema="column" bind:model="data.${key}"></meta-column>
                     </div>
                 </td>
             </tr>
-          </tbody>
-      </table>
-  </template>
+            </tbody>
+        </table>
+    </mat-table-extension>
+</template>
 </body>
 </html>

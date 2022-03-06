@@ -12,14 +12,22 @@ class MatTableConfiguration extends HTMLElement {
     table;
     page = 0;
 
-    left(index) {
-        this.page--
-        this.table.left(index)
+    rnd() {
+        return Math.random();
     }
 
-    right(index) {
+    left(event, index) {
+        event.stopPropagation();
+        this.page--
+        this.table.left(index)
+        return false;
+    }
+
+    right(event, index) {
+        event.stopPropagation();
         this.page++;
         this.table.right(index);
+        return false;
     }
 
     static get components() {

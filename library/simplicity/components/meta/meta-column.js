@@ -1,32 +1,36 @@
 import {customComponents} from "../../simplicity.js";
-import {jsonClient} from "../../services/client.js";
-import DomInput from "../../directives/dom-input.js";
-import DomLazySelect from "../form/dom-lazy-select.js";
-import MatImageUpload from "../form/mat-image-upload.js";
 import {loader} from "../../processors/loader-processor.js";
-import DomLazyMultiSelect from "../form/dom-lazy-multi-select.js";
+import {dateFormat, dateTimeFormat} from "../../services/tools.js";
+import {appManager} from "../../manager/app-manager.js";
 
 class MetaColumn extends HTMLElement {
 
     model;
-    meta;
+    schema;
 
-    domLazySelectSource(model) {
-        let link = model.links.find((link) => link.rel === "list");
-        return (query, callback) => {
-            jsonClient.action(link.method, link.url)
-                .then((response) => {
-                    callback(response.rows, response.size)
-                })
-        }
+    multiSelect(model, meta) {
+        return model.map((item) => Object
+            .entries(meta.items.properties)
+            .filter(([name, property]) => property.naming)
+            .map(([name, property]) => item[name])
+            .join(" ")
+        ).join(" ")
     }
 
-    domLazySelectOption(meta, data) {
-        return meta.properties.filter((property) => property.naming).map((property) => data[property.name]).join(" ")
+    select(model, meta) {
+        return Object
+            .entries(meta.properties)
+            .filter(([name, property]) => property.naming)
+            .map(([name, property]) => model[name])
+            .join(" ")
     }
 
-    domLazySelectLabel(meta) {
-        return meta.properties.filter((property) => property.naming).map((property) => property.name)
+    dateTime(value, meta) {
+        return dateTimeFormat(value, appManager.language)
+    }
+
+    date(value, meta) {
+        return dateFormat(value, appManager.language)
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -35,8 +39,8 @@ class MetaColumn extends HTMLElement {
                 this.model = newValue;
             }
                 break;
-            case "meta" : {
-                this.meta = newValue;
+            case "schema" : {
+                this.schema = newValue;
             }
                 break;
         }
@@ -47,16 +51,15 @@ class MetaColumn extends HTMLElement {
             {
                 name: "model",
                 type: "input"
-            },
-            {
-                name: "meta",
+            }, {
+                name: "schema",
                 type: "input"
             }
         ]
     }
 
     static get components() {
-        return [DomInput, DomLazySelect, DomLazyMultiSelect, MatImageUpload]
+        return []
     }
 
     static get template() {

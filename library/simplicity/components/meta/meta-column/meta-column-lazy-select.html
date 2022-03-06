@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <dom-lazy-select bind:items="domLazySelectSource(meta)" bind:model="model" bind:label="domLazySelectLabel(meta)">
+            <div let="data">{{domLazySelectOption(meta, data)}}</div>
+        </dom-lazy-select>
+    </template>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import {evaluation} from "./js-compiler-processor.js";
-import {isEqual} from "../simplicity.js";
 import {appManager} from "../manager/app-manager.js";
+import {isEqual} from "../services/tools.js";
 
 class BindInterpolationProcessor {
     element;
@@ -23,6 +23,7 @@ class BindInterpolationProcessor {
             for (const AttributeProcessor of attributeProcessorRegistry) {
                 this.processor = new AttributeProcessor(name, value, element, context);
                 if (this.processor.matched) {
+                    this.processor.process();
                     break;
                 } else {
                     this.processor = null
@@ -79,7 +80,9 @@ class StyleAttributeProcessor {
             }
 
             let cssValue = evaluation(value, this.context);
-            this.element.style[keyString] = cssValue;
+            if (this.element.style[keyString] !== cssValue) {
+                this.element.style[keyString] = cssValue;
+            }
         }
     }
 }
@@ -112,7 +115,10 @@ class ClassAttributeProcessor {
         for (const classListElement of classList) {
             result.push(evaluation(classListElement.trim(), this.context));
         }
-        this.element.className = result.join(" ");
+        let classesName = result.join(" ");
+        if (classesName !== this.element.className) {
+            this.element.className = classesName;
+        }
     }
 }
 
@@ -191,7 +197,7 @@ class DynamicBindingAttributeProcessor {
                 } else if (result instanceof Function) {
                     this.oldValue = result;
                 } else if (result instanceof Object){
-                    this.oldValue = JSON.parse(JSON.stringify(result));
+                    this.oldValue = result;
                 } else {
                     this.oldValue = result;
                 }

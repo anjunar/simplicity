@@ -1,38 +1,56 @@
-import {customComponents, Input, mix} from "../../simplicity.js";
+import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {windowManager} from "../../manager/window-manager.js";
 import {contentManager} from "../../manager/content-manager.js";
 import {lifeCycle} from "../../processors/life-cycle-processor.js";
 import DomForm from "../../directives/dom-form.js";
+import {Input, mix} from "../../services/tools.js";
 
 class MatTable extends mix(HTMLTableElement).with(Input) {
 
     index = 0;
-    limit = 5;
+    limit = 10;
     size = 0;
 
     items = () => {};
     window = [];
     columns = [];
+    extension;
 
     name;
     create = false;
 
     preInitialize() {
+        this.extension = this.queryUpwards((element) => element.localName === "mat-table-extension")
         this.columns = [];
-        let content = contentManager.instance(this);
-        let colGroup = content.querySelectorAll("colgroup col")
         let length = this.body.length;
-        for (let i = 0; i < length; i++) {
-            let colElement = colGroup[i];
-            let colAttribute = colElement.getAttribute("path");
 
-            this.columns.push({
-                index: i,
-                visible: true,
-                sort: undefined,
-                path: colAttribute
-            });
+        if (this.extension) {
+            let content = contentManager.instance(this.extension);
+            let tableSearches = content.querySelectorAll("tsearch mat-table-search")
+            for (let i = 0; i < length; i++) {
+                let tableSearch = tableSearches[i];
+                let colAttribute = tableSearch.path;
+                let sortable = tableSearch.sortable;
+
+                this.columns.push({
+                    index: i,
+                    visible: true,
+                    sort: sortable ? undefined : null,
+                    path: colAttribute,
+                    search : ""
+                });
+            }
+        } else {
+            for (let i = 0; i < length; i++) {
+                this.columns.push({
+                    index: i,
+                    visible: true,
+                    sort: null,
+                    path: null,
+                    search : ""
+                });
+            }
         }
 
         if (length > 0) {
@@ -88,6 +106,8 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     }
 
     load(path, event) {
+        this.dispatchEvent(new CustomEvent("load"));
+
         let query = {
             index: this.index,
             limit: this.limit
@@ -100,9 +120,29 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
             }
         }
 
+        let filter = this.columns
+            .filter((column) => {
+                let search = column.search;
+                if (search instanceof Array) {
+                    return search.length > 0;
+                }
+                if (search instanceof Object) {
+                    return search.from && search.to
+                }
+                return column.search.length > 0
+            })
+            .reduce((previous, current) => {
+                let path = current.path;
+                let search = current.search;
+                previous[path] = search;
+                return previous;
+            }, {})
+
         let sorting = this.columns
             .filter((column) => column.sort)
             .map((column) => column.path + ":" + column.sort)
+
+        query.filter = filter;
 
         if (sorting.length > 0) {
             query.sort = sorting

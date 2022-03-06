@@ -1,8 +1,9 @@
-import {customComponents, mix, Input} from "../../simplicity.js";
+import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import EditorToolbar from "./mat-editor/editor-toolbar.js";
 import DomForm from "../../directives/dom-form.js";
 import {contextManager} from "../../manager/context-manager.js";
+import {Input, mix} from "../../services/tools.js";
 
 class MatEditor extends mix(HTMLElement).with(Input) {
 
@@ -23,11 +24,6 @@ class MatEditor extends mix(HTMLElement).with(Input) {
             this.dispatchEvent(new Event("model"));
         });
 
-        let element = this.querySelector("div.content");
-        if (element.innerHTML !== this.model.html) {
-            element.innerHTML = this.model.html;
-        }
-
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
                 return element instanceof DomForm
@@ -35,6 +31,11 @@ class MatEditor extends mix(HTMLElement).with(Input) {
             if (domForm) {
                 domForm.register(this);
             }
+        }
+
+        let element = this.querySelector("div.content");
+        if (element.innerHTML !== this.model.html) {
+            element.innerHTML = this.model.html;
         }
     }
 

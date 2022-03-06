@@ -1,7 +1,6 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {contentManager} from "../../manager/content-manager.js";
-import {lifeCycle} from "../../processors/life-cycle-processor.js";
 
 class MatTabs extends HTMLElement {
 

@@ -1,4 +1,5 @@
-import {customComponents, Input, mix} from "../simplicity.js";
+import {customComponents} from "../simplicity.js";
+import {Input, mix} from "../services/tools.js";
 
 class DomSelect extends mix(HTMLSelectElement).with(Input) {
 
