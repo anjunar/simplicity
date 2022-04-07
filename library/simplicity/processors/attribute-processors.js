@@ -247,9 +247,7 @@ class DomAttributesProcessor {
         if (this.element[this.name] !== result) {
             switch (this.name) {
                 case "disabled" : {
-                    if (result === true || result === "true") {
-                        this.element[this.name] = result;
-                    }
+                    this.element[this.name] = result === true || result === "true";
                 } break;
                 default : {
                     this.element[this.name] = result;

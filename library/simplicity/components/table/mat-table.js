@@ -2,7 +2,7 @@ import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {windowManager} from "../../manager/window-manager.js";
 import {contentManager} from "../../manager/content-manager.js";
-import {lifeCycle} from "../../processors/life-cycle-processor.js";
+import {membraneFactory} from "./../../processors/html-compiler-processor.js";
 import DomForm from "../../directives/dom-form.js";
 import {Input, mix} from "../../services/tools.js";
 
@@ -149,10 +149,10 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         }
 
         this.items(query, (data, size) => {
-            this.window = data;
-            this.size = size;
-            this.open = true;
-            lifeCycle()
+            let membrane = membraneFactory(this);
+            membrane.window = data;
+            membrane.size = size;
+            membrane.open = true;
         })
     }
 
