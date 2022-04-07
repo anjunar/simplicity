@@ -1,25 +1,16 @@
 import {customComponents} from "../../../simplicity.js";
 import {loader} from "../../../processors/loader-processor.js";
+import DomSelect from "../../../directives/dom-select.js";
 import MatInputContainer from "../../form/container/mat-input-container.js";
-import DomInput from "../../../directives/dom-input.js";
 
-class MetaFilterInput extends HTMLElement {
+class MetaInputSelect extends HTMLElement {
 
     schema;
-    model;
-
-    onModel() {
-        this.dispatchEvent(new CustomEvent("model"))
-    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
-                break;
-            case "model" : {
-                this.model = newValue;
             }
         }
     }
@@ -29,21 +20,18 @@ class MetaFilterInput extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name : "model",
-                type : "input"
             }
         ]
     }
 
     static get components() {
-        return [MatInputContainer, DomInput]
+        return [DomSelect, MatInputContainer]
     }
 
     static get template() {
-        return loader("library/simplicity/components/meta/meta-table-filter/meta-filter-input.html")
+        return loader("library/simplicity/components/meta/meta-input/meta-input-select.html")
     }
 
 }
 
-export default customComponents.define("meta-filter-input", MetaFilterInput);
+export default customComponents.define("meta-input-select", MetaInputSelect)

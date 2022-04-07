@@ -7,7 +7,6 @@ import {jsonClient} from "../../../services/client.js";
 class MetaFilterLazyMultiSelect extends HTMLElement {
 
     schema;
-    name;
     model;
 
     onModel() {
@@ -43,11 +42,7 @@ class MetaFilterLazyMultiSelect extends HTMLElement {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
-                break;
-            case "name" : {
-                this.name = newValue;
-            } break;
+            } break
             case "model" : {
                 this.model = newValue;
             }
@@ -59,9 +54,6 @@ class MetaFilterLazyMultiSelect extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name: "name",
-                type : "input"
             }, {
                 name : "model",
                 type : "input"

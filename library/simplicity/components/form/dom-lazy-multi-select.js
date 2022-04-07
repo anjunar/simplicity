@@ -12,6 +12,7 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
     placeholder;
     model = [];
     name;
+    disabled = "false";
 
     initialize() {
         if (this.name) {
@@ -70,6 +71,10 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
             case "name" : {
                 this.name = newValue
             }
+                break
+            case "disabled" : {
+                this.disabled = newValue;
+            }
         }
     }
 
@@ -89,6 +94,9 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
                 type: "input"
             }, {
                 name : "name",
+                type : "input"
+            }, {
+                name : "disabled",
                 type : "input"
             }
         ]

@@ -7,7 +7,6 @@ import {jsonClient} from "../../../services/client.js";
 class MetaFilterLazySelect extends HTMLElement {
 
     schema;
-    name;
     model;
 
     onModel() {
@@ -45,9 +44,6 @@ class MetaFilterLazySelect extends HTMLElement {
                 this.schema = newValue;
             }
                 break;
-            case "name" : {
-                this.name = newValue;
-            } break;
             case "model" : {
                 this.model = newValue;
             }
@@ -59,9 +55,6 @@ class MetaFilterLazySelect extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name: "name",
-                type : "input"
             }, {
                 name : "model",
                 type : "input"

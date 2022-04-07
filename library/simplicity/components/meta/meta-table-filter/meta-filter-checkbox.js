@@ -6,7 +6,6 @@ import DomInput from "../../../directives/dom-input.js";
 class MetaFilterCheckbox extends HTMLElement {
 
     schema;
-    name;
     model;
 
     onModel() {
@@ -19,9 +18,6 @@ class MetaFilterCheckbox extends HTMLElement {
                 this.schema = newValue;
             }
                 break;
-            case "name" : {
-                this.name = newValue;
-            } break;
             case "model" : {
                 this.model = newValue;
             }
@@ -33,9 +29,6 @@ class MetaFilterCheckbox extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name: "name",
-                type : "input"
             }, {
                 name : "model",
                 type : "input"

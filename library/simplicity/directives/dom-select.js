@@ -1,5 +1,6 @@
 import {customComponents} from "../simplicity.js";
 import {Input, mix} from "../services/tools.js";
+import DomForm from "./dom-form.js";
 
 class DomSelect extends mix(HTMLSelectElement).with(Input) {
 
@@ -12,6 +13,15 @@ class DomSelect extends mix(HTMLSelectElement).with(Input) {
     }
 
     initialize() {
+        if (this.name) {
+            let domForm = this.queryUpwards((element) => {
+                return element instanceof DomForm
+            });
+            if (domForm) {
+                domForm.register(this);
+            }
+        }
+
         let options = Array.from(this.options);
 
         let option = options.find(option => option.value === this.model);

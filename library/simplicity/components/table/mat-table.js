@@ -228,11 +228,13 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 break;
             case "name" : {
                 this.name = newValue;
-            } break;
+            }
+                break;
             case "create" : {
                 this.create = newValue || newValue === "true";
             }
                 break;
+            default : {}
         }
     }
 
@@ -246,6 +248,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 type : "input"
             }, {
                 name : "create",
+                type : "input"
+            }, {
+                name : "hoover",
                 type : "input"
             }
         ]

@@ -6,45 +6,40 @@ class MatInputContainer extends HTMLElement {
     placeholder;
 
     initialize() {
-        let element = this.querySelector("input");
-        element.placeholder = this.placeholder;
-
-        let errors = this.querySelectorAll("*[slot=error] *[name]");
-        for (const error of errors) {
-            error.style.display = "none"
-        }
-
-    }
-
-    update() {
-        let errors = this.querySelectorAll("*[slot=error] *[name]");
-        for (const errorElement of errors) {
-            errorElement.style.display = "none";
-        }
-
         let input = this.querySelector("input");
-
         if (input) {
-            for (const validity in input.validity) {
-                if (input.validity[validity] === true) {
-                    let errorElement = this.querySelector(`*[slot=error] *[name=${validity}]`);
-                    if (errorElement) {
+            input.placeholder = this.placeholder;
+
+            let errors = this.querySelectorAll("*[slot=error] *[name]");
+            for (const error of errors) {
+                error.style.display = "none"
+            }
+        }
+
+        input.addEventListener("input", () => {
+            let errors = this.querySelectorAll("*[slot=error] *[name]");
+            for (const errorElement of errors) {
+                errorElement.style.display = "none";
+            }
+
+            let input = this.querySelector("input");
+
+            if (input) {
+                for (const validity in input.validity) {
+                    if (input.validity[validity] === true && validity !== "valid") {
+                        let errorElement = this.querySelector(`*[slot=error] *[name=${validity}]`);
                         errorElement.style.display = "inline"
                     }
                 }
-            }
 
-            if (input.formular) {
-                for (const error of input.formular.errors) {
-                    let errorElement = this.querySelector(`*[slot=error] *[name=${error}]`);
-                    if (errorElement) {
-                        if (input.formular.errors.length > 0) {
-                            errorElement.style.display = "inline";
-                        }
+                if (input.formular) {
+                    for (const error of input.formular.errors) {
+                        let errorElement = this.querySelector(`*[slot=error] *[name=${error}]`);
+                        errorElement.style.display = "inline";
                     }
                 }
             }
-        }
+        })
     }
 
     inputEmpty() {

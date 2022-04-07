@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        meta-form {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <template>
         <form is="dom-form" bind:model="model">
-            <meta-input bind:for="let [key, value] of model.$schema.properties" bind:schema="value" bind:name="key"></meta-input>
-            <button bind:for="let [key, action] of links(model.$schema.links)" type="button" bind:onclick="send(action)">{{key}}</button>
+            <meta-input bind:for="let element of model.$schema.properties" bind:schema="element"></meta-input>
+            <button bind:for="let action of links(model.$schema.links)" type="button" bind:onclick="send(action)">{{action.rel}}</button>
         </form>
     </template>
 </body>

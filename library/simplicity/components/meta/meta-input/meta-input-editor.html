@@ -6,7 +6,7 @@
 </head>
 <body>
     <template>
-        <mat-editor style="height: 300px" bind:name="name"></mat-editor>
+        <mat-editor bind:name="schema.name" bind:disabled="schema.readOnly"></mat-editor>
     </template>
 </body>
 </html>

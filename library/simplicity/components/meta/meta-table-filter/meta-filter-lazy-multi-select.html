@@ -7,7 +7,7 @@
 <body>
     <template>
         <mat-input-container bind:placeholder="schema.title">
-            <dom-lazy-multi-select bind:items="domLazySelect(schema)" bind:label="domLazySelectLabel(schema)" bind:model="model.${name}" bind:onmodel="onModel()">
+            <dom-lazy-multi-select bind:items="domLazySelect(schema)" bind:label="domLazySelectLabel(schema)" bind:model="model.search" bind:onmodel="onModel()">
                 <div let="data">{{domLazySelectOption(schema, data)}}</div>
             </dom-lazy-multi-select>
         </mat-input-container>

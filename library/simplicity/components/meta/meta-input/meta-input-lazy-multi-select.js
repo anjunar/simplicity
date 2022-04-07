@@ -7,7 +7,6 @@ import {jsonClient} from "../../../services/client.js";
 class MetaInputLazyMultiSelect extends HTMLElement {
 
     schema;
-    name;
 
     domLazySelect(schema) {
         let link = schema.links.list;
@@ -39,10 +38,6 @@ class MetaInputLazyMultiSelect extends HTMLElement {
             case "schema" : {
                 this.schema = newValue;
             }
-                break;
-            case "name" : {
-                this.name = newValue;
-            }
         }
     }
 
@@ -51,9 +46,6 @@ class MetaInputLazyMultiSelect extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name: "name",
-                type : "input"
             }
         ]
     }

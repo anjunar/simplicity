@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="font-size: small; width: 100%">
+            {{schema.title}}
+            <div style="margin-left: 12px">
+                <div bind:for="let element of model">
+                    <div style="display: flex; width: 100%; margin: 5px">
+                        <meta-form bind:model="element" style="width: 100%"></meta-form>
+                        <button type="button" bind:onclick="removeItem(element)" style="height: 36px" class="material-icons">delete</button>
+                    </div>
+                </div>
+                <button type="button" bind:onclick="addItem()" class="material-icons">add</button>
+            </div>
+        </div>
+    </template>
+</body>
+</html>

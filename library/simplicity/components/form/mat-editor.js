@@ -34,8 +34,12 @@ class MatEditor extends mix(HTMLElement).with(Input) {
         }
 
         let element = this.querySelector("div.content");
-        if (element.innerHTML !== this.model.html) {
-            element.innerHTML = this.model.html;
+        if (this.model.html === undefined || this.model.html === null) {
+            // No Op
+        } else {
+            if (element.innerHTML !== this.model.html) {
+                element.innerHTML = this.model.html;
+            }
         }
     }
 

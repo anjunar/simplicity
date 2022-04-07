@@ -4,15 +4,6 @@ import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
 import {evaluator, isEqual} from "./services/tools.js";
 
-Object.prototype.equals = function (lhs, rhs) {
-    if (lhs instanceof Object && rhs instanceof Object) {
-        lhs = lhs.resolve || lhs;
-        rhs = rhs.resolve || rhs;
-        return lhs === rhs;
-    }
-    return lhs === rhs;
-}
-
 Node.prototype.queryUpwards = function (callback) {
     if (callback(this)) {
         return this;

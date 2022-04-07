@@ -6,16 +6,10 @@ class MetaInputTextarea extends HTMLElement {
 
     schema;
 
-    name;
-
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
-                break;
-            case "name" : {
-                this.name = newValue;
             }
         }
     }
@@ -25,9 +19,6 @@ class MetaInputTextarea extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name: "name",
-                type : "input"
             }
         ]
     }

@@ -7,16 +7,23 @@ class MetaInputInput extends HTMLElement {
 
     schema;
 
-    name;
+    initialize() {
+        let input = this.querySelector("input");
+        let validators = this.schema.validators;
+
+        if (validators.notBlank || validators.notNull) {
+            input.required = true;
+        }
+        if (validators.size) {
+            input.maxLength = validators.size.max;
+            input.minLength = validators.size.min;
+        }
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
-                break;
-            case "name" : {
-                this.name = newValue;
             }
         }
     }
@@ -26,9 +33,6 @@ class MetaInputInput extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name: "name",
-                type : "input"
             }
         ]
     }

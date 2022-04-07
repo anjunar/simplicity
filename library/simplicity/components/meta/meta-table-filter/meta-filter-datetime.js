@@ -6,7 +6,6 @@ import DomInput from "../../../directives/dom-input.js";
 class MetaFilterDatetime extends HTMLElement {
 
     schema;
-    name;
     model;
 
     onModel() {
@@ -29,9 +28,6 @@ class MetaFilterDatetime extends HTMLElement {
                 this.schema = newValue;
             }
                 break;
-            case "name" : {
-                this.name = newValue;
-            } break;
             case "model" : {
                 this.model = newValue;
             }
@@ -43,9 +39,6 @@ class MetaFilterDatetime extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name: "name",
-                type : "input"
             }, {
                 name : "model",
                 type : "input"

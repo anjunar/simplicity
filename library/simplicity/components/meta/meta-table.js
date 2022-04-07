@@ -6,20 +6,6 @@ import {idExtractor, uriTemplate} from "../../services/tools.js";
 import MatTableExtension from "../table/mat-table-extension.js";
 import MatTableSearch from "../table/mat-table-search.js";
 import MetaTableFilter from "./meta-table-filter.js";
-import {lifeCycle} from "../../processors/life-cycle-processor.js";
-
-const request = indexedDB.open("anjunar", 2);
-
-let db;
-
-request.onupgradeneeded = function () {
-    const db = request.result;
-    db.createObjectStore("table", {keyPath: "id"});
-};
-
-request.onsuccess = function () {
-    db = request.result;
-};
 
 class MetaTable extends HTMLElement {
 

@@ -13,13 +13,14 @@
 
         table[is=mat-table] tr td {
             height: 48px;
+            vertical-align: top;
         }
 
         table[is=mat-table] tbody td {
             border-top: 1px solid var(--main-dark1-color);
         }
 
-        table[is=mat-table] tbody tr:hover {
+        table[is=mat-table][hoover=true] tbody tr:hover {
             background-color: var(--main-selected-color);
             color: var(--main-background-color);
         }
@@ -34,7 +35,7 @@
     <template>
         <thead bind:if="header.length > 0">
         <tr>
-            <td bind:for="let td of configuration(columns)">
+            <td bind:for="let td of configuration(columns); let index = index">
                 <div style="display: flex; align-items: center;">
                     <div bind:onclick="showConfiguration()">
                         <strong>
@@ -42,9 +43,9 @@
                         </strong>
                     </div>
                     <div style="flex: 1"></div>
-                    <button test bind:style="display : td.sort === undefined ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="asc(td)">sort</button>
-                    <button test bind:style="display : td.sort === 'asc' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="desc(td)">expand_more</button>
-                    <button test bind:style="display : td.sort === 'desc' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="none(td)">expand_less</button>
+                    <button bind:style="display : td.sort === undefined ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="asc(td)">sort</button>
+                    <button bind:style="display : td.sort === 'asc' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="desc(td)">expand_more</button>
+                    <button bind:style="display : td.sort === 'desc' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="none(td)">expand_less</button>
                     <div style="flex: 1"></div>
                 </div>
             </td>

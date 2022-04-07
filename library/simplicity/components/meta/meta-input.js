@@ -3,7 +3,6 @@ import {loader} from "../../processors/loader-processor.js";
 
 class MetaInput extends HTMLElement {
 
-    name;
     schema;
 
     container;
@@ -16,6 +15,8 @@ class MetaInput extends HTMLElement {
             case "lazy-multi-select" : return import("./meta-input/meta-input-lazy-multi-select.js");
             case "lazy-select" : return import("./meta-input/meta-input-lazy-select.js");
             case "textarea" : return import("./meta-input/meta-input-textarea.js");
+            case "repeat" : return import("./meta-input/meta-input-repeat.js");
+            case "select" : return import("./meta-input/meta-input-select.js");
             default : return import("./meta-input/meta-input-input.js");
         }
     }
@@ -24,7 +25,6 @@ class MetaInput extends HTMLElement {
         this.load().then(result => {
             let component = new result.default();
             component.schema = this.schema;
-            component.name = this.name;
             this.container.appendChild(component);
         })
     }
@@ -34,11 +34,6 @@ class MetaInput extends HTMLElement {
             case "schema" : {
                 this.schema = newValue;
             }
-                break;
-            case "name" : {
-                this.name = newValue;
-            }
-                break;
         }
     }
 
@@ -46,9 +41,6 @@ class MetaInput extends HTMLElement {
         return [
             {
                 name: "schema",
-                type: "input"
-            }, {
-                name: "name",
                 type: "input"
             }
         ]

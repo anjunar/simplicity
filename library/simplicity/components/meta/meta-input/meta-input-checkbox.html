@@ -7,7 +7,7 @@
 <body>
     <template>
         <mat-checkbox-container bind:placeholder="schema.title">
-            <input is="dom-input" type="checkbox" bind:name="name">
+            <input is="dom-input" type="checkbox" bind:name="schema.name" bind:disabled="schema.readOnly">
         </mat-checkbox-container>
     </template>
 </body>

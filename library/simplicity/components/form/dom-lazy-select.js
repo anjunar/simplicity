@@ -18,11 +18,20 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
 
     defaultValue = "";
     name;
+    disabled = "false";
 
     initialize() {
-        window.addEventListener("click", () => {
-            this.open = false;
-        })
+        let listener = () => {
+            if (this.open) {
+                this.open = false;
+            }
+        };
+
+        window.addEventListener("click", listener)
+
+        DomLazySelect.prototype.destroy = () => {
+            window.removeEventListener("click", listener);
+        }
 
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
@@ -83,7 +92,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
 
     openOverlay(event) {
         event.stopPropagation();
-        this.load();
+        if (this.disabled === undefined || this.disabled === "false") {
+            this.load();
+        }
         return false;
     }
 
@@ -125,6 +136,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             case "name" : {
                 this.name = newValue
             } break;
+            case "disabled" : {
+                this.disabled = newValue;
+            }
         }
     }
 
@@ -149,6 +163,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             }, {
                 name : "name",
                 type : "input"
+            }, {
+                name : "disabled",
+                type: "input"
             }
         ]
     }

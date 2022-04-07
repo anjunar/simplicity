@@ -6,16 +6,18 @@ import DomInput from "../../../directives/dom-input.js";
 class MetaInputCheckbox extends HTMLElement {
 
     schema;
-    name;
+
+    initialize() {
+        let input = this.querySelector("input");
+        if (this.schema.validators.notBlank || this.schema.validators.notNull) {
+            input.required = true;
+        }
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
-                break;
-            case "name" : {
-                this.name = newValue;
             }
         }
     }
@@ -25,9 +27,6 @@ class MetaInputCheckbox extends HTMLElement {
             {
                 name: "schema",
                 type: "input"
-            }, {
-                name: "name",
-                type : "input"
             }
         ]
     }

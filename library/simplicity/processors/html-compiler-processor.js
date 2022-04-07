@@ -142,7 +142,11 @@ function interpolationStatement(text, context) {
 
     function evalText() {
         return text.replace(interpolationRegExp, (match, expression) => {
-            return evaluation(expression, context)
+            let result = evaluation(expression, context);
+            if (result === undefined || result === null) {
+                return ""
+            }
+            return result;
         });
     }
 
@@ -298,7 +302,12 @@ function forExpressions(expressions) {
 
     for (const expression of ast.body) {
         if (expression.type === "VariableDeclaration") {
-            if (expression.id.type === "ArrayPattern") {
+            if (expression.id.value === "index") {
+                result.index = {
+                    expression : jsCodeGenerator(expression),
+                    variable : expression.init.value
+                }
+            } else if (expression.id.type === "ArrayPattern") {
                 result.for = {
                     expression : jsCodeGenerator(expression),
                     variable : expression.id.elements.map(element => element.value),
@@ -343,7 +352,11 @@ function forStatement(rawAttributes, context, callback) {
     if (result instanceof Array) {
         array = Array.from(result);
     } else if (result instanceof Object) {
-        array = Object.entries(result);
+        if (data.for.variable instanceof Array) {
+            array = Object.entries(result);
+        } else {
+            array = Object.values(result);
+        }
     } else {
         console.log(`For loops data source is a ${typeof result} from path ${data.for.source}`)
     }
@@ -363,9 +376,12 @@ function forStatement(rawAttributes, context, callback) {
             } else {
                 instance[data.for.variable] = item;
             }
-
-            instance["index"] = index;
-            instance["length"] = array.length;
+            if (data.index) {
+                instance[data.index.variable] = index;
+            }
+            if (data.length) {
+                instance[data.length.variable] = array.length;
+            }
             let newContext = new Context(instance, context);
             let astLeaf = callback(newContext);
             ast.push(astLeaf);
@@ -399,7 +415,11 @@ function forStatement(rawAttributes, context, callback) {
                 newArray = Array.from(result);
             } else
                 if (result instanceof Object) {
-                    newArray = Object.entries(result);
+                    if (data.for.variable instanceof Array) {
+                        newArray = Object.entries(result);
+                    } else {
+                        newArray = Object.values(result);
+                    }
                 } else {
                     console.log(`For loops data source is a ${typeof result} from path ${data.for.source}`)
                 }

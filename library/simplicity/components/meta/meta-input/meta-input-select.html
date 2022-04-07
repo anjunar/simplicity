@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <mat-input-container bind:placeholder="schema.title">
+        <select is="dom-select" bind:name="schema.name">
+            <option bind:for="let option of schema.enum" bind:value="option">{{option}}</option>
+        </select>
+    </mat-input-container>
+</template>
+</body>
+</html>

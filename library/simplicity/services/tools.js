@@ -265,6 +265,15 @@ export const Input = (superclass) => class InputMixin extends superclass {
 
 };
 
+function equals(lhs, rhs) {
+    if (lhs instanceof Object && rhs instanceof Object) {
+        lhs = lhs.resolve || lhs;
+        rhs = rhs.resolve || rhs;
+        return lhs === rhs;
+    }
+    return lhs === rhs;
+}
+
 export function isEqual(lhs, rhs) {
     if (lhs instanceof Array && rhs instanceof Array) {
         if (lhs && rhs && lhs.length === rhs.length) {
@@ -291,7 +300,7 @@ export function isEqual(lhs, rhs) {
 
         return true;
     } else {
-        return Object.equals(lhs, rhs);
+        return equals(lhs, rhs);
     }
 }
 

@@ -2,18 +2,17 @@ import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import MetaInput from "./meta-input.js";
 import DomForm from "../../directives/dom-form.js";
-import {jsonClient} from "../../services/client.js";
 
 class MetaForm extends HTMLElement {
 
     model = {};
 
     send(action) {
-        jsonClient.action(action.method, action.url, {body : this.model})
+        this.dispatchEvent(new CustomEvent("action", {detail: action}));
     }
 
     links(links) {
-        return Object.entries(links).filter(([key, link]) => link.method !== "GET");
+        return Object.values(links).filter((link) => link.method !== "GET");
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

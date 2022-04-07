@@ -29,7 +29,7 @@
 <body>
     <template>
         <div style="display: flex; position: relative">
-            <dom-lazy-select bind:items="items" bind:label="label" bind:onmodel="onItemClicked($event)">
+            <dom-lazy-select bind:items="items" bind:label="label" bind:onmodel="onItemClicked($event)" bind:disabled="disabled">
                 <div let="item">
                     <slot bind:implicit="item"></slot>
                 </div>

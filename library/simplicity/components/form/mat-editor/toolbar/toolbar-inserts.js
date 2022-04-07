@@ -23,7 +23,6 @@ class ToolbarInserts extends HTMLElement {
                     document.getSelection().removeAllRanges();
                     document.getSelection().addRange(rangeAt);
                     document.execCommand("createLink", false, value);
-                    matWindow.close();
                 })
             });
         },
@@ -88,7 +87,6 @@ class ToolbarInserts extends HTMLElement {
                     document.getSelection().removeAllRanges();
                     document.getSelection().addRange(rangeAt);
                     document.execCommand("insertImage", false, value.data);
-                    matWindow.close();
                 })
             })
         },
@@ -123,7 +121,6 @@ class ToolbarInserts extends HTMLElement {
                     document.getSelection().removeAllRanges();
                     document.getSelection().addRange(rangeAt);
                     document.execCommand("insertText", false, value);
-                    matWindow.close();
                 })
             });
         },

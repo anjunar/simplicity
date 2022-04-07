@@ -3,7 +3,6 @@ import {loader} from "../../processors/loader-processor.js";
 
 class MetaTableFilter extends HTMLElement {
 
-    name;
     schema;
     model;
 
@@ -30,7 +29,6 @@ class MetaTableFilter extends HTMLElement {
         this.load().then(result => {
             let component = new result.default();
             component.schema = this.schema;
-            component.name = this.name;
             component.model = this.model;
             component.addEventListener("model", () => {
                 this.dispatchEvent(new CustomEvent("model"))
@@ -45,10 +43,6 @@ class MetaTableFilter extends HTMLElement {
                 this.schema = newValue;
             }
                 break;
-            case "name" : {
-                this.name = newValue;
-            }
-                break;
             case "model" : {
                 this.model = newValue;
             }
@@ -59,9 +53,6 @@ class MetaTableFilter extends HTMLElement {
         return [
             {
                 name: "schema",
-                type: "input"
-            }, {
-                name: "name",
                 type: "input"
             }, {
                 name : "model",
