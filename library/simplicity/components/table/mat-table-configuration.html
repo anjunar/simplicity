@@ -19,7 +19,7 @@
             </mat-tab>
         </mat-tabs>
         <mat-pages bind:page="page">
-            <mat-page bind:for="let td of table.configuration(table.columns, true)">
+            <mat-page bind:for="let td of table.configuration(table.columns, true); let index = index">
                 <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px">
                         <mat-checkbox-container placeholder="Visible">

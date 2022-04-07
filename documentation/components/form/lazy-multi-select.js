@@ -27,6 +27,6 @@ class LazySelect extends HTMLElement {
 }
 
 export default customViews.define({
-    name: "form-lazy-select",
+    name: "form-lazy-multi-select",
     class: LazySelect
 })

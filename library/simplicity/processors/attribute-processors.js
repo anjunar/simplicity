@@ -245,7 +245,17 @@ class DomAttributesProcessor {
     process() {
         let result = evaluation(this.value, this.context);
         if (this.element[this.name] !== result) {
-            this.element[this.name] = result;
+            switch (this.name) {
+                case "disabled" : {
+                    if (result === true || result === "true") {
+                        this.element[this.name] = result;
+                    }
+                } break;
+                default : {
+                    this.element[this.name] = result;
+                }
+            }
+
         }
     }
 }

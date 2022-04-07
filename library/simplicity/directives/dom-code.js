@@ -1,4 +1,10 @@
 import {customComponents} from "../simplicity.js";
+import Highlight from "../../highlight/highlight.js";
+import xmlGrammar from "../../highlight/languages/xml.min.js";
+import javascriptGrammar from "../../highlight/languages/javascript.min.js";
+
+Highlight.registerLanguage("xml", xmlGrammar)
+Highlight.registerLanguage("javascript", javascriptGrammar)
 
 class DomCode extends HTMLElement {
 
@@ -50,12 +56,12 @@ class DomCode extends HTMLElement {
         if (this.getAttribute("lang") === "html5") {
             let htmliFrameElement = templateElement.content.querySelector("iframe");
             let orLanguageName = this.convert(htmliFrameElement.innerHTML);
-            result = hljs.highlight(orLanguageName, {language: 'xml'}).value
+            result = Highlight.highlight(orLanguageName, {language: 'xml'}).value
         }
         if (this.getAttribute("lang") === "javascript") {
             let htmlScriptElement = templateElement.content.querySelector("script");
             let orLanguageName = this.convert(htmlScriptElement.innerHTML);
-            result = hljs.highlight(orLanguageName, {language: 'javascript'}).value
+            result = Highlight.highlight(orLanguageName, {language: 'javascript'}).value
         }
 
         for (const child of Array.from(this.childNodes)) {

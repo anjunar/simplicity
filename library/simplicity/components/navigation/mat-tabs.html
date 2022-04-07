@@ -17,7 +17,7 @@
 <body>
     <template>
         <div class="container">
-            <div bind:for="let tab of tabs; onRendered = rendered($children)">
+            <div bind:for="let tab of tabs; onRendered = rendered($children); let index = index">
                 <slot selector="mat-tab" bind:index="index"></slot>
             </div>
             <div style="flex: 1; border-bottom: 2px solid var(--main-dark1-color)"></div>
