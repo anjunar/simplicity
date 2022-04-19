@@ -1,7 +1,13 @@
-import {astGenerator, evaluation, codeGenerator as jsCodeGenerator} from "./js-compiler-processor.js";
+import {
+    astGenerator,
+    codeGenerator as jsCodeGenerator,
+    collectIdentifiers,
+    evaluation,
+    identifierToArray
+} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
-import {lifeCycle} from "./life-cycle-processor.js";
 import {cachingProxy, evaluator, isEqual} from "../services/tools.js";
+import {appManager} from "../manager/app-manager.js";
 
 export const contentRegistry = new WeakMap();
 
@@ -12,11 +18,13 @@ class Component {
     constructor(ast) {
         this.ast = ast;
     }
+
     build(container) {
         for (const segment of this.ast) {
             segment.build(container);
         }
     }
+
     update() {
         for (const segment of this.ast) {
             segment.update();
@@ -39,7 +47,7 @@ export function content(element, implicit = "undefined") {
     return fragment;
 }
 
-const findProperties = cachingProxy(function(object) {
+const findProperties = cachingProxy(function (object) {
         let cursor = object;
 
         let result = [];
@@ -55,31 +63,208 @@ const findProperties = cachingProxy(function(object) {
     }
 )
 
-const proxyCache = new WeakMap();
+export function activeObjectExpression(expression, context, element) {
+    let identifiers = collectIdentifiers(expression);
+    let outerCallback;
+    let result = {
+        then(callback) {
+            outerCallback = callback;
+        }
+    }
+    for (let identifier of identifiers) {
+        let ast = astGenerator(identifier);
+        let bodyElement = ast.body[0];
 
-export function membraneFactory(instance) {
+        if (bodyElement.type === "Identifier") {
+            let segments = identifierToArray(bodyElement);
+            let activeContext = context.resolve(segments);
+            let lastSegment = segments[segments.length - 1];
+            function getPropertyDescriptor(target, property) {
+                let descriptor = Object.getOwnPropertyDescriptor(target, property);
+                if (descriptor) {
+                    return descriptor;
+                }
+                return getPropertyDescriptor(Object.getPrototypeOf(target), property)
+            }
+            let propertyDescriptor = getPropertyDescriptor(activeContext, lastSegment)
+            let activeObject = activeProxyFactory(activeContext, element);
+            let objectElement = activeObject[lastSegment];
+            if (objectElement instanceof Function) {
+
+            } else {
+                objectElement
+                    .then(result => {
+                        outerCallback(result);
+                    })
+            }
+        }
+        if (bodyElement.type === "CallExpression") {
+            function getLast(node) {
+                if (node.property) {
+                    return node.property;
+                }
+                return node;
+            }
+            bodyElement.arguments.push({
+                type: "PlaceholderLiteral",
+                value: "$callback"
+            })
+            let last = getLast(bodyElement.callee);
+            last.value = last.value + "Handler"
+            if (context.variable(bodyElement.callee.value)) {
+                let newAst = jsCodeGenerator(bodyElement);
+                evaluation(newAst, context, {
+                    $callback: (result) => {
+                        outerCallback(result);
+                    }
+                })
+            }
+        }
+    }
+
+    return result;
+}
+
+let lifeCycles = 0;
+let avgLatency = 0;
+
+export function activeProxyFactory(object, element) {
+    let promises = {};
+
+    function generate(property) {
+        let handlers = [];
+        promises.element = element;
+        promises[property] = {
+            then(handler) {
+                handlers.push(handler);
+            },
+            fire(value) {
+                for (const handler of handlers) {
+                    handler(value);
+                }
+            }
+        }
+    }
+
+    object.$promises = promises;
+
+    return new Proxy(object, {
+        get(target, p, receiver) {
+            let result = Reflect.get(target, p, receiver);
+            if (result instanceof Function) {
+                return result;
+            } else {
+                if (promises[p]) {
+                    return promises[p]
+                } else {
+                    generate(p)
+                    return promises[p];
+                }
+            }
+        }
+    })
+}
+
+const membraneCache = new WeakMap();
+
+export function membraneFactory(instance, $parent, property) {
     if (instance instanceof Object) {
-        let cachedProxy = proxyCache.get(instance);
+        let cachedProxy = membraneCache.get(instance);
         if (cachedProxy) {
             return cachedProxy;
         } else {
+            let promises = [];
             let proxy = new Proxy(instance, {
+                apply(target, thisArg, argArray) {
+                    let result = Reflect.apply(target, thisArg, argArray);
+                    if (thisArg instanceof Array && (target.name === "push" || target.name === "splice")) {
+                        if ($parent.$parent) {
+                            $parent.$parent.$fire = {
+                                proxy: thisArg,
+                                property: thisArg.$property
+                            }
+                        }
+                    }
+                    return result;
+                },
                 has(target, p) {
                     if (p === "isProxy" || p === "resolve") {
                         return true;
                     }
-                    return Reflect.has(target, p)
+                    return Reflect.has(target, p);
                 },
                 set(target, p, value, receiver) {
-                    let properties = findProperties(target);
-                    if (properties.indexOf(p) > - 1) {
+                    let decimalRegex = /\d+/
+                    if (decimalRegex.test(p) && target instanceof Array) {
                         let result = Reflect.set(target, p, value, receiver);
-                        lifeCycle(target, p, value);
+                        if ($parent) {
+                            $parent.$fire = {
+                                proxy : receiver,
+                                property: receiver.$property
+                            }
+                        }
                         return result;
                     }
-                    return Reflect.set(target, p, value, target);
+
+                    if (p === "$fire") {
+                        for (const promise of Array.from(promises)) {
+                            if (promise[value.property]) {
+                                promise[value.property].fire(value.proxy)
+                            }
+                        }
+                        return true;
+                    }
+
+                    if (p === "$promises") {
+                        promises.push(value);
+                        return true;
+                    } else {
+                        let properties = findProperties(target);
+                        if (properties.indexOf(p) > -1) {
+                            let result = Reflect.set(target, p, value, receiver);
+
+                            let timeStart = performance.now();
+
+                            for (const promise of Array.from(promises)) {
+                                if (promise.element?.isConnected) {
+                                    if (promise[p]) {
+                                        promise[p].fire(value);
+                                    }
+                                } else {
+                                    if (promise[p]) {
+                                        let indexOf = promises.indexOf(promise);
+                                        promises.splice(indexOf, 1);
+                                    }
+                                }
+                            }
+
+                            let timeEnd = performance.now();
+                            let delta = timeEnd - timeStart;
+                            avgLatency = (avgLatency + delta);
+                            console.log(`Latency ${Math.round(delta)} ms - avg Latency: ${Math.round(avgLatency / lifeCycles)} ms`);
+
+                            let lifeCycle = appManager.performance.lifeCycle;
+
+                            lifeCycle.cycles = lifeCycles;
+                            lifeCycle.addAvgLatency(avgLatency / lifeCycles)
+                            lifeCycle.addLatency(delta);
+
+                            lifeCycles++;
+
+                            return result;
+                        }
+                        return Reflect.set(target, p, value, target);
+                    }
                 },
                 get(target, p, receiver) {
+                    if (p === "$property") {
+                        return property;
+                    }
+
+                    if (p === "$parent") {
+                        return $parent;
+                    }
+
                     if (p === "resolve") {
                         return target;
                     }
@@ -93,12 +278,12 @@ export function membraneFactory(instance) {
                     }
 
                     let properties = findProperties(target);
-                    if (properties.indexOf(p) > - 1) {
+                    if (properties.indexOf(p) > -1 || target instanceof Array) {
                         let instance = Reflect.get(target, p, receiver);
                         if (instance && instance.isProxy) {
                             return instance;
                         }
-                        return membraneFactory(instance);
+                        return membraneFactory(instance, receiver, p);
                     }
 
                     let result = Reflect.get(target, p, target);
@@ -109,7 +294,7 @@ export function membraneFactory(instance) {
                 }
             });
 
-            proxyCache.set(instance, proxy);
+            membraneCache.set(instance, proxy);
 
             return proxy
         }
@@ -127,17 +312,33 @@ export class Context {
         this.parent = parent;
     }
 
+    resolve(segments) {
+        if (segments.length > 1) {
+            let context = this.variable(segments[0]);
+            for (let i = 0; i < segments.length - 1; i++) {
+                const segment = segments[i];
+                context = context[segment]
+            }
+            return context;
+        } else {
+            return this.variable(segments);
+        }
+    }
+
     variable(name) {
         if (Reflect.has(this.instance, name)) {
             return this.instance;
         } else {
-            return this.parent.variable(name);
+            if (this.parent) {
+                return this.parent.variable(name);
+            }
+            return null;
         }
     }
 }
 
 
-function interpolationStatement(text, context) {
+function interpolationStatement(text, context, shadow) {
     let interpolationRegExp = /{{([^}]+)}}/g;
 
     function evalText() {
@@ -150,16 +351,28 @@ function interpolationStatement(text, context) {
         });
     }
 
-    function generator() {
-        let expression = evalText();
-        return document.createTextNode(expression);
+    let textNode = document.createTextNode("");
+
+    if (!shadow) {
+        text.replace(interpolationRegExp, (match, expression) => {
+            activeObjectExpression(expression, context, textNode)
+                .then(() => {
+                    let textContent = evalText();
+                    if (textContent !== textNode.textContent) {
+                        textNode.textContent = textContent;
+                    }
+                })
+        })
     }
 
-    let textNode;
+    function generator() {
+        textNode.textContent = evalText();
+        return textNode;
+    }
 
     return {
-        type : "interpolation",
-        text : text,
+        type: "interpolation",
+        text: text,
         build(parent) {
             textNode = generator();
             parent.appendChild(textNode);
@@ -178,7 +391,7 @@ function htmlStatement(tagName, attributes, children) {
     let tag = tagName.split(":")
     let name = tag[0];
     let extension = tag[1]
-    let element = document.createElement(name, {is : extension});
+    let element = document.createElement(name, {is: extension});
 
     function generate() {
         for (const child of children) {
@@ -212,9 +425,9 @@ function htmlStatement(tagName, attributes, children) {
     }
 
     return {
-        type : "html",
-        element : element,
-        children : children,
+        type: "html",
+        element: element,
+        children: children,
         build(parent) {
             generate();
             parent.appendChild(element);
@@ -227,7 +440,7 @@ function htmlStatement(tagName, attributes, children) {
                 }
             }
             for (const child of children) {
-                if (child instanceof Object && ! (child instanceof Function)) {
+                if (child instanceof Object && !(child instanceof Function)) {
                     child.update();
                 }
             }
@@ -271,9 +484,9 @@ function svgStatement(tagName, attributes, children) {
     }
 
     return {
-        type : "svg",
-        element : element,
-        children : children,
+        type: "svg",
+        element: element,
+        children: children,
         build(parent) {
             generate();
             parent.appendChild(element);
@@ -286,7 +499,7 @@ function svgStatement(tagName, attributes, children) {
                 }
             }
             for (const child of children) {
-                if (child instanceof Object && ! (child instanceof Function)) {
+                if (child instanceof Object && !(child instanceof Function)) {
                     child.update();
                 }
             }
@@ -304,33 +517,38 @@ function forExpressions(expressions) {
         if (expression.type === "VariableDeclaration") {
             if (expression.id.value === "index") {
                 result.index = {
-                    expression : jsCodeGenerator(expression),
-                    variable : expression.init.value
+                    expression: jsCodeGenerator(expression),
+                    variable: expression.init.value
+                }
+            } else if (expression.id.value === "length") {
+                result.length = {
+                    expression: jsCodeGenerator(expression),
+                    variable: expression.init.value
                 }
             } else if (expression.id.type === "ArrayPattern") {
                 result.for = {
-                    expression : jsCodeGenerator(expression),
-                    variable : expression.id.elements.map(element => element.value),
-                    source : jsCodeGenerator(expression.init)
+                    expression: jsCodeGenerator(expression),
+                    variable: expression.id.elements.map(element => element.value),
+                    source: jsCodeGenerator(expression.init)
                 }
             } else {
                 result.for = {
-                    expression : jsCodeGenerator(expression),
-                    variable : expression.id.value,
-                    source : jsCodeGenerator(expression.init)
+                    expression: jsCodeGenerator(expression),
+                    variable: expression.id.value,
+                    source: jsCodeGenerator(expression.init)
                 }
             }
         }
         if (expression.type === "AssignmentExpression" && expression.left.value === "onRendered") {
             result.onRendered = {
-                expression : jsCodeGenerator(expression),
-                func : jsCodeGenerator(expression.right)
+                expression: jsCodeGenerator(expression),
+                func: jsCodeGenerator(expression.right)
             }
         }
         if (expression.type === "AssignmentExpression" && expression.left.value === "force") {
             result.force = {
-                expression : jsCodeGenerator(expression),
-                enabled : true
+                expression: jsCodeGenerator(expression),
+                enabled: true
             }
         }
     }
@@ -366,6 +584,11 @@ function forStatement(rawAttributes, context, callback) {
     let container = document.createDocumentFragment();
     let comment = document.createComment(data.for.expression);
 
+    activeObjectExpression(data.for.source, context, comment)
+        .then((result) => {
+            update(result)
+        })
+
     function generate() {
         array.forEach((item, index) => {
             let instance = {};
@@ -395,16 +618,30 @@ function forStatement(rawAttributes, context, callback) {
 
     }
 
+    function update(value) {
+        array = value;
+        for (const child of children) {
+            child.remove();
+        }
+        children.length = 0;
+        ast.length = 0;
+        generate();
+        comment.after(container)
+        if (data.onRendered) {
+            evaluation(data.onRendered.func, context, {$children: children})
+        }
+    }
+
     return {
-        type : "for",
-        expression : expressions,
-        children : ast,
+        type: "for",
+        expression: expressions,
+        children: ast,
         build: function (parent) {
             generate();
             parent.appendChild(comment)
             parent.appendChild(container);
             if (data.onRendered) {
-                evaluation(data.onRendered.func, context, {$children : children})
+                evaluation(data.onRendered.func, context, {$children: children})
             }
             return children;
         },
@@ -413,29 +650,19 @@ function forStatement(rawAttributes, context, callback) {
             let newArray;
             if (result instanceof Array) {
                 newArray = Array.from(result);
-            } else
-                if (result instanceof Object) {
-                    if (data.for.variable instanceof Array) {
-                        newArray = Object.entries(result);
-                    } else {
-                        newArray = Object.values(result);
-                    }
+            } else if (result instanceof Object) {
+                if (data.for.variable instanceof Array) {
+                    newArray = Object.entries(result);
                 } else {
-                    console.log(`For loops data source is a ${typeof result} from path ${data.for.source}`)
+                    newArray = Object.values(result);
                 }
+            } else {
+                console.log(`For loops data source is a ${typeof result} from path ${data.for.source}`)
+            }
 
             if (!isEqual(newArray, array) || data.force?.enabled) {
                 array = newArray;
-                for (const child of children) {
-                    child.remove();
-                }
-                children.length = 0;
-                ast.length = 0;
-                generate();
-                comment.after(container)
-                if (data.onRendered) {
-                    evaluation(data.onRendered.func, context, {$children : children})
-                }
+                update(array);
             } else {
                 for (const astElement of ast) {
                     astElement.update();
@@ -446,21 +673,44 @@ function forStatement(rawAttributes, context, callback) {
 }
 
 function ifStatement(rawAttributes, context, html) {
-
-    let boundAttributesFunction = boundAttributes(rawAttributes, ["if"], context);
+    let attributes = getAttributes(rawAttributes, ["if"]);
+    let boundAttributesFunction = boundAttributes(attributes, context);
     let values = boundAttributesFunction()
     let value = values.if;
     let comment = document.createComment("if");
     let container = document.createDocumentFragment();
     let element;
 
+    activeObjectExpression(attributes.if.value, context, comment)
+        .then(() => {
+            let values = boundAttributesFunction()
+            update(values.if)
+        })
+
+    function update(value) {
+        if (value) {
+            if (element) {
+                if (!element.isConnected) {
+                    comment.after(element);
+                }
+            } else {
+                generate();
+                comment.after(element);
+            }
+        } else {
+            if (element.isConnected) {
+                element.remove();
+            }
+        }
+    }
+
     function generate() {
         element = html.build(container);
     }
 
     return {
-        type : "if",
-        element : html,
+        type: "if",
+        element: html,
         build(parent) {
             parent.appendChild(comment);
             if (value) {
@@ -471,22 +721,9 @@ function ifStatement(rawAttributes, context, html) {
         update() {
             let values = boundAttributesFunction()
             let newValue = values.if;
-            if (! isEqual(newValue, value)) {
+            if (!isEqual(newValue, value)) {
                 value = newValue;
-                if (value) {
-                    if (element) {
-                        if (! element.isConnected) {
-                            comment.after(element);
-                        }
-                    } else {
-                        generate();
-                        comment.after(element);
-                    }
-                } else {
-                    if (element.isConnected) {
-                        element.remove();
-                    }
-                }
+                update(value)
             }
             if (newValue) {
                 html.update();
@@ -498,9 +735,9 @@ function ifStatement(rawAttributes, context, html) {
 function bindStatement(name, value, context) {
     let processor;
     return {
-        type : "bind",
-        name : name,
-        value : value,
+        type: "bind",
+        name: name,
+        value: value,
         build(element) {
             for (const AttributeProcessor of attributeProcessorRegistry) {
                 processor = new AttributeProcessor(name, value, element, context);
@@ -512,7 +749,7 @@ function bindStatement(name, value, context) {
             }
         },
         update() {
-            if (processor && ! processor.runOnce) {
+            if (processor && !processor.runOnce) {
                 processor.process();
             }
         }
@@ -520,26 +757,25 @@ function bindStatement(name, value, context) {
 }
 
 function slotStatement(rawAttributes, context, contents) {
-
-    let boundAttributesFunction = boundAttributes(rawAttributes, ["name", "index", "source", "selector", "implicit"], context);
+    let attributes = getAttributes(rawAttributes, ["name", "index", "source", "selector", "implicit"])
+    let boundAttributesFunction = boundAttributes(attributes, context);
     let values = boundAttributesFunction()
 
     let container = document.createDocumentFragment();
-    let data = "slot";
-    if (values.name) {
-        data += " name=" + values.name
-    }
-    if (values.index) {
-        data += " index=" + values.index
-    }
-    if (values.selector) {
-        data += " selector=" + values.selector
-    }
-    if (values.implicit) {
-        data += " implicit=" + values.implicit
-    }
+    let data = "slot " + JSON.stringify(values);
+
     let comment = document.createComment(data);
     let children = [];
+
+    for (const attribute of Object.values(attributes)) {
+        if (attribute.type === "bind") {
+            activeObjectExpression(attribute.value, context, comment)
+                .then(() => {
+                    values = boundAttributesFunction();
+                    update();
+                })
+        }
+    }
 
     function generate() {
         let activeContent;
@@ -551,7 +787,6 @@ function slotStatement(rawAttributes, context, contents) {
         } else {
             activeContent = contents(implicitValue);
         }
-
 
         if (values.name) {
             let querySelector = activeContent.querySelectorAll(`[slot=${values.name}]`)[index];
@@ -577,10 +812,19 @@ function slotStatement(rawAttributes, context, contents) {
 
     let fragment;
 
+    function update() {
+        for (const child of children) {
+            child.remove();
+        }
+        children.length = 0;
+        fragment = generate();
+        comment.after(container);
+    }
+
     return {
-        type : "slot",
+        type: "slot",
         ...values,
-        children : children,
+        children: children,
         build(parent) {
             fragment = generate();
             parent.appendChild(comment);
@@ -589,14 +833,9 @@ function slotStatement(rawAttributes, context, contents) {
         update() {
             let newValues = boundAttributesFunction();
             let equal = isEqual(newValues, values);
-            if (! equal) {
+            if (!equal) {
                 values = newValues;
-                for (const child of children) {
-                    child.remove();
-                }
-                children.length = 0;
-                fragment = generate();
-                comment.after(container);
+                update();
             } else {
                 fragment.update();
             }
@@ -605,8 +844,8 @@ function slotStatement(rawAttributes, context, contents) {
 }
 
 function switchStatement(rawAttributes, context, cases) {
-
-    let boundAttributesFunction = boundAttributes(rawAttributes, ["switch"], context);
+    let attributes = getAttributes(rawAttributes, ["switch"])
+    let boundAttributesFunction = boundAttributes(attributes, context);
 
     let container = document.createDocumentFragment();
     let comment = document.createComment("switch")
@@ -644,7 +883,7 @@ function switchStatement(rawAttributes, context, cases) {
         update() {
             let values = boundAttributesFunction();
             let newValue = values.switch;
-            if (! isEqual(value, newValue)) {
+            if (!isEqual(value, newValue)) {
                 value = newValue;
                 for (const element of elements) {
                     element.remove();
@@ -660,12 +899,13 @@ function switchStatement(rawAttributes, context, cases) {
 }
 
 function caseStatement(rawAttributes, context, children) {
-    let boundAttributesFunction = boundAttributes(rawAttributes, ["value"], context);
+    let attributes = getAttributes(rawAttributes, ["value"]);
+    let boundAttributesFunction = boundAttributes(attributes, context);
     let values = boundAttributesFunction();
 
     return {
-        type : "case",
-        value : values.value,
+        type: "case",
+        value: values.value,
         build(parent) {
             let elements = [];
             for (const child of children) {
@@ -689,14 +929,15 @@ function variableStatement(rawAttributes, context, html) {
 
     let element = html.element;
 
-    evaluation(variable + " = $value", context, {$value : element})
+    evaluation(variable + " = $value", context, {$value: element})
 
     return html;
 
 }
 
 function letStatement(rawAttributes, implicit, context, callback) {
-    let boundAttributesFunction = boundAttributes(rawAttributes, ["let"], context);
+    let attributes = getAttributes(rawAttributes, ["let"]);
+    let boundAttributesFunction = boundAttributes(attributes, context);
     let values = boundAttributesFunction();
     let instance = {};
     instance[values.let] = implicit;
@@ -731,19 +972,39 @@ function isCompositeComponent(node) {
     return false;
 }
 
-function boundAttributes(attributes, observed, context) {
+function getAttributes(attributes, observed) {
+    let attributeValues = {};
+    for (const attribute of attributes) {
+        let indexOf = attribute.indexOf("=");
+        let attributePair = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
+        if (attribute.startsWith("bind")) {
+            let string = attributePair[0].split(":")[1];
+            if (observed.indexOf(string) > -1) {
+                attributeValues[string] = {
+                    name: string,
+                    type: "bind",
+                    value: attributePair[1]
+                }
+            }
+        } else {
+            attributeValues[attributePair[0]] = {
+                name: attributePair[0],
+                type: "raw",
+                value: attributePair[1]
+            }
+        }
+    }
+    return attributeValues;
+}
+
+function boundAttributes(attributes, context) {
     function values() {
         let attributeValues = {};
-        for (const attribute of attributes) {
-            let indexOf = attribute.indexOf("=");
-            let attributePair = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
-            if (attribute.startsWith("bind")) {
-                let string = attributePair[0].split(":")[1];
-                if (observed.indexOf(string) > -1) {
-                    attributeValues[string] = evaluation(attributePair[1], context)
-                }
+        for (let attribute of Object.values(attributes)) {
+            if (attribute.type === "bind") {
+                attributeValues[attribute.name] = evaluation(attribute.value, context)
             } else {
-                attributeValues[attributePair[0]] = attributePair[1]
+                attributeValues[attribute.name] = attribute.value
             }
         }
         return attributeValues;
@@ -753,14 +1014,15 @@ function boundAttributes(attributes, observed, context) {
 }
 
 export function codeGenerator(nodes) {
-    function children(node, level, isSvg = false) {
+    function children(node, level, isSvg = false, shadow) {
         if (isCompositeComponent(node)) {
-            return `function(implicit) { return [${intern(node.childNodes, level)}]}`
+            shadow = true;
+            return `function(implicit) { let shadow=${shadow}; return [${intern(node.childNodes, level, isSvg, shadow)}]}`
         }
         if (node.localName === "template") {
-            return intern(node.content.childNodes, level)
+            return intern(node.content.childNodes, level, isSvg, shadow)
         }
-        return intern(node.childNodes, level, isSvg)
+        return intern(node.childNodes, level, isSvg, shadow)
     }
 
     function rawAttributes(node) {
@@ -779,7 +1041,7 @@ export function codeGenerator(nodes) {
     }
 
 
-    function intern(nodes, level = 1, isSvg = false) {
+    function intern(nodes, level = 1, isSvg = false, shadow) {
         let tabs = "\t".repeat(level);
         return Array.from(nodes)
             .filter((node => (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) || node.nodeType === Node.ELEMENT_NODE))
@@ -791,8 +1053,8 @@ export function codeGenerator(nodes) {
                         return `\n${tabs}\`${node.textContent}\``
                     }
                     if (interpolationRegExp.test(node.textContent)) {
-                        if (! (node.parentElement instanceof HTMLScriptElement)) {
-                            return `\n${tabs}interpolationStatement(\`${node.textContent}\`, context)`
+                        if (!(node.parentElement instanceof HTMLScriptElement)) {
+                            return `\n${tabs}interpolationStatement(\`${node.textContent}\`, context, shadow)`
                         }
                         return `\n${tabs}\`${node.textContent}\``
                     } else {
@@ -805,35 +1067,35 @@ export function codeGenerator(nodes) {
                         tagName += ":" + node.getAttribute("is")
                     }
                     if (node.hasAttribute("bind:for")) {
-                        return `\n${tabs}forStatement([${rawAttributes(node)}], context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
+                        return `\n${tabs}forStatement([${rawAttributes(node)}], context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg, shadow)}\n${tabs}])})`
                     }
                     if (node.hasAttribute("let")) {
-                        return `\n${tabs}letStatement([${rawAttributes(node)}], implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])})`
+                        return `\n${tabs}letStatement([${rawAttributes(node)}], implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg, shadow)}\n${tabs}])})`
                     }
                     if (node.hasAttribute("bind:variable")) {
-                        return `\n${tabs}variableStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
+                        return `\n${tabs}variableStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg, shadow)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:if")) {
-                        return `\n${tabs}ifStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level)}\n${tabs}]))`
+                        return `\n${tabs}ifStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg, shadow)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:switch")) {
-                        return `\n${tabs}switchStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level)}\n${tabs}])`;
+                        return `\n${tabs}switchStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg, shadow)}\n${tabs}])`;
                     }
                     if (node.localName === "case") {
-                        return `\n${tabs}caseStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level)}\n${tabs}])`;
+                        return `\n${tabs}caseStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg, shadow)}\n${tabs}])`;
                     }
                     if (node.localName === "slot") {
                         return `\n${tabs}slotStatement([${rawAttributes(node)}], context, content)`;
                     }
                     if (node.localName === "svg" || isSvg) {
-                        return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true)}\n${tabs}])`
+                        return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true, shadow)}\n${tabs}])`
                     }
-                    return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1)}\n${tabs}])`
+                    return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg, shadow)}\n${tabs}])`
                 }
             }).join(", ")
     }
 
-    let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
+    let expression = `function factory(context, content, implicit) { let shadow = false; return [${intern(nodes)}\n]}`;
     let arg = `return function(forStatement, slotStatement, html, svg, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement) {return ${expression}}`;
     let func = evaluator(arg)
     return func()(forStatement, slotStatement, htmlStatement, svgStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement)

@@ -2,12 +2,15 @@ import {customComponents} from "../simplicity.js";
 import DomForm from "./dom-form.js";
 import {lifeCycle} from "../processors/life-cycle-processor.js";
 import {Input, mix} from "../services/tools.js";
+import {membraneFactory} from "../processors/html-compiler-processor.js";
 
 
 class DomInput extends mix(HTMLInputElement).with(Input) {
 
 
     initialize() {
+        super.initialize();
+
         let valueChangeHandler = () => {
             if (this.type === "number") {
                 this.model = this.valueAsNumber || "";
@@ -68,9 +71,9 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
         }
 
         if (this.name) {
-            let domForm = this.queryUpwards((element) => {
+            let domForm = membraneFactory(this.queryUpwards((element) => {
                 return element instanceof DomForm
-            });
+            }));
             if (domForm) {
                 domForm.register(this);
             }

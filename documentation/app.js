@@ -13,6 +13,12 @@ export default class DocumentationApp extends HTMLElement {
         return window.location.hash.startsWith(`#/documentation/${value}/index`)
     }
 
+    activeHandler(value, callback) {
+        window.addEventListener("hashchange", () => {
+            callback(window.location.hash.startsWith(`#/documentation/${value}/index`))
+        })
+    }
+
     static get components() {
         return [DomRouter, MatToolbar, MatFooter, MatPerformance, MatLanguage, MatTaskbar];
     }

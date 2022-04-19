@@ -1,24 +1,38 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {contentManager} from "../../manager/content-manager.js";
+import {membraneFactory} from "../../processors/html-compiler-processor.js";
 
 class MatTabs extends HTMLElement {
 
     page = 0;
+    container;
 
-    get tabs() {
-        let container = contentManager.instance(this);
-        return Array.from(container.querySelectorAll("mat-tab"))
+    tabs() {
+        return Array.from(this.resolve.container.querySelectorAll("mat-tab"))
+    }
+
+    tabsHandler(callback) {
+        let mutationObserver = new MutationObserver(() => {
+            callback(Array.from(this.resolve.container.querySelectorAll("mat-tab")));
+            this.dispatchEvent(new CustomEvent("page"))
+        })
+
+        mutationObserver.observe(this.resolve.container, {subtree : true, childList : true})
+    }
+
+    preInitialize() {
+        this.container = contentManager.instance(this);
     }
 
     rendered(children) {
         for (const child of children) {
-            let tab = child.querySelector("mat-tab")
+            let tab = membraneFactory(child.querySelector("mat-tab"))
             tab.selected = false;
             tab.addEventListener("click", (event) => {
                 event.stopPropagation();
                 for (const child of children) {
-                    let tab = child.querySelector("mat-tab")
+                    let tab = membraneFactory(child.querySelector("mat-tab"))
                     tab.selected = false;
                 }
                 tab.selected = true;
@@ -29,7 +43,7 @@ class MatTabs extends HTMLElement {
         }
         if (children.length > 0) {
             let child = children[this.page];
-            let tab = child.querySelector("mat-tab")
+            let tab = membraneFactory(child.querySelector("mat-tab"))
             tab.selected = true;
         }
     }

@@ -5,6 +5,10 @@ class MatInputContainer extends HTMLElement {
 
     placeholder;
 
+    inputEmpty = true;
+    hasFocus = false;
+    hasErrors = false;
+
     initialize() {
         let input = this.querySelector("input");
         if (input) {
@@ -16,13 +20,14 @@ class MatInputContainer extends HTMLElement {
             }
         }
 
-        input.addEventListener("input", () => {
+        let inputListener = () => {
+            this.inputEmpty = input.value === "" && input.type !== "datetime-local" && input.type !== "date";
+            this.hasErrors = input.errors.length > 0 || input.formular?.errors.length > 0 || ! input.validity.valid;
+
             let errors = this.querySelectorAll("*[slot=error] *[name]");
             for (const errorElement of errors) {
                 errorElement.style.display = "none";
             }
-
-            let input = this.querySelector("input");
 
             if (input) {
                 for (const validity in input.validity) {
@@ -39,28 +44,17 @@ class MatInputContainer extends HTMLElement {
                     }
                 }
             }
-        })
-    }
+        };
 
-    inputEmpty() {
-        let element = this.querySelector("input");
-        if (element) {
-            return element.value === "" && element.type !== "datetime-local" && element.type !== "date"
-        }
-    }
+        let focusListener = () => {
+            this.hasFocus = document.activeElement === input;
+        };
 
-    hasFocus() {
-        let element = this.querySelector("input");
-        if (element) {
-            return document.activeElement === element;
-        }
-    }
+        input.addEventListener("input", inputListener)
+        input.addEventListener("focus", focusListener);
+        input.addEventListener("blur", focusListener);
 
-    hasErrors() {
-        let element = this.querySelector("input");
-        if (element) {
-            return element.errors.length > 0 || element.formular?.errors.length > 0 || ! element.validity.valid;
-        }
+        inputListener();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

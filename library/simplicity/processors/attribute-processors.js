@@ -1,6 +1,7 @@
 import {evaluation} from "./js-compiler-processor.js";
 import {appManager} from "../manager/app-manager.js";
 import {isEqual} from "../services/tools.js";
+import {activeObjectExpression, membraneFactory} from "./html-compiler-processor.js";
 
 class BindInterpolationProcessor {
     element;
@@ -80,9 +81,15 @@ class StyleAttributeProcessor {
             }
 
             let cssValue = evaluation(value, this.context);
-            if (this.element.style[keyString] !== cssValue) {
-                this.element.style[keyString] = cssValue;
-            }
+            this.element.style[keyString] = cssValue;
+
+            activeObjectExpression(value, this.context, this.element)
+                .then(() => {
+                    let cssValue = evaluation(value, this.context);
+                    if (this.element.style[keyString] !== cssValue) {
+                        this.element.style[keyString] = cssValue;
+                    }
+                })
         }
     }
 }
@@ -111,13 +118,25 @@ class ClassAttributeProcessor {
 
     process() {
         let classList = this.value.split(";");
-        let result = [];
-        for (const classListElement of classList) {
-            result.push(evaluation(classListElement.trim(), this.context));
+
+        let generate = () => {
+            let result = [];
+            for (const classElement of classList) {
+                result.push(evaluation(classElement.trim(), this.context));
+            }
+            let classesName = result.join(" ");
+            if (classesName !== this.element.className) {
+                this.element.className = classesName;
+            }
         }
-        let classesName = result.join(" ");
-        if (classesName !== this.element.className) {
-            this.element.className = classesName;
+
+        generate();
+
+        for (const classElement of classList) {
+            activeObjectExpression(classElement.trim(), this.context, this.element)
+                .then(() => {
+                    generate();
+                })
         }
     }
 }
@@ -203,6 +222,14 @@ class DynamicBindingAttributeProcessor {
                 }
             }
         }
+
+        activeObjectExpression(this.value, this.context, this.element)
+            .then(() => {
+                let result = evaluation(this.value, this.context);
+                let membrane = membraneFactory(this.element);
+                membrane.attributeChangedCallback(this.name, this.oldValue, result);
+                this.oldValue = result;
+            })
     }
 }
 
@@ -253,8 +280,18 @@ class DomAttributesProcessor {
                     this.element[this.name] = result;
                 }
             }
-
         }
+        activeObjectExpression(this.value, this.context, this.element)
+            .then((result) => {
+                switch (this.name) {
+                    case "disabled" : {
+                        this.element[this.name] = result === true || result === "true";
+                    } break;
+                    default : {
+                        this.element[this.name] = result;
+                    }
+                }
+            })
     }
 }
 

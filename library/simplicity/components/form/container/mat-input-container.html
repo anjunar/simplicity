@@ -91,15 +91,15 @@
     <template>
         <div>
             <div class="placeholder">
-            <span bind:style="display: inputEmpty() ? 'none' : 'inline'"
-                  bind:class="hasFocus() ? 'focus' : ''; hasErrors() ? 'error' : ''">{{placeholder}}</span>
+            <span bind:style="display: inputEmpty ? 'none' : 'inline'"
+                  bind:class="hasFocus ? 'focus' : ''; hasErrors ? 'error' : ''">{{placeholder}}</span>
             </div>
             <div style="display: flex">
                 <slot name="prefix"></slot>
                 <slot tag="isInput"></slot>
                 <slot name="suffix"></slot>
             </div>
-            <hr bind:class="hasFocus() ? 'focus' : ''; hasErrors() ? 'error' : ''"/>
+            <hr bind:class="hasFocus ? 'focus' : ''; hasErrors ? 'error' : ''"/>
             <div class="error">
                 <slot class="errorContainer" name="error"></slot>
             </div>

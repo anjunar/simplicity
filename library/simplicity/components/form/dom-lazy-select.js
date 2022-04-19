@@ -2,8 +2,8 @@ import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
-import {lifeCycle} from "../../processors/life-cycle-processor.js";
 import {Input, mix} from "../../services/tools.js";
+import {membraneFactory} from "../../processors/html-compiler-processor.js";
 
 class DomLazySelect extends mix(HTMLElement).with(Input) {
 
@@ -111,10 +111,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     load() {
         let input = this.querySelector("input");
         this.items({index : this.index, limit : this.limit, value : input.value}, (data, size) => {
-            this.window = data;
             this.size = size;
             this.open = true;
-            lifeCycle();
+            this.window = data;
         })
     }
 

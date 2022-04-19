@@ -4,79 +4,79 @@ function tokenizer(expression) {
 
     let tags = [
         {
-            type : "reserved",
+            type: "reserved",
             regex: /undefined|true|false/y
         },
         {
-            type : "placeholder",
-            regex: /\$event|\$value|\$children/y
+            type: "placeholder",
+            regex: /\$event|\$value|\$children|\$callback/y
         },
         {
-            type : "variableDeclaration",
+            type: "variableDeclaration",
             regex: /let|const|var/y
         },
         {
-            type : "operation",
-            regex : /[+\-*/<>%=!&|]+|of/y
+            type: "operation",
+            regex: /[+\-*/<>%=!&|]+|of/y
         },
         {
-            type : "property",
-            regex : /[a-zA-Z$_][a-zA-Z\d_$]*/y
+            type: "property",
+            regex: /[a-zA-Z$_][a-zA-Z\d_$]*/y
         },
         {
-            type : "point",
-            regex : /\./y
+            type: "point",
+            regex: /\./y
         },
         {
-            type : "number",
-            regex : /[\d.]+/y
+            type: "number",
+            regex: /[\d.]+/y
         },
         {
-            type : "string",
-            regex : /'[^']*'/y
+            type: "string",
+            regex: /'[^']*'/y
         },
         {
-            type : "conditional",
-            regex : /\?/y
+            type: "conditional",
+            regex: /\?/y
         },
         {
-            type : "leftRoundBracket",
-            regex : /\(/y
+            type: "leftRoundBracket",
+            regex: /\(/y
         },
         {
-            type : "rightRoundBracket",
-            regex : /\)/y
+            type: "rightRoundBracket",
+            regex: /\)/y
         },
         {
-            type : "leftCurlyBracket",
+            type: "leftCurlyBracket",
             regex: /{/y
         },
         {
-            type : "rightCurlyBracket",
+            type: "rightCurlyBracket",
             regex: /}/y
         },
         {
-            type : "leftSquareBracket",
+            type: "leftSquareBracket",
             regex: /\[/y
         },
         {
-            type : "rightSquareBracket",
+            type: "rightSquareBracket",
             regex: /\]/y
         },
         {
-            type : "whitespace",
-            regex : /\s+/y
+            type: "whitespace",
+            regex: /\s+/y
         },
         {
-            type : "colon",
+            type: "colon",
             regex: /:/y
         },
         {
-            type : "comma",
+            type: "comma",
             regex: /,/y
         },
         {
-            type : "semicolon",
+            type: "semicolon",
             regex: /;/y
         }
     ]
@@ -102,10 +102,10 @@ function tokenizer(expression) {
             if (result) {
                 if (tag.type !== "whitespace" && tag.type !== "comma") {
                     tokens.push({
-                        type : tag.type,
-                        value : result[0],
-                        index : result.index,
-                        lastIndex : tag.regex.lastIndex
+                        type: tag.type,
+                        value: result[0],
+                        index: result.index,
+                        lastIndex: tag.regex.lastIndex
                     })
                 }
                 index = tag.regex.lastIndex;
@@ -138,9 +138,9 @@ function parser(tokens) {
                 current++
 
                 let node = {
-                    type : "ReservedLiteral",
-                    value : token.value,
-                    before : before
+                    type: "ReservedLiteral",
+                    value: token.value,
+                    before: before
                 }
 
                 return node;
@@ -149,9 +149,9 @@ function parser(tokens) {
                 current++
 
                 let node = {
-                    type : "PlaceholderLiteral",
-                    value : token.value,
-                    before : before
+                    type: "PlaceholderLiteral",
+                    value: token.value,
+                    before: before
                 }
 
                 return node;
@@ -160,11 +160,11 @@ function parser(tokens) {
                 current++
 
                 let node = {
-                    type : "VariableDeclaration",
-                    kind : token.value,
-                    before : before,
-                    init : null,
-                    id : null
+                    type: "VariableDeclaration",
+                    kind: token.value,
+                    before: before,
+                    init: null,
+                    id: null
                 }
 
                 token = tokens[current];
@@ -195,9 +195,9 @@ function parser(tokens) {
                 current++
 
                 let node = {
-                    type : "StringLiteral",
-                    value : token.value,
-                    before : before
+                    type: "StringLiteral",
+                    value: token.value,
+                    before: before
                 };
 
                 token = tokens[current];
@@ -215,12 +215,12 @@ function parser(tokens) {
             }
             case "number" : {
                 current++
-                let isFloat = token.value.indexOf(".") > - 1;
+                let isFloat = token.value.indexOf(".") > -1;
 
                 let node = {
-                    type : "NumberLiteral",
+                    type: "NumberLiteral",
                     value: isFloat ? Number.parseFloat(token.value) : Number.parseInt(token.value),
-                    before : before
+                    before: before
                 };
 
                 token = tokens[current];
@@ -234,9 +234,9 @@ function parser(tokens) {
             case "property" : {
                 current++;
                 let node = {
-                    type : "Identifier",
-                    value : token.value,
-                    before : before
+                    type: "Identifier",
+                    value: token.value,
+                    before: before
                 };
 
                 if (current < tokens.length) {
@@ -247,7 +247,7 @@ function parser(tokens) {
                     }
                 }
 
-                let top = stack[stack.length -1];
+                let top = stack[stack.length - 1];
                 if (before === null || before.type !== "Identifier") {
                     token = tokens[current];
 
@@ -275,18 +275,18 @@ function parser(tokens) {
                 let node;
                 if (token.value === "!") {
                     node = {
-                        type : "UnaryExpression",
+                        type: "UnaryExpression",
                         operator: token.value,
-                        before : before
+                        before: before
                     }
 
                     node.argument = walk(node)
                 } else {
                     if (token.value === "=") {
                         node = {
-                            type : "AssignmentExpression",
-                            operator : token.value,
-                            left : stack.pop(),
+                            type: "AssignmentExpression",
+                            operator: token.value,
+                            left: stack.pop(),
                         }
 
                         node.right = walk(node)
@@ -294,8 +294,8 @@ function parser(tokens) {
                         node = {
                             type: "BinaryExpression",
                             operator: token.value,
-                            before : before,
-                            left : stack.pop()
+                            before: before,
+                            left: stack.pop()
                         };
 
                         node.right = walk(node);
@@ -319,9 +319,9 @@ function parser(tokens) {
                 current++
 
                 let node = {
-                    type : "ObjectExpression",
-                    parameters : [],
-                    before : before
+                    type: "ObjectExpression",
+                    parameters: [],
+                    before: before
                 }
 
                 while (token.type !== "rightCurlyBracket") {
@@ -329,8 +329,8 @@ function parser(tokens) {
                     current++
                     let value = walk(node);
                     node.parameters.push({
-                        key : key,
-                        value : value
+                        key: key,
+                        value: value
                     });
                     token = tokens[current];
                 }
@@ -347,10 +347,10 @@ function parser(tokens) {
 
                 if (top && top.type === "Identifier") {
                     let node = {
-                        type : "CallExpression",
-                        callee : top,
-                        arguments : [],
-                        before : before
+                        type: "CallExpression",
+                        callee: top,
+                        arguments: [],
+                        before: before
                     };
 
                     while (token.type !== "rightRoundBracket") {
@@ -404,9 +404,9 @@ function parser(tokens) {
                 let top = stack[stack.length - 1];
                 if (top && top.type === "VariableDeclaration") {
                     let node = {
-                        type : "ArrayPattern",
-                        elements : [],
-                        before : before
+                        type: "ArrayPattern",
+                        elements: [],
+                        before: before
                     }
 
                     while (token.type !== "rightSquareBracket") {
@@ -427,9 +427,9 @@ function parser(tokens) {
                 let top = stack.pop();
 
                 let node = {
-                    type : "ConditionalExpression",
-                    test : top,
-                    before : before
+                    type: "ConditionalExpression",
+                    test: top,
+                    before: before
                 }
 
                 node.consequent = walk(node);
@@ -450,8 +450,8 @@ function parser(tokens) {
     }
 
     let ast = {
-        type : "Program",
-        body : []
+        type: "Program",
+        body: []
     }
 
     while (current < tokens.length) {
@@ -467,15 +467,15 @@ function transformator(node, parent, property, callback) {
     switch (node.type) {
         case "Program" :
             return {
-                type : node.type,
-                body : node.body.map(element => transformator(element, node, "body", callback))
+                type: node.type,
+                body: node.body.map(element => transformator(element, node, "body", callback))
             }
         case "ReservedLiteral" :
             return node;
         case "PlaceholderLiteral" :
             return {
-                type : node.type,
-                value : `args.${node.value}`
+                type: node.type,
+                value: `args.${node.value}`
             }
         case "StringLiteral" :
             return node
@@ -491,7 +491,7 @@ function transformator(node, parent, property, callback) {
         }
         case "AssignmentExpression" : {
             return {
-                type : node.type,
+                type: node.type,
                 operator: node.operator,
                 left: transformator(node.left, node, "left", callback),
                 right: transformator(node.right, node, "right", callback)
@@ -499,22 +499,22 @@ function transformator(node, parent, property, callback) {
         }
         case "ArrayPattern" : {
             return {
-                type : node.type,
-                elements : node.elements.map((arg) => transformator(arg, node, "elements", callback))
+                type: node.type,
+                elements: node.elements.map((arg) => transformator(arg, node, "elements", callback))
             }
         }
         case "VariableDeclaration" : {
             return {
-                type : node.type,
-                kind : node.kind,
-                value : node.value,
-                id : transformator(node.id, node, "id", callback),
-                init : transformator(node.init, node, "init", callback)
+                type: node.type,
+                kind: node.kind,
+                value: node.value,
+                id: transformator(node.id, node, "id", callback),
+                init: transformator(node.init, node, "init", callback)
             }
         }
         case "UnaryExpression" : {
             return {
-                type : node.type,
+                type: node.type,
                 operator: node.operator,
                 argument: transformator(node.argument, node, "argument", callback)
             }
@@ -522,14 +522,14 @@ function transformator(node, parent, property, callback) {
         case "BinaryExpression" : {
             return {
                 type: node.type,
-                left : transformator(node.left, node, "left", callback),
-                operator : node.operator,
-                right : transformator(node.right, node, "right", callback)
+                left: transformator(node.left, node, "left", callback),
+                operator: node.operator,
+                right: transformator(node.right, node, "right", callback)
             }
         }
         case "ConditionalExpression" :
             let result = {
-                type : node.type,
+                type: node.type,
                 test: transformator(node.test, node, "test", callback),
                 consequent: transformator(node.consequent, node, "consequent", callback)
             };
@@ -541,22 +541,121 @@ function transformator(node, parent, property, callback) {
             return node
         case "CallExpression" :
             return {
-                type : node.type,
+                type: node.type,
                 callee: transformator(node.callee, node, "callee", callback),
                 arguments: node.arguments.map((arg) => transformator(arg, node, "arguments", callback))
             }
         case "ObjectExpression" :
             return {
-                type : node.type,
-                parameters : node.parameters.map((entry) => {
+                type: node.type,
+                parameters: node.parameters.map((entry) => {
                     return {
-                        key : transformator(entry.key, node, "key", callback),
-                        value : transformator(entry.value, node, "value", callback)
+                        key: transformator(entry.key, node, "key", callback),
+                        value: transformator(entry.value, node, "value", callback)
                     }
                 })
             }
     }
 }
+
+function collector(node, parent, property, identifiers) {
+    switch (node.type) {
+        case "Program" :
+            return {
+                type: node.type,
+                body: node.body.map(element => collector(element, node, "body", identifiers))
+            }
+        case "ReservedLiteral" :
+            return node;
+        case "PlaceholderLiteral" :
+            return {
+                type: node.type,
+                value: `args.${node.value}`
+            }
+        case "StringLiteral" :
+            return node
+        case "NumberLiteral" :
+            return node
+        case "Identifier" : {
+            if (parent === null || (parent.type !== "ObjectExpression" && (parent.type !== "VariableDeclaration" || property === "init"))) {
+                if (node.value !== "this" && property !== "callee" && property !== "arguments") {
+                    identifiers.push(node);
+                }
+            }
+            return node
+        }
+        case "AssignmentExpression" : {
+            return {
+                type: node.type,
+                operator: node.operator,
+                left: collector(node.left, node, "left", identifiers),
+                right: collector(node.right, node, "right", identifiers)
+            }
+        }
+        case "ArrayPattern" : {
+            return {
+                type: node.type,
+                elements: node.elements.map((arg) => collector(arg, node, "elements", identifiers))
+            }
+        }
+        case "VariableDeclaration" : {
+            return {
+                type: node.type,
+                kind: node.kind,
+                value: node.value,
+                id: collector(node.id, node, "id", identifiers),
+                init: collector(node.init, node, "init", identifiers)
+            }
+        }
+        case "UnaryExpression" : {
+            return {
+                type: node.type,
+                operator: node.operator,
+                argument: collector(node.argument, node, "argument", identifiers)
+            }
+        }
+        case "BinaryExpression" : {
+            return {
+                type: node.type,
+                left: collector(node.left, node, "left", identifiers),
+                operator: node.operator,
+                right: collector(node.right, node, "right", identifiers)
+            }
+        }
+        case "ConditionalExpression" :
+            let result = {
+                type: node.type,
+                test: collector(node.test, node, "test", identifiers),
+                consequent: collector(node.consequent, node, "consequent", identifiers)
+            };
+
+            if (node.alternate) {
+                result.alternate = collector(node.alternate, node, "alternate", identifiers)
+            }
+
+            return node
+        case "CallExpression" : {
+            identifiers.push(node)
+            return {
+                type: node.type,
+                callee: collector(node.callee, node, "callee", identifiers),
+                arguments: node.arguments.map((arg) => collector(arg, node, "arguments", identifiers))
+            }
+
+        }
+        case "ObjectExpression" :
+            return {
+                type: node.type,
+                parameters: node.parameters.map((entry) => {
+                    return {
+                        key: collector(entry.key, node, "key", identifiers),
+                        value: collector(entry.value, node, "value", identifiers)
+                    }
+                })
+            }
+    }
+}
+
 
 export function codeGenerator(node) {
 
@@ -579,7 +678,7 @@ export function codeGenerator(node) {
             return value
         }
         case "AssignmentExpression" :
-            return codeGenerator(node.left) + " " + " " +  node.operator + " " + codeGenerator(node.right);
+            return codeGenerator(node.left) + " " + " " + node.operator + " " + codeGenerator(node.right);
         case "ArrayPattern" :
             return "[" + node.elements.map((element) => codeGenerator(element)).join(", ") + "]"
         case "VariableDeclaration" :
@@ -601,25 +700,42 @@ export function codeGenerator(node) {
     }
 }
 
+export function identifierToArray(node) {
+    let value = [node.value];
+    if (node.property) {
+        value.push(...identifierToArray(node.property))
+    }
+    return value
+}
+
+export function callExpressionToArray(node) {
+    return [identifierToArray(node.callee)]
+}
+
 export function astGenerator(expression) {
     let tokens = tokenizer(expression);
     return parser(tokens);
 }
 
-export const compiler = cachingProxy(function(expression, callback) {
+export const compiler = cachingProxy(function (expression, callback) {
         let ast = astGenerator(expression);
         let transformed = transformator(ast, null, null, callback)
         return codeGenerator(transformed);
     }
 )
 
-const proxyCache = new WeakMap();
+export const collectIdentifiers = cachingProxy(function (expression) {
+        let ast = astGenerator(expression);
+        let identifiers = [];
+        collector(ast, null, null, identifiers);
+        return identifiers.map((identifier) => codeGenerator(identifier));
+    }
+)
 
-export function evaluation(expression, context, args) {
-
+function proxyFactory(context) {
     let proxy = proxyCache.get(context);
 
-    if (! proxy) {
+    if (!proxy) {
         proxy = new Proxy(context, {
             get(target, p, receiver) {
                 let cursor = target;
@@ -655,6 +771,15 @@ export function evaluation(expression, context, args) {
 
         proxyCache.set(context, proxy);
     }
+
+    return proxy;
+}
+
+const proxyCache = new WeakMap();
+
+export function evaluation(expression, context, args) {
+
+    let proxy = proxyFactory(context);
 
     let output = compiler(expression, (property) => {
         return `context.${property}`

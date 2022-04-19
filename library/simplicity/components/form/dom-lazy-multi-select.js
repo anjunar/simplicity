@@ -27,11 +27,11 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
 
     onItemClicked(event) {
         let item = event.target.model;
-        let find = this.model.find((source) => isEqual(source, item))
+        let find = this.model.find((source) => isEqual(source, item));
         if (! find) {
             this.model.push(item)
         }
-        this.dispatchEvent(new CustomEvent("model"))
+        this.dispatchEvent(new CustomEvent("model"));
     }
 
     onDeleteItem(item) {
@@ -40,7 +40,7 @@ class DomLazyMultiSelect extends mix(HTMLElement).with(Input) {
         if (this.model.length === 0) {
             this.open = false;
         }
-        this.dispatchEvent(new CustomEvent("model"))
+        this.dispatchEvent(new CustomEvent("model"));
     }
 
     onToggle() {

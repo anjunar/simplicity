@@ -6,6 +6,7 @@ let avgLatency = 0;
 
 export const lifeCycle = debounce(function lifeCycle() {
 
+/*
     let timeStart = performance.now();
 
     let iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_ELEMENT);
@@ -44,6 +45,7 @@ export const lifeCycle = debounce(function lifeCycle() {
     lifeCycle.addLatency(delta);
 
     lifeCycles++;
+*/
 
 
 }, 30);

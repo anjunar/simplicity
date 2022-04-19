@@ -35,7 +35,7 @@
     <template>
         <thead bind:if="header.length > 0">
         <tr>
-            <td bind:for="let td of configuration(columns); let index = index">
+            <td bind:for="let td of configuration(columns, false); let index = index">
                 <div style="display: flex; align-items: center;">
                     <div bind:onclick="showConfiguration()">
                         <strong>
@@ -53,7 +53,7 @@
         </thead>
         <tbody>
         <tr bind:for="let tr of window" bind:onclick="onRowClick($event, tr)">
-            <td bind:for="let td of configuration(columns)">
+            <td bind:for="let td of configuration(columns, false)">
                 <slot bind:implicit="tr" selector="tbody tr td > *" bind:index="td.index"></slot>
             </td>
         </tr>

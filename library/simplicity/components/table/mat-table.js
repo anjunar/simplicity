@@ -2,14 +2,14 @@ import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {windowManager} from "../../manager/window-manager.js";
 import {contentManager} from "../../manager/content-manager.js";
-import {membraneFactory} from "./../../processors/html-compiler-processor.js";
 import DomForm from "../../directives/dom-form.js";
 import {Input, mix} from "../../services/tools.js";
+import {activeProxyFactory} from "../../processors/html-compiler-processor.js";
 
 class MatTable extends mix(HTMLTableElement).with(Input) {
 
     index = 0;
-    limit = 10;
+    limit = 5;
     size = 0;
 
     items = () => {};
@@ -149,10 +149,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         }
 
         this.items(query, (data, size) => {
-            let membrane = membraneFactory(this);
-            membrane.window = data;
-            membrane.size = size;
-            membrane.open = true;
+            this.window = data;
+            this.size = size;
+            this.open = true;
         })
     }
 
@@ -169,6 +168,21 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
             return array;
         }
         return array.filter((td) => td.visible);
+    }
+
+    configurationHandler(array, all, callback) {
+        for (const element of array) {
+            let activeObject = activeProxyFactory(element, this.resolve);
+            activeObject.visible
+                .then(() => {
+                    callback(array.filter((td) => td.visible));
+                })
+        }
+        let activeObject = activeProxyFactory(this, this.resolve);
+            activeObject.columns
+                .then(() => {
+                    callback(array.filter((td) => td.visible));
+                });
     }
 
     left(index) {

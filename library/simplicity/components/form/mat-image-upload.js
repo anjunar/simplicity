@@ -28,7 +28,9 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
     }
 
     onLoad(event) {
-        this.model = event.detail;
+        this.model.data = event.detail.data;
+        this.lastModified = event.detail.lastModified;
+        this.name = event.detail.name;
         this.dispatchEvent(new CustomEvent("model"))
     }
 

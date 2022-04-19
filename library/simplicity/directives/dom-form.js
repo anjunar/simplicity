@@ -1,9 +1,11 @@
 import {customComponents} from "../simplicity.js";
 import {Input, mix} from "../services/tools.js";
+import {activeProxyFactory} from "../processors/html-compiler-processor.js";
 
 class DomForm extends mix(HTMLFormElement).with(Input) {
 
     components = [];
+    dirty = false;
 
     initialize() {
         if (this.name) {
@@ -47,13 +49,20 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
                 component.value = value;
                 component.defaultValue = value;
             }
+            activeProxyFactory(this.model, this)[component.name]
+                .then((value) => {
+                    component.model = value;
+                    component.value = value;
+                })
         }
 
         component.formular = this;
-    }
 
-    get dirty() {
-        return this.components.some((component) => component.dirty)
+        let activeObject = activeProxyFactory(component, this);
+        activeObject.dirty
+            .then(() => {
+                this.dirty = this.components.some((component) => component.dirty);
+            })
     }
 
     reset() {
