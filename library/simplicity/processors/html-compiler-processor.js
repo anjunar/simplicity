@@ -63,40 +63,19 @@ const findProperties = cachingProxy(function (object) {
     }
 )
 
-export function activeObjectExpression(expression, context, element) {
+export function activeObjectExpression(expression, context, element, callback) {
     let identifiers = collectIdentifiers(expression);
-    let outerCallback;
-    let result = {
-        then(callback) {
-            outerCallback = callback;
-        }
-    }
     for (let identifier of identifiers) {
         let ast = astGenerator(identifier);
         let bodyElement = ast.body[0];
 
         if (bodyElement.type === "Identifier") {
             let segments = identifierToArray(bodyElement);
-            let activeContext = context.resolve(segments);
+            let model = context.resolve(segments);
             let lastSegment = segments[segments.length - 1];
-            function getPropertyDescriptor(target, property) {
-                let descriptor = Object.getOwnPropertyDescriptor(target, property);
-                if (descriptor) {
-                    return descriptor;
-                }
-                return getPropertyDescriptor(Object.getPrototypeOf(target), property)
-            }
-            let propertyDescriptor = getPropertyDescriptor(activeContext, lastSegment)
-            let activeObject = activeProxyFactory(activeContext, element);
-            let objectElement = activeObject[lastSegment];
-            if (objectElement instanceof Function) {
-
-            } else {
-                objectElement
-                    .then(result => {
-                        outerCallback(result);
-                    })
-            }
+            model.addEventHandler(lastSegment, element, (result) => {
+                callback(result);
+            });
         }
         if (bodyElement.type === "CallExpression") {
             function getLast(node) {
@@ -107,62 +86,42 @@ export function activeObjectExpression(expression, context, element) {
             }
             bodyElement.arguments.push({
                 type: "PlaceholderLiteral",
-                value: "$callback"
+                value: "$context"
             })
             let last = getLast(bodyElement.callee);
             last.value = last.value + "Handler"
             if (context.variable(bodyElement.callee.value)) {
                 let newAst = jsCodeGenerator(bodyElement);
                 evaluation(newAst, context, {
-                    $callback: (result) => {
-                        outerCallback(result);
+                    $context: {
+                        callback : (result) => {
+                            callback(result);
+                        },
+                        element : element
                     }
                 })
             }
         }
     }
-
-    return result;
 }
 
 let lifeCycles = 0;
 let avgLatency = 0;
 
-export function activeProxyFactory(object, element) {
-    let promises = {};
+function addEventHandler(handlers) {
+    return function (name, element, handler) {
+        handlers.push({
+            name : name,
+            handler : handler,
+            element : element
+        });
 
-    function generate(property) {
-        let handlers = [];
-        promises.element = element;
-        promises[property] = {
-            then(handler) {
-                handlers.push(handler);
-            },
-            fire(value) {
-                for (const handler of handlers) {
-                    handler(value);
-                }
-            }
-        }
+        element.addEventListener("removed", () => {
+            let entry = handlers.find((entry) => entry.name === name && entry.handler === handler);
+            let indexOf = handlers.indexOf(entry);
+            handlers.splice(indexOf, 1)
+        })
     }
-
-    object.$promises = promises;
-
-    return new Proxy(object, {
-        get(target, p, receiver) {
-            let result = Reflect.get(target, p, receiver);
-            if (result instanceof Function) {
-                return result;
-            } else {
-                if (promises[p]) {
-                    return promises[p]
-                } else {
-                    generate(p)
-                    return promises[p];
-                }
-            }
-        }
-    })
 }
 
 const membraneCache = new WeakMap();
@@ -173,7 +132,7 @@ export function membraneFactory(instance, $parent, property) {
         if (cachedProxy) {
             return cachedProxy;
         } else {
-            let promises = [];
+            let eventHandlers = [];
             let proxy = new Proxy(instance, {
                 apply(target, thisArg, argArray) {
                     let result = Reflect.apply(target, thisArg, argArray);
@@ -207,54 +166,42 @@ export function membraneFactory(instance, $parent, property) {
                     }
 
                     if (p === "$fire") {
-                        for (const promise of Array.from(promises)) {
-                            if (promise[value.property]) {
-                                promise[value.property].fire(value.proxy)
+                        for (const eventHandler of eventHandlers) {
+                            if (eventHandler.name === value.property) {
+                                eventHandler.handler(value.proxy);
                             }
                         }
                         return true;
                     }
 
-                    if (p === "$promises") {
-                        promises.push(value);
-                        return true;
-                    } else {
-                        let properties = findProperties(target);
-                        if (properties.indexOf(p) > -1) {
-                            let result = Reflect.set(target, p, value, receiver);
+                    let properties = findProperties(target);
+                    if (properties.indexOf(p) > -1) {
+                        let result = Reflect.set(target, p, value, receiver);
 
-                            let timeStart = performance.now();
+                        let timeStart = performance.now();
 
-                            for (const promise of Array.from(promises)) {
-                                if (promise.element?.isConnected) {
-                                    if (promise[p]) {
-                                        promise[p].fire(value);
-                                    }
-                                } else {
-                                    if (promise[p]) {
-                                        let indexOf = promises.indexOf(promise);
-                                        promises.splice(indexOf, 1);
-                                    }
-                                }
+                        for (const eventHandler of eventHandlers) {
+                            if (eventHandler.name === p) {
+                                eventHandler.handler(value);
                             }
-
-                            let timeEnd = performance.now();
-                            let delta = timeEnd - timeStart;
-                            avgLatency = (avgLatency + delta);
-                            console.log(`Latency ${Math.round(delta)} ms - avg Latency: ${Math.round(avgLatency / lifeCycles)} ms`);
-
-                            let lifeCycle = appManager.performance.lifeCycle;
-
-                            lifeCycle.cycles = lifeCycles;
-                            lifeCycle.addAvgLatency(avgLatency / lifeCycles)
-                            lifeCycle.addLatency(delta);
-
-                            lifeCycles++;
-
-                            return result;
                         }
-                        return Reflect.set(target, p, value, target);
+
+                        let timeEnd = performance.now();
+                        let delta = timeEnd - timeStart;
+                        avgLatency = (avgLatency + delta);
+                        console.log(`Latency ${Math.round(delta)} ms - avg Latency: ${Math.round(avgLatency / lifeCycles)} ms`);
+
+                        let lifeCycle = appManager.performance.lifeCycle;
+
+                        lifeCycle.cycles = lifeCycles;
+                        lifeCycle.addAvgLatency(avgLatency / lifeCycles)
+                        lifeCycle.addLatency(delta);
+
+                        lifeCycles++;
+
+                        return result;
                     }
+                    return Reflect.set(target, p, value, target);
                 },
                 get(target, p, receiver) {
                     if (p === "$property") {
@@ -271,6 +218,10 @@ export function membraneFactory(instance, $parent, property) {
 
                     if (p === "isProxy") {
                         return true;
+                    }
+
+                    if (p === "addEventHandler") {
+                        return addEventHandler(eventHandlers);
                     }
 
                     if (typeof p === "symbol" || p === "prototype") {
@@ -338,6 +289,16 @@ export class Context {
 }
 
 
+function notifyElementRemove(element) {
+    let iterator = document.createNodeIterator(element, NodeFilter.SHOW_ALL)
+    let node = iterator.nextNode();
+    while (node !== null) {
+        node.dispatchEvent(new CustomEvent("removed"))
+        node = iterator.nextNode();
+    }
+}
+
+
 function interpolationStatement(text, context, shadow) {
     let interpolationRegExp = /{{([^}]+)}}/g;
 
@@ -355,13 +316,12 @@ function interpolationStatement(text, context, shadow) {
 
     if (!shadow) {
         text.replace(interpolationRegExp, (match, expression) => {
-            activeObjectExpression(expression, context, textNode)
-                .then(() => {
-                    let textContent = evalText();
-                    if (textContent !== textNode.textContent) {
-                        textNode.textContent = textContent;
-                    }
-                })
+            activeObjectExpression(expression, context, textNode, () => {
+                let textContent = evalText();
+                if (textContent !== textNode.textContent) {
+                    textNode.textContent = textContent;
+                }
+            })
         })
     }
 
@@ -584,10 +544,9 @@ function forStatement(rawAttributes, context, callback) {
     let container = document.createDocumentFragment();
     let comment = document.createComment(data.for.expression);
 
-    activeObjectExpression(data.for.source, context, comment)
-        .then((result) => {
-            update(result)
-        })
+    activeObjectExpression(data.for.source, context, comment, (result) => {
+        update(result)
+    });
 
     function generate() {
         array.forEach((item, index) => {
@@ -610,7 +569,7 @@ function forStatement(rawAttributes, context, callback) {
             ast.push(astLeaf);
             let build = astLeaf.build(container);
             children.push(build);
-            newContext.instance = build;
+            newContext.instance = membraneFactory(build);
             Object.assign(build, instance)
         })
 
@@ -621,6 +580,7 @@ function forStatement(rawAttributes, context, callback) {
     function update(value) {
         array = value;
         for (const child of children) {
+            notifyElementRemove(child);
             child.remove();
         }
         children.length = 0;
@@ -681,11 +641,10 @@ function ifStatement(rawAttributes, context, html) {
     let container = document.createDocumentFragment();
     let element;
 
-    activeObjectExpression(attributes.if.value, context, comment)
-        .then(() => {
-            let values = boundAttributesFunction()
-            update(values.if)
-        })
+    activeObjectExpression(attributes.if.value, context, comment, () => {
+        let values = boundAttributesFunction()
+        update(values.if)
+    })
 
     function update(value) {
         if (value) {
@@ -769,11 +728,10 @@ function slotStatement(rawAttributes, context, contents) {
 
     for (const attribute of Object.values(attributes)) {
         if (attribute.type === "bind") {
-            activeObjectExpression(attribute.value, context, comment)
-                .then(() => {
-                    values = boundAttributesFunction();
-                    update();
-                })
+            activeObjectExpression(attribute.value, context, comment, () => {
+                values = boundAttributesFunction();
+                update();
+            })
         }
     }
 

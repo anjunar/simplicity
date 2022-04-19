@@ -4,7 +4,6 @@ import {windowManager} from "../../manager/window-manager.js";
 import {contentManager} from "../../manager/content-manager.js";
 import DomForm from "../../directives/dom-form.js";
 import {Input, mix} from "../../services/tools.js";
-import {activeProxyFactory} from "../../processors/html-compiler-processor.js";
 
 class MatTable extends mix(HTMLTableElement).with(Input) {
 
@@ -170,19 +169,17 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         return array.filter((td) => td.visible);
     }
 
-    configurationHandler(array, all, callback) {
+    configurationHandler(array, all, context) {
         for (const element of array) {
-            let activeObject = activeProxyFactory(element, this.resolve);
-            activeObject.visible
-                .then(() => {
-                    callback(array.filter((td) => td.visible));
-                })
+            element.addEventHandler("visible", context.element, () => {
+                if (! all) {
+                    context.callback(array.filter((td) => td.visible));
+                }
+            })
         }
-        let activeObject = activeProxyFactory(this, this.resolve);
-            activeObject.columns
-                .then(() => {
-                    callback(array.filter((td) => td.visible));
-                });
+        this.addEventHandler("columns", context.element, () => {
+            context.callback(array.filter((td) => td.visible));
+        })
     }
 
     left(index) {

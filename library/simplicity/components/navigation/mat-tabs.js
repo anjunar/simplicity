@@ -12,9 +12,9 @@ class MatTabs extends HTMLElement {
         return Array.from(this.resolve.container.querySelectorAll("mat-tab"))
     }
 
-    tabsHandler(callback) {
+    tabsHandler(context) {
         let mutationObserver = new MutationObserver(() => {
-            callback(Array.from(this.resolve.container.querySelectorAll("mat-tab")));
+            context.callback(Array.from(this.resolve.container.querySelectorAll("mat-tab")));
             this.dispatchEvent(new CustomEvent("page"))
         })
 

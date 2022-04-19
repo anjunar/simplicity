@@ -9,7 +9,7 @@ function tokenizer(expression) {
         },
         {
             type: "placeholder",
-            regex: /\$event|\$value|\$children|\$callback/y
+            regex: /\$event|\$value|\$children|\$context/y
         },
         {
             type: "variableDeclaration",

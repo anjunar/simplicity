@@ -83,13 +83,12 @@ class StyleAttributeProcessor {
             let cssValue = evaluation(value, this.context);
             this.element.style[keyString] = cssValue;
 
-            activeObjectExpression(value, this.context, this.element)
-                .then(() => {
-                    let cssValue = evaluation(value, this.context);
-                    if (this.element.style[keyString] !== cssValue) {
-                        this.element.style[keyString] = cssValue;
-                    }
-                })
+            activeObjectExpression(value, this.context, this.element, () => {
+                let cssValue = evaluation(value, this.context);
+                if (this.element.style[keyString] !== cssValue) {
+                    this.element.style[keyString] = cssValue;
+                }
+            })
         }
     }
 }
@@ -133,10 +132,9 @@ class ClassAttributeProcessor {
         generate();
 
         for (const classElement of classList) {
-            activeObjectExpression(classElement.trim(), this.context, this.element)
-                .then(() => {
-                    generate();
-                })
+            activeObjectExpression(classElement.trim(), this.context, this.element, () => {
+                generate();
+            })
         }
     }
 }
@@ -223,13 +221,12 @@ class DynamicBindingAttributeProcessor {
             }
         }
 
-        activeObjectExpression(this.value, this.context, this.element)
-            .then(() => {
-                let result = evaluation(this.value, this.context);
-                let membrane = membraneFactory(this.element);
-                membrane.attributeChangedCallback(this.name, this.oldValue, result);
-                this.oldValue = result;
-            })
+        activeObjectExpression(this.value, this.context, this.element, () => {
+            let result = evaluation(this.value, this.context);
+            let membrane = membraneFactory(this.element);
+            membrane.attributeChangedCallback(this.name, this.oldValue, result);
+            this.oldValue = result;
+        })
     }
 }
 
@@ -281,17 +278,17 @@ class DomAttributesProcessor {
                 }
             }
         }
-        activeObjectExpression(this.value, this.context, this.element)
-            .then((result) => {
-                switch (this.name) {
-                    case "disabled" : {
-                        this.element[this.name] = result === true || result === "true";
-                    } break;
-                    default : {
-                        this.element[this.name] = result;
-                    }
+
+        activeObjectExpression(this.value, this.context, this.element, (result) => {
+            switch (this.name) {
+                case "disabled" : {
+                    this.element[this.name] = result === true || result === "true";
+                } break;
+                default : {
+                    this.element[this.name] = result;
                 }
-            })
+            }
+        })
     }
 }
 
