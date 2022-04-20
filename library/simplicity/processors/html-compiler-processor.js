@@ -136,7 +136,8 @@ export function membraneFactory(instance, $parent, property) {
                     return Reflect.has(target, p);
                 },
                 set(target, p, value, receiver) {
-                    if (target instanceof Array) {
+                    let decimalRegex = /\d+/
+                    if (decimalRegex.test(p) && target instanceof Array) {
                         let result = Reflect.set(target, p, value, receiver);
                         if ($parent) {
                             $parent.$fire = {
