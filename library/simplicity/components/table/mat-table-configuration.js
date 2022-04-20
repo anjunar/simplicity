@@ -12,10 +12,6 @@ class MatTableConfiguration extends HTMLElement {
     table;
     page = 0;
 
-    rnd() {
-        return Math.random();
-    }
-
     left(event, index) {
         event.stopPropagation();
         this.page--

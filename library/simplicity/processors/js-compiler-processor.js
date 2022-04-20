@@ -777,7 +777,7 @@ function proxyFactory(context) {
 
 const proxyCache = new WeakMap();
 
-export function evaluation(expression, context, args) {
+export function evaluation(expression, context, args, full = false) {
 
     let proxy = proxyFactory(context);
 
@@ -788,7 +788,14 @@ export function evaluation(expression, context, args) {
     try {
         let arg = `return function(context, args) {return ${output}}`;
         let func = evaluator(arg)
-        return func()(proxy, args)
+        let result = func()(proxy, args);
+        if (full) {
+            return result
+        }
+        if (result && typeof result === 'object' && result.constructor === Object && Reflect.has(result, "method")) {
+            return result.method();
+        }
+        return result
     } catch (e) {
         console.error(e)
     }

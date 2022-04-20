@@ -163,17 +163,21 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     }
 
     configuration(array, all) {
-        if (all) {
-            return array;
+        let method = () => {
+            if (all) {
+                return array;
+            }
+            return array.filter((td) => td.visible);
         }
-        return array.filter((td) => td.visible);
-    }
 
-    configurationHandler(array, all, context) {
-        for (const element of array) {
-            element.addEventHandler("visible", context.element, context.callback)
+        let resonator = (callback, element) => {
+            for (const item of array) {
+                item.addEventHandler("visible", element, callback)
+            }
+            this.addEventHandler("columns", element, callback)
         }
-        this.addEventHandler("columns", context.element, context.callback)
+
+        return {method, resonator}
     }
 
     left(index) {

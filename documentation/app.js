@@ -10,11 +10,13 @@ import MatTaskbar from "../library/simplicity/components/system/mat-taskbar.js";
 export default class DocumentationApp extends HTMLElement {
 
     active(value) {
-        return window.location.hash.startsWith(`#/documentation/${value}/index`)
-    }
-
-    activeHandler(value, context) {
-        window.addEventListener("hashchange", context.callback)
+        let method = () => {
+            return window.location.hash.startsWith(`#/documentation/${value}/index`)
+        }
+        let resonator = (callback) => {
+            window.addEventListener("hashchange", callback)
+        }
+        return {method, resonator}
     }
 
     static get components() {

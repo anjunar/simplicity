@@ -327,8 +327,8 @@ class i18nAttributeProcessor {
                 this.element.innerHTML = this.text;
             } else {
                 let context = this.context.variable("i18n");
-                let text = context.i18n(this.text, this.value);
-                this.element.innerHTML = text;
+                let {method, resonator} = context.i18n(this.text, this.value);
+                this.element.innerHTML = method();
             }
 
             this.lastLanguage = language;

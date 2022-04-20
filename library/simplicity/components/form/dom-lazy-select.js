@@ -3,7 +3,6 @@ import {loader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
 import {Input, mix} from "../../services/tools.js";
-import {membraneFactory} from "../../processors/html-compiler-processor.js";
 
 class DomLazySelect extends mix(HTMLElement).with(Input) {
 
@@ -65,11 +64,24 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     }
 
     inputWidth() {
-        let inputElement = this.querySelector("input");
-        if (inputElement) {
-            return inputElement.offsetWidth;
+        let method = () => {
+            let input = this.querySelector("input");
+            if (input) {
+                return input.offsetWidth;
+            }
+            return 0;
         }
-        return 0;
+        let resonator = (callback, element) => {
+            let listener = () => {
+                callback();
+            };
+
+            window.addEventListener("resize", listener)
+            element.addEventListener("removed", () => {
+                window.removeEventListener("resize", listener)
+            })
+        }
+        return {method, resonator}
     }
 
     onItemClicked(event, item) {

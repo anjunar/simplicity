@@ -73,34 +73,14 @@ export function activeObjectExpression(expression, context, element, callback) {
             let segments = identifierToArray(bodyElement);
             let model = context.resolve(segments);
             let lastSegment = segments[segments.length - 1];
-            model.addEventHandler(lastSegment, element, (result) => {
-                callback(result);
+            model.addEventHandler(lastSegment, element, () => {
+                callback(evaluation(expression, context));
             });
         }
         if (bodyElement.type === "CallExpression") {
-            function getLast(node) {
-                if (node.property) {
-                    return node.property;
-                }
-                return node;
-            }
-            bodyElement.arguments.push({
-                type: "PlaceholderLiteral",
-                value: "$context"
-            })
-            let last = getLast(bodyElement.callee);
-            last.value = last.value + "Handler"
-            if (context.variable(bodyElement.callee.value)) {
-                let newAst = jsCodeGenerator(bodyElement);
-                evaluation(newAst, context, {
-                    $context: {
-                        callback : () => {
-                            callback(evaluation(expression, context));
-                        },
-                        element : element
-                    }
-                })
-            }
+            let {method, resonator} = evaluation(identifier, context, {}, true);
+            let handler = () => { callback(evaluation(expression, context))};
+            resonator(handler, element);
         }
     }
 }

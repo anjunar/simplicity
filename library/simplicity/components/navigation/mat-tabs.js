@@ -9,16 +9,22 @@ class MatTabs extends HTMLElement {
     container;
 
     tabs() {
-        return Array.from(this.resolve.container.querySelectorAll("mat-tab"))
-    }
+        let method = () => {
+            return Array.from(this.resolve.container.querySelectorAll("mat-tab"))
+        }
+        let resonator = (callback, element) => {
+            let mutationObserver = new MutationObserver(() => {
+                callback();
+                this.dispatchEvent(new CustomEvent("page"))
+            })
 
-    tabsHandler(context) {
-        let mutationObserver = new MutationObserver(() => {
-            context.callback(Array.from(this.resolve.container.querySelectorAll("mat-tab")));
-            this.dispatchEvent(new CustomEvent("page"))
-        })
+            mutationObserver.observe(this.resolve.container, {subtree : true, childList : true})
 
-        mutationObserver.observe(this.resolve.container, {subtree : true, childList : true})
+            element.addEventListener("removed", () => {
+                mutationObserver.disconnect();
+            })
+        }
+        return {method, resonator}
     }
 
     preInitialize() {

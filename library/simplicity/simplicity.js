@@ -64,19 +64,25 @@ export const customComponents = new class CustomComponents {
             }
 
             i18n(text) {
-                let language = appManager.language;
-                if (language === "en") {
-                    return text;
-                } else {
-                    let withoutSpaces = text.replaceAll(" ", "");
-                    let i18nMessage = i18nMessages[withoutSpaces];
-                    if (i18nMessage) {
-                        return i18nMessage[language]
+                let method = () => {
+                    let language = appManager.language;
+                    if (language === "en") {
+                        return text;
                     } else {
-                        console.warn("no translation found: " + text)
+                        let withoutSpaces = text.replaceAll(" ", "");
+                        let i18nMessage = i18nMessages[withoutSpaces];
+                        if (i18nMessage) {
+                            return i18nMessage[language]
+                        } else {
+                            console.warn("no translation found: " + text)
+                        }
+                        return text;
                     }
-                    return text;
                 }
+                let resonator = (callback, element) => {
+
+                }
+                return {method, resonator}
             }
 
             cycle() {
