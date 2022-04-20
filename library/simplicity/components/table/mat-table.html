@@ -73,14 +73,14 @@
                     <button class="material-icons" translate="no"
                             style="color: var(--main-font-color)"
                             bind:onclick="arrowLeft()"
-                            bind:disabled="! canArrowLeft()">
+                            bind:disabled="! (index > 0)">
                         keyboard_arrow_left
                     </button>
 
                     <button class="material-icons" translate="no"
                             style="color: var(--main-font-color)"
                             bind:onclick="arrowRight()"
-                            bind:disabled="! canArrowRight()">
+                            bind:disabled="! ((index + limit) < size)">
                         keyboard_arrow_right
                     </button>
 

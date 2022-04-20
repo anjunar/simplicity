@@ -94,8 +94,8 @@ export function activeObjectExpression(expression, context, element, callback) {
                 let newAst = jsCodeGenerator(bodyElement);
                 evaluation(newAst, context, {
                     $context: {
-                        callback : (result) => {
-                            callback(result);
+                        callback : () => {
+                            callback(evaluation(expression, context));
                         },
                         element : element
                     }
@@ -135,6 +135,9 @@ export function membraneFactory(instance, $parent, property) {
             let eventHandlers = [];
             let proxy = new Proxy(instance, {
                 apply(target, thisArg, argArray) {
+                    if (thisArg instanceof DocumentFragment) {
+                        return Reflect.apply(target, thisArg.resolve, argArray);
+                    }
                     let result = Reflect.apply(target, thisArg, argArray);
                     if (thisArg instanceof Array && (target.name === "push" || target.name === "splice")) {
                         if ($parent.$parent) {
@@ -153,8 +156,7 @@ export function membraneFactory(instance, $parent, property) {
                     return Reflect.has(target, p);
                 },
                 set(target, p, value, receiver) {
-                    let decimalRegex = /\d+/
-                    if (decimalRegex.test(p) && target instanceof Array) {
+                    if (target instanceof Array) {
                         let result = Reflect.set(target, p, value, receiver);
                         if ($parent) {
                             $parent.$fire = {

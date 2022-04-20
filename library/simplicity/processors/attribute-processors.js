@@ -279,7 +279,8 @@ class DomAttributesProcessor {
             }
         }
 
-        activeObjectExpression(this.value, this.context, this.element, (result) => {
+        activeObjectExpression(this.value, this.context, this.element, () => {
+            let result = evaluation(this.value, this.context);
             switch (this.name) {
                 case "disabled" : {
                     this.element[this.name] = result === true || result === "true";

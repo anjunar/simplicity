@@ -14,9 +14,7 @@ export default class DocumentationApp extends HTMLElement {
     }
 
     activeHandler(value, context) {
-        window.addEventListener("hashchange", () => {
-            context.callback(window.location.hash.startsWith(`#/documentation/${value}/index`))
-        })
+        window.addEventListener("hashchange", context.callback)
     }
 
     static get components() {

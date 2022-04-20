@@ -18,8 +18,10 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
 
     name;
     create = false;
+    contentTemplate;
 
     preInitialize() {
+        this.contentTemplate = contentManager.instance(this);
         this.extension = this.queryUpwards((element) => element.localName === "mat-table-extension")
         this.columns = [];
         let length = this.body.length;
@@ -74,13 +76,11 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     }
 
     get header() {
-        let template = contentManager.instance(this);
-        return Array.from(template.querySelectorAll("thead tr td"))
+        return Array.from(this.contentTemplate.querySelectorAll("thead tr td"))
     }
 
     get body() {
-        let template = contentManager.instance(this);
-        return Array.from(template.querySelectorAll("tbody tr td"))
+        return Array.from(this.contentTemplate.querySelectorAll("tbody tr td"))
     }
 
     desc(td) {
@@ -171,15 +171,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
 
     configurationHandler(array, all, context) {
         for (const element of array) {
-            element.addEventHandler("visible", context.element, () => {
-                if (! all) {
-                    context.callback(array.filter((td) => td.visible));
-                }
-            })
+            element.addEventHandler("visible", context.element, context.callback)
         }
-        this.addEventHandler("columns", context.element, () => {
-            context.callback(array.filter((td) => td.visible));
-        })
+        this.addEventHandler("columns", context.element, context.callback)
     }
 
     left(index) {
@@ -208,17 +202,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         this.load();
     }
 
-    canArrowLeft() {
-        return this.index > 0;
-    }
-
     arrowRight() {
         this.index += this.limit;
         this.load();
-    }
-
-    canArrowRight() {
-        return this.index + this.limit < this.size;
     }
 
     skipNext() {
