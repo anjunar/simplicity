@@ -459,37 +459,37 @@ function forExpressions(expressions) {
         if (expression.type === "VariableDeclaration") {
             if (expression.id.value === "index") {
                 result.index = {
-                    expression: jsCodeGenerator(expression),
+                    expression: jsCodeGenerator(expression, true),
                     variable: expression.init.value
                 }
             } else if (expression.id.value === "length") {
                 result.length = {
-                    expression: jsCodeGenerator(expression),
+                    expression: jsCodeGenerator(expression, true),
                     variable: expression.init.value
                 }
             } else if (expression.id.type === "ArrayPattern") {
                 result.for = {
-                    expression: jsCodeGenerator(expression),
+                    expression: jsCodeGenerator(expression, true),
                     variable: expression.id.elements.map(element => element.value),
-                    source: jsCodeGenerator(expression.init)
+                    source: jsCodeGenerator(expression.init, true)
                 }
             } else {
                 result.for = {
-                    expression: jsCodeGenerator(expression),
+                    expression: jsCodeGenerator(expression, true),
                     variable: expression.id.value,
-                    source: jsCodeGenerator(expression.init)
+                    source: jsCodeGenerator(expression.init, true)
                 }
             }
         }
         if (expression.type === "AssignmentExpression" && expression.left.value === "onRendered") {
             result.onRendered = {
-                expression: jsCodeGenerator(expression),
-                func: jsCodeGenerator(expression.right)
+                expression: jsCodeGenerator(expression, true),
+                func: jsCodeGenerator(expression.right, true)
             }
         }
         if (expression.type === "AssignmentExpression" && expression.left.value === "force") {
             result.force = {
-                expression: jsCodeGenerator(expression),
+                expression: jsCodeGenerator(expression, true),
                 enabled: true
             }
         }
@@ -570,7 +570,7 @@ function forStatement(rawAttributes, context, callback) {
         generate();
         comment.after(container)
         if (data.onRendered) {
-            evaluation(data.onRendered.func, context, {$children: children})
+            evaluation(data.onRendered.func, context, {$children: children}, true)
         }
     }
 
@@ -583,7 +583,7 @@ function forStatement(rawAttributes, context, callback) {
             parent.appendChild(comment)
             parent.appendChild(container);
             if (data.onRendered) {
-                evaluation(data.onRendered.func, context, {$children: children})
+                evaluation(data.onRendered.func, context, {$children: children}, true)
             }
             return children;
         },

@@ -164,7 +164,7 @@ class EventAttributeProcessor {
 
     process() {
         this.element.addEventListener(this.name, ($event) => {
-            evaluation(this.value, this.context, {$event: $event})
+            evaluation(this.value, this.context, {$event: $event}, true)
         })
     }
 }

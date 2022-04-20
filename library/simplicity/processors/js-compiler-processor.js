@@ -657,11 +657,11 @@ function collector(node, parent, property, identifiers) {
 }
 
 
-export function codeGenerator(node) {
+export function codeGenerator(node, full = false) {
 
     switch (node.type) {
         case "Program" :
-            return node.body.map(element => codeGenerator(element)).join(";\n")
+            return node.body.map(element => codeGenerator(element, full)).join(";\n")
         case "ReservedLiteral" :
             return node.value;
         case "PlaceholderLiteral" :
@@ -673,30 +673,36 @@ export function codeGenerator(node) {
         case "Identifier" : {
             let value = node.value;
             if (node.property) {
-                value += "." + codeGenerator(node.property)
+                value += "." + codeGenerator(node.property, full)
             }
             return value
         }
         case "AssignmentExpression" :
-            return codeGenerator(node.left) + " " + " " + node.operator + " " + codeGenerator(node.right);
+            return codeGenerator(node.left) + " " + " " + node.operator + " " + codeGenerator(node.right, full);
         case "ArrayPattern" :
-            return "[" + node.elements.map((element) => codeGenerator(element)).join(", ") + "]"
+            return "[" + node.elements.map((element) => codeGenerator(element, full)).join(", ") + "]"
         case "VariableDeclaration" :
-            return node.kind + " " + codeGenerator(node.id) + " " + node.value + " " + codeGenerator(node.init)
+            return node.kind + " " + codeGenerator(node.id, full) + " " + node.value + " " + codeGenerator(node.init, full)
         case "UnaryExpression" :
-            return node.operator + " " + codeGenerator(node.argument)
+            return node.operator + " " + codeGenerator(node.argument, full)
         case "BinaryExpression" :
-            return "( " + codeGenerator(node.left) + " " + node.operator + " " + codeGenerator(node.right) + " )"
-        case "ConditionalExpression" :
-            let result = codeGenerator(node.test) + " ? " + codeGenerator(node.consequent);
+            return "( " + codeGenerator(node.left, full) + " " + node.operator + " " + codeGenerator(node.right, full) + " )"
+        case "ConditionalExpression" : {
+            let result = codeGenerator(node.test, full) + " ? " + codeGenerator(node.consequent, full);
             if (node.alternate) {
-                result += " : " + codeGenerator(node.alternate)
+                result += " : " + codeGenerator(node.alternate, full)
             }
             return result
-        case "CallExpression" :
-            return codeGenerator(node.callee) + "(" + node.arguments.map((arg) => codeGenerator(arg)).join(", ") + ")"
+        }
+        case "CallExpression" : {
+            let result = codeGenerator(node.callee,full) + "(" + node.arguments.map((arg) => codeGenerator(arg,full)).join(", ") + ")";
+            if (! full) {
+                result += ".method()"
+            }
+            return result
+        }
         case "ObjectExpression" :
-            return "{ " + node.parameters.map((entry) => codeGenerator(entry.key) + " : " + codeGenerator(entry.value)).join(", ") + " }"
+            return "{ " + node.parameters.map((entry) => codeGenerator(entry.key,full) + " : " + codeGenerator(entry.value, full)).join(", ") + " }"
     }
 }
 
@@ -717,18 +723,18 @@ export function astGenerator(expression) {
     return parser(tokens);
 }
 
-export const compiler = cachingProxy(function (expression, callback) {
-        let ast = astGenerator(expression);
-        let transformed = transformator(ast, null, null, callback)
-        return codeGenerator(transformed);
-    }
-)
+export const compiler = function (expression, callback, full) {
+    let ast = astGenerator(expression);
+    let transformed = transformator(ast, null, null, callback)
+    return codeGenerator(transformed, full);
+}
+
 
 export const collectIdentifiers = cachingProxy(function (expression) {
         let ast = astGenerator(expression);
         let identifiers = [];
         collector(ast, null, null, identifiers);
-        return identifiers.map((identifier) => codeGenerator(identifier));
+        return identifiers.map((identifier) => codeGenerator(identifier, true));
     }
 )
 
@@ -783,19 +789,12 @@ export function evaluation(expression, context, args, full = false) {
 
     let output = compiler(expression, (property) => {
         return `context.${property}`
-    });
+    }, full);
 
     try {
         let arg = `return function(context, args) {return ${output}}`;
         let func = evaluator(arg)
-        let result = func()(proxy, args);
-        if (full) {
-            return result
-        }
-        if (result && typeof result === 'object' && result.constructor === Object && Reflect.has(result, "method")) {
-            return result.method();
-        }
-        return result
+        return func()(proxy, args)
     } catch (e) {
         console.error(e)
     }
