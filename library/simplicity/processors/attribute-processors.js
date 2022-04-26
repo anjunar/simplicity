@@ -24,7 +24,6 @@ class BindInterpolationProcessor {
             for (const AttributeProcessor of attributeProcessorRegistry) {
                 this.processor = new AttributeProcessor(name, value, element, context);
                 if (this.processor.matched) {
-                    this.processor.process();
                     break;
                 } else {
                     this.processor = null
@@ -56,7 +55,6 @@ class StyleAttributeProcessor {
         let result = name === "bind:style"
         if (result) {
             this.matched = true;
-            this.process();
         }
     }
 
@@ -111,7 +109,6 @@ class ClassAttributeProcessor {
         let result = name === "bind:class"
         if (result) {
             this.matched = true;
-            this.process();
         }
     }
 
@@ -158,7 +155,6 @@ class EventAttributeProcessor {
         if (result) {
             this.matched = true;
             this.name = result[1];
-            this.process();
         }
     }
 
@@ -192,7 +188,6 @@ class DynamicBindingAttributeProcessor {
             if (find) {
                 this.matched = true;
                 this.type = find.type;
-                this.process();
                 if (this.type === "two-way") {
                     this.element.addEventListener(this.name, (event) => {
                         let $value = event.target[this.name]
@@ -208,7 +203,7 @@ class DynamicBindingAttributeProcessor {
         if (this.element.attributeChangedCallback) {
             let result = evaluation(this.value, this.context);
             if (!isEqual(this.oldValue, result)) {
-                this.element.attributeChangedCallback(this.name, this.oldValue, result);
+                membraneFactory(this.element).attributeChangedCallback(this.name, this.oldValue, result);
                 if (result instanceof Array) {
                     this.oldValue = Array.from(result);
                 } else if (result instanceof Function) {
@@ -262,7 +257,6 @@ class DomAttributesProcessor {
 
         if (Reflect.has(this.element, this.name)) {
             this.matched = true;
-            this.process();
         }
     }
 
@@ -315,7 +309,6 @@ class i18nAttributeProcessor {
                 .replace(/&lt;/g,'<')
                 .replace(/&gt;/g,'>')
                 .replace(/&amp;/g,'&');
-            this.process();
         }
     }
 

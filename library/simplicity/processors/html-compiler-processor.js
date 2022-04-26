@@ -297,17 +297,6 @@ function interpolationStatement(text, context, shadow) {
 
     let textNode = document.createTextNode("");
 
-    if (!shadow) {
-        text.replace(interpolationRegExp, (match, expression) => {
-            activeObjectExpression(expression, context, textNode, () => {
-                let textContent = evalText();
-                if (textContent !== textNode.textContent) {
-                    textNode.textContent = textContent;
-                }
-            })
-        })
-    }
-
     function generator() {
         textNode.textContent = evalText();
         return textNode;
@@ -321,9 +310,15 @@ function interpolationStatement(text, context, shadow) {
             parent.appendChild(textNode);
         },
         update() {
-            let textContent = evalText();
-            if (textContent !== textNode.textContent) {
-                textNode.textContent = textContent;
+            if (!shadow) {
+                text.replace(interpolationRegExp, (match, expression) => {
+                    activeObjectExpression(expression, context, textNode, () => {
+                        let textContent = evalText();
+                        if (textContent !== textNode.textContent) {
+                            textNode.textContent = textContent;
+                        }
+                    })
+                })
             }
         }
     }
@@ -569,7 +564,10 @@ function forStatement(rawAttributes, context, callback) {
         children.length = 0;
         ast.length = 0;
         generate();
-        comment.after(container)
+        comment.after(container);
+        for (const astElement of ast) {
+            astElement.update();
+        }
         if (data.onRendered) {
             evaluation(data.onRendered.func, context, {$children: children}, true)
         }
@@ -589,27 +587,8 @@ function forStatement(rawAttributes, context, callback) {
             return children;
         },
         update: function () {
-            let result = evaluation(data.for.source, context);
-            let newArray;
-            if (result instanceof Array) {
-                newArray = Array.from(result);
-            } else if (result instanceof Object) {
-                if (data.for.variable instanceof Array) {
-                    newArray = Object.entries(result);
-                } else {
-                    newArray = Object.values(result);
-                }
-            } else {
-                console.log(`For loops data source is a ${typeof result} from path ${data.for.source}`)
-            }
-
-            if (!isEqual(newArray, array) || data.force?.enabled) {
-                array = newArray;
-                update(array);
-            } else {
-                for (const astElement of ast) {
-                    astElement.update();
-                }
+            for (const astElement of ast) {
+                astElement.update();
             }
         }
     }
@@ -648,6 +627,7 @@ function ifStatement(rawAttributes, context, html) {
 
     function generate() {
         element = html.build(container);
+        html.update();
     }
 
     return {
@@ -661,15 +641,13 @@ function ifStatement(rawAttributes, context, html) {
             }
         },
         update() {
+/*
             let values = boundAttributesFunction()
             let newValue = values.if;
-            if (!isEqual(newValue, value)) {
-                value = newValue;
-                update(value)
-            }
             if (newValue) {
                 html.update();
             }
+*/
         }
     }
 }
@@ -691,7 +669,7 @@ function bindStatement(name, value, context) {
             }
         },
         update() {
-            if (processor && !processor.runOnce) {
+            if (processor) {
                 processor.process();
             }
         }
@@ -760,6 +738,7 @@ function slotStatement(rawAttributes, context, contents) {
         children.length = 0;
         fragment = generate();
         comment.after(container);
+        fragment.update();
     }
 
     return {
@@ -770,16 +749,10 @@ function slotStatement(rawAttributes, context, contents) {
             fragment = generate();
             parent.appendChild(comment);
             parent.appendChild(container);
+            // fragment.update();
         },
         update() {
-            let newValues = boundAttributesFunction();
-            let equal = isEqual(newValues, values);
-            if (!equal) {
-                values = newValues;
-                update();
-            } else {
-                fragment.update();
-            }
+            fragment.update();
         }
     };
 }

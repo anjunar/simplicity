@@ -53,10 +53,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 });
             }
         }
-
-        if (length > 0) {
+        this.addEventHandler("items", this, () => {
             this.load();
-        }
+        })
     }
 
     initialize() {

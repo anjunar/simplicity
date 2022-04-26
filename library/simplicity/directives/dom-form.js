@@ -1,5 +1,6 @@
 import {customComponents} from "../simplicity.js";
 import {Input, mix} from "../services/tools.js";
+import {membraneFactory} from "../processors/html-compiler-processor.js";
 
 class DomForm extends mix(HTMLFormElement).with(Input) {
 
@@ -8,7 +9,7 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
 
     initialize() {
         if (this.name) {
-            let domForm = this.parentElement.queryUpwards((element) => element instanceof DomForm);
+            let domForm = membraneFactory(this.parentElement.queryUpwards((element) => element instanceof DomForm));
             if (domForm) {
                 domForm.register(this);
             }
@@ -41,19 +42,21 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
             this.asyncValidationHandler();
         })
 
-        if (this.model) {
-            let value = this.model[component.name];
-            if (value !== undefined) {
-                component.model = value;
-                component.value = value;
-                component.defaultValue = value;
-            }
+        this.addEventHandler("model", this, () => {
+            if (this.model) {
+                let value = this.model[component.name];
+                if (value !== undefined) {
+                    component.model = value;
+                    component.value = value;
+                    component.defaultValue = value;
+                }
 
-            this.model.addEventHandler(component.name, this, (value) => {
-                component.model = value;
-                component.value = value;
-            })
-        }
+                this.model.addEventHandler(component.name, this, (value) => {
+                    component.model = value;
+                    component.value = value;
+                })
+            }
+        })
 
         component.formular = this;
 
