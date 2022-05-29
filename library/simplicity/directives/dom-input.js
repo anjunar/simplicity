@@ -9,8 +9,6 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
 
 
     initialize() {
-        super.initialize();
-
         let valueChangeHandler = () => {
             if (this.type === "number") {
                 this.model = this.valueAsNumber || "";

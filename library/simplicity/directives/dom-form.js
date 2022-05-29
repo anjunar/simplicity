@@ -1,11 +1,10 @@
 import {customComponents} from "../simplicity.js";
-import {Input, mix} from "../services/tools.js";
+import {Input, isEqual, mix} from "../services/tools.js";
 import {membraneFactory} from "../processors/html-compiler-processor.js";
 
 class DomForm extends mix(HTMLFormElement).with(Input) {
 
     components = [];
-    dirty = false;
 
     initialize() {
         if (this.name) {
@@ -38,7 +37,9 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         this.components.push(component)
         component.addEventListener("model", () => {
             let name = component.name;
-            this.model[name] = component.model;
+            if (! isEqual(this.model[name], component.model)) {
+                this.model[name] = component.model;
+            }
             this.asyncValidationHandler();
         })
 
@@ -54,6 +55,7 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
                 this.model.addEventHandler(component.name, this, (value) => {
                     component.model = value;
                     component.value = value;
+                    component.dispatchEvent(new CustomEvent("input"))
                 })
             }
         })
@@ -63,11 +65,11 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
 
     get dirty() {
         let method = () => {
-            return this.components.some((component) => component.dirty);
+            return this.components.some((component) => component.dirty.method());
         }
         let resonator = (context, element) => {
             for (const component of this.components) {
-                component.addEventHandler("dirty", element, context)
+                component.dirty.resonator(context, element);
             }
         }
         return {method, resonator}

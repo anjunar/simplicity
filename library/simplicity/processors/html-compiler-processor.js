@@ -130,6 +130,12 @@ export function membraneFactory(instance, $parent, property) {
         } else {
             let eventHandlers = [];
             let proxy = new Proxy(instance, {
+                getOwnPropertyDescriptor(target, p) {
+                    if (target instanceof Array) {
+                        return Reflect.getOwnPropertyDescriptor(target, p);
+                    }
+                    return getPropertyDescriptor(p, target)
+                },
                 apply(target, thisArg, argArray) {
                     if (thisArg instanceof DocumentFragment) {
                         return Reflect.apply(target, thisArg.resolve, argArray);
@@ -298,7 +304,7 @@ function notifyElementRemove(element) {
 }
 
 
-function interpolationStatement(text, context, shadow) {
+function interpolationStatement(text, context) {
     let interpolationRegExp = /{{([^}]+)}}/g;
 
     function evalText() {
@@ -327,16 +333,14 @@ function interpolationStatement(text, context, shadow) {
         update() {
             if (textNode.isConnected) {
                 textNode = generator();
-                if (!shadow) {
-                    text.replace(interpolationRegExp, (match, expression) => {
-                        activeObjectExpression(expression, context, textNode, () => {
-                            let textContent = evalText();
-                            if (textContent !== textNode.textContent) {
-                                textNode.textContent = textContent;
-                            }
-                        })
+                text.replace(interpolationRegExp, (match, expression) => {
+                    activeObjectExpression(expression, context, textNode, () => {
+                        let textContent = evalText();
+                        if (textContent !== textNode.textContent) {
+                            textNode.textContent = textContent;
+                        }
                     })
-                }
+                })
             }
         }
     }
@@ -882,7 +886,7 @@ function letStatement(rawAttributes, implicit, context, callback) {
     return {
         build(parent) {
             let element = ast.build(parent);
-            newContext.instance = element;
+            newContext.instance = membraneFactory(element);
             Object.assign(element, instance)
             return element
         },

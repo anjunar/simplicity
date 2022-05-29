@@ -152,21 +152,11 @@ export const Input = (superclass) => class InputMixin extends superclass {
 
     errors = [];
 
-    dirty = false;
-    pristine = true;
-
     constructor() {
         super();
 
         this.addEventListener("model", debounce(this.asyncValidationHandler, 300));
         this.addEventListener("model", this.syncValidationHandler);
-    }
-
-    initialize() {
-        this.addEventListener("model", () => {
-            this.pristine = isEqual(this.value, this.defaultValue);
-            this.dirty = ! this.pristine
-        });
     }
 
     asyncValidationHandler() {
@@ -250,6 +240,26 @@ export const Input = (superclass) => class InputMixin extends superclass {
 
     get valid() {
         return this.validity.valid && this.errors.length === 0;
+    }
+
+    get pristine() {
+        let method = () => {
+            return isEqual(this.value, this.defaultValue)
+        }
+        let resonator = (context, element) => {
+            this.addEventListener("input", context)
+        }
+        return {method, resonator}
+    }
+
+    get dirty() {
+        let method = () => {
+            return ! this.pristine.method();
+        }
+        let resonator = (context, element) => {
+            this.addEventListener("input", context)
+        }
+        return {method, resonator}
     }
 
     reset() {
