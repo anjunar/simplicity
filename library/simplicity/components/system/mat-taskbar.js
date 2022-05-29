@@ -5,7 +5,13 @@ import {windowManager} from "../../manager/window-manager.js";
 class MatTaskbar extends HTMLElement {
 
     get tasks() {
-        return windowManager.configurations;
+        let method = () => {
+            return windowManager.configurations;
+        }
+        let resonator = () => {
+
+        }
+        return {method, resonator}
     }
 
     onClick(task) {

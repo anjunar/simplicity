@@ -6,7 +6,8 @@ import DomCode from "../../../library/simplicity/directives/dom-code.js";
 class Upload extends HTMLElement {
 
     image = {
-        data : ""
+        data : "",
+        name : ""
     }
 
     static get components() {

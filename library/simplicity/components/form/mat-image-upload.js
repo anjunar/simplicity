@@ -11,7 +11,8 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
     name;
 
     model = {
-        data : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        data : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+        name : ""
     }
 
     placeholder = ""
@@ -29,8 +30,8 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
 
     onLoad(event) {
         this.model.data = event.detail.data;
-        this.lastModified = event.detail.lastModified;
-        this.name = event.detail.name;
+        this.model.lastModified = event.detail.lastModified;
+        this.model.name = event.detail.name;
         this.dispatchEvent(new CustomEvent("model"))
     }
 
@@ -38,7 +39,9 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
         switch (name) {
             case "model" : {
                 if (newValue) {
-                    this.model = newValue;
+                    this.model.data = newValue.data;
+                    this.model.lastModified = newValue.lastModified;
+                    this.model.name = newValue.name;
                 }
             }
                 break

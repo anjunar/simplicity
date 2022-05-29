@@ -59,10 +59,18 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         })
 
         component.formular = this;
+    }
 
-        component.addEventHandler("dirty", this, (value) => {
-            this.dirty = this.components.some((component) => component.dirty);
-        })
+    get dirty() {
+        let method = () => {
+            return this.components.some((component) => component.dirty);
+        }
+        let resonator = (context, element) => {
+            for (const component of this.components) {
+                component.addEventHandler("dirty", element, context)
+            }
+        }
+        return {method, resonator}
     }
 
     reset() {

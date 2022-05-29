@@ -1,13 +1,9 @@
-import {
-    astGenerator,
-    codeGenerator as jsCodeGenerator,
-    collectIdentifiers,
-    evaluation,
-    identifierToArray
-} from "./js-compiler-processor.js";
+import {codeGenerator as jsCodeGenerator, collectIdentifiers, evaluation} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
-import {cachingProxy, evaluator, isEqual} from "../services/tools.js";
+import {cachingProxy, evaluator, getPropertyDescriptor, isEqual} from "../services/tools.js";
 import {appManager} from "../manager/app-manager.js";
+import {generate} from "../../astring";
+import {parse} from "./js-compiler-extension.js";
 
 export const contentRegistry = new WeakMap();
 
@@ -65,21 +61,41 @@ const findProperties = cachingProxy(function (object) {
 
 export function activeObjectExpression(expression, context, element, callback) {
     let identifiers = collectIdentifiers(expression);
-    for (let identifier of identifiers) {
-        let ast = astGenerator(identifier);
-        let bodyElement = ast.body[0];
+    for (let ast of identifiers) {
+        let identifier = generate(ast);
+        let bodyElement = ast;
 
-        if (bodyElement.type === "Identifier") {
+        if (bodyElement.type === "Identifier" || bodyElement.type === "MemberExpression") {
+            function identifierToArray(node) {
+                if (node.type === "Identifier") {
+                    return [node.name]
+                }
+                if (node.type === "MemberExpression") {
+                    return [...identifierToArray(node.object), node.property.name]
+                }
+            }
+
             let segments = identifierToArray(bodyElement);
             let model = context.resolve(segments);
             let lastSegment = segments[segments.length - 1];
-            model.addEventHandler(lastSegment, element, () => {
-                callback(evaluation(expression, context));
-            });
+            let descriptor = getPropertyDescriptor(lastSegment, model);
+            if (descriptor.get && descriptor.set === undefined) {
+                let {method, resonator} = evaluation(identifier, context, {}, true);
+                let handler = () => {
+                    callback(evaluation(expression, context))
+                };
+                resonator(handler, element);
+            } else {
+                model.addEventHandler(lastSegment, element, () => {
+                    callback(evaluation(expression, context));
+                });
+            }
         }
         if (bodyElement.type === "CallExpression") {
             let {method, resonator} = evaluation(identifier, context, {}, true);
-            let handler = () => { callback(evaluation(expression, context))};
+            let handler = () => {
+                callback(evaluation(expression, context))
+            };
             resonator(handler, element);
         }
     }
@@ -91,9 +107,9 @@ let avgLatency = 0;
 function addEventHandler(handlers) {
     return function (name, element, handler) {
         handlers.push({
-            name : name,
-            handler : handler,
-            element : element
+            name: name,
+            handler: handler,
+            element: element
         });
 
         element.addEventListener("removed", () => {
@@ -141,7 +157,7 @@ export function membraneFactory(instance, $parent, property) {
                         let result = Reflect.set(target, p, value, receiver);
                         if ($parent) {
                             $parent.$fire = {
-                                proxy : receiver,
+                                proxy: receiver,
                                 property: receiver.$property
                             }
                         }
@@ -306,19 +322,21 @@ function interpolationStatement(text, context, shadow) {
         type: "interpolation",
         text: text,
         build(parent) {
-            textNode = generator();
             parent.appendChild(textNode);
         },
         update() {
-            if (!shadow) {
-                text.replace(interpolationRegExp, (match, expression) => {
-                    activeObjectExpression(expression, context, textNode, () => {
-                        let textContent = evalText();
-                        if (textContent !== textNode.textContent) {
-                            textNode.textContent = textContent;
-                        }
+            if (textNode.isConnected) {
+                textNode = generator();
+                if (!shadow) {
+                    text.replace(interpolationRegExp, (match, expression) => {
+                        activeObjectExpression(expression, context, textNode, () => {
+                            let textContent = evalText();
+                            if (textContent !== textNode.textContent) {
+                                textNode.textContent = textContent;
+                            }
+                        })
                     })
-                })
+                }
             }
         }
     }
@@ -403,7 +421,6 @@ function svgStatement(tagName, attributes, children) {
                     } else {
                         child.build(element)
                     }
-
                 }
             }
         }
@@ -447,50 +464,59 @@ function svgStatement(tagName, attributes, children) {
 
 
 function forExpressions(expressions) {
-    let ast = astGenerator(expressions);
+    let ast = parse(expressions);
 
     let result = {};
 
-    for (const expression of ast.body) {
-        if (expression.type === "VariableDeclaration") {
-            if (expression.id.value === "index") {
-                result.index = {
-                    expression: jsCodeGenerator(expression, true),
-                    variable: expression.init.value
+    for (const bodyExpression of ast.body) {
+        if (bodyExpression.type === "VariableDeclaration") {
+            for (const expression of bodyExpression.declarations) {
+                if (expression.type === "ForVariableDeclaration") {
+                    result.for = {
+                        expression: jsCodeGenerator(expression, true),
+                        variable: expression.id.name,
+                        source: jsCodeGenerator(expression.init, true)
+                    }
                 }
-            } else if (expression.id.value === "length") {
-                result.length = {
-                    expression: jsCodeGenerator(expression, true),
-                    variable: expression.init.value
-                }
-            } else if (expression.id.type === "ArrayPattern") {
-                result.for = {
-                    expression: jsCodeGenerator(expression, true),
-                    variable: expression.id.elements.map(element => element.value),
-                    source: jsCodeGenerator(expression.init, true)
-                }
-            } else {
-                result.for = {
-                    expression: jsCodeGenerator(expression, true),
-                    variable: expression.id.value,
-                    source: jsCodeGenerator(expression.init, true)
+                if (expression.type === "VariableDeclarator") {
+                    if (expression.id.name === "index") {
+                        result.index = {
+                            expression: jsCodeGenerator(expression, true),
+                            variable: expression.init.name
+                        }
+                    }
+                    if (expression.id.name === "length") {
+                        result.length = {
+                            expression: jsCodeGenerator(expression, true),
+                            variable: expression.init.name
+                        }
+                    }
+                    if (expression.id.type === "ArrayPattern") {
+                        result.for = {
+                            expression: jsCodeGenerator(expression, true),
+                            variable: expression.id.elements.map(element => element.value),
+                            source: jsCodeGenerator(expression.init, true)
+                        }
+                    }
                 }
             }
         }
-        if (expression.type === "AssignmentExpression" && expression.left.value === "onRendered") {
-            result.onRendered = {
-                expression: jsCodeGenerator(expression, true),
-                func: jsCodeGenerator(expression.right, true)
+        if (bodyExpression.type === "ExpressionStatement") {
+            let expressionStatement = bodyExpression.expression;
+            if (expressionStatement.type === "AssignmentExpression" && expressionStatement.left.name === "onRendered") {
+                result.onRendered = {
+                    expression: jsCodeGenerator(expressionStatement, true),
+                    func: jsCodeGenerator(expressionStatement.right, true)
+                }
             }
-        }
-        if (expression.type === "AssignmentExpression" && expression.left.value === "force") {
-            result.force = {
-                expression: jsCodeGenerator(expression, true),
-                enabled: true
+            if (expressionStatement.type === "AssignmentExpression" && expressionStatement.left.name === "force") {
+                result.force = {
+                    expression: jsCodeGenerator(expressionStatement, true),
+                    enabled: true
+                }
             }
         }
     }
-
     return result;
 }
 
@@ -603,9 +629,8 @@ function ifStatement(rawAttributes, context, html) {
     let container = document.createDocumentFragment();
     let element;
 
-    activeObjectExpression(attributes.if.value, context, comment, () => {
-        let values = boundAttributesFunction()
-        update(values.if)
+    activeObjectExpression(attributes.if.value, context, comment, (result) => {
+        update(result);
     })
 
     function update(value) {
@@ -627,7 +652,7 @@ function ifStatement(rawAttributes, context, html) {
 
     function generate() {
         element = html.build(container);
-        html.update();
+        // html.update();
     }
 
     return {
@@ -641,13 +666,11 @@ function ifStatement(rawAttributes, context, html) {
             }
         },
         update() {
-/*
             let values = boundAttributesFunction()
             let newValue = values.if;
             if (newValue) {
                 html.update();
             }
-*/
         }
     }
 }
@@ -749,7 +772,6 @@ function slotStatement(rawAttributes, context, contents) {
             fragment = generate();
             parent.appendChild(comment);
             parent.appendChild(container);
-            // fragment.update();
         },
         update() {
             fragment.update();

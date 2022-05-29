@@ -309,3 +309,11 @@ export function isEqual(lhs, rhs) {
 export const evaluator = cachingProxy(function (arg) {
     return Function(arg)
 })
+
+export function getPropertyDescriptor(name, object) {
+    let result = Object.getOwnPropertyDescriptor(object, name);
+    if (result) {
+        return result;
+    }
+    return getPropertyDescriptor(name, Object.getPrototypeOf(object))
+}

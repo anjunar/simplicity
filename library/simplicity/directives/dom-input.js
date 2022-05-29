@@ -109,6 +109,7 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
             }
                 break;
         }
+        this.render();
     }
 
     static get observedAttributes() {
