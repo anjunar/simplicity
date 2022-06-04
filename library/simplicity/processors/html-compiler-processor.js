@@ -28,7 +28,7 @@ class Component {
     }
 }
 
-export function content(element, implicit = "undefined") {
+export function content(element, implicit) {
     let func = contentRegistry.get(element);
     let objects = func(implicit);
     let fragment = document.createDocumentFragment();
@@ -82,7 +82,7 @@ export function activeObjectExpression(expression, context, element, callback) {
             if (descriptor.get && descriptor.set === undefined) {
                 let {method, resonator} = evaluation(identifier, context, {}, true);
                 let handler = () => {
-                    callback(evaluation(expression, context))
+                    callback(evaluation(expression, context));
                 };
                 resonator(handler, element);
             } else {
@@ -122,7 +122,7 @@ function addEventHandler(handlers) {
 
 const membraneCache = new WeakMap();
 
-export function membraneFactory(instance, $parent, property) {
+export function membraneFactory(instance, parent = []) {
     if (instance instanceof Object) {
         let cachedProxy = membraneCache.get(instance);
         if (cachedProxy) {
@@ -142,10 +142,11 @@ export function membraneFactory(instance, $parent, property) {
                     }
                     let result = Reflect.apply(target, thisArg, argArray);
                     if (thisArg instanceof Array && (target.name === "push" || target.name === "splice")) {
-                        if ($parent.$parent) {
-                            $parent.$parent.$fire = {
+                        if (parent.length > 0) {
+                            let element = parent[parent.length - 1];
+                            element.proxy.$fire = {
                                 proxy: thisArg,
-                                property: thisArg.$property
+                                property: element.property
                             }
                         }
                     }
@@ -159,12 +160,13 @@ export function membraneFactory(instance, $parent, property) {
                 },
                 set(target, p, value, receiver) {
                     let decimalRegex = /\d+/
-                    if (decimalRegex.test(p) && target instanceof Array) {
+                    if (target instanceof Array && decimalRegex.test(p)) {
                         let result = Reflect.set(target, p, value, receiver);
-                        if ($parent) {
-                            $parent.$fire = {
+                        if (parent.length > 0) {
+                            let element = parent[parent.length - 1];
+                            element.proxy.$fire = {
                                 proxy: receiver,
-                                property: receiver.$property
+                                property: element.property
                             }
                         }
                         return result;
@@ -183,40 +185,17 @@ export function membraneFactory(instance, $parent, property) {
                     if (properties.indexOf(p) > -1) {
                         let result = Reflect.set(target, p, value, receiver);
 
-                        let timeStart = performance.now();
-
                         for (const eventHandler of eventHandlers) {
                             if (eventHandler.name === p) {
                                 eventHandler.handler(value);
                             }
                         }
 
-                        let timeEnd = performance.now();
-                        let delta = timeEnd - timeStart;
-                        avgLatency = (avgLatency + delta);
-                        console.log(`Latency ${Math.round(delta)} ms - avg Latency: ${Math.round(avgLatency / lifeCycles)} ms`);
-
-                        let lifeCycle = appManager.performance.lifeCycle;
-
-                        lifeCycle.cycles = lifeCycles;
-                        lifeCycle.addAvgLatency(avgLatency / lifeCycles)
-                        lifeCycle.addLatency(delta);
-
-                        lifeCycles++;
-
                         return result;
                     }
                     return Reflect.set(target, p, value, target);
                 },
                 get(target, p, receiver) {
-                    if (p === "$property") {
-                        return property;
-                    }
-
-                    if (p === "$parent") {
-                        return $parent;
-                    }
-
                     if (p === "resolve") {
                         return target;
                     }
@@ -239,7 +218,7 @@ export function membraneFactory(instance, $parent, property) {
                         if (instance && instance.isProxy) {
                             return instance;
                         }
-                        return membraneFactory(instance, receiver, p);
+                        return membraneFactory(instance, [...parent, {proxy : receiver, property : p}]);
                     }
 
                     let result = Reflect.get(target, p, target);
@@ -318,11 +297,16 @@ function interpolationStatement(text, context) {
     }
 
     let textNode = document.createTextNode("");
+    textNode.textContent = evalText();
 
-    function generator() {
-        textNode.textContent = evalText();
-        return textNode;
-    }
+    text.replace(interpolationRegExp, (match, expression) => {
+        activeObjectExpression(expression, context, textNode, () => {
+            let textContent = evalText();
+            if (textContent !== textNode.textContent) {
+                textNode.textContent = textContent;
+            }
+        })
+    })
 
     return {
         type: "interpolation",
@@ -330,19 +314,7 @@ function interpolationStatement(text, context) {
         build(parent) {
             parent.appendChild(textNode);
         },
-        update() {
-            if (textNode.isConnected) {
-                textNode = generator();
-                text.replace(interpolationRegExp, (match, expression) => {
-                    activeObjectExpression(expression, context, textNode, () => {
-                        let textContent = evalText();
-                        if (textContent !== textNode.textContent) {
-                            textNode.textContent = textContent;
-                        }
-                    })
-                })
-            }
-        }
+        update() {}
     }
 }
 
@@ -876,19 +848,27 @@ function variableStatement(rawAttributes, context, html) {
 }
 
 function letStatement(rawAttributes, implicit, context, callback) {
-    let attributes = getAttributes(rawAttributes, ["let"]);
-    let boundAttributesFunction = boundAttributes(attributes, context);
-    let values = boundAttributesFunction();
-    let instance = {};
-    instance[values.let] = implicit;
-    let newContext = new Context(instance, context);
-    let ast = callback(newContext);
+    let ast = {update() {}}
+    let newContext;
+    let instance;
+    if (implicit) {
+        let attributes = getAttributes(rawAttributes, ["let"]);
+        let boundAttributesFunction = boundAttributes(attributes, context);
+        let values = boundAttributesFunction();
+        instance = {};
+        instance[values.let] = implicit;
+        newContext = new Context(instance, context);
+        ast = callback(newContext);
+    }
     return {
         build(parent) {
-            let element = ast.build(parent);
-            newContext.instance = membraneFactory(element);
-            Object.assign(element, instance)
-            return element
+            if (implicit) {
+                let element = ast.build(parent);
+                newContext.instance = membraneFactory(element);
+                Object.assign(element, instance)
+                return element
+            }
+            return null;
         },
         update() {
             ast.update();
@@ -994,7 +974,7 @@ export function codeGenerator(nodes) {
                     }
                     if (interpolationRegExp.test(node.textContent)) {
                         if (!(node.parentElement instanceof HTMLScriptElement)) {
-                            return `\n${tabs}interpolationStatement(\`${node.textContent}\`, context, shadow)`
+                            return `\n${tabs}interpolationStatement(\`${node.textContent}\`, context)`
                         }
                         return `\n${tabs}\`${node.textContent}\``
                     } else {
@@ -1007,35 +987,35 @@ export function codeGenerator(nodes) {
                         tagName += ":" + node.getAttribute("is")
                     }
                     if (node.hasAttribute("bind:for")) {
-                        return `\n${tabs}forStatement([${rawAttributes(node)}], context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg, shadow)}\n${tabs}])})`
+                        return `\n${tabs}forStatement([${rawAttributes(node)}], context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}])})`
                     }
                     if (node.hasAttribute("let")) {
-                        return `\n${tabs}letStatement([${rawAttributes(node)}], implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg, shadow)}\n${tabs}])})`
+                        return `\n${tabs}letStatement([${rawAttributes(node)}], implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}])})`
                     }
                     if (node.hasAttribute("bind:variable")) {
-                        return `\n${tabs}variableStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg, shadow)}\n${tabs}]))`
+                        return `\n${tabs}variableStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:if")) {
-                        return `\n${tabs}ifStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg, shadow)}\n${tabs}]))`
+                        return `\n${tabs}ifStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:switch")) {
-                        return `\n${tabs}switchStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg, shadow)}\n${tabs}])`;
+                        return `\n${tabs}switchStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])`;
                     }
                     if (node.localName === "case") {
-                        return `\n${tabs}caseStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg, shadow)}\n${tabs}])`;
+                        return `\n${tabs}caseStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])`;
                     }
                     if (node.localName === "slot") {
                         return `\n${tabs}slotStatement([${rawAttributes(node)}], context, content)`;
                     }
                     if (node.localName === "svg" || isSvg) {
-                        return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true, shadow)}\n${tabs}])`
+                        return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true)}\n${tabs}])`
                     }
-                    return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg, shadow)}\n${tabs}])`
+                    return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}])`
                 }
             }).join(", ")
     }
 
-    let expression = `function factory(context, content, implicit) { let shadow = false; return [${intern(nodes)}\n]}`;
+    let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
     let arg = `return function(forStatement, slotStatement, html, svg, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement) {return ${expression}}`;
     let func = evaluator(arg)
     return func()(forStatement, slotStatement, htmlStatement, svgStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement)

@@ -10,7 +10,7 @@ class MatTabs extends HTMLElement {
 
     tabs() {
         let method = () => {
-            return Array.from(this.resolve.container.querySelectorAll("mat-tab"))
+            return Array.from(this.container.querySelectorAll("mat-tab"))
         }
         let resonator = (callback, element) => {
             let mutationObserver = new MutationObserver(() => {
