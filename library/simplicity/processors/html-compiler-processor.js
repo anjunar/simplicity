@@ -243,7 +243,7 @@ export class Context {
     parent;
 
     constructor(instance, parent) {
-        this.instance = membraneFactory(instance);
+        this.instance = instance;
         this.parent = parent;
     }
 
@@ -544,12 +544,12 @@ function forStatement(rawAttributes, context, callback) {
             if (data.length) {
                 instance[data.length.variable] = array.length;
             }
-            let newContext = new Context(instance, context);
+            let newContext = new Context(membraneFactory(instance), context);
             let astLeaf = callback(newContext);
             ast.push(astLeaf);
             let build = astLeaf.build(container);
             children.push(build);
-            newContext.instance = membraneFactory(build);
+            newContext.instance = build;
             Object.assign(build, instance)
         })
 
@@ -681,7 +681,7 @@ function slotStatement(rawAttributes, context, contents) {
     let values = boundAttributesFunction()
 
     let container = document.createDocumentFragment();
-    let data = "slot " + JSON.stringify(values);
+    let data = "slot " //+ JSON.stringify(values);
 
     let comment = document.createComment(data);
     let children = [];
@@ -857,14 +857,14 @@ function letStatement(rawAttributes, implicit, context, callback) {
         let values = boundAttributesFunction();
         instance = {};
         instance[values.let] = implicit;
-        newContext = new Context(instance, context);
+        newContext = new Context(membraneFactory(instance), context);
         ast = callback(newContext);
     }
     return {
         build(parent) {
             if (implicit) {
                 let element = ast.build(parent);
-                newContext.instance = membraneFactory(element);
+                newContext.instance = element;
                 Object.assign(element, instance)
                 return element
             }

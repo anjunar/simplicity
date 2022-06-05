@@ -203,7 +203,7 @@ class DynamicBindingAttributeProcessor {
         if (this.element.attributeChangedCallback) {
             let result = evaluation(this.value, this.context);
             if (!isEqual(this.oldValue, result)) {
-                membraneFactory(this.element).attributeChangedCallback(this.name, this.oldValue, result);
+                this.element.attributeChangedCallback(this.name, this.oldValue, result);
                 if (result instanceof Array) {
                     this.oldValue = Array.from(result);
                 } else if (result instanceof Function) {
@@ -218,8 +218,7 @@ class DynamicBindingAttributeProcessor {
 
         activeObjectExpression(this.value, this.context, this.element, () => {
             let result = evaluation(this.value, this.context);
-            let membrane = membraneFactory(this.element);
-            membrane.attributeChangedCallback(this.name, this.oldValue, result);
+            this.element.attributeChangedCallback(this.name, this.oldValue, result);
             this.oldValue = result;
         })
     }

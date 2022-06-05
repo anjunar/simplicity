@@ -69,9 +69,9 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
         }
 
         if (this.name) {
-            let domForm = membraneFactory(this.queryUpwards((element) => {
+            let domForm = this.queryUpwards((element) => {
                 return element instanceof DomForm
-            }));
+            });
             if (domForm) {
                 domForm.register(this);
             }

@@ -18,7 +18,7 @@ class MatTabs extends HTMLElement {
                 this.dispatchEvent(new CustomEvent("page"))
             })
 
-            mutationObserver.observe(this.resolve.container, {subtree : true, childList : true})
+            mutationObserver.observe(this.container.resolve, {subtree : true, childList : true})
 
             element.addEventListener("removed", () => {
                 mutationObserver.disconnect();
@@ -33,12 +33,12 @@ class MatTabs extends HTMLElement {
 
     rendered(children) {
         for (const child of children) {
-            let tab = membraneFactory(child.querySelector("mat-tab"))
+            let tab = child.querySelector("mat-tab")
             tab.selected = false;
             tab.addEventListener("click", (event) => {
                 event.stopPropagation();
                 for (const child of children) {
-                    let tab = membraneFactory(child.querySelector("mat-tab"))
+                    let tab = child.querySelector("mat-tab")
                     tab.selected = false;
                 }
                 tab.selected = true;
@@ -49,7 +49,7 @@ class MatTabs extends HTMLElement {
         }
         if (children.length > 0) {
             let child = children[this.page];
-            let tab = membraneFactory(child.querySelector("mat-tab"))
+            let tab = child.querySelector("mat-tab")
             tab.selected = true;
         }
     }

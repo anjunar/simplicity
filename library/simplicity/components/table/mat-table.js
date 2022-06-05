@@ -19,9 +19,13 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     name;
     create = false;
     contentTemplate;
+    header
+    body
 
     preInitialize() {
         this.contentTemplate = contentManager.instance(this);
+        this.header = Array.from(this.contentTemplate.querySelectorAll("thead tr td"))
+        this.body = Array.from(this.contentTemplate.querySelectorAll("tbody tr td"))
         this.extension = this.queryUpwards((element) => element.localName === "mat-table-extension")
         this.columns = [];
         let length = this.body.length;
@@ -72,14 +76,6 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     onRowClick(event, row) {
         this.model = row;
         this.dispatchEvent(new CustomEvent("model", {detail : row}))
-    }
-
-    get header() {
-        return Array.from(this.contentTemplate.querySelectorAll("thead tr td"))
-    }
-
-    get body() {
-        return Array.from(this.contentTemplate.querySelectorAll("tbody tr td"))
     }
 
     desc(td) {

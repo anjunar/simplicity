@@ -153,7 +153,8 @@ export class Parser {
     isAssignmentExpression(token, init) {
         return token.type === "assignment" &&
             this.topType(init) !== "VariableDeclarator" &&
-            this.topType(init) !== "ClassBody";
+            this.topType(init) !== "ClassBody" &&
+            ! this.isTopPredicate(init, "MemberExpression", ["property"]);
     }
 
     isObjectPattern(init) {

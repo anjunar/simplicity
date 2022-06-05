@@ -318,7 +318,7 @@ export const tags = [
     },
     {
         type: "operation",
-        regex: /(===|==|!=|!==)/y,
+        regex: /(==|!=|===|!==)/y,
         keyWord: false,
         precedence: 10
     },

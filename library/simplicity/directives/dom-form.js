@@ -8,7 +8,7 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
 
     initialize() {
         if (this.name) {
-            let domForm = membraneFactory(this.parentElement.queryUpwards((element) => element instanceof DomForm));
+            let domForm = this.parentElement.queryUpwards((element) => element instanceof DomForm);
             if (domForm) {
                 domForm.register(this);
             }

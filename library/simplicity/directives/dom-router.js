@@ -5,6 +5,7 @@ import {lifeCycle} from "../processors/life-cycle-processor.js";
 class DomRouter extends HTMLElement {
 
     level = 0
+    handler = null;
 
     constructor() {
         super();
