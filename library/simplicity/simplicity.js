@@ -4,6 +4,14 @@ import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
 import {evaluator, isEqual} from "./services/tools.js";
 
+/*
+Element.prototype.remove = (function (_super) {
+    return function () {
+        _super.apply(this, [])
+    }
+})(Element.prototype.remove)
+*/
+
 Node.prototype.queryUpwards = function (callback) {
     if (callback(this)) {
         return this;
@@ -55,13 +63,54 @@ export const customComponents = new class CustomComponents {
             }
         }
 
+        function generateWrapper(construct, property, descriptor) {
+            delete construct[property];
+
+            Object.defineProperty(construct, "_" + property, descriptor);
+
+            Object.defineProperty(construct, property, {
+                configurable: true,
+                enumerable: true,
+                get() {
+                    let instance = Reflect.get(construct, "_" + property);
+                    if (instance && instance.isProxy) {
+                        return instance;
+                    }
+                    return membraneFactory(instance, [{
+                        proxy: construct, property: property
+                    }])
+                },
+                set(value) {
+                    Reflect.set(construct, "_" + property, value)
+                    for (const eventHandler of construct.handlers) {
+                        if (eventHandler.name === property) {
+                            eventHandler.handler(value);
+                        }
+                    }
+                }
+            })
+        }
+
         class SimplicityComponent extends clazz {
 
             initialized = false;
             handlers = [];
 
+            get isComponent() {
+                return true;
+            }
+
             constructor() {
                 super();
+                this.setupProxy();
+            }
+
+            set $fire(value) {
+                for (const eventHandler of this.handlers) {
+                    if (eventHandler.name === value.property) {
+                        eventHandler.handler(value.proxy);
+                    }
+                }
             }
 
             addEventHandler (name, element, handler) {
@@ -73,9 +122,23 @@ export const customComponents = new class CustomComponents {
 
                 element.addEventListener("removed", () => {
                     let entry = this.handlers.find((entry) => entry.name === name && entry.handler === handler);
-                    let indexOf = this.handlers.indexOf(entry);
-                    this.handlers.splice(indexOf, 1)
+                    if (entry) {
+                        let indexOf = this.handlers.indexOf(entry);
+                        this.handlers.splice(indexOf, 1)
+                    }
                 })
+            }
+
+            setupProxy() {
+                let descriptors = Object.getOwnPropertyDescriptors(this);
+                for (const [property, descriptor] of Object.entries(descriptors)) {
+                    let privateGetter = Object.getOwnPropertyDescriptor(this, "_" + property)
+                    if (! privateGetter) {
+                        if (property !== "handlers") {
+                            generateWrapper(this, property, descriptor);
+                        }
+                    }
+                }
             }
 
             i18n(text) {
@@ -153,43 +216,10 @@ export const customComponents = new class CustomComponents {
 
         }
 
-        let proxy = new Proxy(SimplicityComponent, {
-            construct(target, argArray, newTarget) {
-                let construct = Reflect.construct(target, argArray, newTarget);
-                let descriptors = Object.getOwnPropertyDescriptors(construct);
-                for (const [property, descriptor] of Object.entries(descriptors)) {
-                    delete construct[property];
-
-                    Object.defineProperty(construct, "_" + property, descriptor);
-
-                    Object.defineProperty(construct, property, {
-                        configurable : true,
-                        enumerable : true,
-                        get() {
-                            let instance = Reflect.get(this, "_" + property);
-                            if (instance && instance.isProxy) {
-                                return instance;
-                            }
-                            return membraneFactory(instance)
-                        },
-                        set(value) {
-                            Reflect.set(this, "_" + property, value)
-                            for (const eventHandler of this.handlers) {
-                                if (eventHandler.name === property) {
-                                    eventHandler.handler(value);
-                                }
-                            }
-                        }
-                    })
-                }
-                return construct;
-            }
-        });
-
-        customElements.define(name, proxy, options)
+        customElements.define(name, SimplicityComponent, options)
         names.set(SimplicityComponent, name);
 
-        return proxy;
+        return SimplicityComponent
     }
 
 }

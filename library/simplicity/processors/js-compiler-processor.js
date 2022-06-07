@@ -173,12 +173,11 @@ export function evaluation(expression, context, args, full = false) {
             let source = generate(node.object);
             if (source !== "args") {
                 let destination = generate(node.property);
+                let output = `let result = ${source}; return getPropertyDescriptor('${destination}', result)`
 
-                let output = `let result = ${source}; return Object.getOwnPropertyDescriptor(result, '${destination}')`
-
-                let arg = `return function(context) {${output}}`;
+                let arg = `return function(context, getPropertyDescriptor) {${output}}`;
                 let func = evaluator(arg)
-                let descriptor = func()(proxy)
+                let descriptor = func()(proxy, getPropertyDescriptor)
                 if (descriptor.get && descriptor.set === undefined) {
                     if (! full) {
                         this.addCallExpression(parent, node);

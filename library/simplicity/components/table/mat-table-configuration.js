@@ -14,15 +14,15 @@ class MatTableConfiguration extends HTMLElement {
 
     left(event, index) {
         event.stopPropagation();
-        this.page--
         this.table.left(index)
+        this.page--
         return false;
     }
 
     right(event, index) {
         event.stopPropagation();
-        this.page++;
         this.table.right(index);
+        this.page++;
         return false;
     }
 

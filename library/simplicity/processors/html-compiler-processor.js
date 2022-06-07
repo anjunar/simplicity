@@ -101,9 +101,6 @@ export function activeObjectExpression(expression, context, element, callback) {
     }
 }
 
-let lifeCycles = 0;
-let avgLatency = 0;
-
 function addEventHandler(handlers) {
     return function (name, element, handler) {
         handlers.push({
@@ -114,8 +111,10 @@ function addEventHandler(handlers) {
 
         element.addEventListener("removed", () => {
             let entry = handlers.find((entry) => entry.name === name && entry.handler === handler);
-            let indexOf = handlers.indexOf(entry);
-            handlers.splice(indexOf, 1)
+            if (entry) {
+                let indexOf = handlers.indexOf(entry);
+                handlers.splice(indexOf, 1)
+            }
         })
     }
 }
@@ -123,6 +122,9 @@ function addEventHandler(handlers) {
 const membraneCache = new WeakMap();
 
 export function membraneFactory(instance, parent = []) {
+    if (instance && instance.isComponent) {
+        return instance;
+    }
     if (instance instanceof Object) {
         let cachedProxy = membraneCache.get(instance);
         if (cachedProxy) {
@@ -130,12 +132,6 @@ export function membraneFactory(instance, parent = []) {
         } else {
             let eventHandlers = [];
             let proxy = new Proxy(instance, {
-                getOwnPropertyDescriptor(target, p) {
-                    if (target instanceof Array) {
-                        return Reflect.getOwnPropertyDescriptor(target, p);
-                    }
-                    return getPropertyDescriptor(p, target)
-                },
                 apply(target, thisArg, argArray) {
                     if (thisArg instanceof DocumentFragment) {
                         return Reflect.apply(target, thisArg.resolve, argArray);
@@ -549,8 +545,14 @@ function forStatement(rawAttributes, context, callback) {
             ast.push(astLeaf);
             let build = astLeaf.build(container);
             children.push(build);
-            newContext.instance = build;
             Object.assign(build, instance)
+            if (Reflect.has(build, "setupProxy")) {
+                newContext.instance = build;
+                build.setupProxy();
+            } else {
+                newContext.instance = membraneFactory(build);
+            }
+
         })
 
         comment.children = children;
@@ -681,7 +683,7 @@ function slotStatement(rawAttributes, context, contents) {
     let values = boundAttributesFunction()
 
     let container = document.createDocumentFragment();
-    let data = "slot " //+ JSON.stringify(values);
+    let data = "slot " + JSON.stringify(attributes)
 
     let comment = document.createComment(data);
     let children = [];
@@ -701,7 +703,7 @@ function slotStatement(rawAttributes, context, contents) {
 
         let implicitValue = values.implicit;
         if (Reflect.has(values, "source")) {
-            activeContent = content(values.source.resolve, implicitValue);
+            activeContent = content(values.source, implicitValue);
         } else {
             activeContent = contents(implicitValue);
         }
@@ -865,7 +867,12 @@ function letStatement(rawAttributes, implicit, context, callback) {
             if (implicit) {
                 let element = ast.build(parent);
                 newContext.instance = element;
-                Object.assign(element, instance)
+                if (Reflect.has(element, "setupProxy")) {
+                    Object.assign(element, instance);
+                    element.setupProxy();
+                } else {
+                    Object.assign(membraneFactory(element), instance);
+                }
                 return element
             }
             return null;

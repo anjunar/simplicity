@@ -169,7 +169,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
             for (const item of array) {
                 item.addEventHandler("visible", element, callback)
             }
-            this.addEventHandler("columns", element, callback)
+            this.addEventHandler("columns", element, () => {
+                callback();
+            })
         }
 
         return {method, resonator}
