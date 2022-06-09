@@ -150,7 +150,7 @@ export const tags = [
     },
     {
         type: "do",
-        regex: /(do)/y,
+        regex: /(do)\s/y,
         keyWord: true
     },
     {
@@ -318,7 +318,7 @@ export const tags = [
     },
     {
         type: "operation",
-        regex: /(==|!=|===|!==)/y,
+        regex: /(===|==|!=|!==)/y,
         keyWord: false,
         precedence: 10
     },

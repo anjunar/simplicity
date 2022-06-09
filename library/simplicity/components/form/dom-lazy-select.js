@@ -110,14 +110,18 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         return false;
     }
 
-    up() {
+    up(event) {
+        event.stopPropagation();
         this.index -= this.limit
         this.load();
+        return false;
     }
 
-    down() {
+    down(event) {
+        event.stopPropagation();
         this.index += this.limit;
         this.load();
+        return false;
     }
 
     load() {

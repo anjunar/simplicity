@@ -1,7 +1,6 @@
 import {codeGenerator as jsCodeGenerator, collectIdentifiers, evaluation} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
 import {cachingProxy, evaluator, getPropertyDescriptor, isEqual} from "../services/tools.js";
-import {appManager} from "../manager/app-manager.js";
 import {generate} from "../../astring";
 import {parse} from "./js-compiler-extension.js";
 
@@ -108,6 +107,10 @@ function addEventHandler(handlers) {
             handler: handler,
             element: element
         });
+
+        if (handlers.filter(item => item.name === name).length > 50) {
+            console.warn(`possibly handlers memory leak ${handlers.length} ${name}`)
+        }
 
         element.addEventListener("removed", () => {
             let entry = handlers.find((entry) => entry.name === name && entry.handler === handler);
@@ -620,6 +623,7 @@ function ifStatement(rawAttributes, context, html) {
             } else {
                 generate();
                 comment.after(element);
+                html.update();
             }
         } else {
             if (element.isConnected) {
@@ -644,9 +648,7 @@ function ifStatement(rawAttributes, context, html) {
             }
         },
         update() {
-            let values = boundAttributesFunction()
-            let newValue = values.if;
-            if (newValue) {
+            if (value) {
                 html.update();
             }
         }
@@ -734,6 +736,7 @@ function slotStatement(rawAttributes, context, contents) {
 
     function update() {
         for (const child of children) {
+            notifyElementRemove(child)
             child.remove();
         }
         children.length = 0;

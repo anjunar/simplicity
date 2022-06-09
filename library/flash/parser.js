@@ -120,7 +120,9 @@ export class Parser {
     }
 
     isConditionalExpression(token, init) {
-        return token.type === "conditional" && ! this.isTopPredicate(init, "MemberExpression", ["property"]);
+        return token.type === "conditional" &&
+            ! this.isTopPredicate(init, "MemberExpression", ["property"]) &&
+            ! this.isTopPredicate(init, "BinaryExpression", ["rhs"]);
     }
 
     isMemberExpression(token, init) {
@@ -245,7 +247,7 @@ export class Parser {
 
         let node = {
             type: "Literal",
-            value: token.value === "null" ? null : token === "undefined" ? undefined : "",
+            value: token.value === "null" ? null : token === "undefined" ? undefined : undefined,
         };
 
         token = state.next();

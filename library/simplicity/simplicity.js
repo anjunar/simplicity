@@ -120,6 +120,10 @@ export const customComponents = new class CustomComponents {
                     element: element
                 });
 
+                if (this.handlers.filter(item => item.name === name).length > 50) {
+                    console.warn(`possibly handlers memory leak ${this.handlers.length} ${name}`)
+                }
+
                 element.addEventListener("removed", () => {
                     let entry = this.handlers.find((entry) => entry.name === name && entry.handler === handler);
                     if (entry) {

@@ -29,7 +29,7 @@
         <input is="dom-input" type="text" bind:onclick="openOverlay($event)" bind:disabled="disabled">
         <div style="position: relative">
             <div bind:if="open" class="overlay" bind:style="width : inputWidth() + 'px'">
-                <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none'; width : '100%'" bind:onclick="up()">arrow_drop_up</button>
+                <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none'; width : '100%'" bind:onclick="up($event)">arrow_drop_up</button>
                 <div>
                     <div bind:for="let item of window" bind:onclick="onItemClicked($event, item)" class="item">
                         <div style="padding: 12px;" class="item">
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="material-icons" translate="no" type="button" bind:style="display : (index + limit) < size ? 'block' : 'none'; width : '100%'" bind:onclick="down()">arrow_drop_down</button>
+                <button class="material-icons" translate="no" type="button" bind:style="display : (index + limit) < size ? 'block' : 'none'; width : '100%'" bind:onclick="down($event)">arrow_drop_down</button>
             </div>
         </div>
     </template>
