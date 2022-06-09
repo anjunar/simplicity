@@ -601,13 +601,14 @@ function forStatement(rawAttributes, context, callback) {
     }
 }
 
-function ifStatement(rawAttributes, context, html) {
+function ifStatement(rawAttributes, context, callback) {
     let attributes = getAttributes(rawAttributes, ["if"]);
     let boundAttributesFunction = boundAttributes(attributes, context);
     let values = boundAttributesFunction()
     let value = values.if;
     let comment = document.createComment("if");
     let container = document.createDocumentFragment();
+    let html;
     let element;
 
     activeObjectExpression(attributes.if.value, context, comment, (result) => {
@@ -633,8 +634,8 @@ function ifStatement(rawAttributes, context, html) {
     }
 
     function generate() {
+        html = callback(context);
         element = html.build(container);
-        // html.update();
     }
 
     return {
@@ -727,6 +728,12 @@ function slotStatement(rawAttributes, context, contents) {
                 container.appendChild(segment)
                 children.push(segment);
             }
+        }
+
+        for (const child of children) {
+            child.addEventListener("removed",() => {
+                notifyElementRemove(activeContent)
+            })
         }
 
         return activeContent;
@@ -1006,7 +1013,7 @@ export function codeGenerator(nodes) {
                         return `\n${tabs}variableStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg)}\n${tabs}]))`
                     }
                     if (node.hasAttribute("bind:if")) {
-                        return `\n${tabs}ifStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg)}\n${tabs}]))`
+                        return `\n${tabs}ifStatement([${rawAttributes(node)}], context, () => {return html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])})`
                     }
                     if (node.hasAttribute("bind:switch")) {
                         return `\n${tabs}switchStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])`;
