@@ -1,4 +1,5 @@
 import {lifeCycle} from "../processors/life-cycle-processor.js";
+import {membraneFactory} from "../processors/html-compiler-processor.js";
 
 export function idExtractorHelper(object) {
     if (object instanceof Array) {
@@ -326,4 +327,100 @@ export function getPropertyDescriptor(name, object) {
         return result;
     }
     return getPropertyDescriptor(name, Object.getPrototypeOf(object))
+}
+
+const data = new WeakMap();
+
+export function generateDomProxy(element) {
+    let dataObject = data.get(element);
+    if (! dataObject) {
+        dataObject = {
+            handlers : []
+        }
+        data.set(element, dataObject);
+    }
+
+    function generateWrapper(construct, property, descriptor, data) {
+        delete construct[property];
+
+        Object.defineProperty(data, property, descriptor);
+
+        Object.defineProperty(construct, property, {
+            configurable: true,
+            enumerable: true,
+            get() {
+                let instance = Reflect.get(data, property);
+                if (instance && instance.isProxy) {
+                    return instance;
+                }
+                return membraneFactory(instance, [{
+                    proxy: construct, property: property
+                }])
+            },
+            set(value) {
+                Reflect.set(data, property, value)
+                for (const eventHandler of dataObject.handlers) {
+                    if (eventHandler.name === property) {
+                        eventHandler.handler(value);
+                    }
+                }
+            }
+        })
+    }
+
+    function $fire(value) {
+        for (const eventHandler of dataObject.handlers) {
+            if (eventHandler.name === value.property) {
+                eventHandler.handler(value.proxy);
+            }
+        }
+    }
+
+    function addEventHandler (name, element, handler) {
+        dataObject.handlers.push({
+            name: name,
+            handler: handler,
+            element: element
+        });
+
+        if (dataObject.handlers.filter(item => item.name === name).length > 50) {
+            console.warn(`possibly handlers memory leak ${dataObject.handlers.length} ${name}`)
+        }
+
+        element.addEventListener("removed", () => {
+            let entry = dataObject.handlers.find((entry) => entry.name === name && entry.handler === handler);
+            if (entry) {
+                let indexOf = dataObject.handlers.indexOf(entry);
+                dataObject.handlers.splice(indexOf, 1)
+            }
+        })
+    }
+
+    function setupProxy() {
+        let descriptors = Object.getOwnPropertyDescriptors(element);
+        for (const [property, descriptor] of Object.entries(descriptors)) {
+            let privateGetter = Object.getOwnPropertyDescriptor(dataObject, property)
+            if (! privateGetter) {
+                let blackList = ["$fire", "addEventHandler", "initialized"];
+                if (! blackList.includes(property)) {
+                    generateWrapper(element, property, descriptor, dataObject);
+                }
+            }
+        }
+    }
+
+    if (! Reflect.has(element, "$fire") && ! Reflect.has(element, "addEventHandler")) {
+        Object.defineProperties(element, {
+            $fire : {
+                set(value) {
+                    $fire(value)
+                }
+            },
+            addEventHandler : {
+                value : addEventHandler
+            }
+        })
+    }
+
+    setupProxy();
 }

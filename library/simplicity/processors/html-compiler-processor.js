@@ -1,6 +1,6 @@
 import {codeGenerator as jsCodeGenerator, collectIdentifiers, evaluation} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
-import {cachingProxy, evaluator, getPropertyDescriptor, isEqual} from "../services/tools.js";
+import {cachingProxy, evaluator, generateDomProxy, getPropertyDescriptor, isEqual} from "../services/tools.js";
 import {generate} from "../../astring";
 import {parse} from "./js-compiler-extension.js";
 
@@ -125,7 +125,7 @@ function addEventHandler(handlers) {
 const membraneCache = new WeakMap();
 
 export function membraneFactory(instance, parent = []) {
-    if (instance && instance.isComponent) {
+    if (instance instanceof Node) {
         return instance;
     }
     if (instance instanceof Object) {
@@ -548,14 +548,8 @@ function forStatement(rawAttributes, context, callback) {
             ast.push(astLeaf);
             let build = astLeaf.build(container);
             children.push(build);
-            Object.assign(build, instance)
-            if (Reflect.has(build, "setupProxy")) {
-                newContext.instance = build;
-                build.setupProxy();
-            } else {
-                newContext.instance = membraneFactory(build);
-            }
-
+            Object.assign(build, instance);
+            generateDomProxy(build);
         })
 
         comment.children = children;
@@ -877,12 +871,8 @@ function letStatement(rawAttributes, implicit, context, callback) {
             if (implicit) {
                 let element = ast.build(parent);
                 newContext.instance = element;
-                if (Reflect.has(element, "setupProxy")) {
-                    Object.assign(element, instance);
-                    element.setupProxy();
-                } else {
-                    Object.assign(membraneFactory(element), instance);
-                }
+                Object.assign(element, instance);
+                generateDomProxy(element);
                 return element
             }
             return null;

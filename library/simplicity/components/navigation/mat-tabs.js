@@ -18,7 +18,7 @@ class MatTabs extends HTMLElement {
                 this.dispatchEvent(new CustomEvent("page"))
             })
 
-            mutationObserver.observe(this.container.resolve, {subtree : true, childList : true})
+            mutationObserver.observe(this.container, {subtree : true, childList : true})
 
             element.addEventListener("removed", () => {
                 mutationObserver.disconnect();

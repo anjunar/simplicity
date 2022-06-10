@@ -1,8 +1,8 @@
 import {register} from "./manager/view-manager.js";
-import {codeGenerator, compiler, membraneFactory} from "./processors/html-compiler-processor.js";
+import {codeGenerator, compiler} from "./processors/html-compiler-processor.js";
 import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
-import {evaluator, isEqual} from "./services/tools.js";
+import {evaluator, generateDomProxy, isEqual} from "./services/tools.js";
 
 /*
 Element.prototype.remove = (function (_super) {
@@ -31,6 +31,7 @@ export const customComponents = new class CustomComponents {
     define(name, clazz, options) {
 
         let fragments = new WeakMap();
+        let data = new WeakMap();
         let template;
         let i18nMessages = {};
 
@@ -63,38 +64,9 @@ export const customComponents = new class CustomComponents {
             }
         }
 
-        function generateWrapper(construct, property, descriptor) {
-            delete construct[property];
-
-            Object.defineProperty(construct, "_" + property, descriptor);
-
-            Object.defineProperty(construct, property, {
-                configurable: true,
-                enumerable: true,
-                get() {
-                    let instance = Reflect.get(construct, "_" + property);
-                    if (instance && instance.isProxy) {
-                        return instance;
-                    }
-                    return membraneFactory(instance, [{
-                        proxy: construct, property: property
-                    }])
-                },
-                set(value) {
-                    Reflect.set(construct, "_" + property, value)
-                    for (const eventHandler of construct.handlers) {
-                        if (eventHandler.name === property) {
-                            eventHandler.handler(value);
-                        }
-                    }
-                }
-            })
-        }
-
         class SimplicityComponent extends clazz {
 
             initialized = false;
-            handlers = [];
 
             get isComponent() {
                 return true;
@@ -102,47 +74,7 @@ export const customComponents = new class CustomComponents {
 
             constructor() {
                 super();
-                this.setupProxy();
-            }
-
-            set $fire(value) {
-                for (const eventHandler of this.handlers) {
-                    if (eventHandler.name === value.property) {
-                        eventHandler.handler(value.proxy);
-                    }
-                }
-            }
-
-            addEventHandler (name, element, handler) {
-                this.handlers.push({
-                    name: name,
-                    handler: handler,
-                    element: element
-                });
-
-                if (this.handlers.filter(item => item.name === name).length > 50) {
-                    console.warn(`possibly handlers memory leak ${this.handlers.length} ${name}`)
-                }
-
-                element.addEventListener("removed", () => {
-                    let entry = this.handlers.find((entry) => entry.name === name && entry.handler === handler);
-                    if (entry) {
-                        let indexOf = this.handlers.indexOf(entry);
-                        this.handlers.splice(indexOf, 1)
-                    }
-                })
-            }
-
-            setupProxy() {
-                let descriptors = Object.getOwnPropertyDescriptors(this);
-                for (const [property, descriptor] of Object.entries(descriptors)) {
-                    let privateGetter = Object.getOwnPropertyDescriptor(this, "_" + property)
-                    if (! privateGetter) {
-                        if (property !== "handlers") {
-                            generateWrapper(this, property, descriptor);
-                        }
-                    }
-                }
+                generateDomProxy(this);
             }
 
             i18n(text) {
