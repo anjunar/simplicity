@@ -1,7 +1,6 @@
 import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import {contentManager} from "../../manager/content-manager.js";
-import {membraneFactory} from "../../processors/html-compiler-processor.js";
 
 class MatTabs extends HTMLElement {
 
@@ -18,7 +17,7 @@ class MatTabs extends HTMLElement {
                 this.dispatchEvent(new CustomEvent("page"))
             })
 
-            mutationObserver.observe(this.container, {subtree : true, childList : true})
+            mutationObserver.observe(this.container, {childList : true})
 
             element.addEventListener("removed", () => {
                 mutationObserver.disconnect();

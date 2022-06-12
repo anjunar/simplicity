@@ -100,10 +100,13 @@ export function activeObjectExpression(expression, context, element, callback) {
     }
 }
 
-function addEventHandler(handlers) {
+function addEventHandler(scope) {
+    let handlers = scope[0].proxy.handlers;
     return function (name, element, handler) {
+        let path = scope.map(object => object.property).join(".") + "." + name;
+
         handlers.push({
-            name: name,
+            path : path,
             handler: handler,
             element: element
         });
@@ -113,7 +116,7 @@ function addEventHandler(handlers) {
         }
 
         element.addEventListener("removed", () => {
-            let entry = handlers.find((entry) => entry.name === name && entry.handler === handler);
+            let entry = handlers.find((entry) => entry.path === path && entry.handler === handler);
             if (entry) {
                 let indexOf = handlers.indexOf(entry);
                 handlers.splice(indexOf, 1)
@@ -133,7 +136,8 @@ export function membraneFactory(instance, parent = []) {
         if (cachedProxy) {
             return cachedProxy;
         } else {
-            let eventHandlers = [];
+            let root = parent[0].proxy;
+            let path = parent.map(object => object.property).join(".");
             let proxy = new Proxy(instance, {
                 apply(target, thisArg, argArray) {
                     if (thisArg instanceof DocumentFragment) {
@@ -152,7 +156,7 @@ export function membraneFactory(instance, parent = []) {
                     return result;
                 },
                 has(target, p) {
-                    if (p === "isProxy" || p === "resolve") {
+                    if (p === "isProxy" || p === "resolve" || p === "scope") {
                         return true;
                     }
                     return Reflect.has(target, p);
@@ -172,8 +176,8 @@ export function membraneFactory(instance, parent = []) {
                     }
 
                     if (p === "$fire") {
-                        for (const eventHandler of eventHandlers) {
-                            if (eventHandler.name === value.property) {
+                        for (const eventHandler of root.handlers) {
+                            if (path + "." + p === eventHandler.path) {
                                 eventHandler.handler(value.proxy);
                             }
                         }
@@ -184,8 +188,8 @@ export function membraneFactory(instance, parent = []) {
                     if (properties.indexOf(p) > -1) {
                         let result = Reflect.set(target, p, value, receiver);
 
-                        for (const eventHandler of eventHandlers) {
-                            if (eventHandler.name === p) {
+                        for (const eventHandler of root.handlers) {
+                            if (path + "." + p === eventHandler.path) {
                                 eventHandler.handler(value);
                             }
                         }
@@ -195,6 +199,10 @@ export function membraneFactory(instance, parent = []) {
                     return Reflect.set(target, p, value, target);
                 },
                 get(target, p, receiver) {
+                    if (p === "scope") {
+                        return parent;
+                    }
+
                     if (p === "resolve") {
                         return target;
                     }
@@ -204,7 +212,7 @@ export function membraneFactory(instance, parent = []) {
                     }
 
                     if (p === "addEventHandler") {
-                        return addEventHandler(eventHandlers);
+                        return addEventHandler(parent);
                     }
 
                     if (typeof p === "symbol" || p === "prototype") {
@@ -543,13 +551,15 @@ function forStatement(rawAttributes, context, callback) {
             if (data.length) {
                 instance[data.length.variable] = array.length;
             }
-            let newContext = new Context(membraneFactory(instance), context);
+            let scope = {proxy : {handlers : [], property : ""}};
+            let newContext = new Context(membraneFactory(instance, [scope]), context);
             let astLeaf = callback(newContext);
             ast.push(astLeaf);
             let build = astLeaf.build(container);
             children.push(build);
             Object.assign(build, instance);
             generateDomProxy(build);
+            build.handlers = scope.proxy.handlers;
         })
 
         comment.children = children;
@@ -857,13 +867,15 @@ function letStatement(rawAttributes, implicit, context, callback) {
     let ast = {update() {}}
     let newContext;
     let instance;
+    let scope;
     if (implicit) {
         let attributes = getAttributes(rawAttributes, ["let"]);
         let boundAttributesFunction = boundAttributes(attributes, context);
         let values = boundAttributesFunction();
         instance = {};
         instance[values.let] = implicit;
-        newContext = new Context(membraneFactory(instance), context);
+        scope = {proxy : {handlers: [], property : ""}};
+        newContext = new Context(membraneFactory(instance, [scope]), context);
         ast = callback(newContext);
     }
     return {
@@ -873,6 +885,7 @@ function letStatement(rawAttributes, implicit, context, callback) {
                 newContext.instance = element;
                 Object.assign(element, instance);
                 generateDomProxy(element);
+                element.handlers = scope.proxy.handlers;
                 return element
             }
             return null;

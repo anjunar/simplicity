@@ -4,7 +4,7 @@ import MatModal from "../components/modal/mat-modal.js";
 import {contentManager} from "./content-manager.js";
 import {membraneFactory} from "../processors/html-compiler-processor.js";
 
-const windowsRegistry = membraneFactory([]);
+const windowsRegistry = [];
 
 function zIndexSorted() {
     return windowsRegistry.sort((lhs, rhs) => Number.parseInt(lhs.style.zIndex) - Number.parseInt(rhs.style.zIndex));

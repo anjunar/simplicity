@@ -331,13 +331,12 @@ export function getPropertyDescriptor(name, object) {
 
 const data = new WeakMap();
 
-export function generateDomProxy(element) {
-    let dataObject = data.get(element);
+export function generateDomProxy(node) {
+    node.handlers = node.handlers || [];
+    let dataObject = data.get(node);
     if (! dataObject) {
-        dataObject = {
-            handlers : []
-        }
-        data.set(element, dataObject);
+        dataObject = {}
+        data.set(node, dataObject);
     }
 
     function generateWrapper(construct, property, descriptor, data) {
@@ -359,8 +358,8 @@ export function generateDomProxy(element) {
             },
             set(value) {
                 Reflect.set(data, property, value)
-                for (const eventHandler of dataObject.handlers) {
-                    if (eventHandler.name === property) {
+                for (const eventHandler of node.handlers) {
+                    if (eventHandler.path.startsWith(property)) {
                         eventHandler.handler(value);
                     }
                 }
@@ -369,48 +368,48 @@ export function generateDomProxy(element) {
     }
 
     function $fire(value) {
-        for (const eventHandler of dataObject.handlers) {
-            if (eventHandler.name === value.property) {
+        for (const eventHandler of node.handlers) {
+            if (eventHandler.path === value.property) {
                 eventHandler.handler(value.proxy);
             }
         }
     }
 
     function addEventHandler (name, element, handler) {
-        dataObject.handlers.push({
-            name: name,
+        node.handlers.push({
+            path: name,
             handler: handler,
             element: element
         });
 
-        if (dataObject.handlers.filter(item => item.name === name).length > 50) {
+        if (node.handlers.filter(item => item.name === name).length > 50) {
             console.warn(`possibly handlers memory leak ${dataObject.handlers.length} ${name}`)
         }
 
         element.addEventListener("removed", () => {
-            let entry = dataObject.handlers.find((entry) => entry.name === name && entry.handler === handler);
+            let entry = node.handlers.find((entry) => entry.path === name && entry.handler === handler);
             if (entry) {
-                let indexOf = dataObject.handlers.indexOf(entry);
-                dataObject.handlers.splice(indexOf, 1)
+                let indexOf = node.handlers.indexOf(entry);
+                node.handlers.splice(indexOf, 1)
             }
         })
     }
 
     function setupProxy() {
-        let descriptors = Object.getOwnPropertyDescriptors(element);
+        let descriptors = Object.getOwnPropertyDescriptors(node);
         for (const [property, descriptor] of Object.entries(descriptors)) {
             let privateGetter = Object.getOwnPropertyDescriptor(dataObject, property)
             if (! privateGetter) {
-                let blackList = ["$fire", "addEventHandler", "initialized"];
+                let blackList = ["$fire", "addEventHandler", "initialized", "handlers"];
                 if (! blackList.includes(property)) {
-                    generateWrapper(element, property, descriptor, dataObject);
+                    generateWrapper(node, property, descriptor, dataObject);
                 }
             }
         }
     }
 
-    if (! Reflect.has(element, "$fire") && ! Reflect.has(element, "addEventHandler")) {
-        Object.defineProperties(element, {
+    if (! Reflect.has(node, "$fire") && ! Reflect.has(node, "addEventHandler")) {
+        Object.defineProperties(node, {
             $fire : {
                 set(value) {
                     $fire(value)
@@ -423,4 +422,9 @@ export function generateDomProxy(element) {
     }
 
     setupProxy();
+}
+
+export function queryComment(node) {
+    let iterator = document.createNodeIterator(node, NodeFilter.SHOW_COMMENT);
+    return iterator.nextNode();
 }

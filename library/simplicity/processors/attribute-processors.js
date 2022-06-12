@@ -1,7 +1,7 @@
 import {evaluation} from "./js-compiler-processor.js";
 import {appManager} from "../manager/app-manager.js";
 import {isEqual} from "../services/tools.js";
-import {activeObjectExpression, membraneFactory} from "./html-compiler-processor.js";
+import {activeObjectExpression} from "./html-compiler-processor.js";
 
 class BindInterpolationProcessor {
     element;

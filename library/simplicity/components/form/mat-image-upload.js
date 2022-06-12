@@ -39,9 +39,7 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
         switch (name) {
             case "model" : {
                 if (newValue) {
-                    this.model.data = newValue.data;
-                    this.model.lastModified = newValue.lastModified;
-                    this.model.name = newValue.name;
+                    this.model = newValue
                 }
             }
                 break

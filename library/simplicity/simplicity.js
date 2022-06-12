@@ -67,6 +67,7 @@ export const customComponents = new class CustomComponents {
         class SimplicityComponent extends clazz {
 
             initialized = false;
+            handlers = [];
 
             get isComponent() {
                 return true;
