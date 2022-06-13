@@ -1,6 +1,5 @@
 import {customComponents} from "../simplicity.js";
 import {Input, isEqual, mix} from "../services/tools.js";
-import {membraneFactory} from "../processors/html-compiler-processor.js";
 
 class DomForm extends mix(HTMLFormElement).with(Input) {
 
@@ -43,22 +42,21 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
             this.asyncValidationHandler();
         })
 
-        this.addEventHandler("model", this, () => {
-            if (this.model) {
-                let value = this.model[component.name];
-                if (value !== undefined) {
-                    component.model = value;
-                    component.value = value;
-                    component.defaultValue = value;
-                }
-
-                this.model.addEventHandler(component.name, this, (value) => {
-                    component.model = value;
-                    component.value = value;
-                    component.dispatchEvent(new CustomEvent("input"))
-                })
+        if (this.model) {
+            let value = this.model[component.name];
+            if (value !== undefined) {
+                component.model = value;
+                component.value = value;
+                component.defaultValue = value;
             }
-        })
+
+            this.model.addEventHandler(component.name, this, (value) => {
+                component.model = value;
+                component.value = value;
+                component.dispatchEvent(new CustomEvent("input"));
+                this.asyncValidationHandler();
+            })
+        }
 
         component.formular = this;
     }

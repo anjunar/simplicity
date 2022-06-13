@@ -195,6 +195,12 @@ class DynamicBindingAttributeProcessor {
                         evaluation(expression, context, {$value: $value})
                     })
                 }
+                activeObjectExpression(this.value, this.context, this.element, () => {
+                    let result = evaluation(this.value, this.context);
+                    this.element.attributeChangedCallback(this.name, this.oldValue, result);
+                    this.oldValue = result;
+                })
+                this.process();
             }
         }
     }
@@ -215,12 +221,6 @@ class DynamicBindingAttributeProcessor {
                 }
             }
         }
-
-        activeObjectExpression(this.value, this.context, this.element, () => {
-            let result = evaluation(this.value, this.context);
-            this.element.attributeChangedCallback(this.name, this.oldValue, result);
-            this.oldValue = result;
-        })
     }
 }
 

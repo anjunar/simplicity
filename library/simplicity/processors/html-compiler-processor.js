@@ -146,7 +146,7 @@ export function membraneFactory(instance, parent = []) {
                     let result = Reflect.apply(target, thisArg, argArray);
                     if (thisArg instanceof Array && (target.name === "push" || target.name === "splice")) {
                         if (parent.length > 0) {
-                            let element = parent[parent.length - 1];
+                            let element = parent[0];
                             element.proxy.$fire = {
                                 proxy: thisArg,
                                 property: element.property
@@ -189,7 +189,7 @@ export function membraneFactory(instance, parent = []) {
                         let result = Reflect.set(target, p, value, receiver);
 
                         for (const eventHandler of root.handlers) {
-                            if (path + "." + p === eventHandler.path) {
+                            if (eventHandler.path.startsWith(path + "." + p)) {
                                 eventHandler.handler(value);
                             }
                         }
@@ -199,10 +199,6 @@ export function membraneFactory(instance, parent = []) {
                     return Reflect.set(target, p, value, target);
                 },
                 get(target, p, receiver) {
-                    if (p === "scope") {
-                        return parent;
-                    }
-
                     if (p === "resolve") {
                         return target;
                     }
@@ -377,6 +373,9 @@ function htmlStatement(tagName, attributes, children) {
                 if (attribute instanceof Object) {
                     attribute.update();
                 }
+            }
+            if (Reflect.has(element, "render")) {
+                element.render();
             }
             for (const child of children) {
                 if (child instanceof Object && !(child instanceof Function)) {
