@@ -5,6 +5,7 @@ import {generate} from "../../astring";
 import {parse} from "./js-compiler-extension.js";
 
 export const contentRegistry = new WeakMap();
+const membraneCache = new WeakMap();
 
 class Component {
 
@@ -128,8 +129,6 @@ function addEventHandler(scope) {
         })
     }
 }
-
-const membraneCache = new WeakMap();
 
 export function membraneFactory(instance, parent = []) {
     if (instance instanceof Node) {

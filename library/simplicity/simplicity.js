@@ -95,7 +95,10 @@ export const customComponents = new class CustomComponents {
                     }
                 }
                 let resonator = (callback, element) => {
-
+                    window.addEventListener("language", callback);
+                    element.addEventListener("removed", () => {
+                        window.removeEventListener("language", callback)
+                    })
                 }
                 return {method, resonator}
             }

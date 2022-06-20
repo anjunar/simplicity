@@ -1,5 +1,3 @@
-import {appManager} from "./app-manager.js";
-
 const registry = new Map();
 
 let lastRouteRegistry = new Map();
@@ -66,7 +64,6 @@ export const viewManager = new class ViewManager {
                                 let delta = endTimer - startTimer;
 
                                 console.log("page load: " + delta + " ms")
-                                appManager.performance.addPageLoad(endTimer - startTimer);
                             })
                         })
                         .catch((result) => {

@@ -318,6 +318,9 @@ class i18nAttributeProcessor {
             } else {
                 let context = this.context.variable("i18n");
                 let {method, resonator} = context.i18n(this.text, this.value);
+                resonator(() => {
+                    this.element.innerHTML = method();
+                }, this.element)
                 this.element.innerHTML = method();
             }
 
