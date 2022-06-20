@@ -16,13 +16,17 @@ class Component {
 
     build(container) {
         for (const segment of this.ast) {
-            segment.build(container);
+            if (segment instanceof Object) {
+                segment.build(container);
+            }
         }
     }
 
     update() {
         for (const segment of this.ast) {
-            segment.update();
+            if (segment instanceof Object) {
+                segment.update();
+            }
         }
     }
 }
@@ -980,10 +984,10 @@ export function codeGenerator(nodes) {
     }
 
 
-    function intern(nodes, level = 1, isSvg = false, shadow) {
+    function intern(nodes, level = 1, isSvg = false) {
         let tabs = "\t".repeat(level);
         return Array.from(nodes)
-            .filter((node => (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) || node.nodeType === Node.ELEMENT_NODE))
+            .filter((node => (node.nodeType === Node.TEXT_NODE) || node.nodeType === Node.ELEMENT_NODE))
             .map((node) => {
                 if (node.nodeType === Node.TEXT_NODE) {
                     let interpolationRegExp = /{{([^}]+)}}/g;

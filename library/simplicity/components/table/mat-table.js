@@ -57,9 +57,6 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 });
             }
         }
-        this.addEventHandler("items", this, () => {
-            this.load();
-        })
     }
 
     initialize() {
@@ -71,6 +68,7 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 domForm.register(this);
             }
         }
+        this.load();
     }
 
     onRowClick(event, row) {

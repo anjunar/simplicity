@@ -3,29 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script>
-        function i18n() {
-            return [
-                {
-                    en : `Dirty checking is performed using membranes. The contexts of the application are in membranes
-                    delivered. This means that when you access a context, the application gets it. When a
-                    Property has been changed, the LifeCycle is run through and all corresponding components are updated.
-                    It should be noted that the proxies are not transparent. So they represent their own identity.`,
-                    de : `Dirty checking wird mithilfe von Membranen durchgeführt. Die Kontexte der Anwendung werden in Membranen
-                    ausgeliefert. Das heißt, wenn man auf einen Kontext zugreift, bekommt das die Anwendung mit. Wenn eine
-                    Property verändert wurde, wird der LifeCycle durchlaufen und alle entsprechenden Komponenten werden aktualisiert.
-                    Dabei ist zu beachten, dass die Proxies nicht transparent sind. Sie stellen also eine eigene Identität dar.`
-                }, {
-                    en : `If several properties are changed one after the other, a queue ensures that only one life cycle is used
-                    is run through. This saves valuable time, because there are often several properties internally
-                    to be changed.`,
-                    de : `Werden mehrere Properties hintereinander verändert, sorgt eine Queue dafür das nur ein einziger LifeCycle
-                    durchlaufen wird. Somit wird wertvolle Zeit gespart, denn es kommt häufig vor das intern mehrere Properties
-                    verändert werden.`
-                }
-            ]
-        }
-    </script>
+    <i18n>
+        <translation>
+            <en>
+                Dirty checking is performed using membranes. The contexts of the application are in membranes
+                delivered. This means that when you access a context, the application gets it. When a
+                Property has been changed, the LifeCycle is run through and all corresponding components are updated.
+                It should be noted that the proxies are not transparent. So they represent their own identity.
+            </en>
+            <de>
+                Dirty checking wird mithilfe von Membranen durchgeführt. Die Kontexte der Anwendung werden in Membranen
+                ausgeliefert. Das heißt, wenn man auf einen Kontext zugreift, bekommt das die Anwendung mit. Wenn eine
+                Property verändert wurde, wird der LifeCycle durchlaufen und alle entsprechenden Komponenten werden aktualisiert.
+                Dabei ist zu beachten, dass die Proxies nicht transparent sind. Sie stellen also eine eigene Identität dar.
+            </de>
+        </translation>
+        <translation>
+            <en>
+                If several properties are changed one after the other, a queue ensures that only one life cycle is used
+                is run through. This saves valuable time, because there are often several properties internally
+                to be changed.
+            </en>
+            <de>
+                Werden mehrere Properties hintereinander verändert, sorgt eine Queue dafür das nur ein einziger LifeCycle
+                durchlaufen wird. Somit wird wertvolle Zeit gespart, denn es kommt häufig vor das intern mehrere Properties
+                verändert werden.
+            </de>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>

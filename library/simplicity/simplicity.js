@@ -31,7 +31,6 @@ export const customComponents = new class CustomComponents {
     define(name, clazz, options) {
 
         let fragments = new WeakMap();
-        let data = new WeakMap();
         let template;
         let i18nMessages = {};
 
@@ -50,16 +49,18 @@ export const customComponents = new class CustomComponents {
                 document.head.appendChild(css);
             }
 
-            let scriptElement = html.querySelector("script");
-            if (scriptElement) {
-                let textContent = scriptElement.textContent.replaceAll(/\s+/g, " ");
-                let arg = `return function(context, args) {return ${textContent}}`;
-                let rawMessagesFunction = evaluator(arg)()()
-                let rawMessages = rawMessagesFunction();
-                for (const rawMessage of rawMessages) {
-                    let withoutSpaces = rawMessage["en"].replaceAll(" ", "");
-                    let message = i18nMessages[withoutSpaces] = {}
-                    message["de"] = rawMessage["de"];
+            let i18nElement = html.querySelector("i18n");
+            if (i18nElement) {
+                for (const translationElement of i18nElement.children) {
+                    let en = translationElement.querySelector("en");
+                    let string = en.innerHTML
+                        .trim()
+                        .replace(/ +/g, " ")
+                        .replace(/\n+/g, "")
+                    let message = i18nMessages[string] = {}
+                    for (const languageElement of translationElement.children) {
+                        message[languageElement.localName] = languageElement.innerHTML.trim();
+                    }
                 }
             }
         }
@@ -84,8 +85,7 @@ export const customComponents = new class CustomComponents {
                     if (language === "en") {
                         return text;
                     } else {
-                        let withoutSpaces = text.replaceAll(" ", "");
-                        let i18nMessage = i18nMessages[withoutSpaces];
+                        let i18nMessage = i18nMessages[text];
                         if (i18nMessage) {
                             return i18nMessage[language]
                         } else {

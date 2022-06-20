@@ -15,22 +15,26 @@
             transform: translate(-50%, -50%);
         }
     </style>
-    <script>
-        function i18n() {
-            return [{
-                en : `Custom View with query parameters`,
-                de : `Eigene View mit Query Parametern`
-            }, {
-                en : `This is a Custom Page with query parameters. The path in the hash locates direct to the file on the server.
-                You don't have to put a .js at the end of the path, it is automatically added to the path.`,
-                de : `Dies ist eine benutzerdefinierte Seite mit Abfrageparametern. Der Pfad im Hash führt direkt zu der Datei auf dem Server.
-                Sie müssen keine .js-Datei am Ende des Pfads einfügen, sie wird automatisch dem Pfad hinzugefügt.`
-            }, {
-                en : `The rest of the HTML file is not displayed`,
-                de : `Der rest der HTML Datei wird nicht angezeigt`
-            }]
-        }
-    </script>
+    <i18n>
+        <translation>
+            <en>Custom View with query parameters</en>
+            <de>Eigene View mit Query Parametern</de>
+        </translation>
+        <translation>
+            <en>
+                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the server.
+                You don't have to put a .js at the end of the path, it is automatically added to the path.
+            </en>
+            <de>
+                Dies ist eine benutzerdefinierte Seite mit Abfrageparametern. Der Pfad im Hash führt direkt zu der Datei auf dem Server.
+                Sie müssen keine .js-Datei am Ende des Pfads einfügen, sie wird automatisch dem Pfad hinzugefügt.
+            </de>
+        </translation>
+        <translation>
+            <en>The rest of the HTML file is not displayed</en>
+            <de>Der rest der HTML Datei wird nicht angezeigt</de>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>

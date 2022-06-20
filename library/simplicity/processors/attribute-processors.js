@@ -304,10 +304,8 @@ class i18nAttributeProcessor {
         if (name === "i18n") {
             this.matched = true;
             this.text = element.innerHTML.trim()
-                .replaceAll(/\s+/g, " ")
-                .replace(/&lt;/g,'<')
-                .replace(/&gt;/g,'>')
-                .replace(/&amp;/g,'&');
+                .replace(/ +/g, " ")
+                .replace(/\n+/g, "")
         }
     }
 

@@ -3,43 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script>
-        function i18n() {
-            return [
-                {
-                    en: `The Proxy object enables you to create a proxy for another object, which can intercept and redefine
-                    fundamental operations for that object.`,
-                    de: `Mit dem Proxy-Objekt können Sie einen Proxy für ein anderes Objekt erstellen, das abfangen und neu definieren kann
-                    grundlegende Operationen für dieses Objekt bereitstellen.`
-                },
-                {
-                    en: `A Proxy is created with two parameters:
-                    <ul>
-                        <li><code>target</code>: the original object which you want to proxy</li>
-                        <li><code>handler</code>: an object that defines which operations will be intercepted and how to redefine intercepted operations.</li>
-                    </ul>
-                    For example, this code defines a simple target with just two properties, and an even simpler handler with no properties.
-                    Because the handler is empty, this proxy behaves just like the original target.`,
-                    de: `Ein Proxy wird mit zwei Parametern erstellt:
-                    <ul>
-                        <li><code>target</code>: das ursprüngliche Objekt, das Sie als Proxy verwenden möchten  </li>
-                        <li><code>handler</code>: ein Objekt, das definiert, welche Operationen abgefangen werden und wie abgefangene Operationen neu definiert werden.</li>
-                    </ul>
-                    Dieser Code definiert beispielsweise ein einfaches Ziel mit nur zwei Eigenschaften und einen noch einfacheren Handler ohne Eigenschaften.
-                    Da der Handler leer ist, verhält sich dieser Proxy genauso wie das ursprüngliche Ziel.`
-                }, {
-                    en : `To customise the proxy, we define functions on the handler object: Here we've provided an implementation
-                    of the get() handler, which intercepts attempts to access properties in the target. Handler functions are
-                    sometimes called traps, presumably because they trap calls to the target object. The very simple trap in
-                    handler2 above redefines all property accessors.`,
-                    de : `Um den Proxy anzupassen, definieren wir Funktionen für das Handler-Objekt: Hier haben wir eine Implementierung bereitgestellt
-                    des get()-Handlers, der Versuche abfängt, auf Eigenschaften im Ziel zuzugreifen. Handler-Funktionen sind
-                    manchmal Traps genannt, vermutlich weil sie Aufrufe an das Zielobjekt abfangen. Die ganz einfache Falle in
-                    handler2 oben definiert alle Eigenschaftszugriffsmethoden neu.`
-                }
-            ]
-        }
-    </script>
+    <i18n>
+        <translation>
+            <en>
+                The Proxy object enables you to create a proxy for another object, which can intercept and redefine
+                fundamental operations for that object.</en>
+            <de>
+                Mit dem Proxy-Objekt können Sie einen Proxy für ein anderes Objekt erstellen, das abfangen und neu definieren kann
+                grundlegende Operationen für dieses Objekt bereitstellen.
+            </de>
+        </translation>
+        <translation>
+            <en>
+                A Proxy is created with two parameters:
+                <ul>
+                    <li><code>target</code>: the original object which you want to proxy</li>
+                    <li><code>handler</code>: an object that defines which operations will be intercepted and how to
+                        redefine intercepted operations.
+                    </li>
+                </ul>
+                For example, this code defines a simple target with just two properties, and an even simpler handler
+                with no properties. Because the handler is empty, this proxy behaves just like the original target.
+            </en>
+            <de>
+                Ein Proxy wird mit zwei Parametern erstellt:
+                <ul>
+                    <li><code>target</code>: das ursprüngliche Objekt, das Sie als Proxy verwenden möchten  </li>
+                    <li><code>handler</code>: ein Objekt, das definiert, welche Operationen abgefangen werden und wie abgefangene Operationen neu definiert werden.</li>
+                </ul>
+                Dieser Code definiert beispielsweise ein einfaches Ziel mit nur zwei Eigenschaften und einen noch einfacheren Handler ohne Eigenschaften.
+                Da der Handler leer ist, verhält sich dieser Proxy genauso wie das ursprüngliche Ziel.
+            </de>
+        </translation>
+        <translation>
+            <en>
+                To customise the proxy, we define functions on the handler object: Here we've provided an implementation
+                of the get() handler, which intercepts attempts to access properties in the target. Handler functions are
+                sometimes called traps, presumably because they trap calls to the target object. The very simple trap in
+                handler2 above redefines all property accessors.
+            </en>
+            <de>
+                Um den Proxy anzupassen, definieren wir Funktionen für das Handler-Objekt: Hier haben wir eine Implementierung bereitgestellt
+                des get()-Handlers, der Versuche abfängt, auf Eigenschaften im Ziel zuzugreifen. Handler-Funktionen sind
+                manchmal Traps genannt, vermutlich weil sie Aufrufe an das Zielobjekt abfangen. Die ganz einfache Falle in
+                handler2 oben definiert alle Eigenschaftszugriffsmethoden neu.
+            </de>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>

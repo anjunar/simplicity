@@ -3,39 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script>
-        function i18n() {
-            return [
-                {
-                    en : `JavaScript programs started off pretty small — most of its usage in the early days was to do isolated
-                    scripting tasks, providing a bit of interactivity to your web pages where needed, so large scripts were
-                    generally not needed. Fast forward a few years and we now have complete applications being run in browsers
-                    with a lot of JavaScript, as well as JavaScript being used in other contexts (Node.js, for example).`,
-                    de : `JavaScript-Programme begannen ziemlich klein – der größte Teil ihrer Verwendung in den frühen Tagen war isoliert zu tun
-                     Scripting-Aufgaben, die bei Bedarf ein wenig Interaktivität für Ihre Webseiten bieten, so große Scripts waren
-                     im Allgemeinen nicht erforderlich. Spulen Sie ein paar Jahre vor und wir haben jetzt vollständige Anwendungen, die in Browsern ausgeführt werden
-                     mit viel JavaScript sowie JavaScript, das in anderen Kontexten verwendet wird (z. B. Node.js).`
-                }, {
-                    en : `It has therefore made sense in recent years to start thinking about providing mechanisms for splitting
-                    JavaScript programs up into separate modules that can be imported when needed. Node.js has had this ability
-                    for a long time, and there are a number of JavaScript libraries and frameworks that enable module usage
-                    (for example, other CommonJS and AMD-based module systems like RequireJS, and more recently Webpack and Babel).`,
-                    de : `Daher war es in den letzten Jahren sinnvoll, darüber nachzudenken, Mechanismen zur Aufspaltung bereitzustellen
-                    JavaScript-Programme werden in separate Module umgewandelt, die bei Bedarf importiert werden können. Node.js hatte diese Fähigkeit
-                    für eine lange Zeit, und es gibt eine Reihe von JavaScript-Bibliotheken und Frameworks, die die Verwendung von Modulen ermöglichen
-                    (z. B. andere CommonJS- und AMD-basierte Modulsysteme wie RequireJS und in jüngerer Zeit Webpack und Babel).`
-                }, {
-                    en : `The good news is that modern browsers have started to support module functionality natively, and this
-                    is what this article is all about. This can only be a good thing — browsers can optimize loading of modules,
-                    making it more efficient than having to use a library and do all of that extra client-side processing and extra round trips.`,
-                    de : `Die gute Nachricht ist, dass moderne Browser damit begonnen haben, die Modulfunktionalität nativ zu unterstützen, und das
-                    darum geht es in diesem Artikel. Das kann nur gut sein – Browser können das Laden von Modulen optimieren,
-                    Dies macht es effizienter, als eine Bibliothek verwenden zu müssen und all diese zusätzliche clientseitige Verarbeitung und
-                    zusätzliche Roundtrips durchführen zu müssen.`
-                }
-            ]
-        }
-    </script>
+    <i18n>
+        <translation>
+            <en>
+                JavaScript programs started off pretty small — most of its usage in the early days was to do isolated
+                scripting tasks, providing a bit of interactivity to your web pages where needed, so large scripts were
+                generally not needed. Fast forward a few years and we now have complete applications being run in browsers
+                with a lot of JavaScript, as well as JavaScript being used in other contexts (Node.js, for example).
+            </en>
+            <de>
+                JavaScript-Programme begannen ziemlich klein – der größte Teil ihrer Verwendung in den frühen Tagen war isoliert zu tun
+                Scripting-Aufgaben, die bei Bedarf ein wenig Interaktivität für Ihre Webseiten bieten, so große Scripts waren
+                im Allgemeinen nicht erforderlich. Spulen Sie ein paar Jahre vor und wir haben jetzt vollständige Anwendungen, die in Browsern ausgeführt werden
+                mit viel JavaScript sowie JavaScript, das in anderen Kontexten verwendet wird (z. B. Node.js).
+            </de>
+        </translation>
+        <translation>
+            <en>
+                It has therefore made sense in recent years to start thinking about providing mechanisms for splitting
+                JavaScript programs up into separate modules that can be imported when needed. Node.js has had this ability
+                for a long time, and there are a number of JavaScript libraries and frameworks that enable module usage
+                (for example, other CommonJS and AMD-based module systems like RequireJS, and more recently Webpack and Babel).
+            </en>
+            <de>
+                Daher war es in den letzten Jahren sinnvoll, darüber nachzudenken, Mechanismen zur Aufspaltung bereitzustellen
+                JavaScript-Programme werden in separate Module umgewandelt, die bei Bedarf importiert werden können. Node.js hatte diese Fähigkeit
+                für eine lange Zeit, und es gibt eine Reihe von JavaScript-Bibliotheken und Frameworks, die die Verwendung von Modulen ermöglichen
+                (z. B. andere CommonJS- und AMD-basierte Modulsysteme wie RequireJS und in jüngerer Zeit Webpack und Babel).
+            </de>
+        </translation>
+        <translation>
+            <en>
+                The good news is that modern browsers have started to support module functionality natively, and this
+                is what this article is all about. This can only be a good thing — browsers can optimize loading of modules,
+                making it more efficient than having to use a library and do all of that extra client-side processing and extra round trips.
+            </en>
+            <de>
+                Die gute Nachricht ist, dass moderne Browser damit begonnen haben, die Modulfunktionalität nativ zu unterstützen, und das
+                darum geht es in diesem Artikel. Das kann nur gut sein – Browser können das Laden von Modulen optimieren,
+                Dies macht es effizienter, als eine Bibliothek verwenden zu müssen und all diese zusätzliche clientseitige Verarbeitung und
+                zusätzliche Roundtrips durchführen zu müssen.
+            </de>
+        </translation>
+    </i18n>
 </head>
 <body>
 <template>
