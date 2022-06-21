@@ -839,13 +839,17 @@ function caseStatement(rawAttributes, context, children) {
         build(parent) {
             let elements = [];
             for (const child of children) {
-                elements.push(child.build(parent));
+                if (child instanceof Object) {
+                    elements.push(child.build(parent));
+                }
             }
             return elements;
         },
         update() {
             for (const child of children) {
-                child.update();
+                if (child instanceof Object) {
+                    child.update();
+                }
             }
         }
     }
