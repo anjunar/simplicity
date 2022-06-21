@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <i18n>
+        <translation>
+            <en>Reactivity</en>
+            <de>Reactivität</de>
+        </translation>
+        <translation>
+            <en>
+                Reactivity is performed by tracking changes in the membranes. One changes
+                Property, then handlers are executed that invoke a callback. New handlers can work on the model,
+                that is enclosed by membranes can be attached using the "addEventHandler" method.
+            </en>
+            <de>
+                Reaktivität wird durch das tracken der Veränderungen an den Membranen durchgeführt. Ändert sich eine
+                Property, dann werden Handler ausgeführt der einen Callback aufruft. Neue Handler können an dem Model,
+                das durch Membranen umschlossen wird, angehängt werden, mit der Methode "addEventHandler".
+            </de>
+        </translation>
+        <translation>
+            <en>
+                The "addEventHandler" method is passed the name of the property, an element and the callback.
+                The element is used to de-register the handler when the element leaves the dom.
+            </en>
+            <de>
+                Der Methode "addEventHandler" wird der Name der Property, ein Element und der Callback übergeben.
+                Das Element dient dazu den Handler zu de-registrieren wenn das Element den Dom verläßt.
+            </de>
+        </translation>
+    </i18n>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+        <div style="flex: 1; padding: 20px;">
+            <h2 style="margin-left: 0;" i18n>Reactivity</h2>
+            <hr class="line">
+
+            <p i18n>
+                Reactivity is performed by tracking changes in the membranes. One changes
+                Property, then handlers are executed that invoke a callback. New handlers can work on the model,
+                that is enclosed by membranes can be attached using the "addEventHandler" method.
+            </p>
+
+            <p i18n>
+                The "addEventHandler" method is passed the name of the property, an element and the callback.
+                The element is used to de-register the handler when the element leaves the dom.
+            </p>
+        </div>
+        <div style="flex: 1; padding: 20px;">
+            <h2>Source Code</h2>
+            <hr class="line">
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                import {lifeCycle} from "/library/simplicity/processors/life-cycle-processor.js";
+
+                                function membraneFactory(object) {
+                                    let handlers = [];
+
+                                    if (object instanceof Object) {
+                                        return new Proxy(object, {
+                                            set(target, p, value, receiver) {
+                                                let result = Reflect.set(target, p, value, receiver);
+
+                                                for (const handler of handlers) {
+                                                    if (handler.name === p)  {
+                                                        handler.fire(value);
+                                                    }
+                                                }
+
+                                                return result;
+                                            },
+                                            get(target, p, receiver) {
+                                                let result = Reflect.get(target, p, receiver);
+                                                return membraneFactory(result);
+                                            }
+                                        });
+                                    }
+                                    return object;
+                                }
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

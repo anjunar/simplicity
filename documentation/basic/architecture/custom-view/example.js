@@ -1,5 +1,4 @@
 import {customViews} from "../../../../library/simplicity/simplicity.js";
-import {jsonClient} from "../../../../library/simplicity/services/client.js";
 import {loader} from "../../../../library/simplicity/processors/loader-processor.js";
 
 class Example extends HTMLElement {
@@ -17,7 +16,8 @@ export default customViews.define({
     class : Example,
     guard(activeRoute) {
         return {
-            material : jsonClient.get("materials.json")
+            material : fetch("materials.json")
+                .then(response => response.json())
                 .then((materials) => {
                     return materials.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))
                 })

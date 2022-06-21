@@ -22,12 +22,24 @@
         </translation>
         <translation>
             <en>
-                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the server.
+                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the
+                server.
                 You don't have to put a .js at the end of the path, it is automatically added to the path.
             </en>
             <de>
-                Dies ist eine benutzerdefinierte Seite mit Abfrageparametern. Der Pfad im Hash führt direkt zu der Datei auf dem Server.
+                Dies ist eine benutzerdefinierte Seite mit Abfrageparametern. Der Pfad im Hash führt direkt zu der Datei
+                auf dem Server.
                 Sie müssen keine .js-Datei am Ende des Pfads einfügen, sie wird automatisch dem Pfad hinzugefügt.
+            </de>
+        </translation>
+        <translation>
+            <en>
+                The resulting Query parameters can be found at the component with the property "queryParams"
+                In this case it is the activeRoute that corresponds to the component.
+            </en>
+            <de>
+                Die resultierenden Abfrageparameter finden Sie bei der Komponente mit der Eigenschaft "queryParams".
+                In diesem Fall ist es die activeRoute, die der Komponente entspricht.
             </de>
         </translation>
         <translation>
@@ -46,8 +58,14 @@
             <hr class="line">
 
             <p i18n>
-                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the server.
+                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the
+                server.
                 You don't have to put a .js at the end of the path, it is automatically added to the path.
+            </p>
+
+            <p i18n>
+                The resulting Query parameters can be found at the component with the property "queryParams"
+                In this case it is the activeRoute that corresponds to the component.
             </p>
 
             <div style="margin: 20px;">
@@ -61,55 +79,88 @@
 
             <h2>Source Code</h2>
             <hr class="line">
-            <h3>HTML5</h3>
-            <p i18n>The rest of the HTML file is not displayed</p>
-            <div style="margin-top: 20px;">
-                <code is="dom-code" lang="html5">
-                    <template>
-                        <iframe>
-                            <div>{{material.position}} {{material.name}}</div>
-                        </iframe>
-                    </template>
+            <mat-tabs bind:page="page">
+                <mat-tab>
+                    <span>View</span>
+                </mat-tab>
+                <mat-tab>
+                    <span>Example</span>
+                </mat-tab>
+            </mat-tabs>
 
-                </code>
-            </div>
-            <h3>Javascript</h3>
-            <div>
-                <div>
-                    <code is="dom-code" lang="javascript">
-                        <template>
-                            <script>
-                                import {customViews} from "../../../library/simplicity/simplicity.js";
-                                import {jsonClient} from "../../../library/simplicity/services/client.js";
-                                import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+            <mat-pages bind:page="page">
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p i18n>The rest of the HTML file is not displayed</p>
+                        <div style="margin-top: 20px;">
+                            <code is="dom-code" lang="html5">
+                                <template>
+                                    <iframe>
+                                        <a href="#/documentation/example?id=4">Click Me!</a>
+                                    </iframe>
+                                </template>
+                            </code>
+                        </div>
+                    </div>
+                </mat-page>
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p i18n>The rest of the HTML file is not displayed</p>
+                        <div style="margin-top: 20px;">
+                            <code is="dom-code" lang="html5">
+                                <template>
+                                    <iframe>
+                                        <div>{{material.position}} {{material.name}}</div>
+                                    </iframe>
+                                </template>
 
-                                class Example extends HTMLElement {
+                            </code>
+                        </div>
+                        <h3>Javascript</h3>
+                        <div>
+                            <div>
+                                <code is="dom-code" lang="javascript">
+                                    <template>
+                                        <script>
+                                            import {customViews} from "../../../library/simplicity/simplicity.js";
+                                            import {jsonClient} from "../../../library/simplicity/services/client.js";
+                                            import {
+                                                loader
+                                            } from "../../../library/simplicity/processors/loader-processor.js";
 
-                                    material;
+                                            class Example extends HTMLElement {
 
-                                    static get template() {
-                                        return loader("documentation/advanced/examples/custom-page.html");
-                                    }
+                                                material;
 
-                                }
+                                                static get template() {
+                                                    return loader("documentation/advanced/examples/custom-page.html");
+                                                }
 
-                                export default customViews.define({
-                                    name : "examples-custom-page",
-                                    class : Example,
-                                    guard(activeRoute) {
-                                        return {
-                                            material : jsonClient.get("materials.json")
-                                                .then((materials) => {
-                                                    return materials.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))
-                                                })
-                                        }
-                                    }
-                                })
-                            </script>
-                        </template>
-                    </code>
-                </div>
-            </div>
+                                            }
+
+                                            export default customViews.define({
+                                                name: "architecture-custom-page",
+                                                class: Example,
+                                                guard(activeRoute) {
+                                                    return {
+                                                        material: fetch("materials.json")
+                                                            .then(response => response.json())
+                                                            .then((materials) => {
+                                                                return materials.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))
+                                                            })
+                                                    }
+                                                }
+                                            })
+                                        </script>
+                                    </template>
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+                </mat-page>
+            </mat-pages>
         </div>
     </div>
 </template>

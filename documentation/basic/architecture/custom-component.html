@@ -29,7 +29,7 @@
             </en>
             <de>
                 Bei der Erstellung von Komponenten gibt es mehrere Methoden die implementiert werden müssen. Die initialize
-                Methode wird ausgeführt, wenn das Template angewendet wurde und als children der Komponente zur Verfügung
+                Methode wird ausgeführt, wenn das Template angewendet wurde und die children der Komponente zur Verfügung
                 stehen. Dabei ist zu beachten, dass die Kind-Elemente noch nicht initialisiert sind, somit muss eine Methode
                 wie, z.B. register am Eltern-Element vom Kind-Element aufgerufen werden.
             </de>
@@ -54,14 +54,12 @@
             <en>
                 There is the static method template where the string is sent directly as a
                 HTML template can be attached, or the loader can be used to extract the template from an HTML
-                File to load. The render method is called when an attribute changes and the update
-                is called when the LifeCycle is run through.
+                File to load.
             </en>
             <de>
                 Es gibt die statische Methode template wo direkt der String als
                 HTML-Template angehängt werden kann, oder der loader benutzt werden kann, um das Template aus einer HTML
-                Datei zu laden. Die Methode render wird aufgerufen, wenn sich ein Attribut ändert und die Methode update
-                wird aufgerufen, wenn der LifeCycle durchlaufen wird.
+                Datei zu laden.
             </de>
         </translation>
         <translation>
@@ -111,8 +109,7 @@
             <p i18n>
                 There is the static method template where the string is sent directly as a
                 HTML template can be attached, or the loader can be used to extract the template from an HTML
-                File to load. The render method is called when an attribute changes and the update
-                is called when the LifeCycle is run through.
+                File to load.
             </p>
 
         </div>
@@ -120,85 +117,105 @@
         <div style="flex: 1; padding: 20px;">
             <h2>Source Code</h2>
             <hr class="line">
-            <h3>HTML5</h3>
-            <p i18n>The rest of the HTML file is not displayed</p>
-            <code is="dom-code" lang="html5">
-                <template>
-                    <iframe>
-                        <advanced-hello-world text="Hello World!"></advanced-hello-world>
-                    </iframe>
-                </template>
+            <mat-tabs bind:page="page">
+                <mat-tab>
+                    <span>View</span>
+                </mat-tab>
+                <mat-tab>
+                    <span>Example</span>
+                </mat-tab>
+            </mat-tabs>
 
-            </code>
-            <code is="dom-code" lang="html5">
-                <template>
-                    <iframe>
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>Hello World</title>
-                            <style>
-                                advanced-hello-world {
-                                    display: block;
-                                }
+            <mat-pages bind:page="page">
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <p i18n>The rest of the HTML file is not displayed</p>
+                        <code is="dom-code" lang="html5">
+                            <template>
+                                <iframe>
+                                    <advanced-hello-world text="Hello World!"></advanced-hello-world>
+                                </iframe>
+                            </template>
 
-                                advanced-hello-world div.center {
-                                    margin: 0;
-                                    position: absolute;
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%);
-                                }
-                            </style>
-                        </head>
-                        <body>
-                        <template>
-                            <div class="center">
-                                <div>{{text}}</div>
-                            </div>
-                        </template>
-                        </body>
-                        </html>
-                    </iframe>
-                </template>
-            </code>
-            <h3>Javascript</h3>
-            <code is="dom-code" lang="javascript">
-                <template>
-                    <script>
-                        import {customComponents} from "../../../library/simplicity/simplicity.js";
-                        import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                        </code>
+                    </div>
+                </mat-page>
+                <mat-page>
+                    <div>
+                        <h3>HTML5</h3>
+                        <code is="dom-code" lang="html5">
+                            <template>
+                                <iframe>
+                                    <!DOCTYPE html>
+                                    <html lang="en">
+                                    <head>
+                                        <meta charset="UTF-8">
+                                        <title>Hello World</title>
+                                        <style>
+                                            advanced-hello-world {
+                                                display: block;
+                                            }
 
-                        class HelloWorld extends HTMLElement {
+                                            advanced-hello-world div.center {
+                                                margin: 0;
+                                                position: absolute;
+                                                top: 50%;
+                                                left: 50%;
+                                                transform: translate(-50%, -50%);
+                                            }
+                                        </style>
+                                    </head>
+                                    <body>
+                                    <template>
+                                        <div class="center">
+                                            <div>{{text}}</div>
+                                        </div>
+                                    </template>
+                                    </body>
+                                    </html>
+                                </iframe>
+                            </template>
+                        </code>
+                        <h3>Javascript</h3>
+                        <code is="dom-code" lang="javascript">
+                            <template>
+                                <script>
+                                    import {customComponents} from "../../../library/simplicity/simplicity.js";
+                                    import {loader} from "../../../library/simplicity/processors/loader-processor.js";
 
-                            text = ""
+                                    class HelloWorld extends HTMLElement {
 
-                            attributeChangedCallback(name, oldValue, newValue) {
-                                switch (name) {
-                                    case "text" : {
-                                        this.text = newValue;
+                                        text = ""
+
+                                        attributeChangedCallback(name, oldValue, newValue) {
+                                            switch (name) {
+                                                case "text" : {
+                                                    this.text = newValue;
+                                                }
+                                            }
+                                        }
+
+                                        static get observedAttributes() {
+                                            return [{
+                                                name: "text",
+                                                type: "input"
+                                            }];
+                                        }
+
+                                        static get template() {
+                                            return loader("documentation/advanced/examples/hello-world.html");
+                                        }
+
                                     }
-                                }
-                            }
 
-                            static get observedAttributes() {
-                                return [{
-                                    name: "text",
-                                    type: "input"
-                                }];
-                            }
-
-                            static get template() {
-                                return loader("documentation/advanced/examples/hello-world.html");
-                            }
-
-                        }
-
-                        export default customComponents.define("advanced-hello-world", HelloWorld)
-                    </script>
-                </template>
-            </code>
+                                    export default customComponents.define("advanced-hello-world", HelloWorld)
+                                </script>
+                            </template>
+                        </code>
+                    </div>
+                </mat-page>
+            </mat-pages>
         </div>
     </div>
 </template>
