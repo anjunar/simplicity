@@ -1,11 +1,29 @@
-import {codeGenerator as jsCodeGenerator, collectIdentifiers, evaluation} from "./js-compiler-processor.js";
+import {collectIdentifiers, evaluation} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
-import {cachingProxy, evaluator, generateDomProxy, getPropertyDescriptor, isEqual} from "../services/tools.js";
+import {cachingProxy, evaluator, getPropertyDescriptor} from "../services/tools.js";
 import {generate} from "../../astring";
-import {parse} from "./js-compiler-extension.js";
+import {attributes, isCompositeComponent} from "../plugins/helper.js";
 
+const pluginRegistry = [];
 export const contentRegistry = new WeakMap();
 const membraneCache = new WeakMap();
+
+export const customPlugins = new class CustomPlugins {
+
+    define(configuration) {
+        pluginRegistry.push(configuration);
+        return configuration;
+    }
+
+    find(name, destination) {
+        return pluginRegistry.find(plugin => plugin.name === name && plugin.destination === destination)
+    }
+
+    executors() {
+        return pluginRegistry.map(plugin => plugin.executor);
+    }
+
+}
 
 class Component {
 
@@ -279,16 +297,6 @@ export class Context {
 }
 
 
-function notifyElementRemove(element) {
-    let iterator = document.createNodeIterator(element, NodeFilter.SHOW_ALL)
-    let node = iterator.nextNode();
-    while (node !== null) {
-        node.dispatchEvent(new CustomEvent("removed"))
-        node = iterator.nextNode();
-    }
-}
-
-
 function interpolationStatement(text, context) {
     let interpolationRegExp = /{{([^}]+)}}/g;
 
@@ -447,221 +455,6 @@ function svgStatement(tagName, attributes, children) {
     }
 }
 
-
-function forExpressions(expressions) {
-    let ast = parse(expressions);
-
-    let result = {};
-
-    for (const bodyExpression of ast.body) {
-        if (bodyExpression.type === "VariableDeclaration") {
-            for (const expression of bodyExpression.declarations) {
-                if (expression.type === "ForVariableDeclaration") {
-                    result.for = {
-                        expression: jsCodeGenerator(expression, true),
-                        variable: expression.id.name,
-                        source: jsCodeGenerator(expression.init, true)
-                    }
-                }
-                if (expression.type === "VariableDeclarator") {
-                    if (expression.id.name === "index") {
-                        result.index = {
-                            expression: jsCodeGenerator(expression, true),
-                            variable: expression.init.name
-                        }
-                    }
-                    if (expression.id.name === "length") {
-                        result.length = {
-                            expression: jsCodeGenerator(expression, true),
-                            variable: expression.init.name
-                        }
-                    }
-                    if (expression.id.type === "ArrayPattern") {
-                        result.for = {
-                            expression: jsCodeGenerator(expression, true),
-                            variable: expression.id.elements.map(element => element.value),
-                            source: jsCodeGenerator(expression.init, true)
-                        }
-                    }
-                }
-            }
-        }
-        if (bodyExpression.type === "ExpressionStatement") {
-            let expressionStatement = bodyExpression.expression;
-            if (expressionStatement.type === "AssignmentExpression" && expressionStatement.left.name === "onRendered") {
-                result.onRendered = {
-                    expression: jsCodeGenerator(expressionStatement, true),
-                    func: jsCodeGenerator(expressionStatement.right, true)
-                }
-            }
-            if (expressionStatement.type === "AssignmentExpression" && expressionStatement.left.name === "force") {
-                result.force = {
-                    expression: jsCodeGenerator(expressionStatement, true),
-                    enabled: true
-                }
-            }
-        }
-    }
-    return result;
-}
-
-function forStatement(rawAttributes, context, callback) {
-
-    let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:for"))
-    let indexOf = attribute.indexOf("=");
-    let expressions = attribute.substr(indexOf + 1)
-
-    let data = forExpressions(expressions);
-
-    let children = [];
-    let result = evaluation(data.for.source, context);
-    let array;
-    if (result instanceof Array) {
-        array = Array.from(result);
-    } else if (result instanceof Object) {
-        if (data.for.variable instanceof Array) {
-            array = Object.entries(result);
-        } else {
-            array = Object.values(result);
-        }
-    } else {
-        console.log(`For loops data source is a ${typeof result} from path ${data.for.source}`)
-    }
-
-    let ast = [];
-
-    let container = document.createDocumentFragment();
-    let comment = document.createComment(data.for.expression);
-
-    activeObjectExpression(data.for.source, context, comment, (result) => {
-        update(result)
-    });
-
-    function generate() {
-        array.forEach((item, index) => {
-            let instance = {};
-            if (data.for.variable instanceof Array) {
-                let [key, value] = item;
-                instance[data.for.variable[0]] = key;
-                instance[data.for.variable[1]] = value;
-            } else {
-                instance[data.for.variable] = item;
-            }
-            if (data.index) {
-                instance[data.index.variable] = index;
-            }
-            if (data.length) {
-                instance[data.length.variable] = array.length;
-            }
-            let scope = {proxy : {handlers : [], property : ""}};
-            let newContext = new Context(membraneFactory(instance, [scope]), context);
-            let astLeaf = callback(newContext);
-            ast.push(astLeaf);
-            let build = astLeaf.build(container);
-            children.push(build);
-            Object.assign(build, instance);
-            generateDomProxy(build);
-            build.handlers = scope.proxy.handlers;
-        })
-
-        comment.children = children;
-
-    }
-
-    function update(value) {
-        array = value;
-        for (const child of children) {
-            notifyElementRemove(child);
-            child.remove();
-        }
-        children.length = 0;
-        ast.length = 0;
-        generate();
-        comment.after(container);
-        for (const astElement of ast) {
-            astElement.update();
-        }
-        if (data.onRendered) {
-            evaluation(data.onRendered.func, context, {$children: children}, true)
-        }
-    }
-
-    return {
-        type: "for",
-        expression: expressions,
-        children: ast,
-        build: function (parent) {
-            generate();
-            parent.appendChild(comment)
-            parent.appendChild(container);
-            if (data.onRendered) {
-                evaluation(data.onRendered.func, context, {$children: children}, true)
-            }
-            return children;
-        },
-        update: function () {
-            for (const astElement of ast) {
-                astElement.update();
-            }
-        }
-    }
-}
-
-function ifStatement(rawAttributes, context, callback) {
-    let attributes = getAttributes(rawAttributes, ["if"]);
-    let boundAttributesFunction = boundAttributes(attributes, context);
-    let values = boundAttributesFunction()
-    let value = values.if;
-    let comment = document.createComment("if");
-    let container = document.createDocumentFragment();
-    let html;
-    let element;
-
-    activeObjectExpression(attributes.if.value, context, comment, (result) => {
-        update(result);
-    })
-
-    function update(value) {
-        if (value) {
-            if (element) {
-                if (!element.isConnected) {
-                    comment.after(element);
-                }
-            } else {
-                generate();
-                comment.after(element);
-                html.update();
-            }
-        } else {
-            if (element.isConnected) {
-                element.remove();
-            }
-        }
-    }
-
-    function generate() {
-        html = callback(context);
-        element = html.build(container);
-    }
-
-    return {
-        type: "if",
-        element: html,
-        build(parent) {
-            parent.appendChild(comment);
-            if (value) {
-                generate();
-                parent.appendChild(container);
-            }
-        },
-        update() {
-            if (value) {
-                html.update();
-            }
-        }
-    }
-}
-
 function bindStatement(name, value, context) {
     let processor;
     return {
@@ -686,306 +479,16 @@ function bindStatement(name, value, context) {
     }
 }
 
-function slotStatement(rawAttributes, context, contents) {
-    let attributes = getAttributes(rawAttributes, ["name", "index", "source", "selector", "implicit"])
-    let boundAttributesFunction = boundAttributes(attributes, context);
-    let values = boundAttributesFunction()
-
-    let container = document.createDocumentFragment();
-    let data = "slot " + JSON.stringify(attributes)
-
-    let comment = document.createComment(data);
-    let children = [];
-
-    for (const attribute of Object.values(attributes)) {
-        if (attribute.type === "bind") {
-            activeObjectExpression(attribute.value, context, comment, () => {
-                values = boundAttributesFunction();
-                update();
-            })
-        }
-    }
-
-    function generate() {
-        let activeContent;
-        let index = values.index || 0;
-
-        let implicitValue = values.implicit;
-        if (Reflect.has(values, "source")) {
-            activeContent = content(values.source, implicitValue);
-        } else {
-            activeContent = contents(implicitValue);
-        }
-
-        if (values.name) {
-            let querySelector = activeContent.querySelectorAll(`[slot=${values.name}]`)[index];
-            if (querySelector) {
-                container.appendChild(querySelector)
-                children.push(querySelector);
-            }
-        } else if (values.selector) {
-            let querySelector = activeContent.querySelectorAll(values.selector)[index];
-            if (querySelector) {
-                container.appendChild(querySelector)
-                children.push(querySelector);
-            }
-        } else {
-            for (const segment of activeContent.children) {
-                container.appendChild(segment)
-                children.push(segment);
-            }
-        }
-
-        for (const child of children) {
-            child.addEventListener("removed",() => {
-                notifyElementRemove(activeContent)
-            })
-        }
-
-        return activeContent;
-    }
-
-    let fragment;
-
-    function update() {
-        for (const child of children) {
-            notifyElementRemove(child)
-            child.remove();
-        }
-        children.length = 0;
-        fragment = generate();
-        comment.after(container);
-        fragment.update();
-    }
-
-    return {
-        type: "slot",
-        ...values,
-        children: children,
-        build(parent) {
-            fragment = generate();
-            parent.appendChild(comment);
-            parent.appendChild(container);
-        },
-        update() {
-            fragment.update();
-        }
-    };
-}
-
-function switchStatement(rawAttributes, context, cases) {
-    let attributes = getAttributes(rawAttributes, ["switch"])
-    let boundAttributesFunction = boundAttributes(attributes, context);
-
-    let container = document.createDocumentFragment();
-    let comment = document.createComment("switch")
-
-    function generate() {
-        return caseSegment.build(container);
-    }
-
-    function findCase(value) {
-        for (const caseSegment of cases) {
-            if (caseSegment.value === value) {
-                return caseSegment;
-            }
-        }
-        for (const caseSegment of cases) {
-            if (caseSegment.value === "default") {
-                return caseSegment;
-            }
-        }
-    }
-
-    let caseSegment;
-    let value;
-    let elements;
-
-    return {
-        build(parent) {
-            let values = boundAttributesFunction();
-            value = values.switch;
-            caseSegment = findCase(value);
-            elements = generate();
-            parent.appendChild(comment);
-            parent.appendChild(container);
-        },
-        update() {
-            let values = boundAttributesFunction();
-            let newValue = values.switch;
-            if (!isEqual(value, newValue)) {
-                value = newValue;
-                for (const element of elements) {
-                    element.remove();
-                }
-                caseSegment = findCase(value);
-                elements = generate();
-                comment.after(container);
-            } else {
-                caseSegment.update();
-            }
-        }
-    }
-}
-
-function caseStatement(rawAttributes, context, children) {
-    let attributes = getAttributes(rawAttributes, ["value"]);
-    let boundAttributesFunction = boundAttributes(attributes, context);
-    let values = boundAttributesFunction();
-
-    return {
-        type: "case",
-        value: values.value,
-        build(parent) {
-            let elements = [];
-            for (const child of children) {
-                if (child instanceof Object) {
-                    elements.push(child.build(parent));
-                }
-            }
-            return elements;
-        },
-        update() {
-            for (const child of children) {
-                if (child instanceof Object) {
-                    child.update();
-                }
-            }
-        }
-    }
-}
-
-function variableStatement(rawAttributes, context, html) {
-
-    let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:variable"))
-
-    let variable = attribute.split("=")[1];
-
-    let element = html.element;
-
-    evaluation(variable + " = $value", context, {$value: element})
-
-    return html;
-
-}
-
-function letStatement(rawAttributes, implicit, context, callback) {
-    let ast = {update() {}}
-    let newContext;
-    let instance;
-    let scope;
-    if (implicit) {
-        let attributes = getAttributes(rawAttributes, ["let"]);
-        let boundAttributesFunction = boundAttributes(attributes, context);
-        let values = boundAttributesFunction();
-        instance = {};
-        instance[values.let] = implicit;
-        scope = {proxy : {handlers: [], property : ""}};
-        newContext = new Context(membraneFactory(instance, [scope]), context);
-        ast = callback(newContext);
-    }
-    return {
-        build(parent) {
-            if (implicit) {
-                let element = ast.build(parent);
-                newContext.instance = element;
-                Object.assign(element, instance);
-                generateDomProxy(element);
-                element.handlers = scope.proxy.handlers;
-                return element
-            }
-            return null;
-        },
-        update() {
-            ast.update();
-        }
-    }
-}
-
-function isCompositeComponent(node) {
-    if (node.localName.indexOf("-") > -1) {
-        let component = customElements.get(node.localName);
-        if (Reflect.has(component, "template")) {
-            return true;
-        }
-    }
-    if (node.hasAttribute("is")) {
-        let component = customElements.get(node.getAttribute("is"));
-        if (Reflect.has(component, "template")) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function getAttributes(attributes, observed) {
-    let attributeValues = {};
-    for (const attribute of attributes) {
-        let indexOf = attribute.indexOf("=");
-        let attributePair = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
-        if (attribute.startsWith("bind")) {
-            let string = attributePair[0].split(":")[1];
-            if (observed.indexOf(string) > -1) {
-                attributeValues[string] = {
-                    name: string,
-                    type: "bind",
-                    value: attributePair[1]
-                }
-            }
-        } else {
-            attributeValues[attributePair[0]] = {
-                name: attributePair[0],
-                type: "raw",
-                value: attributePair[1]
-            }
-        }
-    }
-    return attributeValues;
-}
-
-function boundAttributes(attributes, context) {
-    function values() {
-        let attributeValues = {};
-        for (let attribute of Object.values(attributes)) {
-            if (attribute.type === "bind") {
-                attributeValues[attribute.name] = evaluation(attribute.value, context)
-            } else {
-                attributeValues[attribute.name] = attribute.value
-            }
-        }
-        return attributeValues;
-    }
-
-    return values;
-}
-
 export function codeGenerator(nodes) {
-    function children(node, level, isSvg = false, shadow) {
+    function children(node, level, isSvg = false) {
         if (isCompositeComponent(node)) {
-            shadow = true;
-            return `function(implicit) { let shadow=${shadow}; return [${intern(node.childNodes, level, isSvg, shadow)}]}`
+            return `function(implicit) { return [${intern(node.childNodes, level, isSvg)}]}`
         }
         if (node.localName === "template") {
-            return intern(node.content.childNodes, level, isSvg, shadow)
+            return intern(node.content.childNodes, level, isSvg)
         }
-        return intern(node.childNodes, level, isSvg, shadow)
+        return intern(node.childNodes, level, isSvg)
     }
-
-    function rawAttributes(node) {
-        return Array.from(node.attributes).map((attribute) => `"${attribute.name}=${attribute.value}"`);
-    }
-
-    function attributes(node) {
-        return Array.from(node.attributes)
-            .filter((attribute) => attribute.name !== "bind:if" && attribute.name !== "bind:for" && attribute.name !== "bind:variable" && attribute.name !== "bind:switch")
-            .map((attribute => {
-                if (attribute.name.startsWith("bind") || attribute.name === "i18n") {
-                    return `bindStatement("${attribute.name}", "${attribute.value}", context)`
-                }
-                return `"${attribute.name}=${attribute.value}"`
-            })).join(",")
-    }
-
 
     function intern(nodes, level = 1, isSvg = false) {
         let tabs = "\t".repeat(level);
@@ -1012,27 +515,19 @@ export function codeGenerator(nodes) {
                     if (node.hasAttribute("is")) {
                         tagName += ":" + node.getAttribute("is")
                     }
-                    if (node.hasAttribute("bind:for")) {
-                        return `\n${tabs}forStatement([${rawAttributes(node)}], context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}])})`
+
+                    for (const attribute of node.attributes) {
+                        let plugin = customPlugins.find(attribute.name, "Attribute");
+                        if (plugin) {
+                            return plugin.code(tagName, node, children, intern, isSvg, tabs, level);
+                        }
                     }
-                    if (node.hasAttribute("let")) {
-                        return `\n${tabs}letStatement([${rawAttributes(node)}], implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}])})`
+
+                    let plugin = customPlugins.find(node.localName, "Element");
+                    if (plugin) {
+                        return plugin.code(tagName, node, children, intern, isSvg, tabs, level);
                     }
-                    if (node.hasAttribute("bind:variable")) {
-                        return `\n${tabs}variableStatement([${rawAttributes(node)}], context, html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg)}\n${tabs}]))`
-                    }
-                    if (node.hasAttribute("bind:if")) {
-                        return `\n${tabs}ifStatement([${rawAttributes(node)}], context, () => {return html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])})`
-                    }
-                    if (node.hasAttribute("bind:switch")) {
-                        return `\n${tabs}switchStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])`;
-                    }
-                    if (node.localName === "case") {
-                        return `\n${tabs}caseStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])`;
-                    }
-                    if (node.localName === "slot") {
-                        return `\n${tabs}slotStatement([${rawAttributes(node)}], context, content)`;
-                    }
+
                     if (node.localName === "svg" || isSvg) {
                         return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true)}\n${tabs}])`
                     }
@@ -1042,9 +537,11 @@ export function codeGenerator(nodes) {
     }
 
     let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
-    let arg = `return function(forStatement, slotStatement, html, svg, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement) {return ${expression}}`;
+    let names = customPlugins.executors().map(executor => executor.name);
+    let arg = `return function(${names.join(", ")}, html, svg, interpolationStatement, bindStatement) {return ${expression}}`;
     let func = evaluator(arg)
-    return func()(forStatement, slotStatement, htmlStatement, svgStatement, letStatement, interpolationStatement, bindStatement, ifStatement, variableStatement, switchStatement, caseStatement)
+    let parameters = [...customPlugins.executors(), htmlStatement, svgStatement, interpolationStatement, bindStatement];
+    return func().apply(this, parameters)
 }
 
 export function compiler(template, instance, content, implicit) {

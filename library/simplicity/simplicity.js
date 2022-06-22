@@ -2,15 +2,8 @@ import {register} from "./manager/view-manager.js";
 import {codeGenerator, compiler} from "./processors/html-compiler-processor.js";
 import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
-import {evaluator, generateDomProxy, isEqual} from "./services/tools.js";
-
-/*
-Element.prototype.remove = (function (_super) {
-    return function () {
-        _super.apply(this, [])
-    }
-})(Element.prototype.remove)
-*/
+import {generateDomProxy, isEqual} from "./services/tools.js";
+import * as plugins from "./plugins"
 
 Node.prototype.queryUpwards = function (callback) {
     if (callback(this)) {
