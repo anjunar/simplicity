@@ -8,8 +8,12 @@ class MatTaskbar extends HTMLElement {
         let method = () => {
             return windowManager.configurations;
         }
-        let resonator = () => {
+        let resonator = (callback, element) => {
+            window.addEventListener("window", callback)
 
+            element.addEventListener("removed", () => {
+                window.removeEventListener("window", callback)
+            })
         }
         return {method, resonator}
     }

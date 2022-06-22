@@ -56,6 +56,9 @@ export const windowManager = new class WindowManager {
                     matWindow.addEventListener("close", () => {
                         modal.remove();
                     })
+                    matWindow.addEventListener("ok", () => {
+                        modal.remove();
+                    })
 
                     let viewport = document.querySelector("viewport");
                     viewport.appendChild(modal);
@@ -71,6 +74,7 @@ export const windowManager = new class WindowManager {
                 matWindow.style.left = matWindow.parentElement.offsetWidth / 2 - matWindow.offsetWidth / 2 + "px"
 
                 this.clickWindow(matWindow);
+                window.dispatchEvent(new CustomEvent("window"));
 
                 resolve(matWindow);
             })
@@ -88,7 +92,7 @@ export const windowManager = new class WindowManager {
     }
 
     clickWindow(matWindow) {
-        let sort = zIndexSorted();
+        let sort = Array.from(zIndexSorted());
 
         let indexOf = sort.indexOf(matWindow);
 
@@ -130,8 +134,9 @@ export const windowManager = new class WindowManager {
             matWindow = matWindow.resolve;
         }
         let indexOf = windowsRegistry.indexOf(matWindow);
-        windowsRegistry.splice(indexOf)
+        windowsRegistry.splice(indexOf, 1)
         matWindow.remove();
+        window.dispatchEvent(new CustomEvent("window"));
     }
 
     minimize(matWindow) {
