@@ -5,6 +5,8 @@ import {contentManager} from "./manager/content-manager.js";
 import {generateDomProxy, isEqual} from "./services/tools.js";
 import * as plugins from "./plugins"
 
+console.log(`plugins loaded: ${Object.values(plugins).map(plugin => plugin.name)}`)
+
 Node.prototype.queryUpwards = function (callback) {
     if (callback(this)) {
         return this;
@@ -22,6 +24,8 @@ const domParser = new DOMParser();
 export const customComponents = new class CustomComponents {
 
     define(name, clazz, options) {
+
+        console.log(`component loaded: ${name}`)
 
         let fragments = new WeakMap();
         let template;

@@ -1,4 +1,3 @@
-import {lifeCycle} from "../processors/life-cycle-processor.js";
 import {membraneFactory} from "../processors/html-compiler-processor.js";
 
 export function idExtractorHelper(object) {
@@ -179,14 +178,6 @@ export const Input = (superclass) => class InputMixin extends superclass {
                     })
                 results.push(result);
             }
-
-            Promise.all(results)
-                .then(() => {
-                    lifeCycle();
-                })
-                .catch(() => {
-                    lifeCycle();
-                })
         }
     }
 

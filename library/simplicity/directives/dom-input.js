@@ -1,8 +1,6 @@
 import {customComponents} from "../simplicity.js";
 import DomForm from "./dom-form.js";
-import {lifeCycle} from "../processors/life-cycle-processor.js";
 import {Input, mix} from "../services/tools.js";
-import {membraneFactory} from "../processors/html-compiler-processor.js";
 
 
 class DomInput extends mix(HTMLInputElement).with(Input) {
@@ -61,9 +59,6 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
                 break;
             default : {
                 this.addEventListener("input", valueChangeHandler);
-                this.addEventListener("focus", () => {
-                    lifeCycle();
-                });
             }
                 break;
         }

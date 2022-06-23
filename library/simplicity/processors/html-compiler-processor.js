@@ -19,6 +19,10 @@ export const customPlugins = new class CustomPlugins {
         return pluginRegistry.find(plugin => plugin.name === name && plugin.destination === destination)
     }
 
+    names() {
+        return pluginRegistry.filter(plugin => plugin.name.startsWith("bind")).map(plugin => plugin.name);
+    }
+
     executors() {
         return pluginRegistry.map(plugin => plugin.executor);
     }

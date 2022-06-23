@@ -1,12 +1,14 @@
 import {evaluation} from "../processors/js-compiler-processor.js";
+import {customPlugins} from "../processors/html-compiler-processor.js";
 
 export function rawAttributes(node) {
     return Array.from(node.attributes).map((attribute) => `"${attribute.name}=${attribute.value}"`);
 }
 
 export function attributes(node) {
+    let names = customPlugins.names();
     return Array.from(node.attributes)
-        .filter((attribute) => attribute.name !== "bind:if" && attribute.name !== "bind:for" && attribute.name !== "bind:variable" && attribute.name !== "bind:switch")
+        .filter((attribute) => ! names.includes(attribute.name))
         .map((attribute => {
             if (attribute.name.startsWith("bind") || attribute.name === "i18n") {
                 return `bindStatement("${attribute.name}", "${attribute.value}", context)`
