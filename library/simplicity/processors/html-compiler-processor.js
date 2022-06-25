@@ -1,7 +1,7 @@
 import {collectIdentifiers, evaluation} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
 import {cachingProxy, evaluator, getPropertyDescriptor} from "../services/tools.js";
-import {generate} from "../../astring";
+import {generate} from "../../astring/index.js";
 import {attributes, isCompositeComponent} from "../plugins/helper.js";
 
 const pluginRegistry = [];

@@ -3,7 +3,7 @@ import {codeGenerator, compiler} from "./processors/html-compiler-processor.js";
 import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
 import {generateDomProxy, isEqual} from "./services/tools.js";
-import * as plugins from "./plugins"
+import * as plugins from "./plugins/index.js"
 
 console.log(`plugins loaded: ${Object.values(plugins).map(plugin => plugin.name)}`)
 

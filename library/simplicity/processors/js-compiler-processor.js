@@ -1,6 +1,6 @@
 import {cachingProxy, evaluator, getPropertyDescriptor} from "../services/tools.js";
 import {walker} from "../../flash/walker.js";
-import {generate} from "../../astring";
+import {generate} from "../../astring/index.js";
 import {parse} from "./js-compiler-extension.js";
 
 function collect(ast) {
