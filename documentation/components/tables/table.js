@@ -1,5 +1,4 @@
 import {customViews} from "../../../library/simplicity/simplicity.js";
-import {jsonClient} from "../../../library/simplicity/services/client.js";
 import {loader} from "../../../library/simplicity/processors/loader-processor.js";
 import MatTable from "../../../library/simplicity/components/table/mat-table.js";
 import DomCode from "../../../library/simplicity/directives/dom-code.js";
@@ -7,18 +6,19 @@ import DomCode from "../../../library/simplicity/directives/dom-code.js";
 class Table extends HTMLElement {
 
     materials(query, callback) {
-        jsonClient.get("materials.json")
+        fetch("materials.json")
+            .then(response => response.json())
             .then((response) => {
                 let filter;
 
                 if (query.search) {
-                    filter = response.filter(row => String(row[query.search.path]).startsWith(query.search.value));
+                    filter = response.rows.filter(row => String(row[query.search.path]).startsWith(query.search.value));
                 } else {
-                    filter = response;
+                    filter = response.rows;
                 }
 
                 let result = filter.slice(query.index, query.index + query.limit);
-                callback(result, response.length)
+                callback(result, response.rows.length)
             })
     }
 
@@ -33,6 +33,5 @@ class Table extends HTMLElement {
 }
 
 export default customViews.define({
-    name: "documentation-table",
-    class: Table
+    name: "documentation-table", class: Table
 })

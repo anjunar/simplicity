@@ -8,23 +8,23 @@
 <template>
     <mat-table-extension>
         <tsearch>
-            <div bind:for="let [key, column] of model.$schema.properties">
+            <div bind:for="let [key, column] of schema.rows.items.properties">
                 <mat-table-search bind:path="key" bind:sortable="column.type === 'string'">
                     <meta-table-filter let=model bind:schema="column" bind:model="model" bind:onmodel="search()"></meta-table-filter>
                 </mat-table-search>
             </div>
         </tsearch>
-        <table is="mat-table" bind:items="items" bind:onmodel="onModel($event)" hoover="true">
+        <table is="mat-table" bind:items="items">
             <thead>
             <tr>
-                <td bind:for="let [key, column] of model.$schema.properties">
+                <td bind:for="let [key, column] of schema.rows.items.properties">
                     <div>{{column.title}}</div>
                 </td>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td bind:for="let [key, column] of model.$schema.properties">
+                <td bind:for="let [key, column] of schema.rows.items.properties">
                     <div let="data">
                         <meta-column bind:schema="column" bind:model="data.${key}"></meta-column>
                     </div>

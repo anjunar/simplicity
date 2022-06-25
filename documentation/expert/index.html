@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Index Components</title>
+    <style>
+        app-basic {
+            display: block;
+        }
+    </style>
+    <i18n>
+        <translation>
+            <en>Content</en>
+            <de>Inhalt</de>
+        </translation>
+        <translation>
+            <en>Meta Programming</en>
+            <de>Meta Programmierung</de>
+        </translation>
+        <translation>
+            <en>Compiler</en>
+            <de>Kompiler</de>
+        </translation>
+    </i18n>
+</head>
+<body>
+<template>
+    <mat-toolbar style="z-index: 8000; position:relative;">
+        <div slot="left">
+            <button translate="no" class="material-icons" type="button" bind:onclick="open = ! open">menu</button>
+        </div>
+    </mat-toolbar>
+
+    <mat-drawer-container>
+        <mat-drawer bind:open="open">
+            <div style="width: 300px">
+                <div style="padding-top: 20px">
+                    <h2 i18n>Content</h2>
+                </div>
+
+                <hr class="line">
+
+                <nav>
+                    <ul>
+                        <li>
+                            <div>
+                                <a href="#/documentation/expert/index#/documentation/expert/meta/index">
+                                    <div class="row">
+                                        <h4 i18n>Meta Programming</h4>
+                                    </div>
+                                </a>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/expert/index#/documentation/expert/meta/table">
+                                        <div class="row">
+                                            <span i18n>Meta Table</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/expert/index#/documentation/basic/architecture/custom-view">
+                                        <div class="row">
+                                            <span i18n>Meta Form</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div>
+                                <div class="row">
+                                    <h4 i18n>Compiler</h4>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#/documentation/expert/index#/documentation/basic/internals/proxy">
+                                        <div class="row"><span>Plugins</span></div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/expert/index#/documentation/basic/internals/membrane">
+                                        <div class="row"><span>Membrane</span></div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#/documentation/expert/index#/documentation/basic/internals/es6-modules">
+                                        <div class="row"><span>Resonator</span></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content>
+            <viewport style="display: block; position: relative">
+                <dom-router level="1" style="overflow-y: auto; overflow-x: hidden; height: 100%"></dom-router>
+            </viewport>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</template>
+</body>
+</html>

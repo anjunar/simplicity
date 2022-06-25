@@ -43,7 +43,7 @@
                         </strong>
                     </div>
                     <div style="flex: 1"></div>
-                    <button bind:style="display : td.sort === undefined ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="asc(td)">sort</button>
+                    <button bind:style="display : td.sort === 'none' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="asc(td)">sort</button>
                     <button bind:style="display : td.sort === 'asc' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="desc(td)">expand_more</button>
                     <button bind:style="display : td.sort === 'desc' ? 'block' : 'none'; width : '32px'" class="material-icons" translate="no" bind:onclick="none(td)">expand_less</button>
                     <div style="flex: 1"></div>

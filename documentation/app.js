@@ -7,7 +7,7 @@ import MatPerformance from "../library/simplicity/components/system/mat-performa
 import MatLanguage from "../library/simplicity/components/system/mat-language.js";
 import MatTaskbar from "../library/simplicity/components/system/mat-taskbar.js";
 
-export default class DocumentationApp extends HTMLElement {
+class DocumentationApp extends HTMLElement {
 
     active(value) {
         let method = () => {
@@ -28,5 +28,5 @@ export default class DocumentationApp extends HTMLElement {
     }
 }
 
-customComponents.define("app-documentation", DocumentationApp);
+export default customComponents.define("app-documentation", DocumentationApp);
 

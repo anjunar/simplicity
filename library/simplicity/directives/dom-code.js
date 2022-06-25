@@ -2,9 +2,11 @@ import {customComponents} from "../simplicity.js";
 import Highlight from "../../highlight/highlight.js";
 import xmlGrammar from "../../highlight/languages/xml.min.js";
 import javascriptGrammar from "../../highlight/languages/javascript.min.js";
+import jsonGrammar from "../../highlight/languages/json.min.js";
 
 Highlight.registerLanguage("xml", xmlGrammar)
 Highlight.registerLanguage("javascript", javascriptGrammar)
+Highlight.registerLanguage("json", jsonGrammar)
 
 class DomCode extends HTMLElement {
 
@@ -62,6 +64,11 @@ class DomCode extends HTMLElement {
             let htmlScriptElement = templateElement.content.querySelector("script");
             let orLanguageName = this.convert(htmlScriptElement.innerHTML);
             result = Highlight.highlight(orLanguageName, {language: 'javascript'}).value
+        }
+        if (this.getAttribute("lang") === "json") {
+            let htmlScriptElement = templateElement.content.querySelector("script");
+            let orLanguageName = this.convert(htmlScriptElement.innerHTML);
+            result = Highlight.highlight(orLanguageName, {language: 'json'}).value
         }
 
         for (const child of Array.from(this.childNodes)) {

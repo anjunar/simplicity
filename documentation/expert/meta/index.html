@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Box</title>
+    <i18n>
+        <translation>
+            <en>Meta Programming</en>
+            <de>Meta Programmierung</de>
+        </translation>
+    </i18n>
+</head>
+<body>
+<template>
+    <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Meta Programming</h2>
+            <hr class="line">
+
+            <p>
+                Metaprogrammierung ist in der Informatik die Erstellung von Computerprogrammen, die Computerprogramme
+                erzeugen. Das Ziel dabei ist es, den Computer ganz oder teilweise an dem Prozess der Programmierung mitarbeiten zu
+                lassen.
+            </p>
+
+            <p>
+                Meta Programmierung wird mithilfe von einem Schema durchgeführt. Jedes Model sollte ein eigenes Schema
+                besitzen. In diesen Fall wird sich an dem JSON Schema Standard gehalten. Die Tabelle oder auch das Formular
+                können dann aus dem Schema die Spalten oder auch Felder generieren.
+            </p>
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>JSON</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="json">
+                        <template>
+                            <script type="application/json">
+                                {
+                                    "$schema" : {
+                                        "rows" : {
+                                            "type" : "array",
+                                            "items" : {
+                                                "type" : "object",
+                                                "properties" : {
+                                                    "position" : {
+                                                        "type" : "number",
+                                                        "title" : "Position",
+                                                        "widget" : "number"
+                                                    },
+                                                    "name" : {
+                                                        "type" : "string",
+                                                        "title" : "Name",
+                                                        "format" : "default",
+                                                        "widget" : "text"
+                                                    },
+                                                    "weight" : {
+                                                        "type" : "number",
+                                                        "title" : "Weight",
+                                                        "widget" : "number"
+                                                    },
+                                                    "symbol" : {
+                                                        "type" : "string",
+                                                        "title" : "Symbol",
+                                                        "format" : "default",
+                                                        "widget" : "text"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "size": 20,
+                                    "rows": [
+                                        {
+                                            "position": 1,
+                                            "name": "Hydrogen",
+                                            "weight": 1.0079,
+                                            "symbol": "H"
+                                        },
+                                        {
+                                            "position": 2,
+                                            "name": "Helium",
+                                            "weight": 4.0026,
+                                            "symbol": "He"
+                                        },
+                                        {
+                                            "position": 3,
+                                            "name": "Lithium",
+                                            "weight": 6.941,
+                                            "symbol": "Li"
+                                        },
+                                        {
+                                            "position": 4,
+                                            "name": "Beryllium",
+                                            "weight": 9.0122,
+                                            "symbol": "Be"
+                                        },
+                                        {
+                                            "position": 5,
+                                            "name": "Boron",
+                                            "weight": 10.811,
+                                            "symbol": "B"
+                                        },
+                                        {
+                                            "position": 6,
+                                            "name": "Carbon",
+                                            "weight": 12.0107,
+                                            "symbol": "C"
+                                        },
+                                        {
+                                            "position": 7,
+                                            "name": "Nitrogen",
+                                            "weight": 14.0067,
+                                            "symbol": "N"
+                                        },
+                                        {
+                                            "position": 8,
+                                            "name": "Oxygen",
+                                            "weight": 15.9994,
+                                            "symbol": "O"
+                                        },
+                                        {
+                                            "position": 9,
+                                            "name": "Fluorine",
+                                            "weight": 18.9984,
+                                            "symbol": "F"
+                                        },
+                                        {
+                                            "position": 10,
+                                            "name": "Neon",
+                                            "weight": 20.1797,
+                                            "symbol": "Ne"
+                                        },
+                                        {
+                                            "position": 11,
+                                            "name": "Sodium",
+                                            "weight": 22.9897,
+                                            "symbol": "Na"
+                                        },
+                                        {
+                                            "position": 12,
+                                            "name": "Magnesium",
+                                            "weight": 24.305,
+                                            "symbol": "Mg"
+                                        },
+                                        {
+                                            "position": 13,
+                                            "name": "Aluminum",
+                                            "weight": 26.9815,
+                                            "symbol": "Al"
+                                        },
+                                        {
+                                            "position": 14,
+                                            "name": "Silicon",
+                                            "weight": 28.0855,
+                                            "symbol": "Si"
+                                        },
+                                        {
+                                            "position": 15,
+                                            "name": "Phosphorus",
+                                            "weight": 30.9738,
+                                            "symbol": "P"
+                                        },
+                                        {
+                                            "position": 16,
+                                            "name": "Sulfur",
+                                            "weight": 32.065,
+                                            "symbol": "S"
+                                        },
+                                        {
+                                            "position": 17,
+                                            "name": "Chlorine",
+                                            "weight": 35.453,
+                                            "symbol": "Cl"
+                                        },
+                                        {
+                                            "position": 18,
+                                            "name": "Argon",
+                                            "weight": 39.948,
+                                            "symbol": "Ar"
+                                        },
+                                        {
+                                            "position": 19,
+                                            "name": "Potassium",
+                                            "weight": 39.0983,
+                                            "symbol": "K"
+                                        },
+                                        {
+                                            "position": 20,
+                                            "name": "Calcium",
+                                            "weight": 40.078,
+                                            "symbol": "Ca"
+                                        }
+                                    ]
+                                }
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

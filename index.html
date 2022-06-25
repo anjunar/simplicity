@@ -4,39 +4,17 @@
     <meta charset="UTF-8">
     <title>Simplicity 4.2 beta</title>
     <link rel="stylesheet" href="styles.css">
-    <script type="module" src="documentation/app.js"></script>
-    <script>
-        /*
-                let browserName = "";
+    <script type="module">
+        import {bootstrap} from "./library/simplicity/bootstrap.js";
 
-                if(navigator.vendor.match(/google/i)) {
-                    browserName = 'chrome/blink';
-                }
-                else if(navigator.vendor.match(/apple/i)) {
-                    browserName = 'safari/webkit';
-                }
-                else if(navigator.userAgent.match(/firefox\//i)) {
-                    browserName = 'firefox/gecko';
-                }
-                else if(navigator.userAgent.match(/edge\//i)) {
-                    browserName = 'edge/edgehtml';
-                }
-                else if(navigator.userAgent.match(/trident\//i)) {
-                    browserName = 'ie/trident';
-                }
-                else
-                {
-                    browserName = navigator.userAgent + "\n" + navigator.vendor;
-                }
-                alert(browserName);
-        */
-
-        if (window.location.hash === "") {
-            window.location.hash = "#/documentation/basic/index#/documentation/basic/started"
-        }
+        bootstrap("documentation/app.js")
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CVD1HXBNE3"></script>
     <script>
+        if (window.location.hash === "") {
+            window.location.hash = "#/documentation/basic/index#/documentation/basic/started"
+        }
+
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -49,6 +27,5 @@
     </script>
 </head>
 <body style="height: calc(100vh - 78px); overflow: hidden">
-    <app-documentation></app-documentation>
 </body>
 </html>

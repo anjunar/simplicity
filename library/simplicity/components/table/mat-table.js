@@ -19,44 +19,56 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     name;
     create = false;
     contentTemplate;
-    header
-    body
+    header = []
+    body = []
 
     preInitialize() {
         this.contentTemplate = contentManager.instance(this);
-        this.header = Array.from(this.contentTemplate.querySelectorAll("thead tr td"))
-        this.body = Array.from(this.contentTemplate.querySelectorAll("tbody tr td"))
-        this.extension = this.queryUpwards((element) => element.localName === "mat-table-extension")
-        this.columns = [];
-        let length = this.body.length;
 
-        if (this.extension) {
-            let content = contentManager.instance(this.extension);
-            let tableSearches = content.querySelectorAll("tsearch mat-table-search")
-            for (let i = 0; i < length; i++) {
-                let tableSearch = tableSearches[i];
-                let colAttribute = tableSearch.path;
-                let sortable = tableSearch.sortable;
+        let callback = () => {
+            this.header = Array.from(this.contentTemplate.querySelectorAll("thead tr td"))
+            this.body = Array.from(this.contentTemplate.querySelectorAll("tbody tr td"))
+            this.extension = this.queryUpwards((element) => element.localName === "mat-table-extension")
+            this.columns = [];
+            let length = this.body.length;
 
-                this.columns.push({
-                    index: i,
-                    visible: true,
-                    sort: sortable ? undefined : null,
-                    path: colAttribute,
-                    search : ""
-                });
+            if (this.extension) {
+                let content = contentManager.instance(this.extension);
+                let tableSearches = content.querySelectorAll("tsearch mat-table-search")
+                let columns = [];
+                for (let i = 0; i < length; i++) {
+                    let tableSearch = tableSearches[i];
+                    let colAttribute = tableSearch.path;
+                    let sortable = tableSearch.sortable;
+                    columns.push({
+                        index: i,
+                        visible: true,
+                        sort: sortable ? "none" : null,
+                        path: colAttribute,
+                        search : ""
+                    });
+                }
+                this.columns = columns;
+            } else {
+                let columns = [];
+                for (let i = 0; i < length; i++) {
+                    columns.push({
+                        index: i,
+                        visible: true,
+                        sort: null,
+                        path: null,
+                        search : ""
+                    });
+                }
+                this.columns = columns;
             }
-        } else {
-            for (let i = 0; i < length; i++) {
-                this.columns.push({
-                    index: i,
-                    visible: true,
-                    sort: null,
-                    path: null,
-                    search : ""
-                });
-            }
-        }
+        };
+
+        let mutationObserver = new MutationObserver(callback)
+
+        mutationObserver.observe(this.contentTemplate, {childList : true, subtree : true})
+
+        callback()
     }
 
     initialize() {
@@ -92,8 +104,8 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
 
     none(td) {
         let column = this.columns[td.index];
-        column.sort = undefined;
-        td.sort = undefined;
+        column.sort = "none";
+        td.sort = "none";
         this.load();
     }
 
@@ -121,7 +133,7 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 if (search instanceof Object) {
                     return search.from && search.to
                 }
-                return column.search.length > 0
+                return column.search.length > 0 || Number.isInteger(column.search)
             })
             .reduce((previous, current) => {
                 let path = current.path;
@@ -179,16 +191,25 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         let element = this.columns[index];
         let other = this.columns[index - 1];
 
-        this.columns[index] = other;
-        this.columns[index - 1] = element;
+        let newColumns = Array.from(this.columns);
+        newColumns[index] = other;
+        newColumns[index - 1] = element;
+
+        this.columns = newColumns;
+        this.dispatchEvent(new CustomEvent("load"));
     }
 
     right(index) {
         let element = this.columns[index];
         let other = this.columns[index + 1];
 
-        this.columns[index] = other;
-        this.columns[index + 1] = element;
+        let newColumns = Array.from(this.columns);
+
+        newColumns[index] = other;
+        newColumns[index + 1] = element;
+
+        this.columns = newColumns;
+        this.dispatchEvent(new CustomEvent("load"));
     }
 
     skipPrevious() {

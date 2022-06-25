@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <i18n>
+        <translation>
+            <en>
+                A table implementation with sorting, paging and column resorting. The individual columns can
+                The only important thing is that the path is passed with colgroup. The query object
+                then contains the sort property according to which sorting must be carried out.
+            </en>
+            <de>
+                Eine Table implementierung mit Sorting, Paging und Column resorting. Die einzelnen Spalten können
+                sortiert werden, wichtig ist dabei nur, das mit colgroup der path übergeben wird. Das Query object
+                beinhaltet dann die sort Property nach der sortiert werden muss.
+            </de>
+        </translation>
+        <translation>
+            <en>Element</en>
+            <de>Element</de>
+        </translation>
+        <translation>
+            <en>Attribute</en>
+            <de>Attribut</de>
+        </translation>
+        <translation>
+            <en>Description</en>
+            <de>Beschreibung</de>
+        </translation>
+        <translation>
+            <en>An array of items to be displayed</en>
+            <de>Das Array von Elementen das gerendert werden soll</de>
+        </translation>
+        <translation>
+            <en>The property of the model</en>
+            <de>Die Property für die Schleife</de>
+        </translation>
+        <translation>
+            <en>The rest of the HTML file is not displayed</en>
+            <de>Der rest der HTML Datei wird nicht angezeigt</de>
+        </translation>
+    </i18n>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Meta Table</h2>
+            <hr class="line">
+
+            <p i18n>
+                A table implementation with sorting, paging and column resorting. The individual columns can
+                The only important thing is that the path is passed with colgroup. The query object
+                then contains the sort property according to which sorting must be carried out.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>meta-table</td>
+                    <td>items</td>
+                    <td i18n>An array of items to be displayed</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <meta-table bind:items="materials"></meta-table>
+            </div>
+
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p i18n>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <template>
+                            <iframe>
+                                <meta-table bind:items="materials"></meta-table>
+                            </iframe>
+                        </template>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                import {customViews} from "../../../library/simplicity/simplicity.js";
+                                import DomCode from "../../../library/simplicity/directives/dom-code.js";
+                                import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                                import MetaTable from "../../../library/simplicity/components/meta/meta-table.js";
+
+                                class Table extends HTMLElement {
+
+                                    materials(query, callback) {
+                                        fetch("materials.json")
+                                            .then(response => response.json())
+                                            .then((response) => {
+                                                let filter;
+
+                                                if (query.filter) {
+                                                    filter = response.rows.filter(row => {
+                                                        return Object.entries(query.filter).every(([property, value]) => {
+                                                            return String(row[property]).toLowerCase().startsWith(String(value).toLowerCase())
+                                                        })
+                                                    });
+                                                } else {
+                                                    filter = response.rows;
+                                                }
+
+                                                let result = filter.slice(query.index, query.index + query.limit);
+                                                callback(result, response.rows.length, response.$schema)
+                                            })
+                                    }
+
+                                    static get components() {
+                                        return [MetaTable, DomCode]
+                                    }
+
+                                    static get template() {
+                                        return loader("documentation/expert/meta/table.html")
+                                    }
+
+                                }
+
+                                export default customViews.define({
+                                    name: "expert-meta-table",
+                                    class: Table
+                                })
+                        </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+            <h3>JSON</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="json">
+                        <template>
+                            <script type="application/json">
+                                {
+                                    "$schema" : {
+                                        "rows" : {
+                                            "type" : "array",
+                                            "items" : {
+                                                "type" : "object",
+                                                "properties" : {
+                                                    "position" : {
+                                                        "type" : "number",
+                                                        "title" : "Position",
+                                                        "widget" : "number"
+                                                    },
+                                                    "name" : {
+                                                        "type" : "string",
+                                                        "title" : "Name",
+                                                        "format" : "default",
+                                                        "widget" : "text"
+                                                    },
+                                                    "weight" : {
+                                                        "type" : "number",
+                                                        "title" : "Weight",
+                                                        "widget" : "number"
+                                                    },
+                                                    "symbol" : {
+                                                        "type" : "string",
+                                                        "title" : "Symbol",
+                                                        "format" : "default",
+                                                        "widget" : "text"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "size": 20,
+                                    "rows": [
+                                        {
+                                            "position": 1,
+                                            "name": "Hydrogen",
+                                            "weight": 1.0079,
+                                            "symbol": "H"
+                                        },
+                                        {
+                                            "position": 2,
+                                            "name": "Helium",
+                                            "weight": 4.0026,
+                                            "symbol": "He"
+                                        },
+                                        {
+                                            "position": 3,
+                                            "name": "Lithium",
+                                            "weight": 6.941,
+                                            "symbol": "Li"
+                                        },
+                                        {
+                                            "position": 4,
+                                            "name": "Beryllium",
+                                            "weight": 9.0122,
+                                            "symbol": "Be"
+                                        },
+                                        {
+                                            "position": 5,
+                                            "name": "Boron",
+                                            "weight": 10.811,
+                                            "symbol": "B"
+                                        },
+                                        {
+                                            "position": 6,
+                                            "name": "Carbon",
+                                            "weight": 12.0107,
+                                            "symbol": "C"
+                                        },
+                                        {
+                                            "position": 7,
+                                            "name": "Nitrogen",
+                                            "weight": 14.0067,
+                                            "symbol": "N"
+                                        },
+                                        {
+                                            "position": 8,
+                                            "name": "Oxygen",
+                                            "weight": 15.9994,
+                                            "symbol": "O"
+                                        },
+                                        {
+                                            "position": 9,
+                                            "name": "Fluorine",
+                                            "weight": 18.9984,
+                                            "symbol": "F"
+                                        },
+                                        {
+                                            "position": 10,
+                                            "name": "Neon",
+                                            "weight": 20.1797,
+                                            "symbol": "Ne"
+                                        },
+                                        {
+                                            "position": 11,
+                                            "name": "Sodium",
+                                            "weight": 22.9897,
+                                            "symbol": "Na"
+                                        },
+                                        {
+                                            "position": 12,
+                                            "name": "Magnesium",
+                                            "weight": 24.305,
+                                            "symbol": "Mg"
+                                        },
+                                        {
+                                            "position": 13,
+                                            "name": "Aluminum",
+                                            "weight": 26.9815,
+                                            "symbol": "Al"
+                                        },
+                                        {
+                                            "position": 14,
+                                            "name": "Silicon",
+                                            "weight": 28.0855,
+                                            "symbol": "Si"
+                                        },
+                                        {
+                                            "position": 15,
+                                            "name": "Phosphorus",
+                                            "weight": 30.9738,
+                                            "symbol": "P"
+                                        },
+                                        {
+                                            "position": 16,
+                                            "name": "Sulfur",
+                                            "weight": 32.065,
+                                            "symbol": "S"
+                                        },
+                                        {
+                                            "position": 17,
+                                            "name": "Chlorine",
+                                            "weight": 35.453,
+                                            "symbol": "Cl"
+                                        },
+                                        {
+                                            "position": 18,
+                                            "name": "Argon",
+                                            "weight": 39.948,
+                                            "symbol": "Ar"
+                                        },
+                                        {
+                                            "position": 19,
+                                            "name": "Potassium",
+                                            "weight": 39.0983,
+                                            "symbol": "K"
+                                        },
+                                        {
+                                            "position": 20,
+                                            "name": "Calcium",
+                                            "weight": 40.078,
+                                            "symbol": "Ca"
+                                        }
+                                    ]
+                                }
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

@@ -32,7 +32,10 @@
                 </case>
             </div>
         </case>
-        <case value="default">
+        <case value="number">
+            <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{model}}</div>
+        </case>
+        <case value="string">
             <div bind:switch="schema.format">
                 <case value="date-time">
                     <div>{{dateTime(model)}}</div>

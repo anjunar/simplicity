@@ -32,12 +32,12 @@ function forExpressions(expressions) {
                             variable: expression.init.name
                         }
                     }
-                    if (expression.id.type === "ArrayPattern") {
-                        result.for = {
-                            expression: jsCodeGenerator(expression, true),
-                            variable: expression.id.elements.map(element => element.value),
-                            source: jsCodeGenerator(expression.init, true)
-                        }
+                }
+                if (expression.id.type === "ArrayPattern") {
+                    result.for = {
+                        expression: jsCodeGenerator(expression, true),
+                        variable: expression.id.elements.map(element => element.name),
+                        source: jsCodeGenerator(expression.init, true)
                     }
                 }
             }
@@ -90,7 +90,8 @@ function forStatement(rawAttributes, context, callback) {
     let comment = document.createComment(data.for.expression);
 
     activeObjectExpression(data.for.source, context, comment, (result) => {
-        update(result)
+        let value = result instanceof Array ? result : Object.entries(result);
+        update(value)
     });
 
     function generate() {
