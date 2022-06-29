@@ -2,7 +2,7 @@ import {activeObjectExpression, content, customPlugins} from "../processors/html
 import {getAttributes, boundAttributes, notifyElementRemove, rawAttributes} from "./helper.js";
 
 function slotStatement(rawAttributes, context, contents) {
-    let attributes = getAttributes(rawAttributes, ["name", "index", "source", "selector", "implicit"])
+    let attributes = getAttributes(rawAttributes, ["name", "index", "source", "selector", "implicit", "tag"])
     let boundAttributesFunction = boundAttributes(attributes, context);
     let values = boundAttributesFunction()
 
@@ -43,6 +43,17 @@ function slotStatement(rawAttributes, context, contents) {
             if (querySelector) {
                 container.appendChild(querySelector)
                 children.push(querySelector);
+            }
+        } else if (values.tag) {
+            let iterator = document.createNodeIterator(activeContent, NodeFilter.SHOW_ELEMENT)
+            let cursor = iterator.nextNode();
+            while (cursor != null) {
+                if (cursor[values.tag]) {
+                    container.appendChild(cursor)
+                    children.push(cursor);
+                    break;
+                }
+                cursor = iterator.nextNode();
             }
         } else {
             for (const segment of Array.from(activeContent.children)) {

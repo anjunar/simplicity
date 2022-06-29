@@ -1,5 +1,4 @@
 import {customViews} from "../../../library/simplicity/simplicity.js";
-import {jsonClient} from "../../../library/simplicity/services/client.js";
 import DomCode from "../../../library/simplicity/directives/dom-code.js";
 import {loader} from "../../../library/simplicity/processors/loader-processor.js";
 
@@ -25,7 +24,7 @@ export default customViews.define({
     header: "Repeat",
     guard(activeRoute) {
         return {
-            materials: jsonClient.get("materials.json")
+            materials: fetch("materials.json").then(response => response.json())
         }
     }
 })

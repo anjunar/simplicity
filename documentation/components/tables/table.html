@@ -157,14 +157,14 @@
                             <template>
                                 <script>
                                     import {customViews} from "../../library/simplicity/simplicity.js";
-                                    import {jsonClient} from "../../library/simplicity/services/client.js";
                                     import {loader} from "../../library/simplicity/processors/loader-processor.js";
                                     import MatTable from "../../library/simplicity/components/table/mat-table.js";
 
                                     class Table extends HTMLElement {
 
                                         materials(query, callback) {
-                                            jsonClient.get("materials.json")
+                                            fetch("materials.json")
+                                                .then(response => response.json())
                                                 .then((response) => {
                                                     let filter;
 

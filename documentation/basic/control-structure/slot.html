@@ -206,7 +206,6 @@
                                     <template>
                                         <script>
                                             import {customViews} from "../../library/simplicity/simplicity.js";
-                                            import {jsonClient} from "../../library/simplicity/services/client.js";
                                             import {loader} from "../../library/simplicity/processors/loader-processor.js";
                                             import Repeat from "./example.js";
 
@@ -228,7 +227,7 @@
                                                 class : CommonImplicit,
                                                 guard(activeRoute) {
                                                     return {
-                                                        materials : jsonClient.get("materials.json")
+                                                        materials : fetch("materials.json").then(response => response.json())
                                                     }
                                                 }
                                             })

@@ -1,7 +1,6 @@
 import {customComponents} from "../../../simplicity.js";
 import {loader} from "../../../processors/loader-processor.js";
 import DomLazyMultiSelect from "../../form/dom-lazy-multi-select.js";
-import {jsonClient} from "../../../services/client.js";
 
 class MetaColumnLazyMultiSelect extends HTMLElement {
 
@@ -11,7 +10,8 @@ class MetaColumnLazyMultiSelect extends HTMLElement {
     domLazySelectSource(meta) {
         let link = meta.links.list;
         return (query, callback) => {
-            jsonClient.action(link.method, link.url)
+            fetch(link.url, {method : link.method})
+                .then(response => response.json())
                 .then((response) => {
                     callback(response.rows, response.size)
                 })

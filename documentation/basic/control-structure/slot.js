@@ -1,5 +1,4 @@
 import {customViews} from "../../../library/simplicity/simplicity.js";
-import {jsonClient} from "../../../library/simplicity/services/client.js";
 import {loader} from "../../../library/simplicity/processors/loader-processor.js";
 import DomCode from "../../../library/simplicity/directives/dom-code.js";
 import MatTabs from "../../../library/simplicity/components/navigation/mat-tabs.js";
@@ -29,7 +28,7 @@ export default customViews.define({
     class : CommonImplicit,
     guard(activeRoute) {
         return {
-            materials : jsonClient.get("materials.json")
+            materials : fetch("materials.json").then(response => response.json())
         }
     }
 })

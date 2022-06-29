@@ -1,5 +1,4 @@
 import {customViews} from "../../../library/simplicity/simplicity.js";
-import {jsonClient} from "../../../library/simplicity/services/client.js";
 import {loader} from "../../../library/simplicity/processors/loader-processor.js";
 import DomSelect from "../../../library/simplicity/components/form/dom-lazy-select.js";
 import DomCode from "../../../library/simplicity/directives/dom-code.js";
@@ -8,7 +7,8 @@ import MatInputContainer from "../../../library/simplicity/components/form/conta
 class LazySelect extends HTMLElement {
 
     materials(query, callback) {
-        jsonClient.get("materials.json")
+        fetch("materials.json")
+            .then(response => response.json())
             .then((response) => {
                 let result = response.rows.slice(query.index, query.index + query.limit);
                 callback(result, response.rows.length)

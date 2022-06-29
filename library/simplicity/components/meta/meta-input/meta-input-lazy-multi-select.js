@@ -2,7 +2,6 @@ import {customComponents} from "../../../simplicity.js";
 import {loader} from "../../../processors/loader-processor.js";
 import MatInputContainer from "../../form/container/mat-input-container.js";
 import DomLazyMultiSelect from "../../form/dom-lazy-multi-select.js";
-import {jsonClient} from "../../../services/client.js";
 
 class MetaInputLazyMultiSelect extends HTMLElement {
 
@@ -12,7 +11,8 @@ class MetaInputLazyMultiSelect extends HTMLElement {
     domLazySelect(schema) {
         let link = schema.links.list;
         return (query, callback) => {
-            jsonClient.action(link.method, `${link.url}?index=${query.index}&limit=${query.limit}`)
+            fetch(`${link.url}?index=${query.index}&limit=${query.limit}`, {method : link.method})
+                .then(response => response.json())
                 .then((response) => {
                     callback(response.rows, response.size)
                 })
