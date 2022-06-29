@@ -125,9 +125,7 @@
                                     <template>
                                         <script>
                                             import {customViews} from "../../../library/simplicity/simplicity.js";
-                                            import {
-                                                loader
-                                            } from "../../../library/simplicity/processors/loader-processor.js";
+                                            import { loader } from "../../../library/simplicity/processors/loader-processor.js";
 
                                             class Example extends HTMLElement {
 
@@ -147,7 +145,7 @@
                                                         material: fetch("materials.json")
                                                             .then(response => response.json())
                                                             .then((materials) => {
-                                                                return materials.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))
+                                                                return materials.rows.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))
                                                             })
                                                     }
                                                 }

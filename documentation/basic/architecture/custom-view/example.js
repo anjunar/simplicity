@@ -19,7 +19,7 @@ export default customViews.define({
             material : fetch("materials.json")
                 .then(response => response.json())
                 .then((materials) => {
-                    return materials.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))
+                    return materials.rows.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))
                 })
         }
     }
