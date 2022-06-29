@@ -501,17 +501,20 @@ export function codeGenerator(nodes) {
             .map((node) => {
                 if (node.nodeType === Node.TEXT_NODE) {
                     let interpolationRegExp = /{{([^}]+)}}/g;
+                    let textContent = node.textContent
+                        .replaceAll("`", "\\`")
+                        .replaceAll("${", "\\${")
 
                     if (node.parentElement instanceof HTMLIFrameElement) {
-                        return `\n${tabs}\`${node.textContent}\``
+                        return `\n${tabs}\`${textContent}\``
                     }
-                    if (interpolationRegExp.test(node.textContent)) {
+                    if (interpolationRegExp.test(textContent)) {
                         if (!(node.parentElement instanceof HTMLScriptElement)) {
-                            return `\n${tabs}interpolationStatement(\`${node.textContent}\`, context)`
+                            return `\n${tabs}interpolationStatement(\`${textContent}\`, context)`
                         }
-                        return `\n${tabs}\`${node.textContent}\``
+                        return `\n${tabs}\`${textContent}\``
                     } else {
-                        return `\n${tabs}\`${node.textContent}\``
+                        return `\n${tabs}\`${textContent}\``
                     }
                 } else {
 

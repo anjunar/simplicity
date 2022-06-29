@@ -5,6 +5,7 @@ import DomInput from "../../../directives/dom-input.js";
 
 class MetaInputInput extends HTMLElement {
 
+    property;
     schema;
 
     initialize() {
@@ -24,7 +25,10 @@ class MetaInputInput extends HTMLElement {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
+            } break;
+            case "property" : {
+                this.property = newValue;
+            } break;
         }
     }
 
@@ -32,6 +36,9 @@ class MetaInputInput extends HTMLElement {
         return [
             {
                 name: "schema",
+                type: "input"
+            }, {
+                name: "property",
                 type: "input"
             }
         ]

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compiler</title>
+    <i18n>
+        <translation>
+            <en>Meta Programming</en>
+            <de>Meta Programmierung</de>
+        </translation>
+        <translation>
+            <en>Compiler</en>
+            <de>Kompiler</de>
+        </translation>
+        <translation>
+            <en>
+                The compiler is a central part of the framework and works together with the Dom parser.
+                A separate HTML parser was not used because the performance of the Dom parser is too high.
+                The compiler translates the dom into javascript to e.g. break down the context of the components.
+                It is important to understand the compiler in order to provide plugins for the framework.
+            </en>
+            <de>
+                Der Kompiler ist zentraler Bestandteil des Frameworks und arbeitet mit dem Dom-Parser zusammen.
+                Es wurde extra auf einen eigenen HTML-Parser verzichtet da die Performance des Dom-Parser zu hoch ist.
+                Der Kompiler übersetzt den Dom in Javascript um z.B. den Kontext der Komponenten aufzuschlüsseln.
+                Es ist wichtig den Kompiler zu verstehen um Plugins für das Framework bereitzustellen.
+            </de>
+        </translation>
+    </i18n>
+</head>
+<body>
+<template>
+    <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;" i18n>Compiler</h2>
+            <hr class="line">
+
+            <p i18n>
+                The compiler is a central part of the framework and works together with the Dom parser.
+                A separate HTML parser was not used because the performance of the Dom parser is too high.
+                The compiler translates the dom into javascript to e.g. break down the context of the components.
+                It is important to understand the compiler in order to provide plugins for the framework.
+            </p>
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>JavaScript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                function factory(context, content, implicit) {
+                                    return [
+                                        html("div", ["style=margin: auto; flex-wrap: wrap; display: flex"], [
+                                            html("div", ["style=margin: 20px;"], [
+                                                html("meta-form", [bindStatement("bind:model", "material", context)], [function (implicit) {
+                                                    return [
+                                                        html("meta-input", ["property=position"], [function (implicit) {
+                                                            return []
+                                                        }]),
+                                                        html("meta-input", ["property=name"], [function (implicit) {
+                                                            return []
+                                                        }]),
+                                                        html("meta-input", ["property=weight"], [function (implicit) {
+                                                            return []
+                                                        }]),
+                                                        html("meta-input", ["property=symbol"], [function (implicit) {
+                                                            return []
+                                                        }]),
+                                                        html("button", ["type=button", bindStatement("bind:onclick", "send(value)", context)], [
+                                                            "save"
+                                                        ]),
+                                                    ]
+                                                }]),
+                                            ])
+                                        ])
+                                    ]
+                                }
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

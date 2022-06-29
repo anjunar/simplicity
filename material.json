@@ -1,0 +1,58 @@
+{
+  "$schema" : {
+    "type" : "object",
+    "properties" : {
+      "position" : {
+        "type" : "number",
+        "title" : "Position",
+        "widget" : "number",
+        "validators" : {},
+        "readOnly" : false
+      },
+      "name" : {
+        "type" : "string",
+        "title" : "Name",
+        "format" : "default",
+        "widget" : "text",
+        "validators" : {
+          "size" : {
+            "min" : 3,
+            "max" : 12
+          }
+        },
+        "readOnly" : false
+      },
+      "weight" : {
+        "type" : "number",
+        "title" : "Weight",
+        "widget" : "number",
+        "validators" : {},
+        "readOnly" : false
+      },
+      "symbol" : {
+        "type" : "string",
+        "title" : "Symbol",
+        "format" : "default",
+        "widget" : "text",
+        "validators" : {
+          "size" : {
+            "min" : 0,
+            "max" : 3
+          }
+        },
+        "readOnly" : false
+      }
+    },
+    "links" : {
+      "save" : {
+        "method" : "POST",
+        "url" : "#",
+        "rel" : "save"
+      }
+    }
+  },
+  "position": 1,
+  "name": "Hydrogen",
+  "weight": 1.0079,
+  "symbol": "H"
+}

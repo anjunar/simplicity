@@ -6,6 +6,7 @@ import {jsonClient} from "../../../services/client.js";
 
 class MetaInputLazySelect extends HTMLElement {
 
+    property;
     schema;
 
     domLazySelect(schema) {
@@ -37,7 +38,10 @@ class MetaInputLazySelect extends HTMLElement {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
+            } break;
+            case "property" : {
+                this.property = newValue;
+            } break;
         }
     }
 
@@ -45,6 +49,9 @@ class MetaInputLazySelect extends HTMLElement {
         return [
             {
                 name: "schema",
+                type: "input"
+            }, {
+                name: "property",
                 type: "input"
             }
         ]

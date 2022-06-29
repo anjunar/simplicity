@@ -84,7 +84,7 @@
                 </table>
 
                 <div style="margin: 20px;">
-                    <div bind:for="let material of materials">{{material.position}} {{material.name}}</div>
+                    <div bind:for="let material of materials.rows">{{material.position}} {{material.name}}</div>
                 </div>
 
 
@@ -101,7 +101,7 @@
                         <code is="dom-code" lang="html5">
                             <template>
                                 <iframe>
-                                    <div bind:for="let material of materials">{{material.position}} {{material.name}}</div>
+                                    <div bind:for="let material of materials.rows">{{material.position}} {{material.name}}</div>
                                 </iframe>
                             </template>
                         </code>

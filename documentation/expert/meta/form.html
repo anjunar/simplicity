@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Box</title>
+    <i18n>
+        <translation>
+            <en>
+                This is a meta form and with the help of JSON schema, fields can be fully initialized.
+                Validators and the required attributes are supported by the JSON schema.
+            </en>
+            <de>
+                Dies ist eine Meta Form und mit der Hilfe von JSON Schema können Felder komplett initialisiert werden.
+                Validatoren und das Required Attribute wird durch das JSON Schema unterstützt.
+            </de>
+        </translation>
+        <translation>
+            <en>Element</en>
+            <de>Element</de>
+        </translation>
+        <translation>
+            <en>Attribute</en>
+            <de>Attribut</de>
+        </translation>
+        <translation>
+            <en>Description</en>
+            <de>Beschreibung</de>
+        </translation>
+        <translation>
+            <en>The Placeholder text</en>
+            <de>Der Placeholder Text</de>
+        </translation>
+        <translation>
+            <en>The Bind variable that can be bound</en>
+            <de>Die Bind Variable, die gebunden werden kann</de>
+        </translation>
+        <translation>
+            <en>The rest of the HTML file is not displayed</en>
+            <de>Der rest der HTML Datei wird nicht angezeigt</de>
+        </translation>
+
+    </i18n>
+</head>
+<body>
+<template>
+    <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Meta Form</h2>
+            <hr class="line">
+
+            <p i18n>
+                This is a meta form and with the help of JSON schema, fields can be fully initialized.
+                Validators and the required attributes are supported by the JSON schema.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>input</td>
+                    <td>model</td>
+                    <td i18n>The Bind variable that can be bound</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <meta-form bind:model="material">
+                    <meta-input property="position"></meta-input>
+                    <meta-input property="name"></meta-input>
+                    <meta-input property="weight"></meta-input>
+                    <meta-input property="symbol"></meta-input>
+                    <button type="button" bind:onclick="send()">save</button>
+                </meta-form>
+            </div>
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>HTML5</h3>
+            <p i18n>The rest of the HTML file is not displayed</p>
+            <div style="margin-top: 20px;">
+                <div>
+                    <code is="dom-code" lang="html5">
+                        <template>
+                            <iframe>
+                                <meta-form bind:model="material">
+                                    <meta-input property="position"></meta-input>
+                                    <meta-input property="name"></meta-input>
+                                    <meta-input property="weight"></meta-input>
+                                    <meta-input property="symbol"></meta-input>
+                                    <button type="button" bind:onclick="send()">save</button>
+                                </meta-form>
+                            </iframe>
+                        </template>
+                    </code>
+                </div>
+            </div>
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                import {customViews} from "../../../library/simplicity/simplicity.js";
+                                import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                                import DomCode from "../../../library/simplicity/directives/dom-code.js";
+                                import MetaForm from "../../../library/simplicity/components/meta/meta-form.js";
+                                import MetaInput from "../../../library/simplicity/components/meta/meta-input.js";
+
+                                class Form extends HTMLElement {
+
+                                    material;
+
+                                    static get components() {
+                                        return [MetaForm, MetaInput, DomCode]
+                                    }
+
+                                    static get template() {
+                                        return loader("documentation/expert/meta/form.html")
+                                    }
+
+                                }
+
+                                export default customViews.define({
+                                    name: "expert-meta-form",
+                                    class: Form,
+                                    guard(activeRoute) {
+                                        return {
+                                            material : fetch("material.json").then(response => response.json())
+                                        }
+                                    }
+                                })
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+            <h3>JSON</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="json">
+                        <template>
+                            <script type="application/json">
+                                {
+                                    "$schema" : {
+                                        "type" : "object",
+                                        "properties" : {
+                                            "position" : {
+                                                "type" : "number",
+                                                "title" : "Position",
+                                                "widget" : "number",
+                                                "validators" : {},
+                                                "readOnly" : false
+                                            },
+                                            "name" : {
+                                                "type" : "string",
+                                                "title" : "Name",
+                                                "format" : "default",
+                                                "widget" : "text",
+                                                "validators" : {
+                                                    "size" : {
+                                                        "min" : 3,
+                                                        "max" : 12
+                                                    }
+                                                },
+                                                "readOnly" : false
+                                            },
+                                            "weight" : {
+                                                "type" : "number",
+                                                "title" : "Weight",
+                                                "widget" : "number",
+                                                "validators" : {},
+                                                "readOnly" : false
+                                            },
+                                            "symbol" : {
+                                                "type" : "string",
+                                                "title" : "Symbol",
+                                                "format" : "default",
+                                                "widget" : "text",
+                                                "validators" : {
+                                                    "size" : {
+                                                        "min" : 0,
+                                                        "max" : 3
+                                                    }
+                                                },
+                                                "readOnly" : false
+                                            }
+                                        },
+                                        "links" : {
+                                            "save" : {
+                                                "method" : "POST",
+                                                "url" : "#",
+                                                "rel" : "save"
+                                            }
+                                        }
+                                    },
+                                    "position": 1,
+                                    "name": "Hydrogen",
+                                    "weight": 1.0079,
+                                    "symbol": "H"
+                                }
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

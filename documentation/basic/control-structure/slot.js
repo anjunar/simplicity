@@ -12,7 +12,7 @@ class CommonImplicit extends HTMLElement {
 
     page = 0;
 
-    materials = [];
+    materials = {};
 
     static get components() {
         return [DomCode, MatTabs, MatTab, MatPages, MatPage, CommonExample]

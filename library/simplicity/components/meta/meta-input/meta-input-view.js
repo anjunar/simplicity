@@ -6,12 +6,13 @@ import {appManager} from "../../../manager/app-manager.js";
 
 class MetaInputView extends HTMLElement {
 
+    property;
     schema;
     model;
     name;
 
     preInitialize() {
-        this.name = this.schema.name;
+        this.name = this.property
 
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
@@ -58,7 +59,10 @@ class MetaInputView extends HTMLElement {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
+            } break;
+            case "property" : {
+                this.property = newValue;
+            } break;
         }
     }
 
@@ -66,6 +70,9 @@ class MetaInputView extends HTMLElement {
         return [
             {
                 name: "schema",
+                type: "input"
+            }, {
+                name: "property",
                 type: "input"
             }
         ]

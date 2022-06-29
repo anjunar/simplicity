@@ -6,14 +6,14 @@
     <i18n>
         <translation>
             <en>
-                A table implementation with sorting, paging and column resorting. The individual columns can
-                The only important thing is that the path is passed with colgroup. The query object
-                then contains the sort property according to which sorting must be carried out.
+                A meta table implementation, where the headers, columns and filters are generated from a JSON schema.
+                If the schema changes across the request, then the table also changes. Additionally will
+                the column layout is stored in the browser database.
             </en>
             <de>
-                Eine Table implementierung mit Sorting, Paging und Column resorting. Die einzelnen Spalten können
-                sortiert werden, wichtig ist dabei nur, das mit colgroup der path übergeben wird. Das Query object
-                beinhaltet dann die sort Property nach der sortiert werden muss.
+                Eine Meta Table implementation, wo aus einen JSON Schema die Headers, Columns und Filter generiert werden.
+                Verändert sich das Schema über die Request hinweg, dann ändert sich auch die Table. Zusätzlich wird
+                das Column Layout in der Browser Datenbank gespeichert.
             </de>
         </translation>
         <translation>
@@ -52,9 +52,9 @@
             <hr class="line">
 
             <p i18n>
-                A table implementation with sorting, paging and column resorting. The individual columns can
-                The only important thing is that the path is passed with colgroup. The query object
-                then contains the sort property according to which sorting must be carried out.
+                A meta table implementation, where the headers, columns and filters are generated from a JSON schema.
+                If the schema changes across the request, then the table also changes. Additionally will
+                the column layout is stored in the browser database.
             </p>
 
             <h3>DOM-API</h3>
@@ -78,7 +78,6 @@
             <div style="margin: 20px;">
                 <meta-table bind:items="materials"></meta-table>
             </div>
-
 
         </div>
 

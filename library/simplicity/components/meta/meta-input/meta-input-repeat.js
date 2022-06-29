@@ -5,6 +5,7 @@ import MetaForm from "../meta-form.js";
 
 class MetaInputRepeat extends HTMLElement {
 
+    property;
     schema;
     name;
     model;
@@ -20,7 +21,7 @@ class MetaInputRepeat extends HTMLElement {
     }
 
     preInitialize() {
-        this.name = this.schema.name;
+        this.name = this.property;
 
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
@@ -36,7 +37,10 @@ class MetaInputRepeat extends HTMLElement {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
+            } break;
+            case "property" : {
+                this.property = newValue;
+            } break;
         }
     }
 
@@ -44,6 +48,9 @@ class MetaInputRepeat extends HTMLElement {
         return [
             {
                 name: "schema",
+                type: "input"
+            }, {
+                name: "property",
                 type: "input"
             }
         ]

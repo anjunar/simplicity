@@ -158,7 +158,7 @@
             </table>
 
             <div style="margin: 20px;">
-                <common-example bind:items="materials">
+                <common-example bind:items="materials.rows">
                     <div let="material">
                         {{material.position}} {{material.name}}
                     </div>
@@ -189,7 +189,7 @@
                                 <code is="dom-code" lang="html5">
                                     <template>
                                         <iframe>
-                                            <common-example bind:items="materials">
+                                            <common-example bind:items="materials.rows">
                                                 <div let="material">
                                                     {{material.position}} {{material.name}}
                                                 </div>

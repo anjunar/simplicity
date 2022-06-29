@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plugins</title>
+    <i18n>
+        <translation>
+            <en>Meta Programming</en>
+            <de>Meta Programmierung</de>
+        </translation>
+    </i18n>
+</head>
+<body>
+<template>
+    <div style="margin: auto; flex-wrap: wrap; display: flex">
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2 style="margin-left: 0;">Plugins</h2>
+            <hr class="line">
+
+            <p>
+                Plugins bilden das Herzstück des Kompilers und sind in Modulen aufgeteilt. Es gibt folgende Plugins die
+                beim Start des Frameworks geladen werden.
+            </p>
+
+            <table style="width: 400px">
+                <thead>
+                <tr>
+                    <td><strong>Name</strong></td>
+                    <td><strong>Dom Name</strong></td>
+                    <td><strong>Destination</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>For</td>
+                    <td>bind:for</td>
+                    <td>Attribute</td>
+                </tr>
+                <tr>
+                    <td>If</td>
+                    <td>bind:if</td>
+                    <td>Attribute</td>
+                </tr>
+                <tr>
+                    <td>Let</td>
+                    <td>let</td>
+                    <td>Attribute</td>
+                </tr>
+                <tr>
+                    <td>Slot</td>
+                    <td>slot</td>
+                    <td>Element</td>
+                </tr>
+                <tr>
+                    <td>Variable</td>
+                    <td>bind:variable</td>
+                    <td>Attribute</td>
+                </tr>
+                <tr>
+                    <td>Switch</td>
+                    <td>bind:switch</td>
+                    <td>Attribute</td>
+                </tr>
+                <tr>
+                    <td>Case</td>
+                    <td>case</td>
+                    <td>Element</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <p>
+                Plugins sind aufgeteilt in zwei Bereiche. Einmal gibt es die Element-Plugins wie Slot und Case und es
+                gibt
+                die Attribute Plugins wie For, If, Let, Variable und Switch. Dafür ist die Property "Destination" um
+                anzugeben um welche Art von Plugin es sich handelt.
+            </p>
+
+        </div>
+
+        <div style="flex: 1; padding: 20px;">
+
+            <h2>Source Code</h2>
+            <hr class="line">
+            <h3>Javascript</h3>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                import {evaluation} from "../processors/js-compiler-processor.js";
+                                import {customPlugins} from "../processors/html-compiler-processor.js";
+                                import {attributes, rawAttributes} from "./helper.js";
+
+                                function variableStatement(rawAttributes, context, html) {
+                                    let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:variable"))
+                                    let variable = attribute.split("=")[1];
+                                    let element = html.element;
+                                    evaluation(variable + " = $value", context, {$value: element})
+                                    return html;
+                                }
+
+                                export default customPlugins.define({
+                                    name: "bind:variable",
+                                    destination: "Attribute",
+                                    code: function (tagName, node, children, intern, isSvg, tabs, level) {
+                                        return "\\n" + tabs + "variableStatement(" +
+                                            "[" + rawAttributes(node) + "], " +
+                                            "context" + ", " +
+                                            "html(\\\"" + tagName + "\\\"," +
+                                            "[" + attributes(node) + "], " +
+                                            "[" + intern(node.childNodes, ++level, isSvg) + "\\n" + tabs + "]" +
+                                            "))"
+                                    },
+                                    executor: variableStatement
+                                })
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

@@ -10,8 +10,8 @@ class LazySelect extends HTMLElement {
     materials(query, callback) {
         jsonClient.get("materials.json")
             .then((response) => {
-                let result = response.slice(query.index, query.index + query.limit);
-                callback(result, response.length)
+                let result = response.rows.slice(query.index, query.index + query.limit);
+                callback(result, response.rows.length)
             })
     }
 

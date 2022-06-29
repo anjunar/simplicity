@@ -5,13 +5,17 @@ import MatInputContainer from "../../form/container/mat-input-container.js";
 
 class MetaInputSelect extends HTMLElement {
 
+    property;
     schema;
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
+            } break;
+            case "property" : {
+                this.property = newValue;
+            } break;
         }
     }
 
@@ -19,6 +23,9 @@ class MetaInputSelect extends HTMLElement {
         return [
             {
                 name: "schema",
+                type: "input"
+            }, {
+                name: "property",
                 type: "input"
             }
         ]

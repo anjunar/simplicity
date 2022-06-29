@@ -45,7 +45,7 @@ function slotStatement(rawAttributes, context, contents) {
                 children.push(querySelector);
             }
         } else {
-            for (const segment of activeContent.children) {
+            for (const segment of Array.from(activeContent.children)) {
                 container.appendChild(segment)
                 children.push(segment);
             }

@@ -4,13 +4,17 @@ import DomTextarea from "../../../directives/dom-textarea.js";
 
 class MetaInputTextarea extends HTMLElement {
 
+    property;
     schema;
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
+            } break;
+            case "property" : {
+                this.property = newValue;
+            } break;
         }
     }
 
@@ -18,6 +22,9 @@ class MetaInputTextarea extends HTMLElement {
         return [
             {
                 name: "schema",
+                type: "input"
+            }, {
+                name: "property",
                 type: "input"
             }
         ]

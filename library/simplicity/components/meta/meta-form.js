@@ -7,12 +7,8 @@ class MetaForm extends HTMLElement {
 
     model = {};
 
-    send(action) {
-        this.dispatchEvent(new CustomEvent("action", {detail: action}));
-    }
-
-    links(links) {
-        return Object.values(links).filter((link) => link.method !== "GET");
+    register(element) {
+        return this.model.$schema.properties[element.property]
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

@@ -5,6 +5,7 @@ import DomInput from "../../../directives/dom-input.js";
 
 class MetaInputCheckbox extends HTMLElement {
 
+    property;
     schema;
 
     initialize() {
@@ -18,7 +19,10 @@ class MetaInputCheckbox extends HTMLElement {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
+            } break;
+            case "property" : {
+                this.property = newValue;
+            } break;
         }
     }
 
@@ -26,6 +30,9 @@ class MetaInputCheckbox extends HTMLElement {
         return [
             {
                 name: "schema",
+                type: "input"
+            }, {
+                name: "property",
                 type: "input"
             }
         ]

@@ -37,7 +37,7 @@ export const customComponents = new class CustomComponents {
             let templateHMTL = html.querySelector("template");
             template = codeGenerator(templateHMTL.content.children);
 
-            if (clazz.components) {
+            if (Reflect.has(clazz, "components")) {
                 checker(clazz.components, template.content, name)
             }
 
@@ -206,7 +206,7 @@ function checker(jsImports, html, path) {
             let toMuch = sortedJsImports.filter((importz) => sortedComponents.indexOf(importz) === -1);
             let missing = sortedComponents.filter((component) => sortedJsImports.indexOf(component) === -1)
 
-            console.log(`path: ${path} toMuch : ${toMuch.join(", ")} missing:  ${missing.join(", ")}`)
+            console.warn(`path: ${path} toMuch : ${toMuch.join(", ")} missing:  ${missing.join(", ")}`)
         }
 
     }

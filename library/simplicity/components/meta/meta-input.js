@@ -3,6 +3,7 @@ import {loader} from "../../processors/loader-processor.js";
 
 class MetaInput extends HTMLElement {
 
+    property;
     schema;
 
     container;
@@ -21,10 +22,23 @@ class MetaInput extends HTMLElement {
         }
     }
 
+    preInitialize() {
+        this.style.display = "block";
+        this.style.height = "36px";
+        this.style.width = "100%"
+    }
+
     initialize() {
+        let metaForm = this.queryUpwards((element) => {
+            return element.localName === "meta-form"
+        })
+
+        this.schema = metaForm.register(this);
+
         this.load().then(result => {
             let component = new result.default();
             component.schema = this.schema;
+            component.property = this.property;
             this.container.appendChild(component);
         })
     }
@@ -33,7 +47,10 @@ class MetaInput extends HTMLElement {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            }
+            } break
+            case "property" : {
+                this.property = newValue;
+            } break
         }
     }
 
@@ -41,6 +58,10 @@ class MetaInput extends HTMLElement {
         return [
             {
                 name: "schema",
+                type: "input"
+            },
+            {
+                name : "property",
                 type: "input"
             }
         ]

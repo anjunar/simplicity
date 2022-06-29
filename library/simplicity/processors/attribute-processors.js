@@ -256,6 +256,18 @@ class DomAttributesProcessor {
 
         if (Reflect.has(this.element, this.name)) {
             this.matched = true;
+            activeObjectExpression(this.value, this.context, this.element, () => {
+                let result = evaluation(this.value, this.context);
+                switch (this.name) {
+                    case "disabled" : {
+                        this.element[this.name] = result === true || result === "true";
+                    } break;
+                    default : {
+                        this.element[this.name] = result;
+                    }
+                }
+            })
+            this.process();
         }
     }
 
@@ -271,18 +283,6 @@ class DomAttributesProcessor {
                 }
             }
         }
-
-        activeObjectExpression(this.value, this.context, this.element, () => {
-            let result = evaluation(this.value, this.context);
-            switch (this.name) {
-                case "disabled" : {
-                    this.element[this.name] = result === true || result === "true";
-                } break;
-                default : {
-                    this.element[this.name] = result;
-                }
-            }
-        })
     }
 }
 

@@ -12,8 +12,7 @@
 <body>
     <template>
         <form is="dom-form" bind:model="model">
-            <meta-input bind:for="let element of model.$schema.properties" bind:schema="element"></meta-input>
-            <button bind:for="let action of links(model.$schema.links)" type="button" bind:onclick="send(action)">{{action.rel}}</button>
+            <slot></slot>
         </form>
     </template>
 </body>

@@ -7,10 +7,10 @@
 <body>
     <template>
         <mat-input-container bind:placeholder="schema.title">
-            <input is="dom-input" bind:type="schema.widget" bind:name="schema.name" bind:disabled="schema.readOnly">
+            <input is="dom-input" bind:type="schema.widget" bind:name="property" bind:disabled="schema.readOnly">
             <div slot="error">
-                <div bind:for="let validator of schema.validators">
-                    <div bind:switch="validator.name">
+                <div bind:for="let [key, validator] of schema.validators">
+                    <div bind:switch="key">
                         <case value="notNull">
                             <span name="valueMissing">Can not be empty</span>
                         </case>

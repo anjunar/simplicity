@@ -7,7 +7,7 @@
 <body>
 <template>
     <mat-input-container bind:placeholder="schema.title">
-        <select is="dom-select" bind:name="schema.name">
+        <select is="dom-select" bind:name="property">
             <option bind:for="let option of schema.enum" bind:value="option">{{option}}</option>
         </select>
     </mat-input-container>
