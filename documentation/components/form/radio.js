@@ -1,8 +1,8 @@
-import {customViews} from "../../../library/simplicity/simplicity.js";
-import DomCode from "../../../library/simplicity/directives/dom-code.js";
-import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-import MatRadioContainer from "../../../library/simplicity/components/form/container/mat-radio-container.js";
-import DomInput from "../../../library/simplicity/directives/dom-input.js";
+import {customViews} from "../../../library/simplicity-core/simplicity.js";
+import DomCode from "../../../library/simplicity-core/directives/dom-code.js";
+import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
+import MatRadioContainer from "../../../library/simplicity-material/components/form/container/mat-radio-container.js";
+import DomInput from "../../../library/simplicity-core/directives/dom-input.js";
 
 class Radio extends HTMLElement {
 

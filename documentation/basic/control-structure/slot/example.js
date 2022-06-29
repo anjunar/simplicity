@@ -1,5 +1,5 @@
-import {loader} from "../../../../library/simplicity/processors/loader-processor.js";
-import {customComponents} from "../../../../library/simplicity/simplicity.js";
+import {loader} from "../../../../library/simplicity-core/processors/loader-processor.js";
+import {customComponents} from "../../../../library/simplicity-core/simplicity.js";
 
 class CommonExample extends HTMLElement {
 

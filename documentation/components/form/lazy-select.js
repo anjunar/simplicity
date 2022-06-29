@@ -1,8 +1,8 @@
-import {customViews} from "../../../library/simplicity/simplicity.js";
-import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-import DomSelect from "../../../library/simplicity/components/form/dom-lazy-select.js";
-import DomCode from "../../../library/simplicity/directives/dom-code.js";
-import MatInputContainer from "../../../library/simplicity/components/form/container/mat-input-container.js";
+import {customViews} from "../../../library/simplicity-core/simplicity.js";
+import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
+import DomSelect from "../../../library/simplicity-core/components/form/dom-lazy-select.js";
+import DomCode from "../../../library/simplicity-core/directives/dom-code.js";
+import MatInputContainer from "../../../library/simplicity-material/components/form/container/mat-input-container.js";
 
 class LazySelect extends HTMLElement {
 

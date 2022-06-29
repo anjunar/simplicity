@@ -11,9 +11,9 @@
                 when created.
             </en>
             <de>
-                Mit dem Proxy-Objekt können Sie einen Proxy für ein anderes Objekt erstellen, das abfangen und neu definieren kann
-                grundlegende Operationen für dieses Objekt bereitstellen. Ein Proxy ist transparent, das heißt, es handelt sich um eine neue Identität
-                wenn der Proxy erstellt wird.
+                Mit dem Proxy-Objekt können Sie einen Proxy für ein anderes Objekt erstellen, das abfangen und neu definieren von
+                Properties und Funktionen kann grundlegende Operationen für dieses Objekt bereitstellen.
+                Ein Proxy ist transparent, das heißt, es handelt sich um eine neue Identität, wenn der Proxy erstellt wird.
             </de>
         </translation>
         <translation>
@@ -43,13 +43,13 @@
                 To customise the proxy, we define functions on the handler object: Here we've provided an implementation
                 of the get() handler, which intercepts attempts to access properties in the target. Handler functions are
                 sometimes called traps, presumably because they trap calls to the target object. The very simple trap in
-                handler2 above redefines all property accessors.
+                handler2 above redefines the get property accessor.
             </en>
             <de>
                 Um den Proxy anzupassen, definieren wir Funktionen für das Handler-Objekt: Hier haben wir eine Implementierung bereitgestellt
                 des get()-Handlers, der Versuche abfängt, auf Eigenschaften im Ziel zuzugreifen. Handler-Funktionen sind
-                manchmal Traps genannt, vermutlich weil sie Aufrufe an das Zielobjekt abfangen. Die ganz einfache Falle in
-                handler2 oben definiert alle Eigenschaftszugriffsmethoden neu.
+                manchmal Traps genannt, vermutlich weil sie Aufrufe an das Zielobjekt abfangen. Die ganz einfache Trap in
+                handler2 oben definiert die get Eigenschaft neu.
             </de>
         </translation>
     </i18n>
@@ -112,12 +112,12 @@
     <div style="flex-wrap: wrap; display: flex">
         <div style="flex: 1; padding: 20px;">
 
-        <p i18n>
-            To customise the proxy, we define functions on the handler object: Here we've provided an implementation
-            of the get() handler, which intercepts attempts to access properties in the target. Handler functions are
-            sometimes called traps, presumably because they trap calls to the target object. The very simple trap in
-            handler2 above redefines all property accessors.
-        </p>
+            <p i18n>
+                To customise the proxy, we define functions on the handler object: Here we've provided an implementation
+                of the get() handler, which intercepts attempts to access properties in the target. Handler functions are
+                sometimes called traps, presumably because they trap calls to the target object. The very simple trap in
+                handler2 above redefines the get property accessor.
+            </p>
 
     </div>
         <div style="flex: 1; padding: 20px;">

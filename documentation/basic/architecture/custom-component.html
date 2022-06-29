@@ -25,7 +25,7 @@
                 When creating components, there are several methods that must be implemented. The initialize
                 Method is executed when the template has been applied and is available as children of the component
                 stand. It should be noted that the child elements have not yet been initialized, so a method
-                how, e.g. register on the parent element are called by the child element.
+                for example "register" should be called on the parent element from the child element.
             </en>
             <de>
                 Bei der Erstellung von Komponenten gibt es mehrere Methoden die implementiert werden müssen. Die initialize
@@ -97,7 +97,7 @@
                 When creating components, there are several methods that must be implemented. The initialize
                 Method is executed when the template has been applied and is available as children of the component
                 stand. It should be noted that the child elements have not yet been initialized, so a method
-                how, e.g. register on the parent element are called by the child element.
+                for example "register" should be called on the parent element from the child element.
             </p>
             <p i18n>
                 The method attributeChangedCallback is executed when the attribute with or without binding is
@@ -181,8 +181,8 @@
                         <code is="dom-code" lang="javascript">
                             <template>
                                 <script>
-                                    import {customComponents} from "../../../library/simplicity/simplicity.js";
-                                    import {loader} from "../../../library/simplicity/processors/loader-processor.js";
+                                    import {customComponents} from "../../../library/simplicity-core/simplicity.js";
+                                    import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
 
                                     class HelloWorld extends HTMLElement {
 

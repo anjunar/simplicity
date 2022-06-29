@@ -1,7 +1,7 @@
-import {customViews} from "../../../library/simplicity/simplicity.js";
-import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-import MatTable from "../../../library/simplicity/components/table/mat-table.js";
-import DomCode from "../../../library/simplicity/directives/dom-code.js";
+import {customViews} from "../../../library/simplicity-core/simplicity.js";
+import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
+import MatTable from "../../../library/simplicity-material/components/table/mat-table.js";
+import DomCode from "../../../library/simplicity-core/directives/dom-code.js";
 
 class Table extends HTMLElement {
 

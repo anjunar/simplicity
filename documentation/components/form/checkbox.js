@@ -1,8 +1,8 @@
-import {customViews} from "../../../library/simplicity/simplicity.js";
-import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-import DomInput from "../../../library/simplicity/directives/dom-input.js";
-import MatCheckboxContainer from "../../../library/simplicity/components/form/container/mat-checkbox-container.js";
-import DomCode from "../../../library/simplicity/directives/dom-code.js";
+import {customViews} from "../../../library/simplicity-core/simplicity.js";
+import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
+import DomInput from "../../../library/simplicity-core/directives/dom-input.js";
+import MatCheckboxContainer from "../../../library/simplicity-material/components/form/container/mat-checkbox-container.js";
+import DomCode from "../../../library/simplicity-core/directives/dom-code.js";
 
 class Checkbox extends HTMLElement {
 

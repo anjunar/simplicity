@@ -1,8 +1,8 @@
-import {customViews} from "../../../library/simplicity/simplicity.js";
-import {loader} from "../../../library/simplicity/processors/loader-processor.js";
-import DomCode from "../../../library/simplicity/directives/dom-code.js";
-import MetaForm from "../../../library/simplicity/components/meta/meta-form.js";
-import MetaInput from "../../../library/simplicity/components/meta/meta-input.js";
+import {customViews} from "../../../library/simplicity-core/simplicity.js";
+import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
+import DomCode from "../../../library/simplicity-core/directives/dom-code.js";
+import MetaForm from "../../../library/simplicity-material/components/meta/meta-form.js";
+import MetaInput from "../../../library/simplicity-material/components/meta/meta-input.js";
 
 class Form extends HTMLElement {
 

@@ -1,11 +1,11 @@
-import {customViews} from "../../library/simplicity/simplicity.js";
-import {loader} from "../../library/simplicity/processors/loader-processor.js";
-import DomRouter from "../../library/simplicity/directives/dom-router.js";
-import MatToolbar from "../../library/simplicity/components/navigation/mat-toolbar.js";
-import MatDrawerContainer from "../../library/simplicity/components/navigation/mat-drawer-container.js";
-import MatDrawerContent from "../../library/simplicity/components/navigation/mat-drawer-content.js";
-import MatDrawer from "../../library/simplicity/components/navigation/mat-drawer.js";
-import MatFooter from "../../library/simplicity/components/navigation/mat-footer.js";
+import {customViews} from "../../library/simplicity-core/simplicity.js";
+import {loader} from "../../library/simplicity-core/processors/loader-processor.js";
+import DomRouter from "../../library/simplicity-core/directives/dom-router.js";
+import MatToolbar from "../../library/simplicity-material/components/navigation/mat-toolbar.js";
+import MatDrawerContainer from "../../library/simplicity-material/components/navigation/mat-drawer-container.js";
+import MatDrawerContent from "../../library/simplicity-material/components/navigation/mat-drawer-content.js";
+import MatDrawer from "../../library/simplicity-material/components/navigation/mat-drawer.js";
+import MatFooter from "../../library/simplicity-material/components/navigation/mat-footer.js";
 
 class Index extends HTMLElement {
 
