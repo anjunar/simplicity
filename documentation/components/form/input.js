@@ -2,7 +2,7 @@ import {customViews} from "../../../library/simplicity-core/simplicity.js";
 import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
 import MatInputContainer from "../../../library/simplicity-material/components/form/container/mat-input-container.js"
 import DomInput from "../../../library/simplicity-core/directives/dom-input.js";
-import DomCode from "../../../library/simplicity-core/directives/dom-code.js";
+import DomCode from "../../../library/simplicity-code/directives/dom-code.js";
 import DomForm from "../../../library/simplicity-core/directives/dom-form.js";
 
 class Input extends HTMLElement {

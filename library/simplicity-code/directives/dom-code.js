@@ -1,8 +1,8 @@
-import {customComponents} from "../simplicity.js";
-import Highlight from "../../highlight/highlight.js";
-import xmlGrammar from "../../highlight/languages/xml.min.js";
-import javascriptGrammar from "../../highlight/languages/javascript.min.js";
-import jsonGrammar from "../../highlight/languages/json.min.js";
+import {customComponents} from "../../simplicity-core/simplicity.js";
+import Highlight from "./dom-code/highlight.js";
+import xmlGrammar from "./dom-code/languages/xml.js";
+import javascriptGrammar from "./dom-code/languages/javascript.js";
+import jsonGrammar from "./dom-code/languages/json.js";
 
 Highlight.registerLanguage("xml", xmlGrammar)
 Highlight.registerLanguage("javascript", javascriptGrammar)

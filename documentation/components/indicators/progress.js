@@ -1,6 +1,6 @@
 import {customViews} from "../../../library/simplicity-core/simplicity.js";
 import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
-import DomCode from "../../../library/simplicity-core/directives/dom-code.js";
+import DomCode from "../../../library/simplicity-code/directives/dom-code.js";
 import MatProgressBar from "../../../library/simplicity-material/components/indicators/mat-progress-bar.js";
 
 class Spinner extends HTMLElement {

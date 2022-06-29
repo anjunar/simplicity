@@ -251,7 +251,7 @@ class DomAttributesProcessor {
             } break
             default : {
             }
-                ;
+
         }
 
         if (Reflect.has(this.element, this.name)) {

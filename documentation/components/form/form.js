@@ -3,7 +3,7 @@ import {loader} from "../../../library/simplicity-core/processors/loader-process
 import DomForm from "../../../library/simplicity-core/directives/dom-form.js";
 import DomInput from "../../../library/simplicity-core/directives/dom-input.js";
 import MatInputContainer from "../../../library/simplicity-material/components/form/container/mat-input-container.js";
-import DomCode from "../../../library/simplicity-core/directives/dom-code.js";
+import DomCode from "../../../library/simplicity-code/directives/dom-code.js";
 
 class Form extends HTMLElement {
 
