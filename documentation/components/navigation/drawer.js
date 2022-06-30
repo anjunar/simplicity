@@ -1,6 +1,6 @@
 import {customViews} from "../../../library/simplicity-core/simplicity.js";
 import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
-import DomCode from "../../../library/simplicity-code/directives/dom-code.js";
+import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
 import MatDrawer from "../../../library/simplicity-material/components/navigation/mat-drawer.js";
 import MatDrawerContent from "../../../library/simplicity-material/components/navigation/mat-drawer-content.js";
 import MatDrawerContainer from "../../../library/simplicity-material/components/navigation/mat-drawer-container.js";
