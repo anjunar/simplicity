@@ -138,10 +138,6 @@ function addEventHandler(scope) {
             element: element
         });
 
-        if (handlers.filter(item => item.name === name).length > 50) {
-            console.warn(`possibly handlers memory leak ${handlers.length} ${name}`)
-        }
-
         element.addEventListener("removed", () => {
             let entry = handlers.find((entry) => entry.path === path && entry.handler === handler);
             if (entry) {
@@ -219,19 +215,15 @@ export function membraneFactory(instance, parent = []) {
                         return true;
                     }
 
-                    let properties = findProperties(target);
-                    if (properties.indexOf(p) > -1) {
-                        let result = Reflect.set(target, p, value, receiver);
+                    let result = Reflect.set(target, p, value, receiver);
 
-                        for (const eventHandler of root.handlers) {
-                            if (eventHandler.path.startsWith(path + "." + p)) {
-                                eventHandler.handler(value);
-                            }
+                    for (const eventHandler of root.handlers) {
+                        if (eventHandler.path.startsWith(path + "." + p)) {
+                            eventHandler.handler(value);
                         }
-
-                        return result;
                     }
-                    return Reflect.set(target, p, value, target);
+
+                    return result;
                 },
                 get(target, p, receiver) {
                     if (p === "resolve") {
@@ -254,20 +246,11 @@ export function membraneFactory(instance, parent = []) {
                         return Reflect.get(target, p, receiver);
                     }
 
-                    let properties = findProperties(target);
-                    if (properties.indexOf(p) > -1 || target instanceof Array) {
-                        let instance = Reflect.get(target, p, receiver);
-                        if (instance && instance.isProxy) {
-                            return instance;
-                        }
-                        return membraneFactory(instance, [...parent, {proxy : receiver, property : p}]);
+                    let result = Reflect.get(target, p, receiver);
+                    if (result && result.isProxy) {
+                        return result;
                     }
-
-                    let result = Reflect.get(target, p, target);
-                    if (result instanceof Function) {
-                        return (...args) => result.apply(target, args);
-                    }
-                    return result
+                    return membraneFactory(result, [...parent, {proxy : receiver, property : p}]);
                 }
             });
 

@@ -377,10 +377,6 @@ export function generateDomProxy(node) {
             element: element
         });
 
-        if (node.handlers.filter(item => item.name === name).length > 50) {
-            console.warn(`possibly handlers memory leak ${dataObject.handlers.length} ${name}`)
-        }
-
         element.addEventListener("removed", () => {
             let entry = node.handlers.find((entry) => entry.path === name && entry.handler === handler);
             if (entry) {
