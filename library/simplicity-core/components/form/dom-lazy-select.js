@@ -2,7 +2,7 @@ import {customComponents} from "../../simplicity.js";
 import {loader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
-import {Input, mix} from "../../services/tools.js";
+import {debounce, Input, isEqual, mix} from "../../services/tools.js";
 
 class DomLazySelect extends mix(HTMLElement).with(Input) {
 
@@ -18,8 +18,23 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     defaultValue = "";
     name;
     disabled = "false";
+    multiSelect = false;
+    showSelected = false;
+    search = "";
+
+    preInitialize() {
+        this.addEventHandler("model", this, () => {
+            this.render();
+        })
+    }
 
     initialize() {
+        if (this.multiSelect) {
+            this.model = [];
+        } else {
+            this.model = null;
+        }
+
         let listener = () => {
             if (this.open) {
                 this.open = false;
@@ -32,6 +47,10 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             window.removeEventListener("click", listener);
         }
 
+        this.addEventHandler("search", this, debounce(() => {
+            this.load();
+        }, 300))
+
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
                 return element instanceof DomForm
@@ -40,18 +59,34 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 domForm.register(this);
             }
         }
-
-        this.render();
     }
 
     render() {
+        let input = this.querySelector("input");
+
         if (this.model) {
-            let input = this.querySelector("input");
-            if (this.label instanceof Array) {
-                input.value = this.label.map((label) => this.model[label]).join(" ")
+            input.disabled = true;
+            if (this.multiSelect) {
+                if (this.label instanceof Array) {
+                    input.value = this.model.map(model => this.label.map(label => model[label]).join(" ")).join(", ")
+                } else {
+                    input.value = this.model.map(model => model[this.label]).join(", ")
+                }
             } else {
-                input.value = this.model[this.label]
+                if (this.label instanceof Array) {
+                    input.value = this.label.map((label) => this.model[label]).join(" ")
+                } else {
+                    input.value = this.model[this.label]
+                }
             }
+        } else {
+            if (input) {
+                input.value = ""
+            }
+        }
+
+        if (input) {
+            input.dispatchEvent(new Event("input"));
         }
     }
 
@@ -86,16 +121,16 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
 
     onItemClicked(event, item) {
         event.stopPropagation();
-        this.model = item;
-
-        let value;
-        if (this.label instanceof Array) {
-            value = this.label.map((label) => item[label]).join(" ")
+        if (this.multiSelect) {
+            let find = this.model.find(model => isEqual(model, item));
+            if (! find) {
+                this.model.push(item);
+            }
         } else {
-            value = item[this.label];
+            this.model = item;
         }
-        let input = this.querySelector("input");
-        input.value = value;
+
+        this.render();
 
         this.open = false;
         this.dispatchEvent(new CustomEvent("model"))
@@ -124,12 +159,84 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         return false;
     }
 
+    checkbox(event) {
+        event.stopPropagation();
+        return false;
+    }
+
+    showSelectedClick(event) {
+        event.stopPropagation();
+
+        this.showSelected = ! this.showSelected;
+
+        if (this.showSelected) {
+            if (this.multiSelect) {
+                this.window = this.model;
+            } else {
+                this.window = [this.model];
+            }
+        } else {
+            this.load();
+        }
+
+        return false;
+    }
+
+    searchBox(event) {
+        event.stopPropagation();
+        return false;
+    }
+
     load() {
-        let input = this.querySelector("input");
-        this.items({index : this.index, limit : this.limit, value : input.value}, (data, size) => {
+        let self = this;
+        this.items({index : this.index, limit : this.limit, value : this.search}, (data, size) => {
             this.size = size;
             this.open = true;
-            this.window = data;
+            this.showSelected = false;
+            this.window = data.map(item => new Proxy(item, {
+                get(target, p, receiver) {
+                    if (p === "selected") {
+                        if (self.multiSelect) {
+                            return self.model.find(model => isEqual(target, model))
+                        } else {
+                            return isEqual(target, self.model);
+                        }
+                    }
+                    return Reflect.get(target, p, receiver);
+                },
+                set(target, p, value, receiver) {
+                    if (p === "selected") {
+                        let oldValue = Reflect.get(receiver, p, receiver);
+                        if (oldValue) {
+                            if (self.multiSelect) {
+                                let find = self.model.find(model => isEqual(model, target));
+                                let indexOf = self.model.indexOf(find)
+                                self.model.splice(indexOf, 1)
+                            } else {
+                                self.model = null
+                            }
+                        } else {
+                            if (self.multiSelect) {
+                                self.model.push(receiver);
+                            } else {
+                                self.model = receiver;
+                            }
+                        }
+                        self.window.forEach((item) => item.fire())
+                    }
+                    return Reflect.set(target, p, value, receiver);
+                },
+                getOwnPropertyDescriptor(target, p) {
+                    if (p === "selected") {
+                        let object = {
+                            get selected() { return false },
+                            set selected(value) { }
+                        }
+                        return Reflect.getOwnPropertyDescriptor(object, "selected");
+                    }
+                    return Reflect.getOwnPropertyDescriptor(target, p);
+                }
+            }));
         })
     }
 
@@ -153,6 +260,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             } break;
             case "disabled" : {
                 this.disabled = newValue;
+            } break
+            case "multiselect" : {
+                this.multiSelect = newValue === "true"
             }
         }
     }
@@ -180,6 +290,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 type : "input"
             }, {
                 name : "disabled",
+                type: "input"
+            }, {
+                name : "multiselect",
                 type: "input"
             }
         ]

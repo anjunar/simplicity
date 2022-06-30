@@ -97,6 +97,46 @@
                 </mat-input-container>
             </div>
 
+            <h2 style="margin-left: 0;">Lazy Multi Select</h2>
+            <hr class="line">
+
+            <p i18n>
+                This is a lazy select that receives the values from a callback. There are only 5 items at a time
+                displayed. The model consists of one of the selected records when the record was selected. In contrast,
+                the model of the native select consists of the value of the option element. In addition to the lazy Select there is
+                the mat-input-container to turn the lazy Select into a Material Design Select.
+            </p>
+
+            <h3>DOM-API</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <td><strong i18n>Element</strong></td>
+                    <td><strong i18n>Attribute</strong></td>
+                    <td><strong i18n>Description</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>mat-input-container</td>
+                    <td>placeholder</td>
+                    <td i18n>The Placeholder text</td>
+                </tr>
+                <tr>
+                    <td>dom-select</td>
+                    <td>items</td>
+                    <td i18n>The items data source</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="margin: 20px;">
+                <mat-input-container placeholder="Materials">
+                    <dom-lazy-select bind:items="materials" multiselect="true">
+                        <div let="material">{{material.position}} {{material.name}}</div>
+                    </dom-lazy-select>
+                </mat-input-container>
+            </div>
 
         </div>
 
@@ -116,6 +156,12 @@
                                         <div let="material">{{material.position}} {{material.name}}</div>
                                     </dom-lazy-select>
                                 </mat-input-container>
+
+                                <mat-input-container placeholder="Materials" multiselect="true">
+                                    <dom-lazy-select bind:items="materials">
+                                        <div let="material">{{material.position}} {{material.name}}</div>
+                                    </dom-lazy-select>
+                                </mat-input-container>
                             </iframe>
                         </template>
                     </code>
@@ -127,10 +173,11 @@
                     <code is="dom-code" lang="javascript">
                         <template>
                             <script>
-                                import {customViews} from "../../library/simplicity/simplicity.js";
-                                import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                                import DomLazySelect from "../../library/simplicity/directives/dom-lazy-select.js";
-                                import MatDomSelectContainer from "../../library/simplicity/components/form/container/mat-dom-select-container.js";
+                                import {customViews} from "../../../library/simplicity-core/simplicity.js";
+                                import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
+                                import DomSelect from "../../../library/simplicity-core/components/form/dom-lazy-select.js";
+                                import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
+                                import MatInputContainer from "../../../library/simplicity-material/components/form/container/mat-input-container.js";
 
                                 class LazySelect extends HTMLElement {
 
@@ -138,17 +185,18 @@
                                         fetch("materials.json")
                                             .then(response => response.json())
                                             .then((response) => {
-                                                let result = response.slice(query.index, query.index + query.limit);
-                                                callback(result, response.length)
+                                                let filtered = response.rows.filter(item => item.name.toLowerCase().startsWith(query.value.toLowerCase()))
+                                                let result = filtered.slice(query.index, query.index + query.limit);
+                                                callback(result, response.rows.length)
                                             })
                                     }
 
                                     static get components() {
-                                        return [DomLazySelect, MatDomSelectContainer]
+                                        return [DomSelect, MatInputContainer, DomCode]
                                     }
 
                                     static get template() {
-                                        return loader("documentation/form/lazy-select.html")
+                                        return loader("documentation/components/form/lazy-select.html")
                                     }
 
                                 }
@@ -157,7 +205,7 @@
                                     name: "form-lazy-select",
                                     class: LazySelect
                                 })
-                            </script>
+                        </script>
                         </template>
                     </code>
                 </div>

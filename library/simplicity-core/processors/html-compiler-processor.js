@@ -152,6 +152,16 @@ function addEventHandler(scope) {
     }
 }
 
+function fire(handlers, path) {
+    return function () {
+        for (const handler of handlers) {
+            if (handler.path.startsWith(path)) {
+                handler.handler();
+            }
+        }
+    }
+}
+
 export function membraneFactory(instance, parent = []) {
     if (instance instanceof Node) {
         return instance;
@@ -234,6 +244,10 @@ export function membraneFactory(instance, parent = []) {
 
                     if (p === "addEventHandler") {
                         return addEventHandler(parent);
+                    }
+
+                    if (p === "fire") {
+                        return fire(root.handlers, path);
                     }
 
                     if (typeof p === "symbol" || p === "prototype") {

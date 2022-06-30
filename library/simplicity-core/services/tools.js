@@ -279,6 +279,10 @@ function equals(lhs, rhs) {
 }
 
 export function isEqual(lhs, rhs) {
+    return isEqualLeft(lhs, rhs) && isEqualLeft(rhs, lhs);
+}
+
+function isEqualLeft(lhs, rhs) {
     if (lhs instanceof Array && rhs instanceof Array) {
         if (lhs && rhs && lhs.length === rhs.length) {
             for (let i = 0; i < lhs.length; i++) {

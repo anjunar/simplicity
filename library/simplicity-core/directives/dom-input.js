@@ -84,9 +84,7 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
             }
                 break;
             case "checkbox" : {
-                if (this.model) {
-                    this.checked = true
-                }
+                this.checked = this.model;
             }
                 break;
             default : {

@@ -10,7 +10,8 @@ class LazySelect extends HTMLElement {
         fetch("materials.json")
             .then(response => response.json())
             .then((response) => {
-                let result = response.rows.slice(query.index, query.index + query.limit);
+                let filtered = response.rows.filter(item => item.name.toLowerCase().startsWith(query.value.toLowerCase()))
+                let result = filtered.slice(query.index, query.index + query.limit);
                 callback(result, response.rows.length)
             })
     }
