@@ -24,6 +24,18 @@
             </de>
         </translation>
         <translation>
+            <en>
+                With the attribute "multiselect" the select can be converted into a multi-select. In the overlay
+                there is an icon in the top left to indicate the selected items. Is that select in
+                Multi-select mode then the model consists of an array with the selected elements.
+            </en>
+            <de>
+                Mit dem Attribute "multiselect" lässt sich das Select in ein Multi-Select umwandeln. In dem Overlay
+                befindet sich oben links ein Symbol, um die ausgewählten Elemente anzuzeigen. Ist das Select im
+                Multi-Select Modus dann besteht das Model aus einen Array mit den ausgewählten Elementen.
+            </de>
+        </translation>
+        <translation>
             <en>Element</en>
             <de>Element</de>
         </translation>
@@ -91,7 +103,7 @@
 
             <div style="margin: 20px;">
                 <mat-input-container placeholder="Materials">
-                    <dom-lazy-select bind:items="materials">
+                    <dom-lazy-select bind:items="materials" bind:model="selected" label="name">
                         <div let="material">{{material.position}} {{material.name}}</div>
                     </dom-lazy-select>
                 </mat-input-container>
@@ -101,10 +113,9 @@
             <hr class="line">
 
             <p i18n>
-                This is a lazy select that receives the values from a callback. There are only 5 items at a time
-                displayed. The model consists of one of the selected records when the record was selected. In contrast,
-                the model of the native select consists of the value of the option element. In addition to the lazy Select there is
-                the mat-input-container to turn the lazy Select into a Material Design Select.
+                With the attribute "multiselect" the select can be converted into a multi-select. In the overlay
+                there is an icon in the top left to indicate the selected items. Is that select in
+                Multi-select mode then the model consists of an array with the selected elements.
             </p>
 
             <h3>DOM-API</h3>
@@ -132,7 +143,7 @@
 
             <div style="margin: 20px;">
                 <mat-input-container placeholder="Materials">
-                    <dom-lazy-select bind:items="materials" multiselect="true">
+                    <dom-lazy-select bind:items="materials" multiselect="true" label="name">
                         <div let="material">{{material.position}} {{material.name}}</div>
                     </dom-lazy-select>
                 </mat-input-container>
@@ -152,13 +163,13 @@
                         <template>
                             <iframe>
                                 <mat-input-container placeholder="Materials">
-                                    <dom-lazy-select bind:items="materials">
+                                    <dom-lazy-select bind:items="materials" bind:model="selected" label="name">
                                         <div let="material">{{material.position}} {{material.name}}</div>
                                     </dom-lazy-select>
                                 </mat-input-container>
 
-                                <mat-input-container placeholder="Materials" multiselect="true">
-                                    <dom-lazy-select bind:items="materials">
+                                <mat-input-container placeholder="Materials">
+                                    <dom-lazy-select bind:items="materials" multiselect="true" label="name">
                                         <div let="material">{{material.position}} {{material.name}}</div>
                                     </dom-lazy-select>
                                 </mat-input-container>

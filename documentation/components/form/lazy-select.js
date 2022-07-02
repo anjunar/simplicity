@@ -6,6 +6,13 @@ import MatInputContainer from "../../../library/simplicity-material/components/f
 
 class LazySelect extends HTMLElement {
 
+    selected = {
+        position: 1,
+        name: "Hydrogen",
+        weight: 1.0079,
+        symbol: "H"
+    }
+
     materials(query, callback) {
         fetch("materials.json")
             .then(response => response.json())

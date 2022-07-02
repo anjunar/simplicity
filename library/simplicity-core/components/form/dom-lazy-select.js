@@ -30,9 +30,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
 
     initialize() {
         if (this.multiSelect) {
-            this.model = [];
+            this.model = this.model || [];
         } else {
-            this.model = null;
+            this.model = this.model || null;
         }
 
         let listener = () => {
@@ -279,7 +279,11 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {
-                this.model = newValue;
+                if (newValue instanceof Array) {
+                    this.model = newValue.map(model => this.proxyFactory(model, this));
+                } else {
+                    this.model = this.proxyFactory(newValue, this);
+                }
             } break;
             case "placeholder" : {
                 let input = this.querySelector("input");

@@ -386,9 +386,11 @@ function htmlStatement(tagName, attributes, children) {
                     attribute.update();
                 }
             }
+/*
             if (Reflect.has(element, "render")) {
                 element.render();
             }
+*/
             for (const child of children) {
                 if (child instanceof Object && !(child instanceof Function)) {
                     child.update();
