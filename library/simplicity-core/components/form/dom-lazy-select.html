@@ -41,7 +41,7 @@
                     <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none';" style="width: 100%" bind:onclick="up($event)">arrow_drop_up</button>
                     <button type="button" class="material-icons" style="margin-right: 4px" bind:onclick="showSelectedClick($event)" bind:style="color : showSelected ? 'var(--main-font-color)' : 'var(--main-dark1-color)'">manage_search</button>
                 </div>
-                <div>
+                <div bind:onwheel="onWheel($event)">
                     <div bind:for="let item of window" bind:onclick="onItemClicked($event, item)">
                         <div style="display: flex">
                             <input type="checkbox" is="dom-input" bind:model="item.selected" bind:onclick="checkbox($event)" style="width: 16px; height: 16px; margin: 13px">

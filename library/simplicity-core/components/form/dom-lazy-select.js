@@ -170,8 +170,10 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         this.showSelected = ! this.showSelected;
 
         if (this.showSelected) {
+            this.index = 0;
+            this.size = this.model.length;
             if (this.multiSelect) {
-                this.window = this.model;
+                this.window = this.model.slice(this.index, this.index + this.limit);
             } else {
                 this.window = [this.model];
             }
@@ -187,57 +189,91 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         return false;
     }
 
+    onWheel(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (event.deltaY > 0) {
+            if (this.index + this.limit < this.size) {
+                this.index += this.limit
+                this.load();
+            }
+        } else {
+            if (this.index > 0) {
+                this.index -= this.limit
+                this.load();
+            }
+        }
+
+        return false;
+    }
+
     load() {
-        let self = this;
-        this.items({index : this.index, limit : this.limit, value : this.search}, (data, size) => {
-            this.size = size;
+        if (this.showSelected) {
             this.open = true;
-            this.showSelected = false;
-            this.window = data.map(item => new Proxy(item, {
-                get(target, p, receiver) {
-                    if (p === "selected") {
-                        if (self.multiSelect) {
-                            return self.model.find(model => isEqual(target, model))
-                        } else {
-                            return isEqual(target, self.model);
-                        }
+            if (this.multiSelect) {
+                this.window = this.model.slice(this.index, this.index + this.limit);
+            } else {
+                this.window = [this.model];
+            }
+        } else {
+            this.items({index : this.index, limit : this.limit, value : this.search}, (data, size) => {
+                this.size = size;
+                this.open = true;
+                this.showSelected = false;
+                this.window = data.map(item => this.proxyFactory(item, this));
+            })
+        }
+    }
+
+    proxyFactory(item, self) {
+        return new Proxy(item, {
+            get(target, p, receiver) {
+                if (p === "selected") {
+                    if (self.multiSelect) {
+                        return self.model.find(model => isEqual(target, model))
+                    } else {
+                        return isEqual(target, self.model);
                     }
-                    return Reflect.get(target, p, receiver);
-                },
-                set(target, p, value, receiver) {
-                    if (p === "selected") {
-                        let oldValue = Reflect.get(receiver, p, receiver);
-                        if (oldValue) {
-                            if (self.multiSelect) {
-                                let find = self.model.find(model => isEqual(model, target));
-                                let indexOf = self.model.indexOf(find)
-                                self.model.splice(indexOf, 1)
-                            } else {
-                                self.model = null
-                            }
-                        } else {
-                            if (self.multiSelect) {
-                                self.model.push(receiver);
-                            } else {
-                                self.model = receiver;
-                            }
-                        }
-                        self.window.forEach((item) => item.fire())
-                    }
-                    return Reflect.set(target, p, value, receiver);
-                },
-                getOwnPropertyDescriptor(target, p) {
-                    if (p === "selected") {
-                        let object = {
-                            get selected() { return false },
-                            set selected(value) { }
-                        }
-                        return Reflect.getOwnPropertyDescriptor(object, "selected");
-                    }
-                    return Reflect.getOwnPropertyDescriptor(target, p);
                 }
-            }));
-        })
+                return Reflect.get(target, p, receiver);
+            },
+            set(target, p, value, receiver) {
+                if (p === "selected") {
+                    let oldValue = Reflect.get(receiver, p, receiver);
+                    if (oldValue) {
+                        if (self.multiSelect) {
+                            let find = self.model.find(model => isEqual(model, target));
+                            let indexOf = self.model.indexOf(find)
+                            self.model.splice(indexOf, 1)
+                        } else {
+                            self.model = null
+                        }
+                    } else {
+                        if (self.multiSelect) {
+                            self.model.push(receiver);
+                        } else {
+                            self.model = receiver;
+                        }
+                    }
+                    self.window.forEach((item) => item.fire())
+                }
+                return Reflect.set(target, p, value, receiver);
+            },
+            getOwnPropertyDescriptor(target, p) {
+                if (p === "selected") {
+                    let object = {
+                        get selected() {
+                            return false
+                        },
+                        set selected(value) {
+                        }
+                    }
+                    return Reflect.getOwnPropertyDescriptor(object, "selected");
+                }
+                return Reflect.getOwnPropertyDescriptor(target, p);
+            }
+        });
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
