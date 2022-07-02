@@ -17,7 +17,7 @@ class MatDrawer extends HTMLElement {
         return [
             {
                 name: "open",
-                type: "input"
+                binding: "input"
             }
         ]
     }

@@ -54,10 +54,10 @@ class MetaTableFilter extends HTMLElement {
         return [
             {
                 name: "schema",
-                type: "input"
+                binding: "input"
             }, {
                 name : "model",
-                type : "two-way"
+                binding : "two-way"
             }
         ]
     }

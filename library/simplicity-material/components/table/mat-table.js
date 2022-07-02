@@ -259,16 +259,16 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         return [
             {
                 name: "items",
-                type: "input"
+                binding: "input"
             }, {
                 name : "name",
-                type : "input"
+                binding : "input"
             }, {
                 name : "create",
-                type : "input"
+                binding : "input"
             }, {
                 name : "hoover",
-                type : "input"
+                binding : "input"
             }
         ]
     }

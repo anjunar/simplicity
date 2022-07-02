@@ -24,7 +24,7 @@ class MetaForm extends HTMLElement {
         return [
             {
                 name: "model",
-                type: "input"
+                binding: "input"
             }
         ]
     }

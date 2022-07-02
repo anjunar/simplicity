@@ -50,10 +50,10 @@ class MetaColumn extends HTMLElement {
         return [
             {
                 name: "model",
-                type: "input"
+                binding: "input"
             }, {
                 name: "schema",
-                type: "input"
+                binding: "input"
             }
         ]
     }

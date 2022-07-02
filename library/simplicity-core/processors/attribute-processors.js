@@ -187,8 +187,8 @@ class DynamicBindingAttributeProcessor {
 
             if (find) {
                 this.matched = true;
-                this.type = find.type;
-                if (this.type === "two-way") {
+                this.binding = find.binding;
+                if (this.binding === "two-way") {
                     this.element.addEventListener(this.name, (event) => {
                         let $value = event.target[this.name]
                         let expression = value + " = " + "$value"

@@ -54,11 +54,11 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
         return [
             {
                 name: "model",
-                type: "two-way"
+                binding: "two-way"
             },
             {
                 name: "placeholder",
-                type: "input"
+                binding: "input"
             }
         ]
     }

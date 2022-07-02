@@ -28,10 +28,10 @@ class MetaFilterInput extends HTMLElement {
         return [
             {
                 name: "schema",
-                type: "input"
+                binding: "input"
             }, {
                 name : "model",
-                type : "input"
+                binding : "input"
             }
         ]
     }

@@ -16,7 +16,7 @@ class MatRadioContainer extends HTMLElement {
     static get observedAttributes() {
         return [{
             name : "placeholder",
-            type : "input"
+            binding : "input"
         }];
     }
 

@@ -56,7 +56,7 @@ class ToolbarTools extends HTMLElement {
     static get observedAttributes() {
         return [{
             name : "contents",
-            type : "input"
+            binding : "input"
         }]
     }
 

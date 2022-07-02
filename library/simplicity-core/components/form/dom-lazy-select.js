@@ -315,25 +315,25 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         return [
             {
                 name: "model",
-                type: "two-way"
+                binding: "two-way"
             }, {
                 name : "placeholder",
-                type : "input"
+                binding : "input"
             }, {
                 name : "items",
-                type : "input"
+                binding : "input"
             }, {
                 name : "label",
-                type : "input"
+                binding : "input"
             }, {
                 name : "name",
-                type : "input"
+                binding : "input"
             }, {
                 name : "disabled",
-                type: "input"
+                binding: "input"
             }, {
                 name : "multiselect",
-                type: "input"
+                binding: "input"
             }
         ]
     }

@@ -22,10 +22,10 @@ class MetaInputEditor extends HTMLElement {
         return [
             {
                 name: "schema",
-                type: "input"
+                binding: "input"
             } , {
                 name: "property",
-                type: "input"
+                binding: "input"
             }
         ]
     }

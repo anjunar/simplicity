@@ -42,7 +42,7 @@ class DomSelect extends mix(HTMLSelectElement).with(Input) {
         return [
             {
                 name: "model",
-                type: "two-way"
+                binding: "two-way"
             }
         ]
     }

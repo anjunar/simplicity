@@ -53,7 +53,7 @@ class MarginsNode extends HTMLElement {
     static get observedAttributes() {
         return [{
             name: "node",
-            type: "input"
+            binding: "input"
         }]
     }
 

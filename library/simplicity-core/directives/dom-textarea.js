@@ -39,7 +39,7 @@ class DomTextarea extends mix(HTMLTextAreaElement).with(Input) {
         return [
             {
                 name: "model",
-                type: "two-way"
+                binding: "two-way"
             }
         ]
     }

@@ -25,7 +25,7 @@ class DomA extends HTMLAnchorElement {
         return [
             {
                 name: "action",
-                type: "input"
+                binding: "input"
             }
         ]
     }

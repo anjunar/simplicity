@@ -165,7 +165,7 @@ class ToolbarJustify extends HTMLElement {
     static get observedAttributes() {
         return [{
             name: "contents",
-            type: "input"
+            binding: "input"
         }]
     }
 

@@ -17,7 +17,7 @@ class MatPages extends HTMLElement {
         return [
             {
                 name: "page",
-                type: "input"
+                binding: "input"
             }
         ]
     }

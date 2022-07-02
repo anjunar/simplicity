@@ -42,7 +42,7 @@ class DomRouter extends HTMLElement {
         return [
             {
                 name: "level",
-                type: "input"
+                binding: "input"
             }
         ]
     }

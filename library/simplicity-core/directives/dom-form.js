@@ -102,7 +102,7 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         return [
             {
                 name: "model",
-                type: "two-way"
+                binding: "two-way"
             }
         ]
     }

@@ -107,7 +107,7 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
         return [
             {
                 name: "model",
-                type: "two-way"
+                binding: "two-way"
             }
         ]
     }

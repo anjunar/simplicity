@@ -90,15 +90,15 @@ class MatEditor extends mix(HTMLElement).with(Input) {
         return [
             {
                 name: "model",
-                type: "two-way"
+                binding: "two-way"
             },
             {
                 name: "placeholder",
-                type: "input"
+                binding: "input"
             },
             {
                 name : "name",
-                type : "input"
+                binding : "input"
             }
         ]
     }

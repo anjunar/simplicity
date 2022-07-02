@@ -22,10 +22,10 @@ class MatTableSearch extends HTMLElement {
         return [
             {
                 name: "path",
-                type: "input"
+                binding: "input"
             }, {
                 name: "sortable",
-                type: "input"
+                binding: "input"
             }
         ]
     }

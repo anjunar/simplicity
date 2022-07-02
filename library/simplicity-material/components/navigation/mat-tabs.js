@@ -65,7 +65,7 @@ class MatTabs extends HTMLElement {
         return [
             {
                 name: "page",
-                type: "two-way"
+                binding: "two-way"
             }
         ]
     }

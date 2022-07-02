@@ -68,7 +68,7 @@ class MetaTable extends HTMLElement {
         return [
             {
                 name : "items",
-                type : "input"
+                binding : "input"
             }
         ]
     }
