@@ -1,5 +1,9 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
 import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import MetaFilterCheckbox from "./meta-table-filter/meta-filter-checkbox.js";
+import MetaFilterLazySelect from "./meta-table-filter/meta-filter-lazy-select.js";
+import MetaFilterDatetime from "./meta-table-filter/meta-filter-datetime.js";
+import MetaFilterInput from "./meta-table-filter/meta-filter-input.js";
 
 class MetaTableFilter extends HTMLElement {
 
@@ -11,30 +15,27 @@ class MetaTableFilter extends HTMLElement {
     load() {
         switch (this.schema.widget) {
             case "checkbox" :
-                return import("./meta-table-filter/meta-filter-checkbox.js");
-            case "lazy-multi-select" :
-                return import("./meta-table-filter/meta-filter-lazy-multi-select.js");
+                return MetaFilterCheckbox
             case "lazy-select" :
-                return import("./meta-table-filter/meta-filter-lazy-select.js");
+                return MetaFilterLazySelect
             case "datetime-local" :
-                return import("./meta-table-filter/meta-filter-datetime.js");
+                return MetaFilterDatetime
             case "date" :
-                return import("./meta-table-filter/meta-filter-datetime.js");
+                return MetaFilterDatetime
             default :
-                return import("./meta-table-filter/meta-filter-input.js");
+                return MetaFilterInput
         }
     }
 
     initialize() {
-        this.load().then(result => {
-            let component = new result.default();
-            component.schema = this.schema;
-            component.model = this.model;
-            component.addEventListener("model", () => {
-                this.dispatchEvent(new CustomEvent("model"))
-            })
-            this.container.appendChild(component);
+        let result = this.load();
+        let component = new result();
+        component.schema = this.schema;
+        component.model = this.model;
+        component.addEventListener("model", () => {
+            this.dispatchEvent(new CustomEvent("model"))
         })
+        this.container.appendChild(component);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
