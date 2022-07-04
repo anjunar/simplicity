@@ -7,22 +7,35 @@ class DomRouter extends HTMLElement {
 
     handler = (event) => {
         this.dispatchEvent(new CustomEvent("load"))
-        viewManager.load(event?.newURL || window.location.hash, this.level, false)
-            .then((view) => {
-                for (const child of Array.from(this.children)) {
-                    child.remove();
-                }
-                this.appendChild(view);
-                let nextLevelRouter = this.querySelector("dom-router");
-                if (nextLevelRouter) {
-                    nextLevelRouter.addEventListener("loadend", () => {
-                        this.dispatchEvent(new CustomEvent("loadend"))
-                    })
-                } else {
-                    this.dispatchEvent(new CustomEvent("loadend"))
-                }
-            })
 
+        let runViewManager = () => {
+            viewManager.load(event?.newURL || window.location.hash, this.level, false)
+                .then((view) => {
+                    for (const child of Array.from(this.children)) {
+                        child.remove();
+                    }
+                    this.appendChild(view);
+                    let nextLevelRouter = this.querySelector("dom-router");
+                    if (nextLevelRouter) {
+                        nextLevelRouter.addEventListener("loadend", () => {
+                            this.dispatchEvent(new CustomEvent("loadend"))
+                        })
+                    } else {
+                        this.dispatchEvent(new CustomEvent("loadend"))
+                    }
+                })
+        }
+
+        if (event) {
+            let oldUrlSegments = event.oldURL.split("#");
+            let newUrlSegments = event.newURL.split("#");
+
+            if (oldUrlSegments[this.level + 1] !== newUrlSegments[this.level + 1]) {
+                runViewManager();
+            }
+        } else {
+            runViewManager();
+        }
     }
 
     constructor() {

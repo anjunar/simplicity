@@ -126,7 +126,7 @@ export const customComponents = new class CustomComponents {
             }
 
             disconnectedCallback() {
-                if (this.initialized && this.isConnected) {
+                if (this.initialized) {
                     if (super.destroy) {
                         super.destroy();
                     }
