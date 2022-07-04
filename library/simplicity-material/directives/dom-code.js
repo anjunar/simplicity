@@ -39,6 +39,9 @@ class DomCode extends HTMLElement {
     initialize() {
         this.style.whiteSpace = "pre"
         this.style.color = "var(--main-blue-color)"
+        this.style.display = "block"
+        this.style.overflow = "hidden"
+        this.style.width = "100%"
 
         function htmlSpecialChars(str) {
             const specialChars = {
