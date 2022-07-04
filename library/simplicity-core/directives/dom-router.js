@@ -38,11 +38,8 @@ class DomRouter extends HTMLElement {
         }
     }
 
-    constructor() {
-        super();
-        DomRouter.prototype.destroy = () => {
-            window.removeEventListener("hashchange", this.handler)
-        }
+    destroy() {
+        window.removeEventListener("hashchange", this.handler)
     }
 
     initialize() {
