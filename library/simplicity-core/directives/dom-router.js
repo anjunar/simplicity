@@ -8,8 +8,8 @@ class DomRouter extends HTMLElement {
     handler = (event) => {
         this.dispatchEvent(new CustomEvent("load"))
 
-        let runViewManager = () => {
-            viewManager.load(event?.newURL || window.location.hash, this.level, false)
+        let runViewManager = (url) => {
+            viewManager.load(url, this.level, false)
                 .then((view) => {
                     for (const child of Array.from(this.children)) {
                         child.remove();
@@ -31,10 +31,10 @@ class DomRouter extends HTMLElement {
             let newUrlSegments = event.newURL.split("#");
 
             if (oldUrlSegments[this.level + 1] !== newUrlSegments[this.level + 1]) {
-                runViewManager();
+                runViewManager(event.newURL);
             }
         } else {
-            runViewManager();
+            runViewManager(window.location.hash);
         }
     }
 
