@@ -30,6 +30,16 @@
                 Das Element dient dazu den Handler zu de-registrieren wenn das Element den Dom verläßt.
             </de>
         </translation>
+        <translation>
+            <en>
+                If it is a method or a get property, a resonator must be implemented.
+                The resonator lets you know when something changes on the model.
+            </en>
+            <de>
+                Handelt es sich um eine Methode oder einer get-Property so muss ein Resonator implementiert werden.
+                Der Resonator gibt bescheid wenn sich etwas am Model ändert.
+            </de>
+        </translation>
     </i18n>
 </head>
 <body>
@@ -48,6 +58,11 @@
             <p i18n>
                 The "addEventHandler" method is passed the name of the property, an element and the callback.
                 The element is used to de-register the handler when the element leaves the dom.
+            </p>
+
+            <p i18n>
+                If it is a method or a get property, a resonator must be implemented.
+                The resonator lets you know when something changes on the model.
             </p>
         </div>
         <div style="flex: 1; padding: 20px;">
@@ -81,6 +96,34 @@
                                         });
                                     }
                                     return object;
+                                }
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                class Input extends HTMLElement {
+                                    get hasFocus() {
+                                        let input = this.querySelector("input");
+                                        let method = () => {
+                                            return document.activeElement === input;
+                                        }
+                                        let resonator = (callback, element) => {
+                                            input.addEventListener("focus", callback);
+                                            input.addEventListener("blur", callback);
+
+                                            element.addEventListener("removed", () => {
+                                                input.removeEventListener("focus", callback);
+                                                input.removeEventListener("blur", callback);
+                                            })
+                                        }
+                                        return {method, resonator}
+                                    }
                                 }
                             </script>
                         </template>

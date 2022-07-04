@@ -6,7 +6,6 @@ class MatInputContainer extends HTMLElement {
     placeholder;
 
     inputEmpty = true;
-    hasFocus = false;
     hasErrors = false;
 
     initialize() {
@@ -61,6 +60,23 @@ class MatInputContainer extends HTMLElement {
         }
 
         inputListener();
+    }
+
+    get hasFocus() {
+        let input = this.querySelector("input");
+        let method = () => {
+            return document.activeElement === input;
+        }
+        let resonator = (callback, element) => {
+            input.addEventListener("focus", callback);
+            input.addEventListener("blur", callback);
+
+            element.addEventListener("removed", () => {
+                input.removeEventListener("focus", callback);
+                input.removeEventListener("blur", callback);
+            })
+        }
+        return {method, resonator}
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
