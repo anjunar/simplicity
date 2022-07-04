@@ -6,12 +6,21 @@ class DomRouter extends HTMLElement {
     level = 0
 
     handler = (event) => {
+        this.dispatchEvent(new CustomEvent("load"))
         viewManager.load(event?.newURL || window.location.hash, this.level, false)
             .then((view) => {
                 for (const child of Array.from(this.children)) {
                     child.remove();
                 }
                 this.appendChild(view);
+                let nextLevelRouter = this.querySelector("dom-router");
+                if (nextLevelRouter) {
+                    nextLevelRouter.addEventListener("loadend", () => {
+                        this.dispatchEvent(new CustomEvent("loadend"))
+                    })
+                } else {
+                    this.dispatchEvent(new CustomEvent("loadend"))
+                }
             })
 
     }

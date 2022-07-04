@@ -6,8 +6,12 @@ import MatFooter from "../library/simplicity-material/components/navigation/mat-
 import MatPerformance from "../library/simplicity-material/components/system/mat-performance.js";
 import MatLanguage from "../library/simplicity-material/components/system/mat-language.js";
 import MatTaskbar from "../library/simplicity-material/components/system/mat-taskbar.js";
+import MatProgressBar from "../library/simplicity-material/components/indicators/mat-progress-bar.js";
 
 class DocumentationApp extends HTMLElement {
+
+    loading = true;
+    timeStamp;
 
     active(value) {
         let method = () => {
@@ -19,8 +23,19 @@ class DocumentationApp extends HTMLElement {
         return {method, resonator}
     }
 
+    load() {
+        this.loading = true
+        this.timeStamp = performance.now();
+    }
+
+    loadEnd() {
+        this.loading = false
+        let delta = performance.now() - this.timeStamp;
+        console.log("page load: " + Math.round(delta) + "ms")
+    }
+
     static get components() {
-        return [DomRouter, MatToolbar, MatFooter, MatPerformance, MatLanguage, MatTaskbar];
+        return [DomRouter, MatToolbar, MatFooter, MatPerformance, MatLanguage, MatTaskbar, MatProgressBar];
     }
 
     static get template() {

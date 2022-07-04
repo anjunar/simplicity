@@ -43,7 +43,10 @@
 </head>
 <body>
 <template>
-    <div style="height: 38px"></div>
+    <div style="height: 38px;"></div>
+    <div style="height: 4px; background-color: var(--main-dark1-color)">
+        <mat-progress-bar bind:if="loading"></mat-progress-bar>
+    </div>
     <mat-toolbar style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <div slot="left">
             <div style="display: flex">
@@ -76,7 +79,7 @@
             </a>
         </div>
     </mat-toolbar>
-    <dom-router level="0" style="height: 100%; width: 100%"></dom-router>
+    <dom-router level="0" style="height: 100%; width: 100%" bind:onload="load()" bind:onloadend="loadEnd()"></dom-router>
     <mat-footer>
         <div slot="left">
             <mat-taskbar></mat-taskbar>

@@ -155,14 +155,13 @@ class EventAttributeProcessor {
         if (result) {
             this.matched = true;
             this.name = result[1];
+            this.element.addEventListener(this.name, ($event) => {
+                evaluation(this.value, this.context, {$event: $event}, true)
+            })
         }
     }
 
-    process() {
-        this.element.addEventListener(this.name, ($event) => {
-            evaluation(this.value, this.context, {$event: $event}, true)
-        })
-    }
+    process() {}
 }
 
 class DynamicBindingAttributeProcessor {
