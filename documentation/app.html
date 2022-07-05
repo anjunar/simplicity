@@ -25,6 +25,13 @@
         app-documentation .row span {
             margin: 3px;
         }
+
+        @media only screen and (max-width: 800px) {
+            .browsers {
+                display: none
+            }
+        }
+
     </style>
     <i18n>
         <translation>
@@ -58,25 +65,24 @@
                    bind:class="active('expert') ? 'normal active' : 'normal'" i18n>Expert</a>
             </div>
         </div>
-        <div slot="middle">
-            Simplicity 4.2 beta
-        </div>
         <div slot="right">
-            <a href="https://www.google.de/chrome" target="_blank  ">
-                <img src="images/chrome_logo.png"
-                     style="height: 32px; width: 32px; margin-right: 5px; vertical-align: bottom"/>
-            </a>
-            <a href="https://www.microsoft.com/de-de/edge" target="_blank">
-                <img src="images/edge.png"
-                     style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
-            </a>
-            <a href="https://www.mozilla.org" target="_blank">
-                <img src="images/firefox_logo.png"
-                     style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
-            </a>
-            <a href="https://github.com/anjunar/simplicity" target="_blank">
-                <img src="images/github-circle-white-transparent.svg"/>
-            </a>
+            <div class="browsers">
+                <a href="https://www.google.de/chrome" target="_blank  ">
+                    <img src="images/chrome_logo.png"
+                         style="height: 32px; width: 32px; margin-right: 5px; vertical-align: bottom"/>
+                </a>
+                <a href="https://www.microsoft.com/de-de/edge" target="_blank">
+                    <img src="images/edge.png"
+                         style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
+                </a>
+                <a href="https://www.mozilla.org" target="_blank">
+                    <img src="images/firefox_logo.png"
+                         style="height: 32px; width: 32px; margin-right: 12px; vertical-align: bottom"/>
+                </a>
+                <a href="https://github.com/anjunar/simplicity" target="_blank">
+                    <img src="images/github-circle-white-transparent.svg"/>
+                </a>
+            </div>
         </div>
     </mat-toolbar>
     <dom-router level="0" style="height: 100%; width: 100%" bind:onload="load()" bind:onloadend="loadEnd()"></dom-router>
