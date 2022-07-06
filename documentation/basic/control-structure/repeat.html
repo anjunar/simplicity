@@ -31,16 +31,20 @@
             <de>Beschreibung</de>
         </translation>
         <translation>
-            <en>The array to be looped</en>
-            <de>Das Array das durchlaufen wird</de>
+            <en>The array to be looped with the given variable and source</en>
+            <de>Das Array das durchlaufen wird mit der Variable und der Quelle</de>
         </translation>
         <translation>
-            <en>The property in which the data is stored</en>
-            <de>Die Property in der das Element gespeichert wird</de>
+            <en>The index of the given item for that array</en>
+            <de>Der Index von dem gegebenen Element des Array</de>
         </translation>
         <translation>
-            <en>The rest of the HTML file is not displayed</en>
-            <de>Der rest der HTML Datei wird nicht angezeigt</de>
+            <en>The length of the given array</en>
+            <de>Die Länge der gegebenen Array</de>
+        </translation>
+        <translation>
+            <en>A callback to be called when the list has been rendered</en>
+            <de>Ein Callback der Aufgerufen wird, wenn die Liste gerendert wurde</de>
         </translation>
     </i18n>
 </head>
@@ -61,7 +65,7 @@
                 </p>
 
                 <h3>DOM-API</h3>
-                <table style="width: 100%">
+                <table style="width: 100%; font-size: small">
                     <thead>
                     <tr>
                         <td><strong i18n>Element</strong></td>
@@ -71,14 +75,24 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>template</td>
-                        <td>items</td>
-                        <td i18n>The array to be looped</td>
+                        <td>*</td>
+                        <td>for="let [variable] of [source]"</td>
+                        <td i18n>The array to be looped with the given variable and source</td>
                     </tr>
                     <tr>
-                        <td>template</td>
-                        <td>item</td>
-                        <td i18n>The property in which the data is stored</td>
+                        <td>*</td>
+                        <td>for="let [index] = index"</td>
+                        <td i18n>The index of the given item for that array</td>
+                    </tr>
+                    <tr>
+                        <td>*</td>
+                        <td>for="let [length] = length"</td>
+                        <td i18n>The length of the given array</td>
+                    </tr>
+                    <tr>
+                        <td>*</td>
+                        <td>for="onRendered = [rendered($children)]"</td>
+                        <td i18n>A callback to be called when the list has been rendered</td>
                     </tr>
                     </tbody>
                 </table>

@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <i18n>
         <translation>
-            <en>Reactivity</en>
-            <de>Reactivität</de>
+            <en>Reactivity - Resonator</en>
+            <de>Reaktivität - Resonator</de>
+        </translation>
+        <translation>
+            <en>
+                If there is only one getter or one method, a resonator must be implemented. The resonator
+                is responsible for propagating changes to the component, resulting in a re-render.
+                In this example you can see an excerpt from the MatInputContainer the getter "hasFocus" for
+                the highlighting of the "hr" element. The compiler passes the callback and the "hr" element.
+                Additionally, the compiler fires a "removed" event when the element leaves the dom, so we can safely
+                remove all event listeners so that there are no memory leaks.
+            </en>
+            <de>
+                Gibt es nur einen Getter oder eine Methode, so muss ein Resonator implementiert werden. Der Resonator
+                ist dafür verantwortlich, dass Änderungen an die Komponente weitergegeben wird, was zu einem re-render führt.
+                In diesem Beispiel sieht man einen Ausschnitt aus dem MatInputContainer den Getter "hasFocus" der für
+                das Highlighten des "hr" Elementes da ist. Der Compiler übergibt den Callback und das Element "hr".
+                Zusätzlich löst der Compiler ein "removed" Event aus, wenn das Element den Dom verläßt, somit können sicher
+                alle Event Listener de-registriert werden damit es keine Memory Leaks ergibt.
+            </de>
         </translation>
     </i18n>
 </head>
@@ -14,22 +32,37 @@
 <template>
     <div style="flex-wrap: wrap; display: flex">
         <div style="flex: 1; padding: 20px; min-width : 400px">
-            <h2 style="margin-left: 0;" i18n>Reactivity</h2>
+            <h2 style="margin-left: 0;" i18n>Reactivity - Resonator</h2>
             <hr class="line">
 
-            <p>
-
+            <p i18n>
+                If there is only one getter or one method, a resonator must be implemented. The resonator
+                is responsible for propagating changes to the component, resulting in a re-render.
+                In this example you can see an excerpt from the MatInputContainer the getter "hasFocus" for
+                the highlighting of the "hr" element. The compiler passes the callback and the "hr" element.
+                Additionally, the compiler fires a "removed" event when the element leaves the dom, so we can safely
+                remove all event listeners so that there are no memory leaks.
             </p>
         </div>
         <div style="flex: 1; padding: 20px; min-width : 400px">
             <h2>Source Code</h2>
             <hr class="line">
+            <h3>HTML5</h3>
+            <code is="dom-code" lang="html5">
+                <template>
+                    <iframe>
+                        <hr bind:style="color : hasFocus ? 'green' : 'grey'">
+                    </iframe>
+                </template>
+            </code>
+            <hr class="line">
+            <h3>Javascript</h3>
             <div>
                 <div>
                     <code is="dom-code" lang="javascript">
                         <template>
                             <script>
-                                class Input extends HTMLElement {
+                                class MatInputContainer extends HTMLElement {
                                     get hasFocus() {
                                         let input = this.querySelector("input");
                                         let method = () => {

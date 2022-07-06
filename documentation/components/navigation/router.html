@@ -5,8 +5,16 @@
     <title>Title</title>
     <i18n>
         <translation>
-            <en>A Router implementation for a View that is displayed as a route.</en>
-            <de>Eine Router Implementation für eine View, die als Route angezeigt wird.</de>
+            <en>
+                A Router implementation for a View that is displayed as a route. Query Parameters are recognized and
+                available in the View as Property "queryParams". When the Router is nested the "level" Attribute has
+                to be set. Every router has its own hashtag with a string that points to the javascript file.
+            </en>
+            <de>
+                Eine Router-Implementierung für eine View, die als Route angezeigt wird. Abfrageparameter werden erkannt und
+                verfügbar in der View als Property "queryParams". Wenn der Router verschachtelt ist, so muss er das "level" Attribut
+                besitzen. Jeder Router hat seinen eigenen Hashtag mit einem String, der auf die Javascript-Datei verweist.
+            </de>
         </translation>
         <translation>
             <en>Element</en>
@@ -40,11 +48,13 @@
                 <hr class="line">
 
                 <p i18n>
-                    A Router implementation for a View that is displayed as a route.
+                    A Router implementation for a View that is displayed as a route. Query Parameters are recognized and
+                    available in the View as Property "queryParams". When the Router is nested the "level" Attribute has
+                    to be set. Every router has its own hashtag with a string that points to the javascript file.
                 </p>
 
                 <h3>DOM-API</h3>
-                <table style="width: 100%">
+                <table style="width: 100%; font-size: small">
                     <thead>
                     <tr>
                         <td><strong i18n>Element</strong></td>

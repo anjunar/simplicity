@@ -56,6 +56,10 @@
             <de>Die Items Data Source</de>
         </translation>
         <translation>
+            <en>True or false for multi selection</en>
+            <de>True oder False für Multi-selektion</de>
+        </translation>
+        <translation>
             <en>The rest of the HTML file is not displayed</en>
             <de>Der rest der HTML Datei wird nicht angezeigt</de>
         </translation>
@@ -79,7 +83,7 @@
             </p>
 
             <h3>DOM-API</h3>
-            <table style="width: 100%">
+            <table style="width: 100%; font-size: small">
                 <thead>
                 <tr>
                     <td><strong i18n>Element</strong></td>
@@ -97,6 +101,16 @@
                     <td>dom-select</td>
                     <td>items</td>
                     <td i18n>The items data source</td>
+                </tr>
+                <tr>
+                    <td>dom-select</td>
+                    <td>model</td>
+                    <td>Two way data binding</td>
+                </tr>
+                <tr>
+                    <td>dom-select</td>
+                    <td>multiselect</td>
+                    <td i18n>True or false for multi selection</td>
                 </tr>
                 </tbody>
             </table>
@@ -119,27 +133,6 @@
             </p>
 
             <h3>DOM-API</h3>
-            <table style="width: 100%">
-                <thead>
-                <tr>
-                    <td><strong i18n>Element</strong></td>
-                    <td><strong i18n>Attribute</strong></td>
-                    <td><strong i18n>Description</strong></td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>mat-input-container</td>
-                    <td>placeholder</td>
-                    <td i18n>The Placeholder text</td>
-                </tr>
-                <tr>
-                    <td>dom-select</td>
-                    <td>items</td>
-                    <td i18n>The items data source</td>
-                </tr>
-                </tbody>
-            </table>
 
             <div style="margin: 20px;">
                 <mat-input-container placeholder="Materials">
@@ -191,6 +184,13 @@
                                 import MatInputContainer from "../../../library/simplicity-material/components/form/container/mat-input-container.js";
 
                                 class LazySelect extends HTMLElement {
+
+                                    selected = {
+                                        position: 1,
+                                        name: "Hydrogen",
+                                        weight: 1.0079,
+                                        symbol: "H"
+                                    }
 
                                     materials(query, callback) {
                                         fetch("materials.json")
