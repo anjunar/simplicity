@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <i18n>
+        <translation>
+            <en>Reactivity</en>
+            <de>Reactivität</de>
+        </translation>
+    </i18n>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+        <div style="flex: 1; padding: 20px; min-width : 400px">
+            <h2 style="margin-left: 0;" i18n>Reactivity</h2>
+            <hr class="line">
+
+            <p>
+
+            </p>
+        </div>
+        <div style="flex: 1; padding: 20px; min-width : 400px">
+            <h2>Source Code</h2>
+            <hr class="line">
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                class Input extends HTMLElement {
+                                    get hasFocus() {
+                                        let input = this.querySelector("input");
+                                        let method = () => {
+                                            return document.activeElement === input;
+                                        }
+                                        let resonator = (callback, element) => {
+                                            input.addEventListener("focus", callback);
+                                            input.addEventListener("blur", callback);
+
+                                            element.addEventListener("removed", () => {
+                                                input.removeEventListener("focus", callback);
+                                                input.removeEventListener("blur", callback);
+                                            })
+                                        }
+                                        return {method, resonator}
+                                    }
+                                }
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

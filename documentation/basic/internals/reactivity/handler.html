@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <i18n>
+        <translation>
+            <en>Reactivity - Handler</en>
+            <de>Reactivität - Handler</de>
+        </translation>
+    </i18n>
+</head>
+<body>
+<template>
+    <div style="flex-wrap: wrap; display: flex">
+        <div style="flex: 1; padding: 20px; min-width : 400px">
+            <h2 style="margin-left: 0;" i18n>Reactivity - Handler</h2>
+            <hr class="line">
+
+            <p>
+
+            </p>
+        </div>
+        <div style="flex: 1; padding: 20px; min-width : 400px">
+            <h2>Source Code</h2>
+            <hr class="line">
+            <div>
+                <div>
+                    <code is="dom-code" lang="javascript">
+                        <template>
+                            <script>
+                                import {customComponents} from "../../../../library/simplicity-core/simplicity.js";
+
+                                class Test extends HTMLElement {
+
+                                    test = {
+                                        value : "Hello World",
+                                        test2 : {
+                                            value : "Foo Baa!"
+                                        }
+                                    }
+
+                                    initialize() {
+                                        this.test.addEventHandler("value", this, (value) => {
+                                            console.log(value)
+                                        })
+
+                                        this.test.test2.addEventHandler("value", this, (value) => {
+                                            console.log(value)
+                                        })
+
+                                        this.test.fire(); // Hello World
+                                    }
+
+                                }
+
+                                export default customComponents.define("app-test", Test);
+                            </script>
+                        </template>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

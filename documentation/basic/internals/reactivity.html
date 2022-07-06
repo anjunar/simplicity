@@ -102,34 +102,6 @@
                     </code>
                 </div>
             </div>
-            <div>
-                <div>
-                    <code is="dom-code" lang="javascript">
-                        <template>
-                            <script>
-                                class Input extends HTMLElement {
-                                    get hasFocus() {
-                                        let input = this.querySelector("input");
-                                        let method = () => {
-                                            return document.activeElement === input;
-                                        }
-                                        let resonator = (callback, element) => {
-                                            input.addEventListener("focus", callback);
-                                            input.addEventListener("blur", callback);
-
-                                            element.addEventListener("removed", () => {
-                                                input.removeEventListener("focus", callback);
-                                                input.removeEventListener("blur", callback);
-                                            })
-                                        }
-                                        return {method, resonator}
-                                    }
-                                }
-                            </script>
-                        </template>
-                    </code>
-                </div>
-            </div>
         </div>
     </div>
 </template>

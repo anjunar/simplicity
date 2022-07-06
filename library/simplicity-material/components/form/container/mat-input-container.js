@@ -45,13 +45,7 @@ class MatInputContainer extends HTMLElement {
             }
         };
 
-        let focusListener = () => {
-            this.hasFocus = document.activeElement === input;
-        };
-
         input.addEventListener("input", inputListener);
-        input.addEventListener("focus", focusListener);
-        input.addEventListener("blur", focusListener);
 
         if (input.formular) {
             input.formular.addEventHandler("errors", this, () => {

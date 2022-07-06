@@ -171,7 +171,7 @@ export function membraneFactory(instance, parent = []) {
             let path = parent.map(object => object.property).join(".");
             let proxy = new Proxy(instance, {
                 apply(target, thisArg, argArray) {
-                    if (thisArg instanceof DocumentFragment) {
+                    if (thisArg instanceof DocumentFragment || thisArg instanceof Promise) {
                         return Reflect.apply(target, thisArg.resolve, argArray);
                     }
                     let result = Reflect.apply(target, thisArg, argArray);
@@ -184,10 +184,10 @@ export function membraneFactory(instance, parent = []) {
                             }
                         }
                     }
-                    return result;
+                    return membraneFactory(result, [...parent, {proxy : target, property : "()"}]);;
                 },
                 has(target, p) {
-                    if (p === "isProxy" || p === "resolve" || p === "scope") {
+                    if (p === "isProxy" || p === "resolve") {
                         return true;
                     }
                     return Reflect.has(target, p);
