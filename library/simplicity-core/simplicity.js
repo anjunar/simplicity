@@ -38,7 +38,7 @@ export const customComponents = new class CustomComponents {
             template = codeGenerator(templateHMTL.content.children);
 
             if (Reflect.has(clazz, "components")) {
-                checker(clazz.components, template.content, name)
+                checker(clazz.components, templateHMTL.content, name)
             }
 
             let css = html.querySelector("style");
