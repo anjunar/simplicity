@@ -1,20 +1,21 @@
 import {customViews} from "../../../library/simplicity-core/simplicity.js";
-import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
 import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
+import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
 
-class Internals extends HTMLElement {
+class Architecture extends HTMLElement {
 
     static get components() {
         return [DomCode]
     }
 
     static get template() {
-        return loader("documentation/basic/internals/index.html")
+        return loader("documentation/basic/architecture/index.html");
     }
 
 }
 
 export default customViews.define({
-    name : "internals-index",
-    class : Internals
+    name : "basic-architecture-index",
+    class : Architecture
 })
+
