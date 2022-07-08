@@ -3,9 +3,6 @@ import {codeGenerator, compiler} from "./processors/html-compiler-processor.js";
 import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
 import {generateDomProxy, isEqual} from "./services/tools.js";
-import * as plugins from "./plugins/index.js"
-
-console.log(`plugins loaded: ${Object.values(plugins).map(plugin => plugin.name)}`)
 
 Node.prototype.queryUpwards = function (callback) {
     if (callback(this)) {
@@ -25,14 +22,13 @@ export const customComponents = new class CustomComponents {
 
     define(name, clazz, options) {
 
-        console.log(`component loaded: ${name}`)
-
         let fragments = new WeakMap();
         let template;
         let i18nMessages = {};
+        let html;
 
         if (Reflect.has(clazz, "template")) {
-            let html = domParser.parseFromString(clazz.template, "text/html");
+            html = domParser.parseFromString(clazz.template, "text/html");
 
             let templateHMTL = html.querySelector("template");
             template = codeGenerator(templateHMTL.content.children);
@@ -43,9 +39,11 @@ export const customComponents = new class CustomComponents {
                 }
             }
 
-            let css = html.querySelector("style");
-            if (css) {
-                document.head.appendChild(css);
+            if (! appManager.shadowDom) {
+                let css = html.querySelector("style");
+                if (css) {
+                    document.head.appendChild(css);
+                }
             }
 
             let i18nElement = html.querySelector("i18n");
@@ -116,7 +114,20 @@ export const customComponents = new class CustomComponents {
 
                         fragments.set(this, fragment);
 
-                        this.appendChild(fragment);
+                        if (appManager.shadowDom) {
+                            let shadowRoot = this.attachShadow({mode : "open"});
+                            shadowRoot.appendChild(fragment);
+
+                            if (Reflect.has(clazz, "template")) {
+                                let css = html.querySelector("style");
+                                if (css) {
+                                    css.innerHTML = css.innerHTML.replaceAll(name, ":host")
+                                    shadowRoot.appendChild(css);
+                                }
+                            }
+                        } else {
+                            this.appendChild(fragment);
+                        }
 
                         fragment.update();
                     }

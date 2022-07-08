@@ -1,6 +1,7 @@
 let language = "en";
 let mode = "production"
 let library = "library"
+let shadowDom = false;
 
 export const appManager = new class AppManager {
 
@@ -33,6 +34,13 @@ export const appManager = new class AppManager {
     }
     set library(value) {
         library = value;
+    }
+
+    get shadowDom() {
+        return shadowDom;
+    }
+    set shadowDom(value) {
+        shadowDom = value;
     }
 
 };
