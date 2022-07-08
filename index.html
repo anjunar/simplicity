@@ -21,14 +21,9 @@
         gtag('config', 'G-CVD1HXBNE3');
         window.addEventListener("hashchange", (event) => {
             let indexOf = event.newURL.indexOf("#");
-            let url = event.newURL.substr(indexOf)
-            dataLayer.push({
-                event: 'page_view',
-                page: {
-                    path: url,
-                    title: document.title
-                }
-            });
+            let url = event.newURL.substr(indexOf);
+            gtag('set', 'page_path', url);
+            gtag('event', 'page_view');
         })
     </script>
 </head>
