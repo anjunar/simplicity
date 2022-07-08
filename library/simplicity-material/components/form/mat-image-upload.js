@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import DomInput from "../../../simplicity-core/directives/dom-input.js";
 import DomForm from "../../../simplicity-core/directives/dom-form.js";
 import {Input, mix} from "../../../simplicity-core/services/tools.js";
@@ -68,7 +68,7 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/form/mat-image-upload.html")
+        return libraryLoader("simplicity-material/components/form/mat-image-upload.html")
     }
 
 }

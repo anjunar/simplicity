@@ -1,5 +1,5 @@
 import {evaluation} from "./js-compiler-processor.js";
-import {appManager} from "../../simplicity-material/manager/app-manager.js";
+import {appManager} from "../manager/app-manager.js";
 import {isEqual} from "../services/tools.js";
 import {activeObjectExpression} from "./html-compiler-processor.js";
 

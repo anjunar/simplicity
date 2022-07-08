@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import ToolbarColors from "./toolbar/toolbar-colors.js";
 import ToolbarFont from "./toolbar/toolbar-font.js";
 import ToolbarInserts from "./toolbar/toolbar-inserts.js";
@@ -31,7 +31,7 @@ class EditorToolbar extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/form/mat-editor/editor-toolbar.html")
+        return libraryLoader("simplicity-material/components/form/mat-editor/editor-toolbar.html")
     }
 
 }

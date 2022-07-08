@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../../simplicity-core/processors/loader-processor.js";
 import {windowManager} from "../../../../manager/window-manager.js";
 
 class ToolbarInserts extends HTMLElement {
@@ -192,7 +192,7 @@ class ToolbarInserts extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/form/mat-editor/toolbar/toolbar-inserts.html")
+        return libraryLoader("simplicity-material/components/form/mat-editor/toolbar/toolbar-inserts.html")
     }
 
 }

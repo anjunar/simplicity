@@ -1,5 +1,5 @@
 import {customViews} from "../../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../../simplicity-core/processors/loader-processor.js";
 import DomInput from "../../../../../simplicity-core/directives/dom-input.js";
 import MatInputContainer from "../../container/mat-input-container.js";
 
@@ -12,7 +12,7 @@ class LinkDialog extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/form/mat-editor/dialog/link-dialog.html")
+        return libraryLoader("simplicity-material/components/form/mat-editor/dialog/link-dialog.html")
     }
 
 }

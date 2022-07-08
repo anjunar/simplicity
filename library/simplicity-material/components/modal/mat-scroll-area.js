@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import MatScrollbarHorizontal from "../navigation/scrollbar/mat-scrollbar-horizontal.js";
 import MatScrollbarVertical from "../navigation/scrollbar/mat-scrollbar-vertical.js";
 
@@ -102,7 +102,7 @@ class MatScrollArea extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/modal/mat-scroll-area.html")
+        return libraryLoader("simplicity-material/components/modal/mat-scroll-area.html")
     }
 
 }

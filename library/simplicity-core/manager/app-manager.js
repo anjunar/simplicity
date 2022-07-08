@@ -1,4 +1,6 @@
 let language = "en";
+let mode = "production"
+let library = "library"
 
 export const appManager = new class AppManager {
 
@@ -17,6 +19,20 @@ export const appManager = new class AppManager {
     set language(value) {
         language = value;
         window.dispatchEvent(new CustomEvent("language", {detail : language}))
+    }
+
+    get mode() {
+        return mode;
+    }
+    set mode(value) {
+        mode = value;
+    }
+
+    get library() {
+        return library
+    }
+    set library(value) {
+        library = value;
     }
 
 };

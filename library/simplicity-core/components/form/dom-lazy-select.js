@@ -1,5 +1,5 @@
 import {customComponents} from "../../simplicity.js";
-import {loader} from "../../processors/loader-processor.js";
+import {libraryLoader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
 import {debounce, Input, isEqual, mix} from "../../services/tools.js";
@@ -339,7 +339,7 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     }
 
     static get template() {
-        return loader("library/simplicity-core/components/form/dom-lazy-select.html")
+        return libraryLoader("simplicity-core/components/form/dom-lazy-select.html")
     }
 
 }

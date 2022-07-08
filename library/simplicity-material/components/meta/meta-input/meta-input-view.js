@@ -1,8 +1,8 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import DomForm from "../../../../simplicity-core/directives/dom-form.js";
 import {dateFormat, dateTimeFormat} from "../../../../simplicity-core/services/tools.js";
-import {appManager} from "../../../manager/app-manager.js";
+import {appManager} from "../../../../simplicity-core/manager/app-manager.js";
 
 class MetaInputView extends HTMLElement {
 
@@ -79,7 +79,7 @@ class MetaInputView extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-input/meta-input-view.html")
+        return libraryLoader("simplicity-material/components/meta/meta-input/meta-input-view.html")
     }
 
 }

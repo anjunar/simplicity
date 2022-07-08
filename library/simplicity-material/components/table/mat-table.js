@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import {windowManager} from "../../manager/window-manager.js";
 import {contentManager} from "../../../simplicity-core/manager/content-manager.js";
 import DomForm from "../../../simplicity-core/directives/dom-form.js";
@@ -274,7 +274,7 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/table/mat-table.html")
+        return libraryLoader("simplicity-material/components/table/mat-table.html")
     }
 
 

@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import MetaFilterCheckbox from "./meta-table-filter/meta-filter-checkbox.js";
 import MetaFilterLazySelect from "./meta-table-filter/meta-filter-lazy-select.js";
 import MetaFilterDatetime from "./meta-table-filter/meta-filter-datetime.js";
@@ -67,7 +67,7 @@ class MetaTableFilter extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-table-filter.html")
+        return libraryLoader("simplicity-material/components/meta/meta-table-filter.html")
     }
 
 

@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 
 class MatPages extends HTMLElement {
 
@@ -27,7 +27,7 @@ class MatPages extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/navigation/mat-pages.html");
+        return libraryLoader("simplicity-material/components/navigation/mat-pages.html");
     }
 }
 

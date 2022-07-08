@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import DomLazyMultiSelect from "../../../../simplicity-core/components/form/dom-lazy-multi-select.js";
 
 class MetaColumnLazyMultiSelect extends HTMLElement {
@@ -61,7 +61,7 @@ class MetaColumnLazyMultiSelect extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-column/meta-column-lazy-multi-select.html")
+        return libraryLoader("simplicity-material/components/meta/meta-column/meta-column-lazy-multi-select.html")
     }
 
 }

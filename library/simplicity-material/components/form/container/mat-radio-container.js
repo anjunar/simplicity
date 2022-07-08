@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 
 class MatRadioContainer extends HTMLElement {
 
@@ -21,7 +21,7 @@ class MatRadioContainer extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/form/container/mat-radio-container.html")
+        return libraryLoader("simplicity-material/components/form/container/mat-radio-container.html")
     }
 
 }

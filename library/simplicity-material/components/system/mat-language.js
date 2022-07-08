@@ -1,7 +1,7 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import DomSelect from "../../../simplicity-core/directives/dom-select.js";
-import {appManager} from "../../manager/app-manager.js";
+import {appManager} from "../../../simplicity-core/manager/app-manager.js";
 
 class MatLanguage extends HTMLElement {
 
@@ -18,7 +18,7 @@ class MatLanguage extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/system/mat-language.html")
+        return libraryLoader("simplicity-material/components/system/mat-language.html")
     }
 
 }

@@ -1,5 +1,5 @@
 import {customViews} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import MatTabs from "../navigation/mat-tabs.js";
 import MatTab from "../navigation/mat-tab.js";
 import MatPages from "../navigation/mat-pages.js";
@@ -31,7 +31,7 @@ class MatTableConfiguration extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/table/mat-table-configuration.html")
+        return libraryLoader("simplicity-material/components/table/mat-table-configuration.html")
     }
 }
 

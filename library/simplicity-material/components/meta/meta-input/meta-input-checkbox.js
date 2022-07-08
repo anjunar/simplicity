@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import MatCheckboxContainer from "../../form/container/mat-checkbox-container.js";
 import DomInput from "../../../../simplicity-core/directives/dom-input.js";
 
@@ -43,7 +43,7 @@ class MetaInputCheckbox extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-input/meta-input-checkbox.html")
+        return libraryLoader("simplicity-material/components/meta/meta-input/meta-input-checkbox.html")
     }
 
 }

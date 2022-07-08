@@ -1,6 +1,6 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
-import {appManager} from "../../manager/app-manager.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
+import {appManager} from "../../../simplicity-core/manager/app-manager.js";
 
 class MatPerformance extends HTMLElement {
 
@@ -27,7 +27,7 @@ class MatPerformance extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/system/mat-performance.html")
+        return libraryLoader("simplicity-material/components/system/mat-performance.html")
     }
 
 }

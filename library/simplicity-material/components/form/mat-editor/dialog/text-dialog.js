@@ -1,5 +1,5 @@
 import {customViews} from "../../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../../simplicity-core/processors/loader-processor.js";
 import DomTextarea from "../../../../../simplicity-core/directives/dom-textarea.js";
 
 class TextDialog extends HTMLElement {
@@ -11,7 +11,7 @@ class TextDialog extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/form/mat-editor/dialog/text-dialog.html")
+        return libraryLoader("simplicity-material/components/form/mat-editor/dialog/text-dialog.html")
     }
 
 }

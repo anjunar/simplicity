@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 
 class MatContextMenu extends HTMLElement {
 
@@ -25,7 +25,7 @@ class MatContextMenu extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/modal/mat-context-menu.html")
+        return libraryLoader("simplicity-material/components/modal/mat-context-menu.html")
     }
 
 }

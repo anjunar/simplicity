@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../../simplicity-core/processors/loader-processor.js";
 import DomSelect from "../../../../../simplicity-core/directives/dom-select.js";
 
 class ToolbarColors extends HTMLElement {
@@ -89,7 +89,7 @@ class ToolbarColors extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/form/mat-editor/toolbar/toolbar-colors.html")
+        return libraryLoader("simplicity-material/components/form/mat-editor/toolbar/toolbar-colors.html")
     }
 
 

@@ -1,7 +1,7 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import {dateFormat, dateTimeFormat} from "../../../simplicity-core/services/tools.js";
-import {appManager} from "../../manager/app-manager.js";
+import {appManager} from "../../../simplicity-core/manager/app-manager.js";
 
 class MetaColumn extends HTMLElement {
 
@@ -63,7 +63,7 @@ class MetaColumn extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-column.html")
+        return libraryLoader("simplicity-material/components/meta/meta-column.html")
     }
 
 

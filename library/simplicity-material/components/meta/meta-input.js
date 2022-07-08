@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 
 class MetaInput extends HTMLElement {
 
@@ -72,7 +72,7 @@ class MetaInput extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-input.html")
+        return libraryLoader("simplicity-material/components/meta/meta-input.html")
     }
 
 

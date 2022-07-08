@@ -7,7 +7,11 @@
     <script type="module">
         import {bootstrap} from "./library/simplicity-material/bootstrap.js";
 
-        bootstrap("documentation/app.js")
+        bootstrap({
+            app: "documentation/app.js",
+            mode : "development",
+            library : "library"
+        })
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CVD1HXBNE3"></script>
     <script>

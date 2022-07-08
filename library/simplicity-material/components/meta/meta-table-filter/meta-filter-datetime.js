@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import MatInputContainer from "../../form/container/mat-input-container.js";
 import DomInput from "../../../../simplicity-core/directives/dom-input.js";
 
@@ -51,7 +51,7 @@ class MetaFilterDatetime extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-table-filter/meta-filter-datetime.html")
+        return libraryLoader("simplicity-material/components/meta/meta-table-filter/meta-filter-datetime.html")
     }
 
 }

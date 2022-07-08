@@ -1,6 +1,6 @@
 import {register} from "./manager/view-manager.js";
 import {codeGenerator, compiler} from "./processors/html-compiler-processor.js";
-import {appManager} from "../simplicity-material/manager/app-manager.js";
+import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
 import {generateDomProxy, isEqual} from "./services/tools.js";
 import * as plugins from "./plugins/index.js"
@@ -37,8 +37,10 @@ export const customComponents = new class CustomComponents {
             let templateHMTL = html.querySelector("template");
             template = codeGenerator(templateHMTL.content.children);
 
-            if (Reflect.has(clazz, "components")) {
-                checker(clazz.components, templateHMTL.content, name)
+            if (appManager.mode === "development") {
+                if (Reflect.has(clazz, "components")) {
+                    checker(clazz.components, templateHMTL.content, name)
+                }
             }
 
             let css = html.querySelector("style");

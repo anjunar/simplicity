@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import MatImageUpload from "../../form/mat-image-upload.js";
 import DomInput from "../../../../simplicity-core/directives/dom-input.js";
 
@@ -38,7 +38,7 @@ class MetaColumnInput extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-column/meta-column-input.html")
+        return libraryLoader("simplicity-material/components/meta/meta-column/meta-column-input.html")
     }
 
 }

@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import {contentManager} from "../../../simplicity-core/manager/content-manager.js";
 
 class MatTabs extends HTMLElement {
@@ -75,7 +75,7 @@ class MatTabs extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/navigation/mat-tabs.html")
+        return libraryLoader("simplicity-material/components/navigation/mat-tabs.html")
     }
 }
 

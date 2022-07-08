@@ -1,5 +1,5 @@
 import {debounce} from "../services/tools.js";
-import {appManager} from "../../simplicity-material/manager/app-manager.js";
+import {appManager} from "../manager/app-manager.js";
 
 let lifeCycles = 0;
 let avgLatency = 0;

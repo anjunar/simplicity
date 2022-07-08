@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../../../simplicity-core/processors/loader-processor.js";
 import DomSelect from "../../../../../../simplicity-core/directives/dom-select.js";
 
 class FlexBoxNode extends HTMLElement {
@@ -79,7 +79,7 @@ class FlexBoxNode extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/form/mat-editor/dialog/extended-dialog/flex-box-node.html")
+        return libraryLoader("simplicity-material/components/form/mat-editor/dialog/extended-dialog/flex-box-node.html")
     }
 
 }

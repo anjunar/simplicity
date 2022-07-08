@@ -1,5 +1,5 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {loader} from "../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import MatScrollArea from "./mat-scroll-area.js";
 import {windowManager} from "../../manager/window-manager.js";
 
@@ -375,7 +375,7 @@ class MatWindow extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/modal/mat-window.html")
+        return libraryLoader("simplicity-material/components/modal/mat-window.html")
     }
 
 }

@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 
 class MatScrollbarHorizontal extends HTMLElement {
 
@@ -63,7 +63,7 @@ class MatScrollbarHorizontal extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/navigation/scrollbar/mat-scrollbar-horizontal.html")
+        return libraryLoader("simplicity-material/components/navigation/scrollbar/mat-scrollbar-horizontal.html")
     }
 
 

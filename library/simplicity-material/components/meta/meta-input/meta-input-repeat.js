@@ -1,5 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
-import {loader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import DomForm from "../../../../simplicity-core/directives/dom-form.js";
 import MetaForm from "../meta-form.js";
 
@@ -61,7 +61,7 @@ class MetaInputRepeat extends HTMLElement {
     }
 
     static get template() {
-        return loader("library/simplicity-material/components/meta/meta-input/meta-input-repeat.html")
+        return libraryLoader("simplicity-material/components/meta/meta-input/meta-input-repeat.html")
     }
 
 }
