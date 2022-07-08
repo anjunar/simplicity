@@ -6,7 +6,7 @@ class Example extends HTMLElement {
     material;
 
     static get template() {
-        return loader("documentation/basic/architecture/custom-view/example.html");
+        return loader("documentation/basic/architecture/view/example.html");
     }
 
 }

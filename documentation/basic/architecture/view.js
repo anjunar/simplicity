@@ -7,7 +7,7 @@ import MatPage from "../../../library/simplicity-material/components/navigation/
 import MatTabs from "../../../library/simplicity-material/components/navigation/mat-tabs.js";
 import MatTab from "../../../library/simplicity-material/components/navigation/mat-tab.js";
 
-class CustomView extends HTMLElement {
+class View extends HTMLElement {
 
     page = 0;
 
@@ -16,12 +16,12 @@ class CustomView extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/architecture/custom-view.html");
+        return loader("documentation/basic/architecture/view.html");
     }
 
 }
 
 export default customViews.define({
     name: "architecture-custom-view",
-    class: CustomView
+    class: View
 })
