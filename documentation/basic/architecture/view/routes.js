@@ -1,5 +1,5 @@
 export const routes = {
     "example" : {
-        file : "document/basic/architecture/view/example.js"
+        file : "documentation/basic/architecture/view/example.js"
     }
 }

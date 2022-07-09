@@ -3,7 +3,6 @@ import {loader} from "../../../library/simplicity-core/processors/loader-process
 import MatInputContainer from "../../../library/simplicity-material/components/form/container/mat-input-container.js"
 import DomInput from "../../../library/simplicity-core/directives/dom-input.js";
 import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
-import DomForm from "../../../library/simplicity-core/directives/dom-form.js";
 
 class Input extends HTMLElement {
 
@@ -28,7 +27,7 @@ class Input extends HTMLElement {
     }
 
     static get components() {
-        return [DomCode, DomInput, DomForm, MatInputContainer]
+        return [DomCode, DomInput, MatInputContainer]
     }
 
     static get template() {
