@@ -1,43 +1,20 @@
 const registry = new Map();
 
 export const viewManager = new class ViewManager {
-    load(url, level = 0, reload = true) {
+    load(url, queryParams) {
         let executor = (resolve, reject) => {
-            let hash = url
-            if (hash) {
-                let indexOf = hash.indexOf("?");
-                let hashes, path;
-                if (indexOf === -1) {
-                    hashes = [hash]
-                    path = hash;
-                } else {
-                    hashes = [hash.substring(0, indexOf), hash.substring(indexOf + 1)];
-                    path = hashes[0];
-                }
-
-                let result = {};
-                if (hashes[1]) {
-                    let rawQueryParams = hashes[1].split("&");
-                    for (const rawQueryParam of rawQueryParams) {
-                        let queryParamRegex = /(\w+)=([\w\d\-/?=%]*)/g;
-                        let queryParameterRegexResult = queryParamRegex.exec(rawQueryParam);
-                        result[queryParameterRegexResult[1]] = queryParameterRegexResult[2]
-                    }
-                }
-
-                let newPath = "../../../" + path;
-                import(newPath)
-                    .then((module) => {
-                        let view;
-                        view = new module.default();
-                        this.loadGuards(view, result).then(() => {
-                            resolve(view);
-                        })
+            let newPath = "../../../" + url;
+            import(newPath)
+                .then((module) => {
+                    let view;
+                    view = new module.default();
+                    this.loadGuards(view, queryParams).then(() => {
+                        resolve(view);
                     })
-                    .catch((result) => {
-                        console.log(result)
-                    })
-            }
+                })
+                .catch((result) => {
+                    console.log(result)
+                })
         }
 
         return new Promise(executor);

@@ -13,7 +13,10 @@ class DomRouter extends HTMLElement {
         let urlSegments = window.location.hash.split("/").slice(1);
 
         let files = [];
+        let path = [];
         let cursor = routes;
+        let result = {};
+
         for (const urlSegment of urlSegments) {
             cursor = cursor.children[urlSegment.split("?")[0]];
             if (cursor.file) {
@@ -22,12 +25,32 @@ class DomRouter extends HTMLElement {
                 } else {
                     files.push(cursor.file)
                 }
+
+                let indexOf = urlSegment.indexOf("?");
+                let hashes, path;
+                if (indexOf === -1) {
+                    hashes = [urlSegment]
+                    path = urlSegment;
+                } else {
+                    hashes = [urlSegment.substring(0, indexOf), urlSegment.substring(indexOf + 1)];
+                    path = hashes[0];
+                }
+
+                if (hashes[1]) {
+                    let rawQueryParams = hashes[1].split("&");
+                    for (const rawQueryParam of rawQueryParams) {
+                        let queryParamRegex = /(\w+)=([\w\d\-/?=%]*)/g;
+                        let queryParameterRegexResult = queryParamRegex.exec(rawQueryParam);
+                        result[queryParameterRegexResult[1]] = queryParameterRegexResult[2]
+                    }
+                }
+
             }
         }
 
         let file = files[this.level]
 
-        viewManager.load(file, this.level, false)
+        viewManager.load(file, result)
             .then((view) => {
                 for (const child of Array.from(this.children)) {
                     child.remove();
