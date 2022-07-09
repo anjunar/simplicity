@@ -2,6 +2,7 @@ let language = "en";
 let mode = "production"
 let library = "library"
 let shadowDom = false;
+let preFetch = false
 
 export const appManager = new class AppManager {
 
@@ -41,6 +42,13 @@ export const appManager = new class AppManager {
     }
     set shadowDom(value) {
         shadowDom = value;
+    }
+
+    get preFetch() {
+        return preFetch;
+    }
+    set preFetch(value) {
+        preFetch = value;
     }
 
 };
