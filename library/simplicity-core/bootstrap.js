@@ -3,7 +3,7 @@ import * as plugins from "./plugins/index.js"
 
 function traverse(routes) {
     if (routes.children) {
-        for (const [name, route] of Object.entries(routes.children)) {
+        for (const route of Object.values(routes.children)) {
             if (route.file) {
                 import("../../" + route.file)
             }
@@ -23,7 +23,7 @@ export function mountApp(appPath) {
             window.setTimeout(() => {
                 let routes = module.default.routes
                 traverse(routes);
-            }, 1000)
+            }, 3000)
         })
 
 }
