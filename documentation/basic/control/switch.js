@@ -11,7 +11,7 @@ class Switch extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/control-structure/switch.html")
+        return loader("documentation/basic/control/switch.html")
     }
 
 }

@@ -5,7 +5,9 @@ export function mountApp(appPath) {
 
     import("../../" + appPath)
         .then((module) => {
-            document.body.appendChild(new module.default())
+            let app = new module.default();
+            app.id = "app"
+            document.body.appendChild(app)
         })
 
 }

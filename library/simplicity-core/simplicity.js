@@ -101,7 +101,7 @@ export const customComponents = new class CustomComponents {
             }
 
             connectedCallback() {
-                if (! this.initialized && this.isConnected) {
+                if (! this.initialized) {
                     this.initialized = true;
                     if (template) {
                         let activeContentTemplate = (implicit) => contentManager.instance(this, implicit)

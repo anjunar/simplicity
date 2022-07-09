@@ -1,18 +1,9 @@
 const registry = new Map();
 
-let lastRouteRegistry = new Map();
-let lastQueryParamsRegistry = new Map();
-
 export const viewManager = new class ViewManager {
     load(url, level = 0, reload = true) {
         let executor = (resolve, reject) => {
-            let segments = url.split("#");
-
-            if (segments.length === 1) {
-                return;
-            }
-
-            let hash = segments[level + 1];
+            let hash = url
             if (hash) {
                 let indexOf = hash.indexOf("?");
                 let hashes, path;
@@ -34,35 +25,18 @@ export const viewManager = new class ViewManager {
                     }
                 }
 
-                let lastRoute, lastQueryParams;
-                if (! reload) {
-                    lastRoute = lastRouteRegistry.get(level);
-                    lastQueryParams = lastQueryParamsRegistry.get(level);
-                }
-
-                let currentQueryParamsString = JSON.stringify(result);
-                let lastQueryParamsString = JSON.stringify(lastQueryParams);
-
-                if (lastRoute && path === lastRoute.path && lastRoute.view && currentQueryParamsString === lastQueryParamsString) {
-                    resolve(lastRoute.view);
-                } else {
-                    let newPath = "../../.." + path + ".js";
-                    lastRouteRegistry.set(level, { path : path })
-                    lastQueryParamsRegistry.set(level, result);
-                    import(newPath)
-                        .then((module) => {
-                            let view;
-                            view = new module.default();
-                            this.loadGuards(view, result).then(() => {
-                                let lastRoute = lastRouteRegistry.get(level)
-                                lastRoute.view = view;
-                                resolve(view);
-                            })
+                let newPath = "../../../" + path;
+                import(newPath)
+                    .then((module) => {
+                        let view;
+                        view = new module.default();
+                        this.loadGuards(view, result).then(() => {
+                            resolve(view);
                         })
-                        .catch((result) => {
-                            console.log(result)
-                        })
-                }
+                    })
+                    .catch((result) => {
+                        console.log(result)
+                    })
             }
         }
 

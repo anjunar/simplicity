@@ -18,7 +18,7 @@ class CommonImplicit extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/control-structure/slot.html")
+        return loader("documentation/basic/control/slot.html")
     }
 
 }

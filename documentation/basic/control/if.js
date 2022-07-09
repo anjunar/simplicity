@@ -12,7 +12,7 @@ class If extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/control-structure/if.html")
+        return loader("documentation/basic/control/if.html")
     }
 
 }

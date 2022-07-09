@@ -12,7 +12,7 @@ class CommonBindings extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/control-structure/bindings.html")
+        return loader("documentation/basic/control/bindings.html")
     }
 
 }

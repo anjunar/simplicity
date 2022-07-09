@@ -9,7 +9,7 @@ class Compiler extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/expert/compiler/index.html")
+        return loader("documentation/expert/compiler/functionality.html")
     }
 
 }

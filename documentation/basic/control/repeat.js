@@ -13,7 +13,7 @@ class Repeat extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/control-structure/repeat.html")
+        return loader("documentation/basic/control/repeat.html")
     }
 
 }

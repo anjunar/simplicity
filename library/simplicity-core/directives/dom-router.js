@@ -8,34 +8,41 @@ class DomRouter extends HTMLElement {
     handler = (event) => {
         this.dispatchEvent(new CustomEvent("load"))
 
-        let runViewManager = (url) => {
-            viewManager.load(url, this.level, false)
-                .then((view) => {
-                    for (const child of Array.from(this.children)) {
-                        child.remove();
-                    }
-                    this.appendChild(view);
-                    let nextLevelRouter = this.querySelector("dom-router");
-                    if (nextLevelRouter) {
-                        nextLevelRouter.addEventListener("loadend", () => {
-                            this.dispatchEvent(new CustomEvent("loadend"))
-                        })
-                    } else {
-                        this.dispatchEvent(new CustomEvent("loadend"))
-                    }
-                })
-        }
+        let appElement = document.querySelector("#app");
+        let routes = appElement.constructor.routes;
+        let urlSegments = window.location.hash.split("/").slice(1);
 
-        if (event) {
-            let oldUrlSegments = event.oldURL.split("#");
-            let newUrlSegments = event.newURL.split("#");
-
-            if (oldUrlSegments[this.level + 1] !== newUrlSegments[this.level + 1]) {
-                runViewManager(event.newURL);
+        let files = [];
+        let cursor = routes;
+        for (const urlSegment of urlSegments) {
+            cursor = cursor.children[urlSegment.split("?")[0]];
+            if (cursor.file) {
+                if (cursor.override) {
+                    files[files.length - 1] = cursor.file
+                } else {
+                    files.push(cursor.file)
+                }
             }
-        } else {
-            runViewManager(window.location.hash);
         }
+
+        let file = files[this.level]
+
+        viewManager.load(file, this.level, false)
+            .then((view) => {
+                for (const child of Array.from(this.children)) {
+                    child.remove();
+                }
+                this.appendChild(view);
+                let nextLevelRouter = this.querySelector("dom-router");
+                if (nextLevelRouter) {
+                    nextLevelRouter.addEventListener("loadend", () => {
+                        this.dispatchEvent(new CustomEvent("loadend"))
+                    })
+                } else {
+                    this.dispatchEvent(new CustomEvent("loadend"))
+                }
+            })
+
     }
 
     destroy() {

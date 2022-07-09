@@ -12,7 +12,7 @@ class View extends HTMLElement {
     page = 0;
 
     static get components() {
-        return [DomCode, DomInput, MatPages, MatPage, MatTabs, MatTab]
+        return [DomCode, MatPages, MatPage, MatTabs, MatTab]
     }
 
     static get template() {

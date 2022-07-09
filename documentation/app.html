@@ -57,11 +57,11 @@
     <mat-toolbar style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <div slot="left">
             <div style="display: flex">
-                <a href="#/documentation/basic/index#/documentation/basic/started"
+                <a href="#/basic/started"
                    bind:class="active('basic') ? 'normal active' : 'normal'" i18n>Basic</a>
-                <a href="#/documentation/components/index#/documentation/components/form/checkbox"
+                <a href="#/components/form/checkbox"
                    bind:class="active('components') ? 'normal active' : 'normal'" i18n>Components</a>
-                <a href="#/documentation/expert/index#/documentation/expert/meta/index"
+                <a href="#/expert/meta/overview"
                    bind:class="active('expert') ? 'normal active' : 'normal'" i18n>Expert</a>
             </div>
         </div>
@@ -92,7 +92,6 @@
         </div>
         <div slot="right" style="position: relative">
             <mat-language></mat-language>
-<!--            <mat-performance style="position: absolute; bottom: 44px; right: 20px"></mat-performance>-->
         </div>
     </mat-footer>
 </template>

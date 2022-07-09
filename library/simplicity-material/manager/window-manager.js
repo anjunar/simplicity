@@ -14,7 +14,7 @@ export const windowManager = new class WindowManager {
 
     openWindow(url, options) {
         let executor = (resolve, reject) => {
-            viewManager.load("#" + url).then((view) => {
+            viewManager.load(url).then((view) => {
                 view.setAttribute("slot", "content");
                 let configuration = get(view.localName);
 

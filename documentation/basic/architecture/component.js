@@ -14,7 +14,7 @@ class Component extends HTMLElement {
     text = "Hello World!"
 
     static get components() {
-        return [DomCode, DomInput, MatPages, MatPage, MatTabs, MatTab]
+        return [DomCode, MatPages, MatPage, MatTabs, MatTab]
     }
 
     static get template() {

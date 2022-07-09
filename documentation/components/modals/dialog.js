@@ -13,7 +13,7 @@ class Dialog extends HTMLElement {
     page = 0;
 
     open() {
-        windowManager.openWindow("/documentation/components/modals/dialog/example")
+        windowManager.openWindow("documentation/components/modals/dialog/example.js")
     }
 
     static get components() {

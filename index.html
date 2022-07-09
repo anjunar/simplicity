@@ -17,7 +17,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CVD1HXBNE3"></script>
     <script>
         if (window.location.hash === "") {
-            window.location.hash = "#/documentation/basic/index#/documentation/basic/started"
+            window.location.hash = "#/basic/started"
         }
 
         window.dataLayer = window.dataLayer || [];
@@ -26,7 +26,7 @@
         gtag('config', 'G-CVD1HXBNE3');
         window.addEventListener("hashchange", function (event) {
             gtag('event', 'page_view', {
-                'page_path': window.location.hash
+                'page_path': window.location.hash.substring(1)
             });
         });
     </script>
