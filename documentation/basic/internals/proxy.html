@@ -6,14 +6,18 @@
     <i18n>
         <translation>
             <en>
-                The Proxy object enables you to create a proxy for another object, which can intercept and redefine
-                fundamental operations for that object. A Proxy is not transparent, that means that it is a new Identity
-                when created.
+                If a new proxy is created for an object, then it should not be a node. A Node cannot be added to the
+                dom as a proxy because proxies are not transparent. It should only one Proxy be created for a normal
+                object that is not a node. A proxy provides new functionality for an object, so that existing
+                properties or functions are intercepted. The interception of Properties and functions are provided
+                by so-called traps.
             </en>
             <de>
-                Mit dem Proxy-Objekt können Sie einen Proxy für ein anderes Objekt erstellen, das abfangen und neu definieren von
-                Properties und Funktionen kann grundlegende Operationen für dieses Objekt bereitstellen.
-                Ein Proxy ist nicht transparent, das heißt, es handelt sich um eine neue Identität, wenn der Proxy erstellt wird.
+                Wird ein neuer Proxy für ein Objekt erstellt, dann sollte es sich nicht um eine Node handeln, denn eine
+                Node lässt sich nicht als Proxy in den Dom einfügen, da Proxies nicht transparent sind. Es sollte nur ein
+                Proxy für ein normales Objekt erstellt werden, dass keine Node ist. Ein Proxy stellt neue Funktionalität für
+                ein Objekt bereit, indem vorhandene Properties oder Funktionen abgefangen werden. Das Abfangen von
+                Properties und Funktionen wird durch sogenannte Traps bereitgestellt.
             </de>
         </translation>
         <translation>
@@ -47,7 +51,7 @@
             </en>
             <de>
                 Um den Proxy anzupassen, definieren wir Funktionen für das Handler-Objekt: Hier haben wir eine Implementierung bereitgestellt
-                des get()-Handlers, der Versuche abfängt, auf Eigenschaften im Ziel zuzugreifen. Handler-Funktionen sind
+                des get()-Handlers, der Versuche abfängt, auf Eigenschaften im Ziel zuzugreifen. Handler-Funktionen werden
                 manchmal Traps genannt, vermutlich weil sie Aufrufe an dem Zielobjekt abfangen. Die ganz einfache Trap in
                 handler2 oben definiert die get Eigenschaft neu.
             </de>
@@ -63,9 +67,11 @@
             <hr class="line">
 
             <p i18n>
-                The Proxy object enables you to create a proxy for another object, which can intercept and redefine
-                fundamental operations for that object. A Proxy is not transparent, that means that it is a new Identity
-                when created.
+                If a new proxy is created for an object, then it should not be a node. A Node cannot be added to the
+                dom as a proxy because proxies are not transparent. It should only one Proxy be created for a normal
+                object that is not a node. A proxy provides new functionality for an object, so that existing
+                properties or functions are intercepted. The interception of Properties and functions are provided
+                by so-called traps.
             </p>
 
             <div i18n>
@@ -131,7 +137,7 @@
                                 message2: "everyone"
                             };
 
-                            const handler3 = {
+                            const handler2 = {
                                 get: function (target, prop, receiver) {
                                     if (prop === "message2") {
                                         return "world";
@@ -140,7 +146,7 @@
                                 },
                             };
 
-                            const proxy3 = new Proxy(target, handler3);
+                            const proxy3 = new Proxy(target, handler2);
 
                             console.log(proxy3.message1); // hello
                             console.log(proxy3.message2); // world
