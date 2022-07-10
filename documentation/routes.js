@@ -12,7 +12,7 @@ export const routes = {
             file: "documentation/components/index.js",
             children: components
         },
-        "expert" : {
+        "{expert}" : {
             file : "documentation/expert/index.js",
             children : expert
         }

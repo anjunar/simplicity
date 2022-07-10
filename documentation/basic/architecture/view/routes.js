@@ -1,5 +1,5 @@
 export const routes = {
-    "example" : {
+    "example/{id}" : {
         override : true,
         file : "documentation/basic/architecture/view/example.js"
     }

@@ -13,12 +13,47 @@ class DomRouter extends HTMLElement {
         let urlSegments = window.location.hash.split("/").slice(1);
 
         let files = [];
-        let path = [];
         let cursor = routes;
-        let result = {};
+        let queryParams = {};
 
-        for (const urlSegment of urlSegments) {
-            cursor = cursor.children[urlSegment.split("?")[0]];
+        function *segmentsIterator () {
+            for (const urlSegment of urlSegments) {
+                yield urlSegment;
+            }
+        }
+
+        function process(urlSegment, cursor, index) {
+            let path = urlSegment.split("?")[0];
+            let cursorSegments = Object.keys(cursor.children);
+            let cursorRegex = cursorSegments.map(segment => {
+                let splitElement = segment.split("/")[index];
+                let regexVariable = /{(\w+)}/;
+                let regexVariableResult = regexVariable.exec(segment);
+                if (regexVariableResult) {
+                    queryParams[regexVariableResult[1]] = path;
+                    return new RegExp(".*");
+                }
+                return new RegExp(splitElement);
+            });
+            let regex = cursorRegex.find(regex => regex.test(path));
+            let indexOfSegment = cursorRegex.indexOf(regex);
+            return cursorSegments[indexOfSegment];
+        }
+
+        let iterator = segmentsIterator();
+        let next = iterator.next();
+
+        while (! next.done) {
+            let urlSegment = next.value;
+            let cursorSegment = process(urlSegment, cursor, 0);
+
+            let missingSegments = cursorSegment.split("/").slice(1)
+            missingSegments.forEach((segment, index) => {
+                urlSegment = iterator.next().value
+                process(urlSegment, cursor, index)
+            })
+
+            cursor = cursor.children[cursorSegment];
             if (cursor.file) {
                 if (cursor.override) {
                     files[files.length - 1] = cursor.file
@@ -27,13 +62,11 @@ class DomRouter extends HTMLElement {
                 }
 
                 let indexOf = urlSegment.indexOf("?");
-                let hashes, path;
+                let hashes;
                 if (indexOf === -1) {
                     hashes = [urlSegment]
-                    path = urlSegment;
                 } else {
                     hashes = [urlSegment.substring(0, indexOf), urlSegment.substring(indexOf + 1)];
-                    path = hashes[0];
                 }
 
                 if (hashes[1]) {
@@ -41,16 +74,17 @@ class DomRouter extends HTMLElement {
                     for (const rawQueryParam of rawQueryParams) {
                         let queryParamRegex = /(\w+)=([\w\d\-/?=%]*)/g;
                         let queryParameterRegexResult = queryParamRegex.exec(rawQueryParam);
-                        result[queryParameterRegexResult[1]] = queryParameterRegexResult[2]
+                        queryParams[queryParameterRegexResult[1]] = queryParameterRegexResult[2]
                     }
                 }
 
             }
+            next = iterator.next();
         }
 
         let file = files[this.level]
 
-        viewManager.load(file, result)
+        viewManager.load(file, queryParams)
             .then((view) => {
                 for (const child of Array.from(this.children)) {
                     child.remove();
