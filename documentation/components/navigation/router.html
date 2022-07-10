@@ -13,7 +13,29 @@
             <de>
                 Eine Router-Implementierung für eine View, die als Route angezeigt wird. Abfrageparameter werden erkannt und
                 verfügbar in der View als Property "queryParams". Wenn der Router verschachtelt ist, so muss er das "level" Attribut
-                besitzen. Jeder Router hat seinen eigenen Hashtag mit einem String, der auf die Javascript-Datei verweist.
+                besitzen.
+            </de>
+        </translation>
+        <translation>
+            <en>
+                The router also includes another component, the routes in which is stored, to which
+                File the corresponding URL belongs. The routes must be available in the app of the application at
+                the static property "routes".
+            </en>
+            <de>
+                Zu dem Router gehört auch noch eine weitere Komponente, die Routes in denen gespeichert ist, zu welcher
+                Datei welche URL gehört. Die Routen müssen in der App der Anwendung bekannt gemacht werden unter
+                der statischen Property "routes".
+            </de>
+        </translation>
+        <translation>
+            <en>
+                In this example for the routes, the elements have been broken down especially for this path.
+                Usually these are modules that compose the entire tree for the routes.
+            </en>
+            <de>
+                In diesem Beispiel für die Routen sind extra für diesen Pfad die Elemente aufgeschlüsselt worden.
+                Normalerweise handelt es sich um Module, die den gesamten Baum für die Routen zusammensetzt.
             </de>
         </translation>
         <translation>
@@ -47,11 +69,22 @@
                 <h2 style="margin-left: 0;">Dom Router</h2>
                 <hr class="line">
 
-                <p i18n>
+                 <p i18n>
                     A Router implementation for a View that is displayed as a route. Query Parameters are recognized and
                     available in the View as Property "queryParams". When the Router is nested the "level" Attribute has
                     to be set. Every router has its own hashtag with a string that points to the javascript file.
                 </p>
+
+                 <p i18n>
+                     The router also includes another component, the routes in which is stored, to which
+                     File the corresponding URL belongs. The routes must be available in the app of the application at
+                     the static property "routes".
+                 </p>
+
+                 <p i18n>
+                     In this example for the routes, the elements have been broken down especially for this path.
+                     Usually these are modules that compose the entire tree for the routes.
+                 </p>
 
                 <h3>DOM-API</h3>
                 <table style="width: 100%; font-size: small">
@@ -82,48 +115,129 @@
 
                 <h2>Source Code</h2>
                 <hr class="line">
-                <h3>HTML5</h3>
-                <p i18n>The rest of the HTML file is not displayed</p>
-                <div style="margin-top: 20px;">
-                    <div>
-                        <code is="dom-code" lang="html5">
-                            <template>
-                                <iframe>
-                                    <dom-router level="0"></dom-router>
-                                </iframe>
-                            </template>
-                        </code>
-                    </div>
-                </div>
-                <h3>Javascript</h3>
-                <div>
-                    <div>
-                        <code is="dom-code" lang="javascript">
-                            <template>
-                                <script>
-                                    import {customComponent} from "../../library/simplicity/simplicity.js";
-                                    import {loader} from "../../library/simplicity/processors/loader-processor.js";
-                                    import DomRouter from "../../library/simplicity/directives/dom-router.js";
 
-                                    class AppDocumentation extends HTMLElement {
+                 <mat-tabs bind:page="page">
+                     <mat-tab>
+                         <span>View</span>
+                     </mat-tab>
+                     <mat-tab>
+                         <span>Routes</span>
+                     </mat-tab>
+                 </mat-tabs>
 
-                                        static get components() {
-                                            return [DomRouter]
-                                        }
+                 <mat-pages bind:page="page">
+                     <mat-page>
+                         <div>
+                             <h3>HTML5</h3>
+                             <p i18n>The rest of the HTML file is not displayed</p>
+                             <div style="margin-top: 20px;">
+                                 <div>
+                                     <code is="dom-code" lang="html5">
+                                         <template>
+                                             <iframe>
+                                                 <dom-router level="0"></dom-router>
+                                             </iframe>
+                                         </template>
+                                     </code>
+                                 </div>
+                             </div>
+                             <h3>Javascript</h3>
+                             <div>
+                                 <div>
+                                     <code is="dom-code" lang="javascript">
+                                         <template>
+                                             <script>
+                                                 import {customComponent} from "../../library/simplicity/simplicity.js";
+                                                 import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                                                 import DomRouter from "../../library/simplicity/directives/dom-router.js";
 
-                                        static get template() {
-                                            return loader("documentation/app.html")
-                                        }
+                                                 class AppDocumentation extends HTMLElement {
 
-                                    }
+                                                     static get components() {
+                                                         return [DomRouter]
+                                                     }
 
-                                    export default customComponent.define("app-documentation", AppDocumentation)
-                                </script>
-                            </template>
-                        </code>
-                    </div>
-                </div>
-            </div>
+                                                     static get template() {
+                                                         return loader("documentation/app.html")
+                                                     }
+
+                                                 }
+
+                                                 export default customComponent.define("app-documentation", AppDocumentation)
+                                             </script>
+                                         </template>
+                                     </code>
+                                 </div>
+                             </div>
+                         </div>
+                     </mat-page>
+                     <mat-page>
+                         <div>
+                             <h3>Javascript</h3>
+                             <code is="dom-code" lang="javascript">
+                                 <template>
+                                     <script>
+                                         import {routes as basic} from "./basic/routes.js";
+                                         import {routes as expert} from "./expert/routes.js";
+                                         import {routes as form} from "./components/form/routes";
+                                         import {routes as indicators} from "./components/indicators/routes";
+                                         import {routes as modals} from "./components/modals/routes";
+                                         import {routes as tables} from "./components/tables/routes";
+
+                                         export const routes = {
+                                             children : {
+                                                 "basic" : {
+                                                     file: "documentation/basic/index.js",
+                                                     children : basic
+                                                 },
+                                                 "components" : {
+                                                     file: "documentation/components/index.js",
+                                                     children: {
+                                                         "form" : {
+                                                             children : form
+                                                         },
+                                                         "indicators" : {
+                                                             children: indicators
+                                                         },
+                                                         "modals" : {
+                                                             children : modals
+                                                         },
+                                                         "navigation" : {
+                                                             children : {
+                                                                 "drawer" : {
+                                                                     file : "documentation/components/navigation/drawer.js"
+                                                                 },
+                                                                 "router" : {
+                                                                     file : "documentation/components/navigation/router.js",
+                                                                     children : {
+                                                                         "example" : {
+                                                                             file : "documentation/components/navigation/router/example.js"
+                                                                         }
+                                                                     }
+                                                                 },
+                                                                 "tabs" : {
+                                                                     file : "documentation/components/navigation/tabs.js"
+                                                                 }
+                                                             }
+                                                         },
+                                                         "tables" : {
+                                                             children : tables
+                                                         }
+                                                     }
+                                                 },
+                                                 "expert" : {
+                                                     file : "documentation/expert/index.js",
+                                                     children : expert
+                                                 }
+                                             }
+                                         }
+                                 </script>
+                                 </template>
+                             </code>
+                         </div>
+                     </mat-page>
+                 </mat-pages>
+             </div>
         </div>
     </template>
 </body>
