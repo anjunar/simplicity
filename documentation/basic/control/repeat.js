@@ -1,7 +1,6 @@
 import {customViews} from "../../../library/simplicity-core/simplicity.js";
 import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
 import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
-import {appManager} from "../../../library/simplicity-core/manager/app-manager.js";
 
 class Repeat extends HTMLElement {
 
@@ -25,7 +24,7 @@ export default customViews.define({
     header: "Repeat",
     guard(activeRoute) {
         return {
-            materials: fetch("/" + appManager.context + "/materials.json").then(response => response.json())
+            materials: fetch("materials.json").then(response => response.json())
         }
     }
 })

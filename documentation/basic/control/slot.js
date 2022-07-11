@@ -6,7 +6,6 @@ import MatTab from "../../../library/simplicity-material/components/navigation/m
 import MatPages from "../../../library/simplicity-material/components/navigation/mat-pages.js";
 import MatPage from "../../../library/simplicity-material/components/navigation/mat-page.js";
 import CommonExample from "./slot/example.js";
-import {appManager} from "../../../library/simplicity-core/manager/app-manager.js";
 
 class CommonImplicit extends HTMLElement {
 
@@ -29,7 +28,7 @@ export default customViews.define({
     class : CommonImplicit,
     guard(activeRoute) {
         return {
-            materials : fetch("/" + appManager.context + "/materials.json").then(response => response.json())
+            materials : fetch("materials.json").then(response => response.json())
         }
     }
 })

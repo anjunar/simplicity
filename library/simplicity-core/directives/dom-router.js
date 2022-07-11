@@ -1,6 +1,5 @@
 import {customComponents} from "../simplicity.js";
 import {viewManager} from "../manager/view-manager.js";
-import {appManager} from "../manager/app-manager.js";
 
 class DomRouter extends HTMLElement {
 
@@ -10,8 +9,9 @@ class DomRouter extends HTMLElement {
         this.dispatchEvent(new CustomEvent("load"))
 
         let appElement = document.querySelector("#app");
+        let baseElement = document.querySelector("base")
         let routes = appElement.constructor.routes;
-        let urlSegments = window.location.pathname.replace("/" + appManager.context + "/", "").split("/");
+        let urlSegments = window.location.pathname.replace("/" + baseElement.getAttribute("href") + "/", "").split("/");
 
         let files = [];
         let cursor = routes;

@@ -35,7 +35,6 @@ export function bootstrap(options) {
     appManager.library = options.library || "library"
     appManager.shadowDom = options.shadowDom || false
     appManager.preFetch = options.preFetch || false
-    appManager.context = options.context || ""
 
     if (appManager.mode === "development") {
         console.log(`plugins loaded: ${Object.values(plugins).map(plugin => plugin.name)}`)

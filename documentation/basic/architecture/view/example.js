@@ -1,6 +1,5 @@
 import {customViews} from "../../../../library/simplicity-core/simplicity.js";
 import {loader} from "../../../../library/simplicity-core/processors/loader-processor.js";
-import {appManager} from "../../../../library/simplicity-core/manager/app-manager.js";
 
 class Example extends HTMLElement {
 
@@ -17,7 +16,7 @@ export default customViews.define({
     class : Example,
     guard(activeRoute) {
         return {
-            material : fetch("/" + appManager.context + "/materials.json")
+            material : fetch("materials.json")
                 .then(response => response.json())
                 .then((materials) => {
                     return materials.rows.find((material) => material.position === Number.parseInt(activeRoute.queryParams.id))

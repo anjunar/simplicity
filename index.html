@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="simplicity">
     <meta charset="UTF-8">
     <title>Simplicity 4.2 beta</title>
     <link rel="stylesheet" href="styles.css" type="text/css">
@@ -9,7 +10,6 @@
 
         bootstrap({
             app: "documentation/app.js",
-            context : "simplicity",
             mode : "development",
             library : "library",
             shadowDom : false, // Experimental
@@ -34,7 +34,7 @@
         gtag('config', 'G-CVD1HXBNE3');
         window.addEventListener("hashchange", function (event) {
             gtag('event', 'page_view', {
-                'page_path': window.location.hash.substring(1)
+                'page_path': window.location.pathname
             });
         });
     </script>
