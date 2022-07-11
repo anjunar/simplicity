@@ -9,7 +9,8 @@
 
         bootstrap({
             app: "documentation/app.js",
-            mode : "production",
+            context : "simplicity",
+            mode : "development",
             library : "library",
             shadowDom : false, // Experimental
             preFetch : false // Experimental
@@ -17,9 +18,15 @@
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CVD1HXBNE3"></script>
     <script>
-        if (window.location.hash === "") {
-            window.location.hash = "#/basic/started"
-        }
+        (function(){
+            let redirect = sessionStorage.redirect;
+            delete sessionStorage.redirect;
+            if (redirect && redirect !== location.href) {
+                history.replaceState(null, null, redirect);
+            } else {
+                history.pushState(null, null, "/simplicity/basic/started")
+            }
+        })();
 
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}

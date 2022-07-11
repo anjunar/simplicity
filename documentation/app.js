@@ -14,12 +14,28 @@ class DocumentationApp extends HTMLElement {
     loading = true;
     timeStamp;
 
+    initialize() {
+        window.addEventListener("click", (event) => {
+            let aElement = event.path.find((element) => element.localName === "a" && element.hasAttribute("href"));
+            if (aElement) {
+                event.stopPropagation();
+                event.preventDefault();
+                let url = aElement.getAttribute("href").substring(1);
+                let urlWithPath = "/" + appManager.context + url;
+                history.pushState(null, null, urlWithPath)
+                window.dispatchEvent(new Event("popstate"));
+                return false;
+            }
+            return true;
+        })
+    }
+
     active(value) {
         let method = () => {
-            return window.location.hash.startsWith(`#/${value}`)
+            return window.location.pathname.startsWith(`/simplicity/${value}`)
         }
         let resonator = (callback) => {
-            window.addEventListener("hashchange", callback)
+            window.addEventListener("popstate", callback)
         }
         return {method, resonator}
     }

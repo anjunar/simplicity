@@ -1,6 +1,7 @@
 let language = "en";
 let mode = "production"
 let library = "library"
+let context = "";
 let shadowDom = false;
 let preFetch = false
 
@@ -37,6 +38,13 @@ export const appManager = new class AppManager {
         library = value;
     }
 
+    get context() {
+        return context;
+    }
+    set context(value) {
+        context = value;
+    }
+
     get shadowDom() {
         return shadowDom;
     }
@@ -50,5 +58,6 @@ export const appManager = new class AppManager {
     set preFetch(value) {
         preFetch = value;
     }
+
 
 };
