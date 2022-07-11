@@ -14,23 +14,6 @@ class DocumentationApp extends HTMLElement {
     loading = true;
     timeStamp;
 
-    initialize() {
-        let baseElement = document.querySelector("base");
-        window.addEventListener("click", (event) => {
-            let aElement = event.path.find((element) => element.localName === "a" && element.hasAttribute("href"));
-            if (aElement) {
-                event.stopPropagation();
-                event.preventDefault();
-                let url = aElement.getAttribute("href");
-                let urlWithPath = baseElement.getAttribute("href") + url;
-                history.pushState(null, null, urlWithPath)
-                window.dispatchEvent(new Event("popstate"));
-                return false;
-            }
-            return true;
-        })
-    }
-
     active(value) {
         let method = () => {
             return window.location.pathname.startsWith(`/simplicity/${value}`)

@@ -1,6 +1,21 @@
 import {appManager} from "./manager/app-manager.js";
 import * as plugins from "./plugins/index.js"
 
+let baseElement = document.querySelector("base");
+window.addEventListener("click", (event) => {
+    let aElement = event.path.find((element) => element.localName === "a" && element.hasAttribute("href"));
+    if (aElement) {
+        event.stopPropagation();
+        event.preventDefault();
+        let url = aElement.getAttribute("href");
+        let urlWithPath = baseElement.getAttribute("href") + url;
+        history.pushState(null, null, urlWithPath)
+        window.dispatchEvent(new Event("popstate"));
+        return false;
+    }
+    return true;
+})
+
 function traverse(routes) {
     if (routes.children) {
         for (const route of Object.values(routes.children)) {
