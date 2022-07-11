@@ -14,7 +14,7 @@ export function loader(url) {
 export function libraryLoader(url) {
     let result;
     let request = new XMLHttpRequest();
-    request.open("GET", "/" + appManager.library + "/" + url, false)
+    request.open("GET", "" + appManager.context + "/" + appManager.library + "/" + url, false)
     request.addEventListener("loadend", (event) => {
         result = event.target.responseText
     })
