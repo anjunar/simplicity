@@ -2,11 +2,12 @@ import {customViews} from "../../../library/simplicity-core/simplicity.js";
 import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
 import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
 import MetaTable from "../../../library/simplicity-material/components/meta/meta-table.js";
+import {appManager} from "../../../library/simplicity-core/manager/app-manager.js";
 
 class Table extends HTMLElement {
 
     materials(query, callback) {
-        fetch("materials.json")
+        fetch("/" + appManager.context + "/materials.json")
             .then(response => response.json())
             .then((response) => {
                 let filter;
