@@ -3,7 +3,7 @@ import {appManager} from "../manager/app-manager.js";
 export function loader(url) {
     let result;
     let request = new XMLHttpRequest();
-    request.open("GET", "/" + url, false)
+    request.open("GET", "/" + appManager.context + "/" + url, false)
     request.addEventListener("loadend", (event) => {
         result = event.target.responseText
     })
