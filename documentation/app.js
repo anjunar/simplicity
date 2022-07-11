@@ -22,7 +22,7 @@ class DocumentationApp extends HTMLElement {
                 event.stopPropagation();
                 event.preventDefault();
                 let url = aElement.getAttribute("href");
-                let urlWithPath = "/" + baseElement.getAttribute("href") + "/" +  url;
+                let urlWithPath = baseElement.getAttribute("href") + url;
                 history.pushState(null, null, urlWithPath)
                 window.dispatchEvent(new Event("popstate"));
                 return false;

@@ -11,7 +11,7 @@ class DomRouter extends HTMLElement {
         let appElement = document.querySelector("#app");
         let baseElement = document.querySelector("base")
         let routes = appElement.constructor.routes;
-        let urlSegments = window.location.pathname.replace("/" + baseElement.getAttribute("href") + "/", "").split("/");
+        let urlSegments = window.location.pathname.replace(baseElement.getAttribute("href"), "").split("/");
 
         let files = [];
         let cursor = routes;
