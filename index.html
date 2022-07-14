@@ -13,7 +13,8 @@
             mode : "development",
             library : "library",
             shadowDom : false, // Experimental
-            preFetch : false // Experimental
+            preFetch : false, // Experimental,
+            history : true
         })
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CVD1HXBNE3"></script>
@@ -24,7 +25,8 @@
             if (redirect && redirect !== location.href) {
                 history.replaceState(null, null, redirect);
             } else {
-                history.pushState(null, null, "/simplicity/basic/started")
+                history.pushState(null, null, "basic/started")
+                // window.location.hash = "#basic/started"
             }
         })();
 

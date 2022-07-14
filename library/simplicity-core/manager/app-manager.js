@@ -3,6 +3,7 @@ let mode = "production"
 let library = "library"
 let shadowDom = false;
 let preFetch = false
+let history = false;
 
 export const appManager = new class AppManager {
 
@@ -51,5 +52,11 @@ export const appManager = new class AppManager {
         preFetch = value;
     }
 
+    get history() {
+        return history;
+    }
+    set history(value) {
+        history = value;
+    }
 
 };

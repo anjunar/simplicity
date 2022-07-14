@@ -1,5 +1,6 @@
 import {customComponents} from "../simplicity.js";
 import {viewManager} from "../manager/view-manager.js";
+import {appManager} from "../manager/app-manager.js";
 
 class DomRouter extends HTMLElement {
 
@@ -11,8 +12,12 @@ class DomRouter extends HTMLElement {
         let appElement = document.querySelector("#app");
         let baseElement = document.querySelector("base")
         let routes = appElement.constructor.routes;
-        let urlSegments = window.location.pathname.replace(baseElement.getAttribute("href"), "").split("/");
-
+        let urlSegments;
+        if (appManager.history) {
+            urlSegments = window.location.pathname.replace(baseElement.getAttribute("href"), "").split("/");
+        } else {
+            urlSegments = window.location.hash.split("#")[1].split("/")
+        }
         let files = [];
         let cursor = routes;
         let queryParams = {};
@@ -37,8 +42,12 @@ class DomRouter extends HTMLElement {
                 return new RegExp(splitElement);
             });
             let regex = cursorRegex.find(regex => regex.test(path));
-            let indexOfSegment = cursorRegex.indexOf(regex);
-            return cursorSegments[indexOfSegment];
+            if (regex) {
+                let indexOfSegment = cursorRegex.indexOf(regex);
+                return cursorSegments[indexOfSegment];
+            } else {
+                throw new Error(`no route found for ${urlSegment}. existing routes: ${cursorSegments}`)
+            }
         }
 
         let iterator = segmentsIterator();
