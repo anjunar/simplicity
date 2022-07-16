@@ -52,7 +52,9 @@ class MetaTable extends HTMLElement {
             if (! isEqual(schema, this.schema)) {
                 this.schema = schema;
             }
-            callback(rows, size)
+            window.setTimeout(() => {
+                callback(rows, size)
+            })
         })
     }
 

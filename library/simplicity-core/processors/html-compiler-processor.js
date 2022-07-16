@@ -131,7 +131,6 @@ function addEventHandler(scope) {
     let handlers = scope[0].proxy.handlers;
     return function (name, element, handler) {
         let path = scope.map(object => object.property).join(".") + "." + name;
-
         handlers.push({
             path : path,
             handler: handler,
