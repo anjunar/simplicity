@@ -2,7 +2,7 @@ import {customComponents} from "../../simplicity.js";
 import {libraryLoader} from "../../processors/loader-processor.js";
 import DomInput from "../../directives/dom-input.js";
 import DomForm from "../../directives/dom-form.js";
-import {debounce, Input, isEqual, mix} from "../../services/tools.js";
+import {debounce, Input, isEqual, Membrane, mix} from "../../services/tools.js";
 
 class DomLazySelect extends mix(HTMLElement).with(Input) {
 
@@ -23,9 +23,13 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     search = "";
 
     preInitialize() {
-        this.addEventHandler("model", this, () => {
-            this.render();
-        })
+        Membrane.track(this, {
+            property : "model",
+            element : this,
+            handler : () => {
+                this.render();
+            }
+        });
     }
 
     initialize() {
@@ -47,9 +51,13 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             window.removeEventListener("click", listener);
         }
 
-        this.addEventHandler("search", this, debounce(() => {
-            this.load();
-        }, 300))
+        Membrane.track(this, {
+            property : "search",
+            element : this,
+            handler : debounce(() => {
+                this.load();
+            }, 300)
+        })
 
         if (this.name) {
             let domForm = this.queryUpwards((element) => {

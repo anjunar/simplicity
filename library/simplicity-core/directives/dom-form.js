@@ -1,5 +1,5 @@
 import {customComponents} from "../simplicity.js";
-import {Input, isEqual, mix} from "../services/tools.js";
+import {Input, isEqual, Membrane, mix} from "../services/tools.js";
 
 class DomForm extends mix(HTMLFormElement).with(Input) {
 
@@ -50,11 +50,15 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
                 component.defaultValue = value;
             }
 
-            this.model.addEventHandler(component.name, this, (value) => {
-                component.model = value;
-                component.value = value;
-                component.dispatchEvent(new CustomEvent("input"));
-                this.asyncValidationHandler();
+            Membrane.track(this.model, {
+                property : component.name,
+                element : this,
+                handler : (value) => {
+                    component.model = value;
+                    component.value = value;
+                    component.dispatchEvent(new CustomEvent("input"));
+                    this.asyncValidationHandler();
+                }
             })
         }
 

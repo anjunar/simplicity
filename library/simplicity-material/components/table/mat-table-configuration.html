@@ -12,14 +12,14 @@
 <body>
     <template>
         <mat-tabs bind:page="page">
-            <mat-tab bind:for="let td of table.configuration(table.columns, true)">
+            <mat-tab bind:for="let td of table.configuration(table.columns, true, true)">
                 <div>
                     <slot bind:source="table" selector="thead tr td *" bind:index="td.index"></slot>
                 </div>
             </mat-tab>
         </mat-tabs>
         <mat-pages bind:page="page">
-            <mat-page bind:for="let td of table.configuration(table.columns, true); let index = index; let length = length">
+            <mat-page bind:for="let td of table.configuration(table.columns, true, true); let index = index; let length = length">
                 <div>
                     <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px">
                         <mat-checkbox-container placeholder="Visible">

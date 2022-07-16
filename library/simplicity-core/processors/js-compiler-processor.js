@@ -7,7 +7,7 @@ function collect(ast) {
     walker(ast, new class {
         CallExpression(node, parent) {
             identifiers.push(node);
-            walker(node.arguments, this, [...parent, {node : node, property : "arguments"}])
+            // walker(node.arguments, this, [...parent, {node : node, property : "arguments"}])
             return false;
         }
         MemberExpression(node, parent) {

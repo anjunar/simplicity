@@ -328,6 +328,7 @@ const data = new WeakMap();
 
 export function generateDomProxy(node) {
     node.handlers = node.handlers || [];
+    node.passive = node.passive || [];
     let dataObject = data.get(node);
     if (! dataObject) {
         dataObject = {}
@@ -354,8 +355,14 @@ export function generateDomProxy(node) {
             set(value) {
                 Reflect.set(data, property, value)
                 for (const eventHandler of node.handlers) {
-                    if (eventHandler.path.startsWith(property)) {
-                        eventHandler.handler(value);
+                    if (eventHandler.scoped) {
+                        if (eventHandler.path === property && (node.passive.indexOf(property) === -1 || eventHandler.override)) {
+                            eventHandler.handler(value);
+                        }
+                    } else {
+                        if (eventHandler.path.startsWith(property) && (node.passive.indexOf(property) === -1 || eventHandler.override)) {
+                            eventHandler.handler(value);
+                        }
                     }
                 }
             }
@@ -370,11 +377,17 @@ export function generateDomProxy(node) {
         }
     }
 
-    function addEventHandler (name, element, handler) {
+    function addEventHandler (options) {
+        let name = options.property, handler = options.handler, element = options.element,
+            scoped = options.scoped || false, passive = options.passive || false, override = options.override || false;
+
         node.handlers.push({
             path: name,
             handler: handler,
-            element: element
+            element: element,
+            scoped : scoped,
+            passive : passive,
+            override : override
         });
 
         element.addEventListener("removed", () => {
@@ -386,12 +399,16 @@ export function generateDomProxy(node) {
         })
     }
 
+    function passiveProperty(name) {
+        node.passive.push(name);
+    }
+
     function setupProxy() {
         let descriptors = Object.getOwnPropertyDescriptors(node);
         for (const [property, descriptor] of Object.entries(descriptors)) {
             let privateGetter = Object.getOwnPropertyDescriptor(dataObject, property)
             if (! privateGetter) {
-                let blackList = ["$fire", "addEventHandler", "initialized", "handlers"];
+                let blackList = ["$fire", "addEventHandler", "initialized", "handlers", "passiveProperty"];
                 if (! blackList.includes(property)) {
                     generateWrapper(node, property, descriptor, dataObject);
                 }
@@ -408,6 +425,9 @@ export function generateDomProxy(node) {
             },
             addEventHandler : {
                 value : addEventHandler
+            },
+            passiveProperty : {
+                value : passiveProperty
             }
         })
     }
@@ -418,4 +438,10 @@ export function generateDomProxy(node) {
 export function queryComment(node) {
     let iterator = document.createNodeIterator(node, NodeFilter.SHOW_COMMENT);
     return iterator.nextNode();
+}
+
+export const Membrane = class Membrane {
+    static track(membrane, options) {
+        membrane.addEventHandler(options)
+    }
 }

@@ -1,6 +1,6 @@
 import {collectIdentifiers, evaluation} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
-import {cachingProxy, evaluator, getPropertyDescriptor} from "../services/tools.js";
+import {cachingProxy, evaluator, getPropertyDescriptor, Membrane} from "../services/tools.js";
 import {attributes, isCompositeComponent} from "../plugins/helper.js";
 import {generate} from "./js-compiler-extension.js";
 
@@ -112,9 +112,13 @@ export function activeObjectExpression(expression, context, element, callback) {
                 };
                 resonator(handler, element);
             } else {
-                model.addEventHandler(lastSegment, element, () => {
-                    callback(evaluation(expression, context));
-                });
+                Membrane.track(model, {
+                    property : lastSegment,
+                    element : element,
+                    handler : () => {
+                        callback(evaluation(expression, context));
+                    }
+                })
             }
         }
         if (bodyElement.type === "CallExpression") {
@@ -129,12 +133,17 @@ export function activeObjectExpression(expression, context, element, callback) {
 
 function addEventHandler(scope) {
     let handlers = scope[0].proxy.handlers;
-    return function (name, element, handler) {
+    return function (options) {
+        let name = options.property, handler = options.handler, element = options.element,
+            scoped = options.scoped || false, passive = options.passive || false, override = options.override || false;
         let path = scope.map(object => object.property).join(".") + "." + name;
         handlers.push({
             path : path,
             handler: handler,
-            element: element
+            element: element,
+            scoped : scoped,
+            passive : passive,
+            override : override
         });
 
         element.addEventListener("removed", () => {
@@ -154,6 +163,12 @@ function fire(handlers, path) {
                 handler.handler();
             }
         }
+    }
+}
+
+function passiveProperty(handlers, path) {
+    return function () {
+        handlers.push(path);
     }
 }
 
@@ -217,8 +232,14 @@ export function membraneFactory(instance, parent = []) {
                     let result = Reflect.set(target, p, value, receiver);
 
                     for (const eventHandler of root.handlers) {
-                        if (eventHandler.path.startsWith(path + "." + p)) {
-                            eventHandler.handler(value);
+                        if (eventHandler.scoped) {
+                            if (eventHandler.path === (path + "." + p) && (root.passive.indexOf(path + "." + p) === -1 || eventHandler.override)) {
+                                eventHandler.handler(value);
+                            }
+                        } else {
+                            if (eventHandler.path.startsWith(path + "." + p) && (root.passive.indexOf(path + "." + p) === -1 || eventHandler.override)) {
+                                eventHandler.handler(value);
+                            }
                         }
                     }
 
@@ -239,6 +260,10 @@ export function membraneFactory(instance, parent = []) {
 
                     if (p === "fire") {
                         return fire(root.handlers, path);
+                    }
+
+                    if (p === "passiveProperty") {
+                        return passiveProperty(root.passive, path + "." + p)
                     }
 
                     if (typeof p === "symbol" || p === "prototype") {

@@ -126,6 +126,7 @@ function forStatement(rawAttributes, context, callback) {
     }
 
     function update(value) {
+        // console.log("for: " + data.for.expression)
         array = value;
         for (const child of children) {
             notifyElementRemove(child);

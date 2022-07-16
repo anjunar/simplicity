@@ -94,6 +94,10 @@ class DomRouter extends HTMLElement {
 
         let file = files[this.level]
 
+        if (!file) {
+            throw new Error("no file for routing found: " + urlSegments)
+        }
+
         viewManager.load(file, queryParams)
             .then((view) => {
                 for (const child of Array.from(this.children)) {

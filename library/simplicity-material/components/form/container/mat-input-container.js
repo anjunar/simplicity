@@ -1,5 +1,6 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
+import {Membrane} from "../../../../simplicity-core/services/tools.js";
 
 class MatInputContainer extends HTMLElement {
 
@@ -48,8 +49,12 @@ class MatInputContainer extends HTMLElement {
         input.addEventListener("input", inputListener);
 
         if (input.formular) {
-            input.formular.addEventHandler("errors", this, () => {
-                inputListener();
+            Membrane.track(input.formular, {
+                property : "errors",
+                element : this,
+                handler : () => {
+                    inputListener();
+                }
             })
         }
 

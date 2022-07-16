@@ -3,7 +3,7 @@ import {libraryLoader} from "../../../simplicity-core/processors/loader-processo
 import {windowManager} from "../../manager/window-manager.js";
 import {contentManager} from "../../../simplicity-core/manager/content-manager.js";
 import DomForm from "../../../simplicity-core/directives/dom-form.js";
-import {Input, mix} from "../../../simplicity-core/services/tools.js";
+import {Input, mix, Membrane} from "../../../simplicity-core/services/tools.js";
 
 class MatTable extends mix(HTMLTableElement).with(Input) {
 
@@ -24,12 +24,12 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
 
     preInitialize() {
         this.contentTemplate = contentManager.instance(this);
+        this.passiveProperty("columns");
 
         let callback = () => {
             this.header = Array.from(this.contentTemplate.querySelectorAll("thead tr td"))
             this.body = Array.from(this.contentTemplate.querySelectorAll("tbody tr td"))
             this.extension = this.queryUpwards((element) => element.localName === "mat-table-extension")
-            this.columns = [];
             let length = this.body.length;
 
             if (this.extension) {
@@ -167,7 +167,7 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         })
     }
 
-    configuration(array, all) {
+    configuration(array, all, override) {
         let method = () => {
             if (all) {
                 return array;
@@ -177,10 +177,20 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
 
         let resonator = (callback, element) => {
             for (const item of array) {
-                item.addEventHandler("visible", element, callback)
+                Membrane.track(item, {
+                    property : "visible",
+                    element : element,
+                    handler : callback,
+                    scoped : true
+                })
             }
-            this.addEventHandler("columns", element, () => {
-                callback();
+            Membrane.track(this, {
+                property : "columns",
+                element : element,
+                override : override,
+                handler : () => {
+                    callback();
+                }
             })
         }
 
