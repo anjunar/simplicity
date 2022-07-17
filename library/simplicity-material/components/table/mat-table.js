@@ -24,7 +24,7 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
 
     preInitialize() {
         this.contentTemplate = contentManager.instance(this);
-        this.passiveProperty("columns");
+        Membrane.passive(this, "columns")
 
         let callback = () => {
             this.header = Array.from(this.contentTemplate.querySelectorAll("thead tr td"))
@@ -176,25 +176,34 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         }
 
         let resonator = (callback, element) => {
+            let handlers = [];
             for (const item of array) {
-                Membrane.track(item, {
+                handlers.push(Membrane.track(item, {
                     property : "visible",
                     element : element,
                     handler : callback,
                     scoped : true
-                })
+                }))
             }
-            Membrane.track(this, {
+            handlers.push(Membrane.track(this, {
                 property : "columns",
                 element : element,
                 override : override,
-                handler : () => {
-                    callback();
-                }
+                handler : callback
+            }))
+            return handlers;
+        }
+
+        let activator = (callback, element) => {
+            Membrane.track(this, {
+                property : "columns",
+                element : element,
+                handler : callback,
+                override : true
             })
         }
 
-        return {method, resonator}
+        return {method, resonator, activator}
     }
 
     left(index) {

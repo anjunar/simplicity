@@ -94,26 +94,23 @@ class DomRouter extends HTMLElement {
 
         let file = files[this.level]
 
-        if (!file) {
-            throw new Error("no file for routing found: " + urlSegments)
-        }
-
-        viewManager.load(file, queryParams)
-            .then((view) => {
-                for (const child of Array.from(this.children)) {
-                    child.remove();
-                }
-                this.appendChild(view);
-                let nextLevelRouter = this.querySelector("dom-router");
-                if (nextLevelRouter) {
-                    nextLevelRouter.addEventListener("loadend", () => {
+        if (file) {
+            viewManager.load(file, queryParams)
+                .then((view) => {
+                    for (const child of Array.from(this.children)) {
+                        child.remove();
+                    }
+                    this.appendChild(view);
+                    let nextLevelRouter = this.querySelector("dom-router");
+                    if (nextLevelRouter) {
+                        nextLevelRouter.addEventListener("loadend", () => {
+                            this.dispatchEvent(new CustomEvent("loadend"))
+                        })
+                    } else {
                         this.dispatchEvent(new CustomEvent("loadend"))
-                    })
-                } else {
-                    this.dispatchEvent(new CustomEvent("loadend"))
-                }
-            })
-
+                    }
+                })
+        }
     }
 
     destroy() {

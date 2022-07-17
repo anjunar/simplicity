@@ -20,6 +20,7 @@ class MetaTable extends HTMLElement {
     };
 
     initialize() {
+/*
         let table = this.querySelector("table");
         Membrane.track(this, {
             property : "schema",
@@ -45,6 +46,7 @@ class MetaTable extends HTMLElement {
                 columns: JSON.stringify(table.columns)
             });
         })
+*/
     }
 
     search() {
@@ -54,8 +56,9 @@ class MetaTable extends HTMLElement {
 
     items = (query, callback) => {
         this.parent(query, (rows, size, schema) => {
+            this.schema = schema;
             if (! isEqual(schema, this.schema)) {
-                this.schema = schema;
+
             }
             window.setTimeout(() => {
                 callback(rows, size)

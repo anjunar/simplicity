@@ -381,14 +381,16 @@ export function generateDomProxy(node) {
         let name = options.property, handler = options.handler, element = options.element,
             scoped = options.scoped || false, passive = options.passive || false, override = options.override || false;
 
-        node.handlers.push({
+        let result = {
+            node : node,
             path: name,
             handler: handler,
             element: element,
             scoped : scoped,
             passive : passive,
             override : override
-        });
+        };
+        node.handlers.push(result);
 
         element.addEventListener("removed", () => {
             let entry = node.handlers.find((entry) => entry.path === name && entry.handler === handler);
@@ -397,6 +399,13 @@ export function generateDomProxy(node) {
                 node.handlers.splice(indexOf, 1)
             }
         })
+
+        return result;
+    }
+
+    function removeEventHandler(options) {
+        let indexOf = node.handlers.indexOf(options);
+        node.handlers.splice(indexOf, 1)
     }
 
     function passiveProperty(name) {
@@ -408,7 +417,7 @@ export function generateDomProxy(node) {
         for (const [property, descriptor] of Object.entries(descriptors)) {
             let privateGetter = Object.getOwnPropertyDescriptor(dataObject, property)
             if (! privateGetter) {
-                let blackList = ["$fire", "addEventHandler", "initialized", "handlers", "passiveProperty"];
+                let blackList = ["$fire", "addEventHandler", "removeEventHandler", "initialized", "handlers", "passiveProperty"];
                 if (! blackList.includes(property)) {
                     generateWrapper(node, property, descriptor, dataObject);
                 }
@@ -426,6 +435,9 @@ export function generateDomProxy(node) {
             addEventHandler : {
                 value : addEventHandler
             },
+            removeEventHandler : {
+                value : removeEventHandler
+            },
             passiveProperty : {
                 value : passiveProperty
             }
@@ -442,6 +454,13 @@ export function queryComment(node) {
 
 export const Membrane = class Membrane {
     static track(membrane, options) {
-        membrane.addEventHandler(options)
+        return membrane.addEventHandler(options);
+    }
+    static remove(options) {
+        options.node.removeEventHandler(options);
+    }
+    static passive(membrane, property) {
+        membrane.passiveProperty(property);
+        return property;
     }
 }

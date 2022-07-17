@@ -106,11 +106,24 @@ export function activeObjectExpression(expression, context, element, callback) {
             let lastSegment = segments[segments.length - 1];
             let descriptor = getPropertyDescriptor(lastSegment, model);
             if (descriptor.get && descriptor.set === undefined) {
-                let {method, resonator} = evaluation(identifier, context, {}, true);
+                let {method, resonator, activator} = evaluation(identifier, context, {}, true);
                 let handler = () => {
                     callback(evaluation(expression, context));
                 };
-                resonator(handler, element);
+                let handlers = resonator(handler, element);
+
+                if (activator) {
+                    activator(() => {
+                        let {method, resonator, activator} = evaluation(identifier, context, {}, true);
+                        let handler = () => {
+                            callback(evaluation(expression, context));
+                        };
+                        for (const handler of handlers) {
+                            Membrane.remove(handler);
+                        }
+                        handlers = resonator(handler, element);
+                    }, element)
+                }
             } else {
                 Membrane.track(model, {
                     property : lastSegment,
@@ -122,29 +135,46 @@ export function activeObjectExpression(expression, context, element, callback) {
             }
         }
         if (bodyElement.type === "CallExpression") {
-            let {method, resonator} = evaluation(identifier, context, {}, true);
+            let {method, resonator, activator} = evaluation(identifier, context, {}, true);
             let handler = () => {
                 callback(evaluation(expression, context))
             };
-            resonator(handler, element);
+            let handlers = resonator(handler, element);
+
+            if (activator) {
+                activator(() => {
+                    let {method, resonator, activator} = evaluation(identifier, context, {}, true);
+                    let handler = () => {
+                        callback(evaluation(expression, context));
+                    };
+                    for (const handler of handlers) {
+                        Membrane.remove(handler);
+                    }
+                    handlers = resonator(handler, element);
+                }, element)
+            }
         }
     }
 }
 
 function addEventHandler(scope) {
-    let handlers = scope[0].proxy.handlers;
+    let node = scope[0].proxy;
+    let handlers = node.handlers;
     return function (options) {
         let name = options.property, handler = options.handler, element = options.element,
             scoped = options.scoped || false, passive = options.passive || false, override = options.override || false;
         let path = scope.map(object => object.property).join(".") + "." + name;
-        handlers.push({
+
+        let result = {
+            node: node,
             path : path,
             handler: handler,
             element: element,
             scoped : scoped,
             passive : passive,
             override : override
-        });
+        };
+        handlers.push(result);
 
         element.addEventListener("removed", () => {
             let entry = handlers.find((entry) => entry.path === path && entry.handler === handler);
@@ -153,6 +183,16 @@ function addEventHandler(scope) {
                 handlers.splice(indexOf, 1)
             }
         })
+        return result;
+    }
+}
+
+function removeEventHandler(scope) {
+    let node = scope[0].proxy;
+    let handlers = node.handlers;
+    return function (options) {
+        let indexOf = handlers.indexOf(options);
+        handlers.splice(indexOf, 1)
     }
 }
 
@@ -166,9 +206,9 @@ function fire(handlers, path) {
     }
 }
 
-function passiveProperty(handlers, path) {
+function passiveProperty(passive, path) {
     return function () {
-        handlers.push(path);
+        passive.push(path);
     }
 }
 
@@ -256,6 +296,10 @@ export function membraneFactory(instance, parent = []) {
 
                     if (p === "addEventHandler") {
                         return addEventHandler(parent);
+                    }
+
+                    if (p === "removeEventHandler") {
+                        return removeEventHandler(parent)
                     }
 
                     if (p === "fire") {
