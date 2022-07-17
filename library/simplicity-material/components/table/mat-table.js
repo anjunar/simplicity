@@ -62,6 +62,8 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 }
                 this.columns = columns;
             }
+
+            this.dispatchEvent(new CustomEvent("columns"))
         };
 
         let mutationObserver = new MutationObserver(callback)
@@ -188,19 +190,14 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
             handlers.push(Membrane.track(this, {
                 property : "columns",
                 element : element,
-                override : override,
+                override : true,
                 handler : callback
             }))
             return handlers;
         }
 
         let activator = (callback, element) => {
-            Membrane.track(this, {
-                property : "columns",
-                element : element,
-                handler : callback,
-                override : true
-            })
+            this.addEventListener("columns", callback)
         }
 
         return {method, resonator, activator}
