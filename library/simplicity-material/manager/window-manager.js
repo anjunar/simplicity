@@ -2,7 +2,7 @@ import MatWindow from "../components/modal/mat-window.js";
 import {get, viewManager} from "../../simplicity-core/manager/view-manager.js";
 import MatModal from "../components/modal/mat-modal.js";
 import {contentManager} from "../../simplicity-core/manager/content-manager.js";
-import {membraneFactory} from "../../simplicity-core/processors/html-compiler-processor.js";
+import {notifyElementRemove} from "../../simplicity-core/plugins/helper.js";
 
 const windowsRegistry = [];
 
@@ -136,6 +136,7 @@ export const windowManager = new class WindowManager {
         let indexOf = windowsRegistry.indexOf(matWindow);
         windowsRegistry.splice(indexOf, 1)
         matWindow.remove();
+        notifyElementRemove(matWindow);
         window.dispatchEvent(new CustomEvent("window"));
     }
 
