@@ -198,6 +198,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
 
         let activator = (callback, element) => {
             this.addEventListener("columns", callback)
+            element.addEventListener("removed", () => {
+                this.removeEventListener("columns", callback)
+            })
         }
 
         return {method, resonator, activator}
