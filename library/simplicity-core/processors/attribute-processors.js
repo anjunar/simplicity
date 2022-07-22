@@ -1,5 +1,4 @@
 import {evaluation} from "./js-compiler-processor.js";
-import {appManager} from "../manager/app-manager.js";
 import {isEqual} from "../services/tools.js";
 import {activeObjectExpression} from "./html-compiler-processor.js";
 
@@ -309,7 +308,7 @@ class i18nAttributeProcessor {
     }
 
     process() {
-        let language = appManager.language;
+        let language = this.element.app.language;
 
         if (language !== this.lastLanguage) {
             if (language === "en") {

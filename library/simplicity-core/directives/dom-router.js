@@ -9,7 +9,7 @@ class DomRouter extends HTMLElement {
     handler = (event) => {
         this.dispatchEvent(new CustomEvent("load"))
 
-        let appElement = document.querySelector("#app");
+        let appElement = this.app;
         let baseElement = document.querySelector("base")
         let routes = appElement.constructor.routes;
         let urlSegments;
@@ -97,6 +97,7 @@ class DomRouter extends HTMLElement {
         if (file) {
             viewManager.load(file, queryParams)
                 .then((view) => {
+                    view.app = this.app;
                     for (const child of Array.from(this.children)) {
                         child.remove();
                     }
@@ -114,12 +115,12 @@ class DomRouter extends HTMLElement {
     }
 
     destroy() {
-        window.removeEventListener("popstate", this.handler)
+        window.removeEventListener("popstate", this.handler);
     }
 
     initialize() {
         this.style.display = "block"
-        window.addEventListener("popstate", this.handler)
+        window.addEventListener("popstate", this.handler);
         this.handler();
     }
 

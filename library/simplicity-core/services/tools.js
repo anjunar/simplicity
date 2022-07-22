@@ -418,7 +418,8 @@ export function generateDomProxy(node) {
             let privateGetter = Object.getOwnPropertyDescriptor(dataObject, property)
             if (! privateGetter) {
                 let blackList = ["$fire", "addEventHandler", "removeEventHandler", "initialized", "handlers", "passiveProperty"];
-                if (! blackList.includes(property)) {
+                let blackListRegex = /\d+/;
+                if (! blackList.includes(property) && ! blackListRegex.test(property)) {
                     generateWrapper(node, property, descriptor, dataObject);
                 }
             }

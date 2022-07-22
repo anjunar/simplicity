@@ -2,7 +2,7 @@ import {register} from "./manager/view-manager.js";
 import {codeGenerator, compiler} from "./processors/html-compiler-processor.js";
 import {appManager} from "./manager/app-manager.js";
 import {contentManager} from "./manager/content-manager.js";
-import {generateDomProxy, isEqual} from "./services/tools.js";
+import {generateDomProxy, isEqual, Membrane} from "./services/tools.js";
 
 Node.prototype.queryUpwards = function (callback) {
     if (callback(this)) {
@@ -71,14 +71,9 @@ export const customComponents = new class CustomComponents {
                 return true;
             }
 
-            constructor() {
-                super();
-                generateDomProxy(this);
-            }
-
             i18n(text) {
                 let method = () => {
-                    let language = appManager.language;
+                    let language = this.app.language;
                     if (language === "en") {
                         return text;
                     } else {
@@ -92,9 +87,10 @@ export const customComponents = new class CustomComponents {
                     }
                 }
                 let resonator = (callback, element) => {
-                    window.addEventListener("language", callback);
-                    element.addEventListener("removed", () => {
-                        window.removeEventListener("language", callback)
+                    Membrane.track(this.app, {
+                        property : "language",
+                        element : element,
+                        handler : callback
                     })
                 }
                 return {method, resonator}
@@ -102,6 +98,7 @@ export const customComponents = new class CustomComponents {
 
             connectedCallback() {
                 if (! this.initialized) {
+                    generateDomProxy(this);
                     this.initialized = true;
                     if (template) {
                         let activeContentTemplate = (implicit) => contentManager.instance(this, implicit)
@@ -110,7 +107,7 @@ export const customComponents = new class CustomComponents {
                             this.preInitialize();
                         }
 
-                        let fragment = compiler(template, this, activeContentTemplate);
+                        let fragment = compiler(template, this, activeContentTemplate, null, this.app || this);
 
                         fragments.set(this, fragment);
 

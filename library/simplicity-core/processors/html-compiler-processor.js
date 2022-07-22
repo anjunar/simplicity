@@ -401,12 +401,13 @@ function interpolationStatement(text, context) {
     }
 }
 
-function htmlStatement(tagName, attributes, children) {
+function htmlStatement(tagName, attributes, children, app) {
 
     let tag = tagName.split(":")
     let name = tag[0];
     let extension = tag[1]
     let element = document.createElement(name, {is: extension});
+    element.app = app;
 
     function generate() {
         for (const child of children) {
@@ -468,7 +469,7 @@ function htmlStatement(tagName, attributes, children) {
     }
 }
 
-function svgStatement(tagName, attributes, children) {
+function svgStatement(tagName, attributes, children, app) {
 
     let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
 
@@ -603,14 +604,14 @@ export function codeGenerator(nodes) {
                     }
 
                     if (node.localName === "svg" || isSvg) {
-                        return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true)}\n${tabs}])`
+                        return `\n${tabs}svg("${tagName}", [${attributes(node)}], [${children(node, level + 1, true)}\n${tabs}], app)`
                     }
-                    return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}])`
+                    return `\n${tabs}html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}], app)`
                 }
             }).join(", ")
     }
 
-    let expression = `function factory(context, content, implicit) { return [${intern(nodes)}\n]}`;
+    let expression = `function factory(context, content, implicit, app) { return [${intern(nodes)}\n]}`;
     let names = customPlugins.executors().map(executor => executor.name);
     let arg = `return function(${names.join(", ")}, html, svg, interpolationStatement, bindStatement) {return ${expression}}`;
     let func = evaluator(arg)
@@ -618,9 +619,9 @@ export function codeGenerator(nodes) {
     return func().apply(this, parameters)
 }
 
-export function compiler(template, instance, content, implicit) {
+export function compiler(template, instance, content, implicit, app) {
     let container = document.createDocumentFragment();
-    let activeTemplate = template(new Context(instance, new Context(window)), content, implicit);
+    let activeTemplate = template(new Context(instance, new Context(window)), content, implicit, app);
 
     let component = new Component(activeTemplate);
     component.build(container);

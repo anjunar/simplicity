@@ -1,7 +1,6 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import {dateFormat, dateTimeFormat} from "../../../simplicity-core/services/tools.js";
-import {appManager} from "../../../simplicity-core/manager/app-manager.js";
 
 class MetaColumn extends HTMLElement {
 
@@ -26,11 +25,11 @@ class MetaColumn extends HTMLElement {
     }
 
     dateTime(value, meta) {
-        return dateTimeFormat(value, appManager.language)
+        return dateTimeFormat(value, this.app.language)
     }
 
     date(value, meta) {
-        return dateFormat(value, appManager.language)
+        return dateFormat(value, this.app.language)
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

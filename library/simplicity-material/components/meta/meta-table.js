@@ -19,7 +19,6 @@ class MetaTable extends HTMLElement {
         }
     };
 
-/*
     initialize() {
         let table = this.querySelector("table");
         Membrane.track(this, {
@@ -47,7 +46,6 @@ class MetaTable extends HTMLElement {
             });
         })
     }
-*/
 
     search() {
         let table = this.querySelector("table");

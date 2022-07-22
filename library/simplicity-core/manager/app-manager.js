@@ -1,4 +1,3 @@
-let language = "en";
 let mode = "production"
 let library = "library"
 let shadowDom = false;
@@ -6,23 +5,6 @@ let preFetch = false
 let history = false;
 
 export const appManager = new class AppManager {
-
-    constructor() {
-        language = navigator.language.split("-")[0]
-        if (language === "en" || language === "de") {
-            // No Op
-        } else {
-            language = "en"
-        }
-    }
-
-    get language() {
-        return language;
-    }
-    set language(value) {
-        language = value;
-        window.dispatchEvent(new CustomEvent("language", {detail : language}))
-    }
 
     get mode() {
         return mode;

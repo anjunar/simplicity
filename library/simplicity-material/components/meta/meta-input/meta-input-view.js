@@ -43,14 +43,14 @@ class MetaInputView extends HTMLElement {
 
     dateTime(value, meta) {
         if (value) {
-            return dateTimeFormat(value, appManager.language)
+            return dateTimeFormat(value, this.app.language)
         }
         return "";
     }
 
     date(value, meta) {
         if (value) {
-            return dateFormat(value, appManager.language)
+            return dateFormat(value, this.app.language)
         }
         return "";
     }
