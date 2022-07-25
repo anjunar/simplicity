@@ -57,7 +57,9 @@
     <mat-toolbar style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <div slot="left">
             <div style="display: flex">
-                <a href="basic/started"
+                <a href="home"
+                   bind:class="active('home') ? 'normal active' : 'normal'; 'material-icons'">home</a>
+                <a href="basic/getting-started/installation"
                    bind:class="active('basic') ? 'normal active' : 'normal'" i18n>Basic</a>
                 <a href="components/form/checkbox"
                    bind:class="active('components') ? 'normal active' : 'normal'" i18n>Components</a>

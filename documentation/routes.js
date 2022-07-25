@@ -4,6 +4,9 @@ import {routes as expert} from "./expert/routes.js";
 
 export const routes = {
     children : {
+        "home" : {
+            file : "documentation/home/index.js"
+        },
         "basic" : {
             file: "documentation/basic/index.js",
             children : basic

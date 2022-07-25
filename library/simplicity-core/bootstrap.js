@@ -37,16 +37,29 @@ export function mountApp(options) {
                 }, 3000)
             }
 
+            function startWith(routes, url) {
+                for (const route of routes) {
+                    if (url.startsWith(route)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             if (options.history) {
                 window.addEventListener("click", (event) => {
                     let aElement = event.path.find((element) => element.localName === "a" && element.hasAttribute("href"));
                     if (aElement) {
-                        event.stopPropagation();
-                        event.preventDefault();
                         let url = aElement.getAttribute("href");
-                        history.pushState(null, null, url)
-                        window.dispatchEvent(new Event("popstate"));
-                        return false;
+                        let routes = app.constructor.routes;
+                        let strings = Object.keys(routes.children);
+                        if (startWith(strings, url)) {
+                            event.stopPropagation();
+                            event.preventDefault();
+                            history.pushState(null, null, url)
+                            window.dispatchEvent(new Event("popstate"));
+                            return false;
+                        }
                     }
                     return true;
                 })
