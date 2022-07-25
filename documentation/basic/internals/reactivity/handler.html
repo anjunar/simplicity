@@ -11,15 +11,15 @@
         <translation>
             <en>
                 The active membrane makes it possible for properties to be tracked by an event handler.
-                The "addEventHandler" function makes this possible, while the property, the element when
+                The Membrane.track([object], [options]) function makes this possible, using the property, the element when
                 Exiting the dom de-registers the handler and passes the callback. In addition, there is the method
-                "fire" on the active membrane that triggers the handlers.
+                Membrane.fire([object]) on the active membrane that fires the handlers.
             </en>
             <de>
                 Die aktive Membrane macht es möglich das Properties durch einen Event-handler getrackt werden können.
-                Die Funktion "addEventHandler" macht dies möglich, dabei wird die Property, das Element, dass beim
-                Verlassen des Doms den Handler de-registriert und der Callback übergeben. Zusätzlich gibt es die Methode
-                "fire" an der aktiven Membrane das die Handler auslöst.
+                Die Funktion Membrane.track([object], [options]) macht dies möglich, dabei wird die Property, das Element, dass beim
+                Verlassen des Doms den Handler de-registriert und der Handler übergeben. Zusätzlich gibt es die Methode
+                Membrane.fire([object]) an der aktiven Membrane das die Handler auslöst.
             </de>
         </translation>
     </i18n>
@@ -33,9 +33,9 @@
 
             <p i18n>
                 The active membrane makes it possible for properties to be tracked by an event handler.
-                The "addEventHandler" function makes this possible, while the property, the element when
+                The Membrane.track([object], [options]) function makes this possible, using the property, the element when
                 Exiting the dom de-registers the handler and passes the callback. In addition, there is the method
-                "fire" on the active membrane that triggers the handlers.
+                Membrane.fire([object]) on the active membrane that fires the handlers.
             </p>
         </div>
         <div style="flex: 1; padding: 20px; min-width : 400px">
@@ -47,6 +47,7 @@
                         <template>
                             <script>
                                 import {customComponents} from "../../../../library/simplicity-core/simplicity.js";
+                                import {Membrane} from "../../../../library/simplicity-core/services/tools";
 
                                 class Test extends HTMLElement {
 
@@ -58,15 +59,23 @@
                                     }
 
                                     initialize() {
-                                        this.test.addEventHandler("value", this, (value) => {
-                                            console.log(value)
+                                        Membrane.track(this.test, {
+                                            property : "value",
+                                            element : this,
+                                            handler : (value) => {
+                                                console.log(value)
+                                            }
                                         })
 
-                                        this.test.test2.addEventHandler("value", this, (value) => {
-                                            console.log(value)
+                                        Membrane.track(this.test.test2, {
+                                            property : "value",
+                                            element : this,
+                                            handler : (value) => {
+                                                console.log(value)
+                                            }
                                         })
 
-                                        this.test.fire(); // Hello World
+                                        Membrane.fire(this.test) ; // Hello World
                                     }
 
                                 }

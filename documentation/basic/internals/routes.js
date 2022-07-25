@@ -1,6 +1,9 @@
 import {routes as reactivity} from "./reactivity/routes.js";
 
 export const routes = {
+    "architecture": {
+        file: "documentation/basic/internals/architecture.js"
+    },
     "es6-modules" : {
         file : "documentation/basic/internals/es6-modules.js"
     },

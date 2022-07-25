@@ -22,14 +22,12 @@
         </translation>
         <translation>
             <en>
-                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the
-                server.
-                You don't have to put a .js at the end of the path, it is automatically added to the path.
+                This is a custom query parameters page. The path in the URL goes through the routes,
+                stored in the root of the app directly to a javascript file.
             </en>
             <de>
-                Dies ist eine benutzerdefinierte Seite mit Abfrageparametern. Der Pfad im Hash führt direkt zu der Datei
-                auf dem Server.
-                Sie müssen keine .js-Datei am Ende des Pfads einfügen, sie wird automatisch dem Pfad hinzugefügt.
+                Dies ist eine benutzerdefinierte Seite mit Abfrageparametern. Der Pfad in der URL führt über die Routen,
+                die in der Root der App gespeichert sind, direkt zu einer Javascript Datei.
             </de>
         </translation>
         <translation>
@@ -58,9 +56,8 @@
             <hr class="line">
 
             <p i18n>
-                This is a Custom Page with query parameters. The path in the hash locates direct to the file on the
-                server.
-                You don't have to put a .js at the end of the path, it is automatically added to the path.
+                This is a custom query parameters page. The path in the URL goes through the routes,
+                stored in the root of the app directly to a javascript file.
             </p>
 
             <p i18n>
@@ -85,6 +82,9 @@
                 </mat-tab>
                 <mat-tab>
                     <span>Example</span>
+                </mat-tab>
+                <mat-tab>
+                    <span>Routes</span>
                 </mat-tab>
             </mat-tabs>
 
@@ -155,6 +155,88 @@
                                 </code>
                             </div>
                         </div>
+                    </div>
+                </mat-page>
+                <mat-page>
+                    <div>
+                        <h3>Javascript</h3>
+                        <code is="dom-code" lang="javascript">
+                            <template>
+                                <script>
+                                    import {routes as expert} from "./expert/routes.js";
+                                    import {routes as form} from "./components/form/routes";
+                                    import {routes as indicators} from "./components/indicators/routes";
+                                    import {routes as modals} from "./components/modals/routes";
+                                    import {routes as tables} from "./components/tables/routes";
+                                    import {routes as navigation} from "./navigation/routes.js";
+                                    import {routes as control} from "./control/routes.js";
+                                    import {routes as internals} from "./internals/routes.js";
+
+
+                                    export const routes = {
+                                        children : {
+                                            "basic" : {
+                                                file: "documentation/basic/index.js",
+                                                children : {
+                                                    "started" : {
+                                                        file : "documentation/basic/started.js"
+                                                    },
+                                                    "architecture" : {
+                                                        children : {
+                                                            "component": {
+                                                                file: "documentation/basic/architecture/component.js"
+                                                            },
+                                                            "overview": {
+                                                                file: "documentation/basic/architecture/overview.js"
+                                                            },
+                                                            "view": {
+                                                                file: "documentation/basic/architecture/view.js",
+                                                                children : {
+                                                                    "example/{id}" : {
+                                                                        override : true,
+                                                                        file : "documentation/basic/architecture/view/example.js"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "control" : {
+                                                        children : control
+                                                    },
+                                                    "internals" : {
+                                                        children : internals
+                                                    }
+                                                }
+                                            },
+                                            "components" : {
+                                                file: "documentation/components/index.js",
+                                                children: {
+                                                    "form" : {
+                                                        children : form
+                                                    },
+                                                    "indicators" : {
+                                                        children: indicators
+                                                    },
+                                                    "modals" : {
+                                                        children : modals
+                                                    },
+                                                    "navigation" : {
+                                                        children : navigation
+                                                    },
+                                                    "tables" : {
+                                                        children : tables
+                                                    }
+                                                }
+                                            },
+                                            "expert" : {
+                                                file : "documentation/expert/index.js",
+                                                children : expert
+                                            }
+                                        }
+                                    }
+                                </script>
+                            </template>
+                        </code>
                     </div>
                 </mat-page>
             </mat-pages>

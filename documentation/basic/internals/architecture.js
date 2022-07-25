@@ -8,7 +8,7 @@ class Architecture extends HTMLElement {
     }
 
     static get template() {
-        return loader("documentation/basic/architecture/overview.html");
+        return loader("documentation/basic/internals/architecture.html");
     }
 
 }

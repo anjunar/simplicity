@@ -464,4 +464,7 @@ export const Membrane = class Membrane {
         membrane.passiveProperty(property);
         return property;
     }
+    static fire(membrane) {
+        membrane.fire();
+    }
 }

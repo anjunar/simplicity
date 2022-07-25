@@ -3,7 +3,7 @@ export const routes = {
         file : "documentation/expert/meta/form.js"
     },
     "overview" : {
-        file : "documentation/expert/meta/overview.js"
+        file : "documentation/expert/meta/architecture.js"
     },
     "table" : {
         file : "documentation/expert/meta/table.js"

@@ -12,22 +12,24 @@
             <en>
                 Reactivity is performed by tracking changes in the membranes. One changes
                 Property, then handlers are executed that invoke a callback. New handlers can work on the model,
-                that is enclosed by membranes can be attached using the "addEventHandler" method.
+                that is enclosed by membranes can be attached using the Membrane.track([object], [options]) method.
             </en>
             <de>
                 Reaktivität wird durch das tracken der Veränderungen an den Membranen durchgeführt. Ändert sich eine
                 Property, dann werden Handler ausgeführt der einen Callback aufruft. Neue Handler können an dem Model,
-                das durch Membranen umschlossen wird, angehängt werden, mit der Methode "addEventHandler".
+                das durch Membranen umschlossen wird, angehängt werden, mit der Methode Membrane.track([object], [options]).
             </de>
         </translation>
         <translation>
             <en>
-                The "addEventHandler" method is passed the name of the property, an element and the callback.
-                The element is used to de-register the handler when the element leaves the dom.
+                The Membrane.track([object], [options]) method is passed an Object surrounded by a membrane
+                and is passed another Object with Options. The options must contain the property
+                the element and the handler.
             </en>
             <de>
-                Der Methode "addEventHandler" wird der Name der Property, ein Element und der Callback übergeben.
-                Das Element dient dazu den Handler zu de-registrieren wenn das Element den Dom verläßt.
+                Der Methode Membrane.track([object], [options]) wird ein Object übergeben das durch eine Membrane umgeben
+                ist übergeben und ein weiteres Object mit Options. In den Options muss enthalten sein die Property,
+                das Element und der Handler.
             </de>
         </translation>
         <translation>
@@ -52,12 +54,13 @@
             <p i18n>
                 Reactivity is performed by tracking changes in the membranes. One changes
                 Property, then handlers are executed that invoke a callback. New handlers can work on the model,
-                that is enclosed by membranes can be attached using the "addEventHandler" method.
+                that is enclosed by membranes can be attached using the Membrane.track([object], [options]) method.
             </p>
 
             <p i18n>
-                The "addEventHandler" method is passed the name of the property, an element and the callback.
-                The element is used to de-register the handler when the element leaves the dom.
+                The Membrane.track([object], [options]) method is passed an Object surrounded by a membrane
+                and is passed another Object with Options. The options must contain the property
+                the element and the handler.
             </p>
 
             <p i18n>
