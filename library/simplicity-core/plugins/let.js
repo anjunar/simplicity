@@ -18,9 +18,13 @@ function letStatement(rawAttributes, implicit, context, callback) {
         ast = callback(newContext);
     }
     return {
+        type : "let",
         build(parent) {
             if (implicit) {
                 let element = ast.build(parent);
+                if (! this.element) {
+                    this.element = element;
+                }
                 newContext.instance = element;
                 Object.assign(element, instance);
                 generateDomProxy(element);

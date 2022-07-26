@@ -35,7 +35,9 @@
                     </div>
                 </div>
                 <mat-scroll-area style="height: calc(100% - 40px); width: 100%">
-                    <slot name="content"></slot>
+                    <div>
+                        <slot name="content"></slot>
+                    </div>
                 </mat-scroll-area>
                 <div style="height: 20px; background-color: var(--main-dark1-color)">
                     <button style="float: right" class="thin" type="button" bind:onclick="close($event)">Cancel</button>

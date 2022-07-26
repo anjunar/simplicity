@@ -46,17 +46,46 @@ class Component {
     }
 }
 
+let contentChildrenCache = new WeakMap();
+
 export function content(element, implicit) {
-    let func = contentRegistry.get(element);
-    let objects = func(implicit);
-    let fragment = document.createDocumentFragment();
+    let contentChildren = contentChildrenCache.get(element);
+    if (contentChildren) {
+        let implicitObject = contentChildren.get(implicit);
+        if (implicitObject) {
+            return implicitObject;
+        } else {
+            let func = contentRegistry.get(element);
+            let objects = func(implicit);
+            let fragment = document.createDocumentFragment();
 
-    let component = new Component(objects);
-    component.build(fragment);
+            let component = new Component(objects);
+            component.build(fragment);
 
-    fragment.component = component;
+            fragment.component = component;
 
-    return fragment;
+            implicitObject = new Map();
+            implicitObject.set(implicit, fragment)
+            contentChildren.set(element, implicitObject)
+
+            return fragment;
+        }
+    } else {
+        let func = contentRegistry.get(element);
+        let objects = func(implicit);
+        let fragment = document.createDocumentFragment();
+
+        let component = new Component(objects);
+        component.build(fragment);
+
+        fragment.component = component;
+
+        let map = new Map();
+        map.set(implicit, fragment)
+        contentChildrenCache.set(element, map)
+
+        return fragment;
+    }
 }
 
 export function activeObjectExpression(expression, context, element, callback) {
@@ -353,25 +382,23 @@ function interpolationStatement(text, context) {
         });
     }
 
-    let textNode = document.createTextNode("");
-    textNode.textContent = evalText();
-
-    text.replace(interpolationRegExp, (match, expression) => {
-        activeObjectExpression(expression, context, textNode, () => {
-            let textContent = evalText();
-            if (textContent !== textNode.textContent) {
-                textNode.textContent = textContent;
-            }
-        })
-    })
-
     return {
         type: "interpolation",
         text: text,
         build(parent) {
+            let textNode = document.createTextNode("");
+            textNode.textContent = evalText();
+
+            text.replace(interpolationRegExp, (match, expression) => {
+                activeObjectExpression(expression, context, textNode, () => {
+                    let textContent = evalText();
+                    if (textContent !== textNode.textContent) {
+                        textNode.textContent = textContent;
+                    }
+                })
+            })
             parent.appendChild(textNode);
-        },
-        update() {}
+        }
     }
 }
 
@@ -380,8 +407,6 @@ function htmlStatement(tagName, attributes, children, app) {
     let tag = tagName.split(":")
     let name = tag[0];
     let extension = tag[1]
-    let element = document.createElement(name, {is: extension});
-    element.app = app;
 
     function generate(element) {
         for (const child of children) {
@@ -416,16 +441,13 @@ function htmlStatement(tagName, attributes, children, app) {
 
     return {
         type: "html",
-        element: element,
         children: children,
         build(parent) {
-            generate(element);
-            parent.appendChild(element);
-            return element;
-        },
-        import(parent) {
             let element = document.createElement(name, {is: extension});
             element.app = app;
+            if (! this.element) {
+                this.element = element;
+            }
             generate(element);
             parent.appendChild(element);
             return element;
@@ -434,8 +456,6 @@ function htmlStatement(tagName, attributes, children, app) {
 }
 
 function svgStatement(tagName, attributes, children, app) {
-
-    let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
 
     function generate() {
         for (const child of children) {
@@ -469,9 +489,12 @@ function svgStatement(tagName, attributes, children, app) {
 
     return {
         type: "svg",
-        element: element,
         children: children,
         build(parent) {
+            let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+            if (! this.element) {
+                this.element = element;
+            }
             generate();
             parent.appendChild(element);
             return element;
@@ -493,11 +516,6 @@ function bindStatement(name, value, context) {
                 } else {
                     processor = null
                 }
-            }
-        },
-        update() {
-            if (processor) {
-                processor.process();
             }
         }
     }

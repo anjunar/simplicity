@@ -11,7 +11,7 @@ class MatWindow extends HTMLElement {
     minimized = false;
 
     get contents() {
-        let element = this.querySelector("div.content *");
+        let element = this.querySelector("div.content div *");
         return element
     }
 

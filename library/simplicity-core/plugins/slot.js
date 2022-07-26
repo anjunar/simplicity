@@ -32,40 +32,64 @@ function slotStatement(rawAttributes, context, contents) {
             activeContent = contents(implicitValue);
         }
 
+        function findAst(ast, element) {
+            let result = null;
+            for (const astElement of ast) {
+                if (result) {
+                    break;
+                }
+                if (astElement instanceof Object) {
+                    if (astElement.element === element) {
+                        result = astElement;
+                        break;
+                    }
+                    if (astElement.children) {
+                        result = findAst(astElement.children, element);
+                    }
+                }
+            }
+            return result;
+        }
+
         if (values.name) {
             let querySelector = activeContent.querySelectorAll(`[slot=${values.name}]`)[index];
             if (querySelector) {
-                container.appendChild(querySelector)
-                children.push(querySelector);
+                let ast = findAst(activeContent.component.ast, querySelector);
+                let items = ast.build(container);
+                children.push(items)
             }
         } else if (values.selector) {
             let querySelector = activeContent.querySelectorAll(values.selector)[index];
             if (querySelector) {
-                container.appendChild(querySelector)
-                children.push(querySelector);
+                let ast = findAst(activeContent.component.ast, querySelector);
+                let items = ast.build(container);
+                children.push(items)
             }
         } else if (values.tag) {
             let iterator = document.createNodeIterator(activeContent, NodeFilter.SHOW_ELEMENT)
             let cursor = iterator.nextNode();
             while (cursor != null) {
                 if (cursor[values.tag]) {
-                    container.appendChild(cursor)
-                    children.push(cursor);
+                    let ast = findAst(activeContent.component.ast, cursor);
+                    let items = ast.build(container);
+                    children.push(items)
                     break;
                 }
                 cursor = iterator.nextNode();
             }
         } else {
-            for (const segment of Array.from(activeContent.children)) {
-                container.appendChild(segment)
-                children.push(segment);
-            }
-        }
+            for (const astElement of activeContent.component.ast) {
+                if (astElement instanceof Object) {
+                    let items = astElement.build(container);
+                    if (items instanceof Array) {
+                        children.push(...items)
+                    } else {
+                        children.push(items)
+                    }
 
-        for (const child of children) {
-            child.addEventListener("removed",() => {
-                notifyElementRemove(activeContent)
-            })
+                }
+            }
+
         }
 
         return activeContent;
@@ -91,6 +115,7 @@ function slotStatement(rawAttributes, context, contents) {
             fragment = generate();
             parent.appendChild(comment);
             parent.appendChild(container);
+            return children;
         }
     };
 }

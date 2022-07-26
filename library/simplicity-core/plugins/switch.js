@@ -31,6 +31,7 @@ function switchStatement(rawAttributes, context, cases) {
     let elements;
 
     return {
+        type : "switch",
         build(parent) {
             let values = boundAttributesFunction();
             value = values.switch;

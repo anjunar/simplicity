@@ -188,11 +188,12 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                 }))
             }
             handlers.push(Membrane.track(this, {
-                property : "columns",
-                element : element,
-                override : true,
-                handler : callback
+                property: "columns",
+                element: element,
+                override: true,
+                handler: callback
             }))
+
             return handlers;
         }
 
