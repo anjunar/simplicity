@@ -3,13 +3,10 @@ import {Context, customPlugins, membraneFactory} from "../processors/html-compil
 import {attributes, boundAttributes, getAttributes, rawAttributes} from "./helper.js";
 
 function letStatement(rawAttributes, implicit, context, callback) {
-    let ast = {
-        update() {
-        }
-    }
     let newContext;
     let instance;
     let scope;
+    let ast;
     if (implicit) {
         let attributes = getAttributes(rawAttributes, ["let"]);
         let boundAttributesFunction = boundAttributes(attributes, context);
@@ -31,9 +28,6 @@ function letStatement(rawAttributes, implicit, context, callback) {
                 return element
             }
             return null;
-        },
-        update() {
-            ast.update();
         }
     }
 }

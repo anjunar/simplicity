@@ -54,6 +54,7 @@ class StyleAttributeProcessor {
         let result = name === "bind:style"
         if (result) {
             this.matched = true;
+            this.process();
         }
     }
 
@@ -108,6 +109,7 @@ class ClassAttributeProcessor {
         let result = name === "bind:class"
         if (result) {
             this.matched = true;
+            this.process();
         }
     }
 

@@ -24,7 +24,6 @@ function ifStatement(rawAttributes, context, callback) {
             } else {
                 generate();
                 comment.after(element);
-                html.update();
             }
         } else {
             if (element.isConnected) {
@@ -46,11 +45,6 @@ function ifStatement(rawAttributes, context, callback) {
             if (value) {
                 generate();
                 parent.appendChild(container);
-            }
-        },
-        update() {
-            if (value) {
-                html.update();
             }
         }
     }

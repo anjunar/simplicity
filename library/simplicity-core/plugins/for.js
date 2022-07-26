@@ -136,9 +136,6 @@ function forStatement(rawAttributes, context, callback) {
         ast.length = 0;
         generate();
         comment.after(container);
-        for (const astElement of ast) {
-            astElement.update();
-        }
         if (data.onRendered) {
             evaluation(data.onRendered.func, context, {$children: children}, true)
         }
@@ -156,11 +153,6 @@ function forStatement(rawAttributes, context, callback) {
                 evaluation(data.onRendered.func, context, {$children: children}, true)
             }
             return children;
-        },
-        update: function () {
-            for (const astElement of ast) {
-                astElement.update();
-            }
         }
     }
 }

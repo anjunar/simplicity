@@ -73,8 +73,15 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
             for (const component of this.components) {
                 component.dirty.resonator(context, element);
             }
+            return [];
         }
-        return {method, resonator}
+        let activator = (callback) => {
+            let mutationObserver = new MutationObserver(() => {
+                callback();
+            })
+            mutationObserver.observe(this, {childList : true, subtree: true})
+        }
+        return {method, resonator, activator}
     }
 
     reset() {

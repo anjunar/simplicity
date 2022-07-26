@@ -1,6 +1,6 @@
 import {collectIdentifiers, evaluation} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
-import {cachingProxy, evaluator, getPropertyDescriptor, Membrane} from "../services/tools.js";
+import {evaluator, getPropertyDescriptor, Membrane} from "../services/tools.js";
 import {attributes, isCompositeComponent} from "../plugins/helper.js";
 import {generate} from "./js-compiler-extension.js";
 
@@ -44,14 +44,6 @@ class Component {
             }
         }
     }
-
-    update() {
-        for (const segment of this.ast) {
-            if (segment instanceof Object) {
-                segment.update();
-            }
-        }
-    }
 }
 
 export function content(element, implicit) {
@@ -62,28 +54,10 @@ export function content(element, implicit) {
     let component = new Component(objects);
     component.build(fragment);
 
-    fragment.update = function () {
-        component.update();
-    }
+    fragment.component = component;
 
     return fragment;
 }
-
-const findProperties = cachingProxy(function (object) {
-        let cursor = object;
-
-        let result = [];
-        while (cursor !== null) {
-            let ownPropertyNames = Object.getOwnPropertyNames(cursor);
-            result.push(...ownPropertyNames);
-            cursor = Object.getPrototypeOf(cursor);
-            if (cursor && cursor.constructor.name.startsWith("HTML")) {
-                cursor = null
-            }
-        }
-        return result;
-    }
-)
 
 export function activeObjectExpression(expression, context, element, callback) {
     let identifiers = collectIdentifiers(expression);
@@ -409,7 +383,7 @@ function htmlStatement(tagName, attributes, children, app) {
     let element = document.createElement(name, {is: extension});
     element.app = app;
 
-    function generate() {
+    function generate(element) {
         for (const child of children) {
             if (typeof child === "string") {
                 element.appendChild(document.createTextNode(child))
@@ -445,26 +419,16 @@ function htmlStatement(tagName, attributes, children, app) {
         element: element,
         children: children,
         build(parent) {
-            generate();
+            generate(element);
             parent.appendChild(element);
             return element;
         },
-        update() {
-            for (const attribute of attributes) {
-                if (attribute instanceof Object) {
-                    attribute.update();
-                }
-            }
-/*
-            if (Reflect.has(element, "render")) {
-                element.render();
-            }
-*/
-            for (const child of children) {
-                if (child instanceof Object && !(child instanceof Function)) {
-                    child.update();
-                }
-            }
+        import(parent) {
+            let element = document.createElement(name, {is: extension});
+            element.app = app;
+            generate(element);
+            parent.appendChild(element);
+            return element;
         }
     }
 }
@@ -511,18 +475,6 @@ function svgStatement(tagName, attributes, children, app) {
             generate();
             parent.appendChild(element);
             return element;
-        },
-        update() {
-            for (const attribute of attributes) {
-                if (attribute instanceof Object) {
-                    attribute.update();
-                }
-            }
-            for (const child of children) {
-                if (child instanceof Object && !(child instanceof Function)) {
-                    child.update();
-                }
-            }
         }
     }
 }
@@ -626,9 +578,7 @@ export function compiler(template, instance, content, implicit, app) {
     let component = new Component(activeTemplate);
     component.build(container);
 
-    container.update = function () {
-        component.update();
-    }
+    container.component = component;
 
     return container;
 }

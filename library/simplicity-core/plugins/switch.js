@@ -38,21 +38,6 @@ function switchStatement(rawAttributes, context, cases) {
             elements = generate();
             parent.appendChild(comment);
             parent.appendChild(container);
-        },
-        update() {
-            let values = boundAttributesFunction();
-            let newValue = values.switch;
-            if (!isEqual(value, newValue)) {
-                value = newValue;
-                for (const element of elements) {
-                    element.remove();
-                }
-                caseSegment = findCase(value);
-                elements = generate();
-                comment.after(container);
-            } else {
-                caseSegment.update();
-            }
         }
     }
 }

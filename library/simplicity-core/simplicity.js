@@ -125,8 +125,6 @@ export const customComponents = new class CustomComponents {
                         } else {
                             this.appendChild(fragment);
                         }
-
-                        fragment.update();
                     }
 
                     if (Reflect.has(this, "initialize")) {

@@ -18,13 +18,6 @@ function caseStatement(rawAttributes, context, callback) {
                 }
             }
             return elements;
-        },
-        update() {
-            for (const child of children) {
-                if (child instanceof Object) {
-                    child.update();
-                }
-            }
         }
     }
 }

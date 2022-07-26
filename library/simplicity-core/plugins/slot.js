@@ -81,7 +81,6 @@ function slotStatement(rawAttributes, context, contents) {
         children.length = 0;
         fragment = generate();
         comment.after(container);
-        fragment.update();
     }
 
     return {
@@ -92,9 +91,6 @@ function slotStatement(rawAttributes, context, contents) {
             fragment = generate();
             parent.appendChild(comment);
             parent.appendChild(container);
-        },
-        update() {
-            fragment.update();
         }
     };
 }

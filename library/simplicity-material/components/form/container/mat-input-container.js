@@ -67,15 +67,24 @@ class MatInputContainer extends HTMLElement {
             return document.activeElement === input;
         }
         let resonator = (callback, element) => {
-            input.addEventListener("focus", callback);
-            input.addEventListener("blur", callback);
+            if (input) {
+                input.addEventListener("focus", callback);
+                input.addEventListener("blur", callback);
 
-            element.addEventListener("removed", () => {
-                input.removeEventListener("focus", callback);
-                input.removeEventListener("blur", callback);
-            })
+                element.addEventListener("removed", () => {
+                    input.removeEventListener("focus", callback);
+                    input.removeEventListener("blur", callback);
+                })
+            }
+            return [];
         }
-        return {method, resonator}
+        let activator = (callback) => {
+            let mutationObserver = new MutationObserver(() => {
+                callback();
+            })
+            mutationObserver.observe(this, {childList : true, subtree : true})
+        }
+        return {method, resonator, activator}
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
