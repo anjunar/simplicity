@@ -93,13 +93,24 @@
                     <iframe>
                         <html lang="en">
                         <head>
+                            <base href="/"> <!--Can be modified for Server configuration-->
                             <meta charset="UTF-8">
                             <title>Simplicity</title>
                             <link rel="stylesheet" href="styles.css">
-                            <script type="module" src="documentation/app.js"></script>
+                            <script type="module">
+                                import {bootstrap} from "./library/simplicity-material/bootstrap.js";
+
+                                bootstrap({
+                                    app: "documentation/app.js",
+                                    mode : "development",
+                                    library : "library",
+                                    shadowDom : false, // Experimental
+                                    preFetch : false, // Experimental,
+                                    history : true
+                                })
+                            </script>
                         </head>
                         <body>
-                        <app-documentation></app-documentation>
                         </body>
                         </html>
                     </iframe>

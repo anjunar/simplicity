@@ -16,7 +16,9 @@ class DocumentationApp extends HTMLElement {
 
     active(value) {
         let method = () => {
-            return window.location.pathname.startsWith(`/simplicity/${value}`)
+            let baseElement = document.querySelector("base")
+            let attribute = baseElement.getAttribute("href");
+            return window.location.pathname.startsWith(`${attribute}${value}`)
         }
         let resonator = (callback) => {
             window.addEventListener("popstate", callback)
