@@ -28,7 +28,7 @@ export const windowManager = new class WindowManager {
 
                 let matWindow = new MatWindow();
 
-                contentManager.register(matWindow, [header, view]);
+                contentManager.register(matWindow, [header, view], options.data);
 
                 if (options?.width) {
                     matWindow.style.width = options.width;

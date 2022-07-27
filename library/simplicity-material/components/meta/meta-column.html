@@ -17,7 +17,7 @@
         </case>
         <case value="array">
             <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">
-                {{multiSelect(model, schema)}}
+                {{{multiSelect(model, schema)}}}
             </div>
         </case>
         <case value="object">
@@ -27,7 +27,7 @@
                 </case>
                 <case value="default">
                     <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">
-                        {{select(model, schema)}}
+                        {{{select(model, schema)}}}
                     </div>
                 </case>
             </div>
@@ -38,13 +38,13 @@
         <case value="string">
             <div bind:switch="schema.format">
                 <case value="date-time">
-                    <div>{{dateTime(model)}}</div>
+                    <div>{{{dateTime(model)}}}</div>
                 </case>
                 <case value="date">
-                    <div>{{date(model)}}</div>
+                    <div>{{{date(model)}}}</div>
                 </case>
                 <case value="default">
-                    <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{model}}</div>
+                    <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{{model}}}</div>
                 </case>
             </div>
 

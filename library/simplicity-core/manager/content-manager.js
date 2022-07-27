@@ -7,14 +7,16 @@ export const contentManager = new class ContentManager {
         return content(element, implicit);
     }
 
-    register(element, children) {
+    register(element, children, data) {
         function template(implicit) {
             return children.map((outerChild) => {
                 return {
                     type : "registeredContentChildren",
                     build(parent) {
                         let child = document.importNode(outerChild);
-                        child.table = outerChild.table
+                        if (data) {
+                            Object.assign(child, data)
+                        }
                         parent.appendChild(child);
                         if (! this.element) {
                             this.element = child;

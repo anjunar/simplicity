@@ -1,6 +1,5 @@
-import {isEqual} from "../services/tools.js";
-import {boundAttributes, getAttributes, rawAttributes} from "./helper.js";
-import {customPlugins} from "../processors/html-compiler-processor.js";
+import {boundAttributes, getAttributes, notifyElementRemove, rawAttributes} from "./helper.js";
+import {activeObjectExpression, customPlugins} from "../processors/html-compiler-processor.js";
 
 function switchStatement(rawAttributes, context, cases) {
     let attributes = getAttributes(rawAttributes, ["switch"])
@@ -26,12 +25,22 @@ function switchStatement(rawAttributes, context, cases) {
         }
     }
 
+    activeObjectExpression(attributes.switch.value, context, comment, (result) => {
+        for (const element of elements) {
+            element.remove();
+            notifyElementRemove(element)
+        }
+        caseSegment = findCase(value);
+        elements = generate();
+        comment.after(container);
+    });
+
     let caseSegment;
     let value;
     let elements;
 
     return {
-        type : "switch",
+        type: "switch",
         build(parent) {
             let values = boundAttributesFunction();
             value = values.switch;

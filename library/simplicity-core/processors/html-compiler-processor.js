@@ -373,6 +373,29 @@ export class Context {
     }
 }
 
+function passiveInterpolationStatement(text, context) {
+    let interpolationRegExp = /{{{([^}]+)}}}/g;
+
+    function evalText() {
+        return text.replace(interpolationRegExp, (match, expression) => {
+            let result = evaluation(expression, context);
+            if (result === undefined || result === null) {
+                return ""
+            }
+            return result;
+        });
+    }
+
+    return {
+        type: "interpolation",
+        text: text,
+        build(parent) {
+            let textNode = document.createTextNode("");
+            textNode.textContent = evalText();
+            parent.appendChild(textNode);
+        }
+    }
+}
 
 function interpolationStatement(text, context) {
     let interpolationRegExp = /{{([^}]+)}}/g;
@@ -462,7 +485,7 @@ function htmlStatement(tagName, attributes, children, app) {
 
 function svgStatement(tagName, attributes, children, app) {
 
-    function generate() {
+    function generate(element) {
         for (const child of children) {
             if (typeof child === "string") {
                 element.appendChild(document.createTextNode(child))
@@ -500,7 +523,7 @@ function svgStatement(tagName, attributes, children, app) {
             if (! this.element) {
                 this.element = element;
             }
-            generate();
+            generate(element);
             parent.appendChild(element);
             return element;
         }
@@ -543,6 +566,7 @@ export function codeGenerator(nodes) {
             .filter((node => (node.nodeType === Node.TEXT_NODE) || node.nodeType === Node.ELEMENT_NODE))
             .map((node) => {
                 if (node.nodeType === Node.TEXT_NODE) {
+                    let passiveInterpolationRegExp = /{{{([^}]+)}}}/g;
                     let interpolationRegExp = /{{([^}]+)}}/g;
                     let textContent = node.textContent
                         .replaceAll("`", "\\`")
@@ -551,13 +575,20 @@ export function codeGenerator(nodes) {
                     if (node.parentElement instanceof HTMLIFrameElement) {
                         return `\n${tabs}\`${textContent}\``
                     }
-                    if (interpolationRegExp.test(textContent)) {
+                    if (passiveInterpolationRegExp.test(textContent)) {
                         if (!(node.parentElement instanceof HTMLScriptElement)) {
-                            return `\n${tabs}interpolationStatement(\`${textContent}\`, context)`
+                            return `\n${tabs}passiveInterpolationStatement(\`${textContent}\`, context)`
                         }
                         return `\n${tabs}\`${textContent}\``
                     } else {
-                        return `\n${tabs}\`${textContent}\``
+                        if (interpolationRegExp.test(textContent)) {
+                            if (!(node.parentElement instanceof HTMLScriptElement)) {
+                                return `\n${tabs}interpolationStatement(\`${textContent}\`, context)`
+                            }
+                            return `\n${tabs}\`${textContent}\``
+                        } else {
+                            return `\n${tabs}\`${textContent}\``
+                        }
                     }
                 } else {
 
@@ -588,9 +619,9 @@ export function codeGenerator(nodes) {
 
     let expression = `function factory(context, content, implicit, app) { return [${intern(nodes)}\n]}`;
     let names = customPlugins.executors().map(executor => executor.name);
-    let arg = `return function(${names.join(", ")}, html, svg, interpolationStatement, bindStatement) {return ${expression}}`;
+    let arg = `return function(${names.join(", ")}, html, svg, interpolationStatement, passiveInterpolationStatement, bindStatement) {return ${expression}}`;
     let func = evaluator(arg)
-    let parameters = [...customPlugins.executors(), htmlStatement, svgStatement, interpolationStatement, bindStatement];
+    let parameters = [...customPlugins.executors(), htmlStatement, svgStatement, interpolationStatement, passiveInterpolationStatement, bindStatement];
     return func().apply(this, parameters)
 }
 
