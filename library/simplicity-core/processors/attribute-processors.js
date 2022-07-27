@@ -306,6 +306,7 @@ class i18nAttributeProcessor {
             this.text = element.innerHTML.trim()
                 .replace(/ +/g, " ")
                 .replace(/\n+/g, "")
+            this.process();
         }
     }
 

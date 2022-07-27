@@ -3,6 +3,7 @@ import {attributeProcessorRegistry} from "./attribute-processors.js";
 import {evaluator, getPropertyDescriptor, Membrane} from "../services/tools.js";
 import {attributes, isCompositeComponent} from "../plugins/helper.js";
 import {generate} from "./js-compiler-extension.js";
+import {appManager} from "../manager/app-manager.js";
 
 const pluginRegistry = [];
 export const contentRegistry = new WeakMap();
@@ -49,28 +50,7 @@ class Component {
 let contentChildrenCache = new WeakMap();
 
 export function content(element, implicit) {
-    let contentChildren = contentChildrenCache.get(element);
-    if (contentChildren) {
-        let implicitObject = contentChildren.get(implicit);
-        if (implicitObject) {
-            return implicitObject;
-        } else {
-            let func = contentRegistry.get(element);
-            let objects = func(implicit);
-            let fragment = document.createDocumentFragment();
-
-            let component = new Component(objects);
-            component.build(fragment);
-
-            fragment.component = component;
-
-            implicitObject = new Map();
-            implicitObject.set(implicit, fragment)
-            contentChildren.set(element, implicitObject)
-
-            return fragment;
-        }
-    } else {
+    function generate() {
         let func = contentRegistry.get(element);
         let objects = func(implicit);
         let fragment = document.createDocumentFragment();
@@ -79,10 +59,29 @@ export function content(element, implicit) {
         component.build(fragment);
 
         fragment.component = component;
+        return fragment;
+    }
 
-        let map = new Map();
-        map.set(implicit, fragment)
-        contentChildrenCache.set(element, map)
+    let contentChildren = contentChildrenCache.get(element);
+
+    if (contentChildren) {
+        let implicitObject = contentChildren.get(implicit);
+        if (implicitObject) {
+            return implicitObject;
+        } else {
+            let fragment = generate();
+
+            implicitObject = implicit;
+            contentChildren.set(implicitObject, fragment)
+
+            return fragment;
+        }
+    } else {
+        let fragment = generate();
+
+        let implicitObject = new Map();
+        implicitObject.set(implicit, fragment)
+        contentChildrenCache.set(element, implicitObject)
 
         return fragment;
     }
@@ -272,6 +271,8 @@ export function membraneFactory(instance, parent = []) {
                         return true;
                     }
 
+                    let start = performance.now();
+
                     let result = Reflect.set(target, p, value, receiver);
 
                     for (const eventHandler of root.handlers) {
@@ -284,6 +285,10 @@ export function membraneFactory(instance, parent = []) {
                                 eventHandler.handler(value);
                             }
                         }
+                    }
+
+                    if (appManager.mode === "development") {
+                        console.log("latency : " + Math.round(performance.now() - start) + "ms")
                     }
 
                     return result;

@@ -92,6 +92,14 @@ function slotStatement(rawAttributes, context, contents) {
 
         }
 
+/*
+        for (const child of children) {
+            child.addEventListener("removed",() => {
+                notifyElementRemove(activeContent)
+            })
+        }
+*/
+
         return activeContent;
     }
 

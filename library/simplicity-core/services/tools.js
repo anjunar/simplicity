@@ -1,4 +1,5 @@
 import {membraneFactory} from "../processors/html-compiler-processor.js";
+import {appManager} from "../manager/app-manager.js";
 
 export function idExtractorHelper(object) {
     if (object instanceof Array) {
@@ -353,6 +354,8 @@ export function generateDomProxy(node) {
                 }])
             },
             set(value) {
+                let start = performance.now();
+
                 Reflect.set(data, property, value)
                 for (const eventHandler of node.handlers) {
                     if (eventHandler.scoped) {
@@ -364,6 +367,9 @@ export function generateDomProxy(node) {
                             eventHandler.handler(value);
                         }
                     }
+                }
+                if (appManager.mode === "development") {
+                    console.log("latency : " + Math.round(performance.now() - start) + "ms")
                 }
             }
         })
