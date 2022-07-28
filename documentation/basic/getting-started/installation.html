@@ -7,11 +7,13 @@
         <translation>
             <en>
                 Simplicity is a progressive Web framework to build interfaces. Attention was paid to the lines of code
-                Keeping it as low as possible, this promises readability and performance. On additional libraries was added
+                Keeping it as low as possible, this promises readability and performance. On additional libraries was
+                added
                 deliberately avoided in order to keep the level of abstraction low.
             </en>
             <de>
-                Simplicity ist ein Progressive Web Framework um Oberflächen zu bauen. Dabei wurde darauf geachtet den umfang des Quellcodes
+                Simplicity ist ein Progressive Web Framework um Oberflächen zu bauen. Dabei wurde darauf geachtet den
+                umfang des Quellcodes
                 möglichst gering zu halten, das verspricht Lesbarkeit und Leistung. Auf zusätzliche Bibliotheken wurde
                 bewusst verzichtet, um das Abstraktionsniveau niedrig zu halten.
             </de>
@@ -42,6 +44,44 @@
         </translation>
         <translation>
             <en>
+                The "bootstrap" function is there to start the application. It should be noted that there are two
+                functions "bootstrap" exists. Once in the "simplicity-core" directory and once in the directory
+                "simplicity-material". The bootstrap function in the "simplicity-material" directory
+                simultaneously includes the "bootstrap" function from the "simplicity-core" directory. The options object can do the following
+                parameter contain.
+            </en>
+            <de>
+                Die Funktion "bootstrap" ist dafür da, die Anwendung zu starten. Dabei ist zu beachten, dass es zweimal
+                die Funktion "bootstrap" gibt. Einmal im Verzeichnis "simplicity-core" und einmal im Verzeichnis
+                "simplicity-material". Die Bootstrap funktion im Verzeichnis "simplicity-material" beinhaltet
+                gleichzeitig die "bootstrap" Funktion aus dem Verzeichnis "simplicity-core". Das Options Object kann folgende
+                Parameter enthalten.
+            </de>
+        </translation>
+        <translation>
+            <en>
+                <ul>
+                    <li>app - The Path to the App</li>
+                    <li>mode - The mode of the App (development or production)</li>
+                    <li>library - The path to the Simplicity Library</li>
+                    <li>shadowDom - Shadow Dom activation (Experimental)</li>
+                    <li>preFetch - Loads all available Views (Experimental)</li>
+                    <li>history - HTML5 Navigation or with Hashtag</li>
+                </ul>
+            </en>
+            <de>
+                <ul>
+                    <li>app - Der Pfad zur Anwendung</li>
+                    <li>mode - Der Mode der App (development oder production)</li>
+                    <li>library - Der Pfad zur Simplicity Library</li>
+                    <li>shadowDom - Shadow Dom Aktivierung (Experimental)</li>
+                    <li>preFetch - Alle weiteren Seiten vorweg Laden (Experimental)</li>
+                    <li>history - HTML5 Navigation oder mit Hashtag</li>
+                </ul>
+            </de>
+        </translation>
+        <translation>
+            <en>
                 The code can be downloaded from the GitHub repository, the link is available in the toolbar above.
             </en>
             <de>
@@ -54,36 +94,55 @@
 <template>
     <div style="flex-wrap: wrap; display: flex">
 
-         <div style="flex: 1; padding: 20px; min-width : 400px">
+        <div style="flex: 1; padding: 20px; min-width : 400px">
 
             <h2 style="margin-left: 0;">Installation</h2>
             <hr class="line">
 
             <p i18n>
                 Simplicity is a progressive Web framework to build interfaces. Attention was paid to the lines of code
-                Keeping it as low as possible, this promises readability and performance. On additional libraries was added
+                Keeping it as low as possible, this promises readability and performance. On additional libraries was
+                added
                 deliberately avoided in order to keep the level of abstraction low.
             </p>
 
-             <p i18n>
-                 The framework is divided into three parts, simplicity-core contains the basic functionality,
-                 simplicity-material mainly contains the components in Material Design and simplicity-parser is
-                 the standalone javascript parser.
-             </p>
+            <p i18n>
+                The framework is divided into three parts, simplicity-core contains the basic functionality,
+                simplicity-material mainly contains the components in Material Design and simplicity-parser is
+                the standalone javascript parser.
+            </p>
 
-             <p i18n>
-                 As the name suggests, this is about simplicity. That's why there is no shadow-dom,
-                 no other libraries and only vanilla javascript. Also NPM with NodeJS is not needed,
-                 since ES6 modules are used.
-             </p>
+            <p i18n>
+                As the name suggests, this is about simplicity. That's why there is no shadow-dom,
+                no other libraries and only vanilla javascript. Also NPM with NodeJS is not needed,
+                since ES6 modules are used.
+            </p>
+
+            <p i18n>
+                The "bootstrap" function is there to start the application. It should be noted that there are two
+                functions "bootstrap" exists. Once in the "simplicity-core" directory and once in the directory
+                "simplicity-material". The bootstrap function in the "simplicity-material" directory
+                simultaneously includes the "bootstrap" function from the "simplicity-core" directory. The options object can do the following
+                parameter contain.
+            </p>
+            <p i18n>
+                <ul>
+                    <li>app - The Path to the App</li>
+                    <li>mode - The mode of the App (development or production)</li>
+                    <li>library - The path to the Simplicity Library</li>
+                    <li>shadowDom - Shadow Dom activation (Experimental)</li>
+                    <li>preFetch - Loads all available Views (Experimental)</li>
+                    <li>history - HTML5 Navigation or with Hashtag</li>
+                </ul>
+            </p>
 
             <p i18n>
                 The code can be downloaded from the GitHub repository, the link is available in the toolbar above.
             </p>
-             
-         </div>
 
-         <div style="flex: 1; padding: 20px; min-width : 400px">
+        </div>
+
+        <div style="flex: 1; padding: 20px; min-width : 400px">
             <h2>Source Code</h2>
             <hr class="line">
             <h3>HTML5</h3>
@@ -102,11 +161,11 @@
 
                                 bootstrap({
                                     app: "documentation/app.js",
-                                    mode : "development",
-                                    library : "library",
-                                    shadowDom : false, // Experimental
-                                    preFetch : false, // Experimental,
-                                    history : true
+                                    mode: "development",
+                                    library: "library",
+                                    shadowDom: false, // Experimental
+                                    preFetch: false, // Experimental,
+                                    history: true
                                 })
                             </script>
                         </head>

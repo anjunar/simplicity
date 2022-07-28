@@ -28,7 +28,7 @@ export const windowManager = new class WindowManager {
 
                 let matWindow = new MatWindow();
 
-                contentManager.register(matWindow, [header, view], options.data);
+                contentManager.register(matWindow, [header, view], options?.data);
 
                 if (options?.width) {
                     matWindow.style.width = options.width;
@@ -46,26 +46,28 @@ export const windowManager = new class WindowManager {
                     matWindow.style.height = configuration.height
                 }
 
-                windowsRegistry.push(matWindow);
-
                 if (configuration.modal) {
                     matWindow.resizable = false;
                     matWindow.draggable = false;
                     let modal = new MatModal();
                     contentManager.register(modal, [matWindow]);
+                    let viewport = document.querySelector("viewport");
+                    viewport.appendChild(modal);
+
+                    matWindow = modal.querySelector("mat-window")
+
                     matWindow.addEventListener("close", () => {
                         modal.remove();
                     })
                     matWindow.addEventListener("ok", () => {
                         modal.remove();
                     })
-
-                    let viewport = document.querySelector("viewport");
-                    viewport.appendChild(modal);
                 } else {
                     let viewport = document.querySelector("viewport");
                     viewport.appendChild(matWindow);
                 }
+
+                windowsRegistry.push(matWindow);
 
                 let matScrollArea = matWindow.querySelector("mat-scroll-area");
                 matScrollArea.checkScrollBars();

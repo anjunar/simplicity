@@ -14,6 +14,10 @@ export const contentManager = new class ContentManager {
                     type : "registeredContentChildren",
                     build(parent) {
                         let child = document.importNode(outerChild);
+                        let outerRegistry = contentRegistry.get(outerChild);
+                        if (outerRegistry) {
+                            contentRegistry.set(child, outerRegistry)
+                        }
                         if (data) {
                             Object.assign(child, data)
                         }

@@ -434,7 +434,10 @@ function htmlStatement(tagName, attributes, children, app) {
 
     let tag = tagName.split(":")
     let name = tag[0];
-    let extension = tag[1]
+    let extension = tag[1];
+    let element = document.createElement(name, {is: extension});
+    element.app = app;
+    let initialize = false;
 
     function generate(element) {
         for (const child of children) {
@@ -470,20 +473,29 @@ function htmlStatement(tagName, attributes, children, app) {
     return {
         type: "html",
         children: children,
+        element : element,
         build(parent) {
-            let element = document.createElement(name, {is: extension});
-            element.app = app;
-            if (! this.element) {
-                this.element = element;
+            if (initialize) {
+                let element = document.createElement(name, {is: extension});
+                element.app = app;
+                generate(element);
+                parent.appendChild(element);
+                return element;
+            } else {
+                initialize = true;
+                generate(element);
+                parent.appendChild(element);
+                return element;
             }
-            generate(element);
-            parent.appendChild(element);
-            return element;
         }
     }
 }
 
 function svgStatement(tagName, attributes, children, app) {
+
+    let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+    element.app = app;
+    let initialize = false;
 
     function generate(element) {
         for (const child of children) {
@@ -519,13 +531,19 @@ function svgStatement(tagName, attributes, children, app) {
         type: "svg",
         children: children,
         build(parent) {
-            let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
-            if (! this.element) {
-                this.element = element;
+            if (initialize) {
+                let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+                element.app = app;
+                generate(element);
+                parent.appendChild(element);
+                return element;
+            } else {
+                initialize = true;
+                generate(element);
+                parent.appendChild(element);
+                return element;
             }
-            generate(element);
-            parent.appendChild(element);
-            return element;
+
         }
     }
 }

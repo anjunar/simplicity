@@ -8,16 +8,11 @@ function variableStatement(rawAttributes, context, html) {
 
     let variable = attribute.split("=")[1];
 
-    return {
-        type : "variable",
-        build(parent) {
-            let element = html.build(parent);
-            if (! this.element) {
-                this.element = element;
-            }
-            evaluation(variable + " = $value", context, {$value: element})
-        }
-    }
+    let element = html.element;
+
+    evaluation(variable + " = $value", context, {$value: element})
+
+    return html;
 
 }
 

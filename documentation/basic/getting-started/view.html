@@ -163,38 +163,34 @@
                         <code is="dom-code" lang="javascript">
                             <template>
                                 <script>
+                                    import {routes as components} from "./components/routes.js";
                                     import {routes as expert} from "./expert/routes.js";
-                                    import {routes as form} from "./components/form/routes";
-                                    import {routes as indicators} from "./components/indicators/routes";
-                                    import {routes as modals} from "./components/modals/routes";
-                                    import {routes as tables} from "./components/tables/routes";
-                                    import {routes as navigation} from "./navigation/routes.js";
                                     import {routes as control} from "./control/routes.js";
                                     import {routes as internals} from "./internals/routes.js";
 
 
                                     export const routes = {
                                         children : {
+                                            "home" : {
+                                                file : "documentation/home/index.js"
+                                            },
                                             "basic" : {
                                                 file: "documentation/basic/index.js",
                                                 children : {
-                                                    "started" : {
-                                                        file : "documentation/basic/started.js"
-                                                    },
-                                                    "architecture" : {
+                                                    "getting-started" : {
                                                         children : {
-                                                            "component": {
-                                                                file: "documentation/basic/architecture/component.js"
+                                                            "installation" : {
+                                                                file : "documentation/basic/getting-started/installation.js"
                                                             },
-                                                            "overview": {
-                                                                file: "documentation/basic/architecture/overview.js"
+                                                            "component": {
+                                                                file: "documentation/basic/getting-started/component.js"
                                                             },
                                                             "view": {
-                                                                file: "documentation/basic/architecture/view.js",
+                                                                file: "documentation/basic/getting-started/view.js",
                                                                 children : {
                                                                     "example/{id}" : {
                                                                         override : true,
-                                                                        file : "documentation/basic/architecture/view/example.js"
+                                                                        file : "documentation/basic/getting-started/view/example.js"
                                                                     }
                                                                 }
                                                             }
@@ -210,23 +206,7 @@
                                             },
                                             "components" : {
                                                 file: "documentation/components/index.js",
-                                                children: {
-                                                    "form" : {
-                                                        children : form
-                                                    },
-                                                    "indicators" : {
-                                                        children: indicators
-                                                    },
-                                                    "modals" : {
-                                                        children : modals
-                                                    },
-                                                    "navigation" : {
-                                                        children : navigation
-                                                    },
-                                                    "tables" : {
-                                                        children : tables
-                                                    }
-                                                }
+                                                children: components
                                             },
                                             "expert" : {
                                                 file : "documentation/expert/index.js",
@@ -234,7 +214,7 @@
                                             }
                                         }
                                     }
-                                </script>
+                            </script>
                             </template>
                         </code>
                     </div>
