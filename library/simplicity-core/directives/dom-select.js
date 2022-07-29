@@ -1,6 +1,17 @@
 import {customComponents} from "../simplicity.js";
-import {Input, mix} from "../services/tools.js";
+import {css, Input, mix} from "../services/tools.js";
 import DomForm from "./dom-form.js";
+
+css({
+    "select" : {
+        border: "0",
+        borderRadius: "0",
+        color: "var(--main-font-color)",
+        backgroundColor: "var(--main-background-color)",
+        width: "100%",
+        outline: "0"
+    }
+})
 
 class DomSelect extends mix(HTMLSelectElement).with(Input) {
 

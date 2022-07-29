@@ -1,6 +1,22 @@
 import {membraneFactory} from "../processors/html-compiler-processor.js";
 import {appManager} from "../manager/app-manager.js";
 
+export function css(stylesheet) {
+    let styleElement = document.createElement("style");
+    document.head.appendChild(styleElement)
+    let sheet = styleElement.sheet;
+
+    for (const [selector, object] of Object.entries(stylesheet)) {
+        let cssString = selector + " {\n"
+        for (const [rule, value] of Object.entries(object)) {
+            let unescaped = rule.replace(/([A-Z])/g, (group) => "-" + group.toLowerCase())
+            cssString += "\t" + unescaped + " : " + value + ";\n"
+        }
+        cssString += "}\n"
+        sheet.insertRule(cssString);
+    }
+}
+
 export function idExtractorHelper(object) {
     if (object instanceof Array) {
         return object.map((item) => objectIdExtractor(item))

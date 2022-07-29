@@ -3,10 +3,54 @@ import Highlight from "./dom-code/highlight.js";
 import xmlGrammar from "./dom-code/languages/xml.js";
 import javascriptGrammar from "./dom-code/languages/javascript.js";
 import jsonGrammar from "./dom-code/languages/json.js";
+import {css} from "../../simplicity-core/services/tools.js";
 
 Highlight.registerLanguage("xml", xmlGrammar)
 Highlight.registerLanguage("javascript", javascriptGrammar)
 Highlight.registerLanguage("json", jsonGrammar)
+
+css({
+    ".hljs": {
+        color: "#a9b7c6",
+        background: "#282b2e"
+    },
+    ".hljs-number, .hljs-literal, .hljs-symbol, .hljs-bullet" : {
+        color: "#6897BB"
+    },
+    ".hljs-keyword, .hljs-selector-tag, .hljs-deletion" : {
+        color: "#cc7832"
+    },
+    ".hljs-variable, .hljs-template-variable, .hljs-link" : {
+        color: "#629755"
+    },
+    ".hljs-comment, .hljs-quote" : {
+        color: "#808080"
+    },
+    ".hljs-meta" : {
+        color: "#bbb529"
+    },
+    ".hljs-attr" : {
+        color: "var(--main-font-color)"
+    },
+    ".hljs-string" : {
+        color: "var(--main-selected-color)"
+    },
+    ".hljs-attribute, .hljs-addition" : {
+        color: "var(--main-green-color)"
+    },
+    ".hljs-section, .hljs-title, .hljs-type" : {
+        color: "var(--main-yellow-color)"
+    },
+    ".hljs-name, .hljs-selector-id, .hljs-selector-class" : {
+        color: "var(--main-yellow-color)"
+    },
+    ".hljs-emphasis" : {
+        fontStyle: "italic"
+    },
+    ".hljs-strong" : {
+        fontWeight: "bold"
+    }
+})
 
 class DomCode extends HTMLElement {
 
@@ -86,4 +130,4 @@ class DomCode extends HTMLElement {
 
 }
 
-export default customComponents.define("dom-code", DomCode, {extends : "code"})
+export default customComponents.define("dom-code", DomCode, {extends: "code"})
