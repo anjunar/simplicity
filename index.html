@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="/simplicity/">
+    <base href="/simplicity">
     <meta charset="UTF-8">
     <title>Simplicity 4.3 beta</title>
     <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
     <script type="module">
         import {bootstrap} from "./library/simplicity-material/bootstrap.js";
 
         bootstrap({
             app: "documentation/app.js",
-            mode : "development",
+            mode : "production",
             library : "library",
             shadowDom : false, // Experimental
             preFetch : false, // Experimental,
