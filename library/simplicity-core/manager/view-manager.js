@@ -3,7 +3,7 @@ const registry = new Map();
 export const viewManager = new class ViewManager {
     load(url, queryParams) {
         let executor = (resolve, reject) => {
-            let newPath = "../../.." + url;
+            let newPath = "../../../" + url;
             import(newPath)
                 .then((module) => {
                     let view;
