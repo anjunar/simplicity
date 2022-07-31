@@ -162,7 +162,7 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
     }
 
     showConfiguration() {
-        windowManager.openWindow("library/simplicity-material/components/table/mat-table-configuration.js", {
+        windowManager.openWindow("/library/simplicity-material/components/table/mat-table-configuration.js", {
             data: {
                 table: this
             }

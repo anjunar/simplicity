@@ -34,7 +34,7 @@ class DomRouter extends HTMLElement {
             let cursorRegex = cursorSegments.map(segment => {
                 let splitElement = segment.split("/")[index];
                 let regexVariable = /{(\w+)}/;
-                let regexVariableResult = regexVariable.exec(segment);
+                let regexVariableResult = regexVariable.exec(splitElement);
                 if (regexVariableResult) {
                     queryParams[regexVariableResult[1]] = path;
                     return new RegExp(".*");
@@ -60,7 +60,7 @@ class DomRouter extends HTMLElement {
             let missingSegments = cursorSegment.split("/").slice(1)
             missingSegments.forEach((segment, index) => {
                 urlSegment = iterator.next().value
-                process(urlSegment, cursor, index)
+                process(urlSegment, cursor, index + 1)
             })
 
             cursor = cursor.children[cursorSegment];
