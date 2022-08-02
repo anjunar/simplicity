@@ -1,7 +1,7 @@
 import {collectIdentifiers, evaluation} from "./js-compiler-processor.js";
 import {attributeProcessorRegistry} from "./attribute-processors.js";
 import {evaluator, getPropertyDescriptor, Membrane} from "../services/tools.js";
-import {attributes, isCompositeComponent} from "../plugins/helper.js";
+import {attributes, buildStrategie, isCompositeComponent} from "../plugins/helper.js";
 import {generate} from "./js-compiler-extension.js";
 import {appManager} from "../manager/app-manager.js";
 
@@ -376,6 +376,9 @@ export class Context {
 function passiveInterpolationStatement(text, context) {
     let interpolationRegExp = /{{{([^}]+)}}}/g;
 
+    let textNode = document.createTextNode("");
+    textNode.textContent = evalText();
+
     function evalText() {
         return text.replace(interpolationRegExp, (match, expression) => {
             let result = evaluation(expression, context);
@@ -390,9 +393,11 @@ function passiveInterpolationStatement(text, context) {
         type: "interpolation",
         text: text,
         build(parent) {
-            let textNode = document.createTextNode("");
-            textNode.textContent = evalText();
             parent.appendChild(textNode);
+        },
+        import(parent) {
+            return passiveInterpolationStatement(text, context)
+                .build(parent)
         }
     }
 }
@@ -400,6 +405,18 @@ function passiveInterpolationStatement(text, context) {
 function interpolationStatement(text, context) {
     let interpolationRegExp = /{{([^}]+)}}/g;
 
+    let textNode = document.createTextNode("");
+    textNode.textContent = evalText();
+
+    text.replace(interpolationRegExp, (match, expression) => {
+        activeObjectExpression(expression, context, textNode, () => {
+            let textContent = evalText();
+            if (textContent !== textNode.textContent) {
+                textNode.textContent = textContent;
+            }
+        })
+    })
+
     function evalText() {
         return text.replace(interpolationRegExp, (match, expression) => {
             let result = evaluation(expression, context);
@@ -414,32 +431,24 @@ function interpolationStatement(text, context) {
         type: "interpolation",
         text: text,
         build(parent) {
-            let textNode = document.createTextNode("");
-            textNode.textContent = evalText();
-
-            text.replace(interpolationRegExp, (match, expression) => {
-                activeObjectExpression(expression, context, textNode, () => {
-                    let textContent = evalText();
-                    if (textContent !== textNode.textContent) {
-                        textNode.textContent = textContent;
-                    }
-                })
-            })
             parent.appendChild(textNode);
+        },
+        import(parent) {
+            return interpolationStatement(text, context)
+                .build(parent)
         }
     }
 }
 
-function htmlStatement(tagName, attributes, children, app) {
+function htmlStatement(tagName, attributes, children, app, imported = false) {
 
     let tag = tagName.split(":")
     let name = tag[0];
     let extension = tag[1];
     let element = document.createElement(name, {is: extension});
     element.app = app;
-    let initialize = false;
 
-    function generate(element) {
+    function generate() {
         for (const child of children) {
             if (typeof child === "string") {
                 element.appendChild(document.createTextNode(child))
@@ -448,9 +457,9 @@ function htmlStatement(tagName, attributes, children, app) {
                     contentRegistry.set(element, child);
                 } else {
                     if (element instanceof HTMLTemplateElement) {
-                        child.build(element.content)
+                        buildStrategie(child, element.content, imported)
                     } else {
-                        child.build(element)
+                        buildStrategie(child, element, imported)
                     }
 
                 }
@@ -463,7 +472,7 @@ function htmlStatement(tagName, attributes, children, app) {
                 let segments = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
                 element.setAttribute(segments[0], segments[1])
             } else {
-                attribute.build(element);
+                buildStrategie(attribute, element, imported)
             }
         }
 
@@ -475,29 +484,23 @@ function htmlStatement(tagName, attributes, children, app) {
         children: children,
         element : element,
         build(parent) {
-            if (initialize) {
-                let element = document.createElement(name, {is: extension});
-                element.app = app;
-                generate(element);
-                parent.appendChild(element);
-                return element;
-            } else {
-                initialize = true;
-                generate(element);
-                parent.appendChild(element);
-                return element;
-            }
+            generate();
+            parent.appendChild(element);
+            return element;
+        },
+        import(parent) {
+            return htmlStatement(tagName, attributes, children, app, true)
+                .build(parent)
         }
     }
 }
 
-function svgStatement(tagName, attributes, children, app) {
+function svgStatement(tagName, attributes, children, app, imported = false) {
 
     let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
     element.app = app;
-    let initialize = false;
 
-    function generate(element) {
+    function generate() {
         for (const child of children) {
             if (typeof child === "string") {
                 element.appendChild(document.createTextNode(child))
@@ -506,9 +509,9 @@ function svgStatement(tagName, attributes, children, app) {
                     contentRegistry.set(element, child);
                 } else {
                     if (element instanceof HTMLTemplateElement) {
-                        child.build(element.content)
+                        buildStrategie(child, element.content, imported)
                     } else {
-                        child.build(element)
+                        buildStrategie(child, element, imported)
                     }
                 }
             }
@@ -520,7 +523,7 @@ function svgStatement(tagName, attributes, children, app) {
                 let segments = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
                 element.setAttribute(segments[0], segments[1])
             } else {
-                attribute.build(element);
+                buildStrategie(attribute, element, imported)
             }
         }
 
@@ -530,20 +533,15 @@ function svgStatement(tagName, attributes, children, app) {
     return {
         type: "svg",
         children: children,
+        element : element,
         build(parent) {
-            if (initialize) {
-                let element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
-                element.app = app;
-                generate(element);
-                parent.appendChild(element);
-                return element;
-            } else {
-                initialize = true;
-                generate(element);
-                parent.appendChild(element);
-                return element;
-            }
-
+            generate();
+            parent.appendChild(element);
+            return element;
+        },
+        import(parent) {
+            return svgStatement(tagName, attributes, children, app, true)
+                .build(parent)
         }
     }
 }
@@ -563,6 +561,10 @@ function bindStatement(name, value, context) {
                     processor = null
                 }
             }
+        },
+        import(element) {
+            return bindStatement(name, value, context)
+                .build(element)
         }
     }
 }

@@ -1,6 +1,14 @@
 import {evaluation} from "../processors/js-compiler-processor.js";
 import {customPlugins} from "../processors/html-compiler-processor.js";
 
+export function buildStrategie(ast, element, imported = false) {
+    if (imported) {
+        return ast.import(element)
+    } else {
+        return ast.build(element)
+    }
+}
+
 export function rawAttributes(node) {
     return Array.from(node.attributes).map((attribute) => `"${attribute.name}=${attribute.value}"`);
 }

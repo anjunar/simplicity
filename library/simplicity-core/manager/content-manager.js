@@ -12,7 +12,11 @@ export const contentManager = new class ContentManager {
             return children.map((outerChild) => {
                 return {
                     type : "registeredContentChildren",
+                    element : outerChild,
                     build(parent) {
+                        parent.appendChild(outerChild);
+                    },
+                    import(parent) {
                         let child = document.importNode(outerChild);
                         let outerRegistry = contentRegistry.get(outerChild);
                         if (outerRegistry) {
@@ -22,11 +26,8 @@ export const contentManager = new class ContentManager {
                             Object.assign(child, data)
                         }
                         parent.appendChild(child);
-                        if (! this.element) {
-                            this.element = child;
-                        }
                         return child;
-                    },
+                    }
                 }
             })
         }

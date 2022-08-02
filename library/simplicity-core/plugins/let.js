@@ -1,8 +1,8 @@
 import {generateDomProxy} from "../services/tools.js";
 import {Context, customPlugins, membraneFactory} from "../processors/html-compiler-processor.js";
-import {attributes, boundAttributes, getAttributes, rawAttributes} from "./helper.js";
+import {attributes, boundAttributes, buildStrategie, getAttributes, rawAttributes} from "./helper.js";
 
-function letStatement(rawAttributes, implicit, context, callback) {
+function letStatement(rawAttributes, implicit, context, callback, imported = false) {
     let newContext;
     let instance;
     let scope;
@@ -21,7 +21,7 @@ function letStatement(rawAttributes, implicit, context, callback) {
         type : "let",
         build(parent) {
             if (implicit) {
-                let element = ast.build(parent);
+                let element = buildStrategie(ast, parent, imported)
                 if (! this.element) {
                     this.element = element;
                 }
@@ -32,6 +32,10 @@ function letStatement(rawAttributes, implicit, context, callback) {
                 return element
             }
             return null;
+        },
+        import(parent) {
+            return letStatement(rawAttributes, implicit, context, callback, true)
+                .build(parent)
         }
     }
 }

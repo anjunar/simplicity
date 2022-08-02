@@ -1,4 +1,4 @@
-import {rawAttributes, attributes, notifyElementRemove} from "./helper.js";
+import {rawAttributes, attributes, notifyElementRemove, buildStrategie} from "./helper.js";
 import {parse} from "../processors/js-compiler-extension.js";
 import {codeGenerator as jsCodeGenerator, evaluation} from "../processors/js-compiler-processor.js";
 import {generateDomProxy} from "../services/tools.js";
@@ -61,7 +61,7 @@ function forExpressions(expressions) {
     return result;
 }
 
-function forStatement(rawAttributes, context, callback) {
+function forStatement(rawAttributes, context, callback, imported = false) {
 
     let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:for"))
     let indexOf = attribute.indexOf("=");
@@ -114,7 +114,7 @@ function forStatement(rawAttributes, context, callback) {
             let newContext = new Context(membraneFactory(instance, [scope]), context);
             let astLeaf = callback(newContext);
             ast.push(astLeaf);
-            let build = astLeaf.build(container);
+            let build = buildStrategie(astLeaf, container, imported)
             children.push(build);
             Object.assign(build, instance);
             generateDomProxy(build);
@@ -147,12 +147,16 @@ function forStatement(rawAttributes, context, callback) {
         children: ast,
         build: function (parent) {
             generate();
-            parent.appendChild(comment)
+            parent.appendChild(comment);
             parent.appendChild(container);
             if (data.onRendered) {
                 evaluation(data.onRendered.func, context, {$children: children}, true)
             }
             return children;
+        },
+        import(parent) {
+            return forStatement(rawAttributes, context, callback, true)
+                .build(parent)
         }
     }
 }

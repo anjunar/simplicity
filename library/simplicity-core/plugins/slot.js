@@ -55,14 +55,14 @@ function slotStatement(rawAttributes, context, contents) {
             let querySelector = activeContent.querySelectorAll(`[slot=${values.name}]`)[index];
             if (querySelector) {
                 let ast = findAst(activeContent.component.ast, querySelector);
-                let items = ast.build(container);
+                let items = ast.import(container);
                 children.push(items)
             }
         } else if (values.selector) {
             let querySelector = activeContent.querySelectorAll(values.selector)[index];
             if (querySelector) {
                 let ast = findAst(activeContent.component.ast, querySelector);
-                let items = ast.build(container);
+                let items = ast.import(container);
                 children.push(items)
             }
         } else if (values.tag) {
@@ -71,7 +71,7 @@ function slotStatement(rawAttributes, context, contents) {
             while (cursor != null) {
                 if (cursor[values.tag]) {
                     let ast = findAst(activeContent.component.ast, cursor);
-                    let items = ast.build(container);
+                    let items = ast.import(container);
                     children.push(items)
                     break;
                 }
@@ -80,7 +80,7 @@ function slotStatement(rawAttributes, context, contents) {
         } else {
             for (const astElement of activeContent.component.ast) {
                 if (astElement instanceof Object) {
-                    let items = astElement.build(container);
+                    let items = astElement.import(container);
                     if (items instanceof Array) {
                         children.push(...items)
                     } else {
@@ -91,14 +91,6 @@ function slotStatement(rawAttributes, context, contents) {
             }
 
         }
-
-/*
-        for (const child of children) {
-            child.addEventListener("removed",() => {
-                notifyElementRemove(activeContent)
-            })
-        }
-*/
 
         return activeContent;
     }
@@ -124,6 +116,10 @@ function slotStatement(rawAttributes, context, contents) {
             parent.appendChild(comment);
             parent.appendChild(container);
             return children;
+        },
+        import(parent) {
+            return slotStatement(rawAttributes, context, contents)
+                .build(parent);
         }
     };
 }

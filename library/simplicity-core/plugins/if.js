@@ -1,7 +1,7 @@
 import {activeObjectExpression, customPlugins} from "../processors/html-compiler-processor.js";
-import {attributes, boundAttributes, getAttributes, rawAttributes} from "./helper.js";
+import {attributes, boundAttributes, buildStrategie, getAttributes, rawAttributes} from "./helper.js";
 
-function ifStatement(rawAttributes, context, callback) {
+function ifStatement(rawAttributes, context, callback, imported = false) {
     let attributes = getAttributes(rawAttributes, ["if"]);
     let boundAttributesFunction = boundAttributes(attributes, context);
     let values = boundAttributesFunction()
@@ -34,7 +34,7 @@ function ifStatement(rawAttributes, context, callback) {
 
     function generate() {
         html = callback(context);
-        element = html.build(container);
+        element = buildStrategie(html, container, imported)
     }
 
     return {
@@ -46,6 +46,10 @@ function ifStatement(rawAttributes, context, callback) {
                 generate();
                 parent.appendChild(container);
             }
+        },
+        import(parent) {
+            return ifStatement(rawAttributes, context, callback, true)
+                .build(parent)
         }
     }
 }

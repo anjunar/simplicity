@@ -1,7 +1,7 @@
-import {boundAttributes, getAttributes, notifyElementRemove, rawAttributes} from "./helper.js";
+import {boundAttributes, buildStrategie, getAttributes, notifyElementRemove, rawAttributes} from "./helper.js";
 import {activeObjectExpression, customPlugins} from "../processors/html-compiler-processor.js";
 
-function switchStatement(rawAttributes, context, cases) {
+function switchStatement(rawAttributes, context, cases, imported = false) {
     let attributes = getAttributes(rawAttributes, ["switch"])
     let boundAttributesFunction = boundAttributes(attributes, context);
 
@@ -9,7 +9,7 @@ function switchStatement(rawAttributes, context, cases) {
     let comment = document.createComment("switch")
 
     function generate() {
-        return caseSegment.build(container);
+        return buildStrategie(caseSegment, container, imported)
     }
 
     function findCase(value) {
@@ -48,6 +48,10 @@ function switchStatement(rawAttributes, context, cases) {
             elements = generate();
             parent.appendChild(comment);
             parent.appendChild(container);
+        },
+        import(parent) {
+            return switchStatement(rawAttributes, context, cases, true)
+                .build(parent)
         }
     }
 }
