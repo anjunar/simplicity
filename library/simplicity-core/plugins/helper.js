@@ -21,6 +21,9 @@ export function attributes(node) {
             if (attribute.name.startsWith("bind") || attribute.name === "i18n") {
                 return `bindStatement("${attribute.name}", "${attribute.value}", context)`
             }
+            if (attribute.name.startsWith("bindonce")) {
+                return `bindOnceStatement("${attribute.name}", "${attribute.value}", context)`
+            }
             return `"${attribute.name}=${attribute.value}"`
         })).join(",")
 }

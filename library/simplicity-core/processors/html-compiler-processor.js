@@ -569,6 +569,29 @@ function bindStatement(name, value, context) {
     }
 }
 
+function bindOnceStatement(name, value, context) {
+    let processor;
+    return {
+        type: "bind",
+        name: name,
+        value: value,
+        build(element) {
+            for (const AttributeProcessor of attributeProcessorRegistry) {
+                processor = new AttributeProcessor(name, value, element, context, true);
+                if (processor.matched) {
+                    break;
+                } else {
+                    processor = null
+                }
+            }
+        },
+        import(element) {
+            return bindStatement(name, value, context)
+                .build(element)
+        }
+    }
+}
+
 export function codeGenerator(nodes) {
     function children(node, level, isSvg = false) {
         if (isCompositeComponent(node)) {
@@ -639,9 +662,9 @@ export function codeGenerator(nodes) {
 
     let expression = `function factory(context, content, implicit, app) { return [${intern(nodes)}\n]}`;
     let names = customPlugins.executors().map(executor => executor.name);
-    let arg = `return function(${names.join(", ")}, html, svg, interpolationStatement, passiveInterpolationStatement, bindStatement) {return ${expression}}`;
+    let arg = `return function(${names.join(", ")}, html, svg, interpolationStatement, passiveInterpolationStatement, bindStatement, bindOnceStatement) {return ${expression}}`;
     let func = evaluator(arg)
-    let parameters = [...customPlugins.executors(), htmlStatement, svgStatement, interpolationStatement, passiveInterpolationStatement, bindStatement];
+    let parameters = [...customPlugins.executors(), htmlStatement, svgStatement, interpolationStatement, passiveInterpolationStatement, bindStatement, bindOnceStatement];
     return func().apply(this, parameters)
 }
 
