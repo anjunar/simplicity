@@ -2,6 +2,7 @@ import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import MatCheckboxContainer from "../../form/container/mat-checkbox-container.js";
 import DomInput from "../../../../simplicity-core/directives/dom-input.js";
+import {Membrane} from "../../../../simplicity-core/services/tools.js";
 
 class MetaInputCheckbox extends HTMLElement {
 
@@ -13,6 +14,14 @@ class MetaInputCheckbox extends HTMLElement {
         if (this.schema.validators.notBlank || this.schema.validators.notNull) {
             input.required = true;
         }
+
+        Membrane.track(input, {
+            property : "dirty",
+            element : this,
+            handler : (value) => {
+                this.schema.dirty = value
+            }
+        })
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

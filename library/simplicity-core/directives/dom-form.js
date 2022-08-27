@@ -47,7 +47,7 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
             if (value !== undefined) {
                 component.model = value;
                 component.value = value;
-                component.defaultValue = value;
+                component.defaultValue = JSON.parse(JSON.stringify(value));
             }
 
             Membrane.track(this.model, {

@@ -17,7 +17,7 @@ class ToolbarInserts extends HTMLElement {
                 header: "Link Dialog"
             };
 
-            windowManager.openWindow("/library/simplicity-material/components/form/mat-editor/dialog/link-dialog", options).then((matWindow) => {
+            windowManager.openWindow("library/simplicity-material/components/form/mat-editor/dialog/link-dialog.js", options).then((matWindow) => {
                 matWindow.addEventListener("ok", (event) => {
                     let value = event.target.contents.value;
                     document.getSelection().removeAllRanges();
@@ -81,7 +81,7 @@ class ToolbarInserts extends HTMLElement {
                 header: "Image Upload"
             };
 
-            windowManager.openWindow("/library/simplicity-material/components/form/mat-editor/dialog/image-upload-dialog", options).then((matWindow) => {
+            windowManager.openWindow("library/simplicity-material/components/form/mat-editor/dialog/image-upload-dialog.js", options).then((matWindow) => {
                 matWindow.addEventListener("ok", (event) => {
                     let value = event.target.contents.value;
                     document.getSelection().removeAllRanges();
@@ -115,7 +115,7 @@ class ToolbarInserts extends HTMLElement {
                 header: "Text import"
             };
 
-            windowManager.openWindow("/library/simplicity-material/components/form/mat-editor/dialog/text-dialog", options).then((matWindow) => {
+            windowManager.openWindow("library/simplicity-material/components/form/mat-editor/dialog/text-dialog.js", options).then((matWindow) => {
                 matWindow.addEventListener("ok", (event) => {
                     let value = event.target.contents.value;
                     document.getSelection().removeAllRanges();
@@ -156,13 +156,16 @@ class ToolbarInserts extends HTMLElement {
         }
     }
 
-    inputs = [this.link, this.unLink, this.image, this.horizontalRule, this.text, this.orderedList, this.unOrderedList, this.paragraph];
-
     initialize() {
         let handler = (event) => {
-            for (const input of this.inputs) {
-                input.handler(event)
-            }
+            this.link.handler(event);
+            this.unLink.handler(event);
+            this.image.handler(event);
+            this.horizontalRule.handler(event);
+            this.text.handler(event);
+            this.orderedList.handler(event);
+            this.unOrderedList.handler(event);
+            this.paragraph.handler(event);
         }
 
         this.contents.addEventListener("click", handler);

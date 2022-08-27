@@ -11,9 +11,11 @@ function ifStatement(rawAttributes, context, callback, imported = false) {
     let html;
     let element;
 
-    activeObjectExpression(attributes.if.value, context, comment, (result) => {
-        update(result);
-    })
+    if (attributes.if.type === "bind") {
+        activeObjectExpression(attributes.if.value, context, comment, (result) => {
+            update(result);
+        })
+    }
 
     function update(value) {
         if (value) {
@@ -55,7 +57,7 @@ function ifStatement(rawAttributes, context, callback, imported = false) {
 }
 
 export default customPlugins.define({
-    name: "bind:if",
+    name: ["bind:if", "read:if"],
     destination: "Attribute",
     code: function (tagName, node, children, intern, isSvg, tabs, level) {
         return `\n${tabs}ifStatement([${rawAttributes(node)}], context, () => {return html("${tagName}", [${attributes(node)}], [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])})`

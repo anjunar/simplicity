@@ -16,7 +16,7 @@ class DomRouter extends HTMLElement {
         if (appManager.history) {
             urlSegments = window.location.pathname.replace(baseElement.getAttribute("href"), "").split("/");
         } else {
-            urlSegments = window.location.hash.split("#")[1].split("/")
+            urlSegments = window.location.hash.split("#")[1].split("/").slice(1)
         }
         let files = [];
         let cursor = routes;
@@ -71,6 +71,7 @@ class DomRouter extends HTMLElement {
                     files.push(cursor.file)
                 }
 
+                // urlSegment = window.location.search;
                 let indexOf = urlSegment.indexOf("?");
                 let hashes;
                 if (indexOf === -1) {

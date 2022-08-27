@@ -35,8 +35,8 @@
         <case value="number">
             <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{model}}</div>
         </case>
-        <case value="string">
-            <div bind:switch="schema.format">
+        <case value="default">
+            <div bind:switch="schema.widget">
                 <case value="date-time">
                     <div>{{{dateTime(model)}}}</div>
                 </case>
@@ -47,7 +47,6 @@
                     <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{{model}}}</div>
                 </case>
             </div>
-
         </case>
     </div>
 </template>

@@ -125,7 +125,7 @@ function slotStatement(rawAttributes, context, contents) {
 }
 
 export default customPlugins.define({
-    name : "slot",
+    name : ["slot"],
     destination : "Element",
     code : function (tagName, node, children, intern, isSvg, tabs, level) {
         return `\n${tabs}slotStatement([${rawAttributes(node)}], context, content)`;

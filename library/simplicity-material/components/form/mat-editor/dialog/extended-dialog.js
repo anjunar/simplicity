@@ -7,7 +7,6 @@ import MatPage from "../../../navigation/mat-page.js";
 import MarginsNode from "./extended-dialog/margins-node.js";
 import PaddingNode from "./extended-dialog/padding-node.js";
 import SizingNode from "./extended-dialog/sizing-node.js";
-import DomIf from "../../../../../simplicity-core/directives/dom-if.js";
 import FlexBoxNode from "./extended-dialog/flex-box-node.js";
 
 class ExtendedDialog extends HTMLElement {
@@ -17,7 +16,7 @@ class ExtendedDialog extends HTMLElement {
     path = [];
 
     static get components() {
-        return [DomIf, MatTabs, MatTab, MatPages, MatPage, MarginsNode, PaddingNode, SizingNode, FlexBoxNode]
+        return [MatTabs, MatTab, MatPages, MatPage, MarginsNode, PaddingNode, SizingNode, FlexBoxNode]
     }
 
     static get template() {

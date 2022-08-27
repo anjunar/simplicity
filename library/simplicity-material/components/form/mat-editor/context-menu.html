@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -29,13 +29,13 @@
             </button>
             <br/>
             <hr/>
-            <button type="button" class="normal" bind:onclick="extension()" bind:style="display : isExtensionContext ? 'block' : 'none'">
+            <button type="button" class="normal" bind:onclick="extension()" read:style="display : isExtensionContext ? 'block' : 'none'">
                 <div style="display: flex; align-items: center; width: 100%">
                     <i class="material-icons" translate="no">extension</i>
                     Extension
                 </div>
             </button>
-            <div bind:if="isTableContext">
+            <div read:if="isTableContext">
                 <hr/>
                 <button type="button" class="normal" bind:onclick="addTableRow()">
                     <div style="display: flex; align-items: center; width: 100%">
@@ -65,7 +65,7 @@
                     </div>
                 </button>
             </div>
-            <div bind:if="isFlexBoxContext">
+            <div read:if="isFlexBoxContext">
                 <hr/>
                 <button type="button" class="normal" bind:onclick="addFlexColumn()">
                     <div style="display: flex; align-items: center; width: 100%">

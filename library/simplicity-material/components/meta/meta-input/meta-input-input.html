@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
     <template>
-        <mat-input-container bind:placeholder="schema.title">
-            <input is="dom-input" bind:type="schema.widget" bind:name="property" bind:disabled="schema.readOnly">
+        <mat-input-container read:placeholder="schema.title">
+            <input is="dom-input" read:type="schema.widget" read:name="property" read:disabled="schema.readOnly">
             <div slot="error">
-                <div bind:for="let [key, validator] of schema.validators">
-                    <div bind:switch="key">
+                <div read:for="let [key, validator] of schema.validators">
+                    <div read:switch="key">
                         <case value="notNull">
                             <span name="valueMissing">Can not be empty</span>
                         </case>
@@ -18,7 +18,7 @@
                             <span name="valueMissing">Can not be empty</span>
                         </case>
                         <case value="size">
-                            <span name="tooShort">Must be minimum {{validator.min}} characters and a maximum of {{validator.max}} characters</span>
+                            <span name="tooShort">Must be minimum {{{validator.min}}} characters and a maximum of {{{validator.max}}} characters</span>
                         </case>
                     </div>
                 </div>

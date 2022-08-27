@@ -6,9 +6,9 @@
 </head>
 <body>
     <template>
-        <mat-input-container bind:placeholder="schema.title">
-            <dom-lazy-select bind:items="domLazySelect(schema)" bind:label="domLazySelectLabel(schema)" bind:name="property" bind:disabled="schema.readOnly">
-                <div let="data">{{domLazySelectOption(schema, data)}}</div>
+        <mat-input-container read:placeholder="schema.title">
+            <dom-lazy-select read:items="domLazySelect(schema)" read:label="domLazySelectLabel(schema)" read:name="property" read:disabled="schema.readOnly">
+                <div let="data">{{{domLazySelectOption(schema, data)}}}</div>
             </dom-lazy-select>
         </mat-input-container>
     </template>

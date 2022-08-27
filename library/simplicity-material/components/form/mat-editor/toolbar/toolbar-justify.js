@@ -133,13 +133,16 @@ class ToolbarJustify extends HTMLElement {
         }
     }
 
-    inputs = [this.justify, this.justifyLeft, this.justifyRight, this.justifyCenter, this.outdent, this.indent, this.floatLeft, this.floatRight];
-
     initialize() {
         let handler = (event) => {
-            for (const input of this.inputs) {
-                input.handler(event)
-            }
+            this.justify.handler(event);
+            this.justifyLeft.handler(event);
+            this.justifyRight.handler(event);
+            this.justifyCenter.handler(event);
+            this.outdent.handler(event);
+            this.indent.handler(event);
+            this.floatLeft.handler(event);
+            this.floatRight.handler(event);
         }
 
         this.contents.addEventListener("click", handler);

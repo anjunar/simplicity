@@ -12,19 +12,19 @@
 <body>
     <template>
         <mat-tabs bind:page="page">
-            <mat-tab bind:for="let segment of path">
+            <mat-tab read:for="let segment of path">
                 <div>
-                    {{segment.localName}}
+                    {{{segment.localName}}}
                 </div>
             </mat-tab>
         </mat-tabs>
         <mat-pages bind:page="page">
-            <mat-page bind:for="let segment of path">
+            <mat-page read:for="let segment of path">
                 <div>
-                    <margins-node bind:node="segment"></margins-node>
-                    <padding-node bind:node="segment"></padding-node>
-                    <sizing-node bind:node="segment"></sizing-node>
-                    <flex-box-node bind:if="segment.className === 'flex'" bind:node="segment"></flex-box-node>
+                    <margins-node read:node="segment"></margins-node>
+                    <padding-node read:node="segment"></padding-node>
+                    <sizing-node read:node="segment"></sizing-node>
+                    <flex-box-node read:if="segment.className === 'flex'" read:node="segment"></flex-box-node>
                 </div>
             </mat-page>
         </mat-pages>

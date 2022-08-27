@@ -1,17 +1,37 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import MatInputContainer from "../../form/container/mat-input-container.js";
-import DomLazyMultiSelect from "../../../../simplicity-core/components/form/dom-lazy-multi-select.js";
+import {Membrane} from "../../../../simplicity-core/services/tools.js";
+import DomLazySelect from "../../../../simplicity-core/components/form/dom-lazy-select.js";
 
 class MetaInputLazyMultiSelect extends HTMLElement {
 
     property;
     schema;
 
+    initialize() {
+        let input = this.querySelector("dom-lazy-select");
+        if (this.schema.validators.notBlank || this.schema.validators.notNull) {
+            input.required = true;
+        }
+        Membrane.track(input, {
+            property: "dirty",
+            element: this,
+            handler: (value) => {
+                this.schema.dirty = value;
+            }
+        })
+    }
+
+
     domLazySelect(schema) {
         let link = schema.links.list;
         return (query, callback) => {
-            fetch(`${link.url}?index=${query.index}&limit=${query.limit}`, {method : link.method})
+            let url = new URL(link.url, `${window.location.protocol}//${window.location.host}/app/`);
+            url.searchParams.set("index", query.index);
+            url.searchParams.set("limit", query.limit);
+
+            fetch(url.toString(), {method: link.method})
                 .then(response => response.json())
                 .then((response) => {
                     callback(response.rows, response.size)
@@ -30,18 +50,20 @@ class MetaInputLazyMultiSelect extends HTMLElement {
     domLazySelectLabel(meta) {
         return Object
             .entries(meta.items.properties)
-            .filter(([name,property]) => property.naming)
+            .filter(([name, property]) => property.naming)
             .map(([name, property]) => name)
     }
-    
+
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            } break;
+            }
+                break;
             case "property" : {
                 this.property = newValue;
-            } break;
+            }
+                break;
         }
     }
 
@@ -58,7 +80,7 @@ class MetaInputLazyMultiSelect extends HTMLElement {
     }
 
     static get components() {
-        return [MatInputContainer, DomLazyMultiSelect]
+        return [MatInputContainer, DomLazySelect]
     }
 
     static get template() {

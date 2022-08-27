@@ -18,5 +18,6 @@ class TextDialog extends HTMLElement {
 
 export default customViews.define({
     name: "text-dialog",
-    class: TextDialog
+    class: TextDialog,
+    header : "Insert Text"
 });

@@ -2,16 +2,35 @@ import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import MatInputContainer from "../../form/container/mat-input-container.js";
 import DomLazySelect from "../../../../simplicity-core/components/form/dom-lazy-select.js";
+import {Membrane} from "../../../../simplicity-core/services/tools.js";
 
 class MetaInputLazySelect extends HTMLElement {
 
     property;
     schema;
 
+    initialize() {
+        let input = this.querySelector("dom-lazy-select");
+        if (this.schema.validators.notBlank || this.schema.validators.notNull) {
+            input.required = true;
+        }
+        Membrane.track(input, {
+            property : "dirty",
+            element : this,
+            handler : (value) => {
+                this.schema.dirty = value;
+            }
+        })
+    }
+
     domLazySelect(schema) {
         let link = schema.links.list;
         return (query, callback) => {
-            fetch(`${link.url}?index=${query.index}&limit=${query.limit}`, {method : link.method})
+            let url = new URL(link.url, `${window.location.protocol}//${window.location.host}/app/`);
+            url.searchParams.set("index", query.index);
+            url.searchParams.set("limit", query.limit);
+
+            fetch(url.toString(), {method : link.method})
                 .then(response => response.json())
                 .then((response) => {
                     callback(response.rows, response.size)

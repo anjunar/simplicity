@@ -12,12 +12,23 @@ class MetaTable extends HTMLElement {
     parent;
 
     schema = {
-        rows : {
-            items : {
-                properties : {}
+        links : {},
+        properties: {
+            rows : {
+                items : {
+                    properties : {}
+                }
             }
         }
     };
+
+    links(links) {
+        return Object.values(links).filter((link) => link.method === "GET");
+    }
+
+    onRowClick(event) {
+        this.dispatchEvent(new CustomEvent("model", {detail : event.detail}));
+    }
 
     initialize() {
         let table = this.querySelector("table");
@@ -54,6 +65,7 @@ class MetaTable extends HTMLElement {
 
     items = (query, callback) => {
         this.parent(query, (rows, size, schema) => {
+            this.dispatchEvent(new CustomEvent("load", {detail : {rows : rows, size : size, schema : schema}}))
             if (! isEqual(schema, this.schema)) {
                 this.schema = schema;
             }

@@ -18,11 +18,11 @@ export function attributes(node) {
     return Array.from(node.attributes)
         .filter((attribute) => ! names.includes(attribute.name))
         .map((attribute => {
+            if (attribute.name.startsWith("read")) {
+                return `bindOnceStatement("${attribute.name}", "${attribute.value}", context)`
+            }
             if (attribute.name.startsWith("bind") || attribute.name === "i18n") {
                 return `bindStatement("${attribute.name}", "${attribute.value}", context)`
-            }
-            if (attribute.name.startsWith("bindonce")) {
-                return `bindOnceStatement("${attribute.name}", "${attribute.value}", context)`
             }
             return `"${attribute.name}=${attribute.value}"`
         })).join(",")
@@ -33,12 +33,12 @@ export function getAttributes(attributes, observed) {
     for (const attribute of attributes) {
         let indexOf = attribute.indexOf("=");
         let attributePair = [attribute.substr(0, indexOf), attribute.substr(indexOf + 1)]
-        if (attribute.startsWith("bind")) {
+        if (attribute.startsWith("bind") || attribute.startsWith("read")) {
             let string = attributePair[0].split(":")[1];
             if (observed.indexOf(string) > -1) {
                 attributeValues[string] = {
                     name: string,
-                    type: "bind",
+                    type: attribute.startsWith("bind") ? "bind" : "read",
                     value: attributePair[1]
                 }
             }
@@ -59,6 +59,8 @@ export function boundAttributes(attributes, context) {
         for (let attribute of Object.values(attributes)) {
             if (attribute.type === "bind") {
                 attributeValues[attribute.name] = evaluation(attribute.value, context)
+            } else if (attribute.type === "read"){
+                attributeValues[attribute.name] = evaluation(attribute.value, context, null, true)
             } else {
                 attributeValues[attribute.name] = attribute.value
             }

@@ -13,7 +13,9 @@ export function css(stylesheet) {
             cssString += "\t" + unescaped + " : " + value + ";\n"
         }
         cssString += "}\n"
-        sheet.insertRule(cssString);
+        if (cssString) {
+            sheet.insertRule(cssString);
+        }
     }
 }
 
@@ -318,8 +320,10 @@ function isEqualLeft(lhs, rhs) {
         for (let i = 0; i < lhsProperties.length; i++) {
             const lhsProperty = lhsProperties[i];
 
-            if (!isEqual(lhs[lhsProperty], rhs[lhsProperty])) {
-                return false
+            if (lhsProperty !== "$schema") {
+                if (!isEqual(lhs[lhsProperty], rhs[lhsProperty])) {
+                    return false
+                }
             }
         }
 
@@ -333,12 +337,15 @@ export const evaluator = cachingProxy(function (arg) {
     return Function(arg)
 })
 
-export function getPropertyDescriptor(name, object) {
+export function getPropertyDescriptor(object, name) {
+    if (object === null) {
+        return null;
+    }
     let result = Object.getOwnPropertyDescriptor(object, name);
     if (result) {
         return result;
     }
-    return getPropertyDescriptor(name, Object.getPrototypeOf(object))
+    return getPropertyDescriptor(Object.getPrototypeOf(object), name)
 }
 
 const data = new WeakMap();
@@ -362,7 +369,7 @@ export function generateDomProxy(node) {
             enumerable: true,
             get() {
                 let instance = Reflect.get(data, property);
-                if (instance && instance.isProxy) {
+                if ((instance && instance.isProxy) || (instance && instance instanceof WebSocket)) {
                     return instance;
                 }
                 return membraneFactory(instance, [{
@@ -371,7 +378,9 @@ export function generateDomProxy(node) {
             },
             set(value) {
                 let start = performance.now();
-
+                if (value && value.isProxy) {
+                    value = value.resolve;
+                }
                 Reflect.set(data, property, value)
                 for (const eventHandler of node.handlers) {
                     if (eventHandler.scoped) {
@@ -403,26 +412,33 @@ export function generateDomProxy(node) {
         let name = options.property, handler = options.handler, element = options.element,
             scoped = options.scoped || false, passive = options.passive || false, override = options.override || false;
 
-        let result = {
-            node : node,
-            path: name,
-            handler: handler,
-            element: element,
-            scoped : scoped,
-            passive : passive,
-            override : override
-        };
-        node.handlers.push(result);
+        if (node[name] instanceof Object && Reflect.has(node[name], "method") && Reflect.has(node[name], "resonator")) {
+            let nodeElement = node[name];
+            nodeElement.resonator(() => {
+                handler(nodeElement.method());
+            }, element);
+        } else {
+            let result = {
+                node : node,
+                path: name,
+                handler: handler,
+                element: element,
+                scoped : scoped,
+                passive : passive,
+                override : override
+            };
+            node.handlers.push(result);
 
-        element.addEventListener("removed", () => {
-            let entry = node.handlers.find((entry) => entry.path === name && entry.handler === handler);
-            if (entry) {
-                let indexOf = node.handlers.indexOf(entry);
-                node.handlers.splice(indexOf, 1)
-            }
-        })
+            element.addEventListener("removed", () => {
+                let entry = node.handlers.find((entry) => entry.path === name && entry.handler === handler);
+                if (entry) {
+                    let indexOf = node.handlers.indexOf(entry);
+                    node.handlers.splice(indexOf, 1)
+                }
+            })
 
-        return result;
+            return result;
+        }
     }
 
     function removeEventHandler(options) {

@@ -6,10 +6,11 @@ class BindInterpolationProcessor {
     element;
     matched = false;
     processor;
+    bindOnce = false;
 
     constructor(name, value, element, context, bindOnce = false) {
         this.element = element;
-
+        this.bindOnce = bindOnce
         let interpolationRegExp = /\${([^}]+)}/g;
 
         let result = interpolationRegExp.exec(value);
@@ -17,7 +18,7 @@ class BindInterpolationProcessor {
             this.matched = true;
             let variable = result[1];
 
-            let value1 = evaluation(variable, context);
+            let value1 = evaluation(variable, context, null, this.bindOnce);
             value = value.replace(interpolationRegExp, value1);
 
             for (const AttributeProcessor of attributeProcessorRegistry) {
@@ -52,7 +53,7 @@ class StyleAttributeProcessor {
         this.value = value;
         this.bindOnce = bindOnce;
 
-        let result = name === "bind:style"
+        let result = name === "bind:style" || name === "read:style"
         if (result) {
             this.matched = true;
             this.process();
@@ -79,7 +80,7 @@ class StyleAttributeProcessor {
                 last = char;
             }
 
-            let cssValue = evaluation(value, this.context);
+            let cssValue = evaluation(value, this.context, null, this.bindOnce);
             this.element.style[keyString] = cssValue;
 
             if (! this.bindOnce) {
@@ -123,7 +124,7 @@ class ClassAttributeProcessor {
         let generate = () => {
             let result = [];
             for (const classElement of classList) {
-                result.push(evaluation(classElement.trim(), this.context));
+                result.push(evaluation(classElement.trim(), this.context, null, this.bindOnce));
             }
             let classesName = result.join(" ");
             if (classesName !== this.element.className) {
@@ -200,7 +201,7 @@ class DynamicBindingAttributeProcessor {
                     this.element.addEventListener(this.name, (event) => {
                         let $value = event.target[this.name]
                         let expression = value + " = " + "$value"
-                        evaluation(expression, context, {$value: $value})
+                        evaluation(expression, context, {$value: $value}, this.bindOnce)
                     })
                 }
                 if (! this.bindOnce) {
@@ -217,7 +218,7 @@ class DynamicBindingAttributeProcessor {
 
     process() {
         if (this.element.attributeChangedCallback) {
-            let result = evaluation(this.value, this.context);
+            let result = evaluation(this.value, this.context, null, this.bindOnce);
             if (!isEqual(this.oldValue, result)) {
                 this.element.attributeChangedCallback(this.name, this.oldValue, result);
                 if (result instanceof Array) {
@@ -285,7 +286,7 @@ class DomAttributesProcessor {
     }
 
     process() {
-        let result = evaluation(this.value, this.context);
+        let result = evaluation(this.value, this.context, null, this.bindOnce);
         if (this.element[this.name] !== result) {
             switch (this.name) {
                 case "disabled" : {

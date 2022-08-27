@@ -13,10 +13,12 @@ css({
         color: "var(--main-font-color)",
         backgroundColor: "inherit"
     },
+/*
     "input:-internal-autofill-selected" : {
         color: "var(--main-font-color) !important",
         backgroundColor: "inherit"
     },
+*/
     "input[type=checkbox]" : {
         appearance: "none",
         fontFamily: "'Material Icons', fantasy",

@@ -38,7 +38,7 @@
             <div bind:if="open" class="overlay" bind:style="width : inputWidth() + 'px'">
                 <div style="display: flex">
                     <input type="text" is="dom-input" placeholder="Search" bind:onclick="searchBox($event)" bind:model="search" style="padding: 12px; margin-left: 4px">
-                    <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none';" style="width: 100%" bind:onclick="up($event)">arrow_drop_up</button>
+                    <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none'; width: '100%'" bind:onclick="up($event)">arrow_drop_up</button>
                     <button type="button" class="material-icons" style="margin-right: 4px" bind:onclick="showSelectedClick($event)" bind:style="color : showSelected ? 'var(--main-font-color)' : 'var(--main-dark1-color)'">manage_search</button>
                 </div>
                 <div bind:onwheel="onWheel($event)">
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="material-icons" translate="no" type="button" bind:style="display : (index + limit) < size ? 'block' : 'none';" style="width: 100%" bind:onclick="down($event)">arrow_drop_down</button>
+                <button class="material-icons" translate="no" type="button" bind:style="display : (index + limit) < size ? 'block' : 'none'; width: '100%'" bind:onclick="down($event)">arrow_drop_down</button>
             </div>
         </div>
     </template>

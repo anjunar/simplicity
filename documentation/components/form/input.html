@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:bind="http://www.w3.org/1999/xhtml">
+<html xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -233,7 +233,7 @@
                 <div style="margin: 20px;">
                     <form>
                         <mat-input-container placeholder="Text">
-                            <input type="text" is="dom-input" bind:variable="input" bind:model="text" required pattern="[a-zA-Z]+"/>
+                            <input type="text" is="dom-input" read:variable="input" bind:model="text" required pattern="[a-zA-Z]+"/>
                             <div slot="error" >
                                 <span name="valueMissing" i18n>Value required</span>
                                 <span name="patternMismatch" i18n>Only Letters</span>
@@ -258,7 +258,7 @@
                             <template>
                                 <iframe>
                                     <mat-input-container placeholder="Text">
-                                        <input type="text" is="dom-input" bind:variable="input" bind:model="text" required pattern="[a-zA-Z]+"/>
+                                        <input type="text" is="dom-input" read:variable="input" bind:model="text" required pattern="[a-zA-Z]+"/>
                                         <div slot="error" >
                                             <span name="valueMissing">Value required</span>
                                             <span name="patternMismatch">Only Letters</span>

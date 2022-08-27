@@ -105,7 +105,7 @@ function proxyFactory(context) {
 
                 function scope(target) {
                     if (Reflect.has(target.instance, p)) {
-                        return getPropertyDescriptor(p, target.instance)
+                        return getPropertyDescriptor(target.instance, p)
                     }
                     cursor = cursor.parent;
                     return scope(cursor);
@@ -161,54 +161,51 @@ export function evaluation(expression, context, args, full = false) {
 
     let proxy = proxyFactory(context);
 
-    walker(ast, new class {
-        CallExpression(node, parent) {
-            if (! full) {
+    if (! full) {
+        walker(ast, new class {
+            CallExpression(node, parent) {
                 this.addCallExpression(parent, node);
+                return false;
             }
-            return false;
-        }
-        MemberExpression(node, parent) {
-            let source = generate(node.object);
-            if (source !== "args") {
-                let destination = generate(node.property);
-                let output = `let result = ${source}; return getPropertyDescriptor('${destination}', result)`
+            MemberExpression(node, parent) {
+                let source = generate(node.object);
+                if (source !== "args") {
+                    let destination = generate(node.property);
+                    let output = `let result = ${source}; return getPropertyDescriptor(result, '${destination}')`
 
-                let arg = `return function(context, getPropertyDescriptor) {${output}}`;
-                let func = evaluator(arg)
-                let descriptor = func()(proxy, getPropertyDescriptor)
-                if (descriptor.get && descriptor.set === undefined) {
-                    if (! full) {
+                    let arg = `return function(context, getPropertyDescriptor) {${output}}`;
+                    let func = evaluator(arg)
+                    let descriptor = func()(proxy, getPropertyDescriptor)
+                    if (descriptor.get && descriptor.set === undefined) {
                         this.addCallExpression(parent, node);
                     }
                 }
+                return false;
             }
-            return false;
-        }
-        addCallExpression(parent, node) {
-            let top = parent[parent.length - 1]
-            let container = top.node[top.property];
-            let callExpression = {
-                type: "CallExpression",
-                arguments: [],
-                callee: {
-                    type: "MemberExpression",
-                    object: node,
-                    property: {
-                        type: "Identifier",
-                        name: "method"
+            addCallExpression(parent, node) {
+                let top = parent[parent.length - 1]
+                let container = top.node[top.property];
+                let callExpression = {
+                    type: "CallExpression",
+                    arguments: [],
+                    callee: {
+                        type: "MemberExpression",
+                        object: node,
+                        property: {
+                            type: "Identifier",
+                            name: "method"
+                        }
                     }
+                };
+                if (container instanceof Array) {
+                    let indexOf = container.indexOf(node);
+                    container[indexOf] = callExpression;
+                } else {
+                    top.node[top.property] = callExpression;
                 }
-            };
-            if (container instanceof Array) {
-                let indexOf = container.indexOf(node);
-                container[indexOf] = callExpression;
-            } else {
-                top.node[top.property] = callExpression;
             }
-        }
-    })
-
+        })
+    }
 
     let output = generate(ast);
 

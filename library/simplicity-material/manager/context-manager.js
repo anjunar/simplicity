@@ -1,10 +1,11 @@
 import {get, viewManager} from "../../simplicity-core/manager/view-manager.js";
 import MatContextMenu from "../components/modal/mat-context-menu.js";
+import {contentManager} from "../../simplicity-core/manager/content-manager.js";
 
 export const contextManager = new class ContextManager {
     openContext(url, options) {
         let executor = (resolve, reject) => {
-            viewManager.load("#" + url).then((view) => {
+            viewManager.load(url).then((view) => {
                 if (options?.data) {
                     Object.assign(view, options.data);
                 }
@@ -15,9 +16,10 @@ export const contextManager = new class ContextManager {
                 let viewPortRect = viewPort.getBoundingClientRect();
 
                 let matContextMenu = new MatContextMenu();
-                matContextMenu.appendChild(view);
                 matContextMenu.style.top = options.pageY - viewPortRect.top - 2 + "px";
                 matContextMenu.style.left = options.pageX - viewPortRect.left - 2 + "px";
+
+                contentManager.register(matContextMenu, [view], options?.data);
 
                 viewPort.appendChild(matContextMenu);
 

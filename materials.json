@@ -1,31 +1,33 @@
 {
   "$schema" : {
-    "rows" : {
-      "type" : "array",
-      "items" : {
-        "type" : "object",
-        "properties" : {
-          "position" : {
-            "type" : "number",
-            "title" : "Position",
-            "widget" : "number"
-          },
-          "name" : {
-            "type" : "string",
-            "title" : "Name",
-            "format" : "default",
-            "widget" : "text"
-          },
-          "weight" : {
-            "type" : "number",
-            "title" : "Weight",
-            "widget" : "number"
-          },
-          "symbol" : {
-            "type" : "string",
-            "title" : "Symbol",
-            "format" : "default",
-            "widget" : "text"
+    "properties" : {
+      "rows" : {
+        "type" : "array",
+        "items" : {
+          "type" : "object",
+          "properties" : {
+            "position" : {
+              "type" : "number",
+              "title" : "Position",
+              "widget" : "number"
+            },
+            "name" : {
+              "type" : "string",
+              "title" : "Name",
+              "format" : "default",
+              "widget" : "text"
+            },
+            "weight" : {
+              "type" : "number",
+              "title" : "Weight",
+              "widget" : "number"
+            },
+            "symbol" : {
+              "type" : "string",
+              "title" : "Symbol",
+              "format" : "default",
+              "widget" : "text"
+            }
           }
         }
       }

@@ -1,11 +1,26 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import DomTextarea from "../../../../simplicity-core/directives/dom-textarea.js";
+import {Membrane} from "../../../../simplicity-core/services/tools.js";
 
 class MetaInputTextarea extends HTMLElement {
 
     property;
     schema;
+
+    initialize() {
+        let input = this.querySelector("textarea");
+        if (this.schema.validators.notBlank || this.schema.validators.notNull) {
+            input.required = true;
+        }
+        Membrane.track(input, {
+            property : "dirty",
+            element : this,
+            handler : (value) => {
+                this.schema.dirty = value;
+            }
+        })
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {

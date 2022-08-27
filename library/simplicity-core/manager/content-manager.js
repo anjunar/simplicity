@@ -25,6 +25,13 @@ export const contentManager = new class ContentManager {
                         if (data) {
                             Object.assign(child, data)
                         }
+
+                        if (outerChild.$guards) {
+                            for (const $guard of outerChild.$guards) {
+                                child[$guard] = outerChild[$guard];
+                            }
+                        }
+
                         parent.appendChild(child);
                         return child;
                     }

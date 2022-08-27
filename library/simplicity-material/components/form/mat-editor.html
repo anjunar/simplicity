@@ -38,7 +38,7 @@
 <body>
     <template>
         <editor-toolbar bind:contents="contents"></editor-toolbar>
-        <div bind:variable="contents" class="content" contenteditable="true" bind:oncontextmenu="contextmenuClick($event)"></div>
+        <div read:variable="contents" class="content" contenteditable="true" bind:oncontextmenu="contextmenuClick($event)"></div>
     </template>
 </body>
 </html>

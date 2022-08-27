@@ -22,12 +22,6 @@ class MetaInput extends HTMLElement {
         }
     }
 
-    preInitialize() {
-        this.style.display = "block";
-        this.style.height = "36px";
-        this.style.width = "100%"
-    }
-
     initialize() {
         let metaForm = this.queryUpwards((element) => {
             return element.localName === "meta-form"

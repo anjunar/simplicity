@@ -21,6 +21,7 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     multiSelect = false;
     showSelected = false;
     search = "";
+    id = "id";
 
     preInitialize() {
         Membrane.track(this, {
@@ -142,6 +143,7 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
 
         this.open = false;
         this.dispatchEvent(new CustomEvent("model"))
+        this.dispatchEvent(new CustomEvent("input"));
         return false;
     }
 
@@ -239,9 +241,12 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             get(target, p, receiver) {
                 if (p === "selected") {
                     if (self.multiSelect) {
-                        return self.model.find(model => isEqual(target, model))
+                        return self.model.find(model => target[self.id] === model[self.id])
                     } else {
-                        return isEqual(target, self.model);
+                        if (self.model) {
+                            return self.model[self.id] === target[self.id];
+                        }
+                        return false;
                     }
                 }
                 return Reflect.get(target, p, receiver);
@@ -311,6 +316,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             } break
             case "multiselect" : {
                 this.multiSelect = newValue === "true"
+            } break;
+            case "id" : {
+                this.id = newValue;
             }
         }
     }
@@ -341,6 +349,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 binding: "input"
             }, {
                 name : "multiselect",
+                binding: "input"
+            }, {
+                name : "id",
                 binding: "input"
             }
         ]

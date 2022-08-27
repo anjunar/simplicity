@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Mat Image Upload</title>
@@ -33,11 +33,11 @@
 </head>
 <body>
   <template>
-      <div class="area" bind:onclick="input.click()">
+      <div class="area" bind:onclick="onAreaClick()">
           <div bind:if="! model.name" class="center">{{placeholder}}</div>
           <img bind:src="model.data"/>
       </div>
-      <input bind:variable="input" bind:onload="onLoad($event)" is="dom-input" type="file" style="display: none">
+      <input read:variable="input" bind:onload="onLoad($event)" is="dom-input" type="file" style="display: none">
   </template>
 </body>
 </html>

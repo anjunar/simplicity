@@ -41,7 +41,7 @@ function letStatement(rawAttributes, implicit, context, callback, imported = fal
 }
 
 export default customPlugins.define({
-    name: "let",
+    name: ["let"],
     destination: "Attribute",
     code: function (tagName, node, children, intern, isSvg, tabs, level) {
         return `\n${tabs}letStatement([${rawAttributes(node)}], implicit, context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}])})`

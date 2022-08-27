@@ -1,7 +1,7 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import MatInputContainer from "../../form/container/mat-input-container.js";
-import DomLazyMultiSelect from "../../../../simplicity-core/components/form/dom-lazy-multi-select.js";
+import DomLazySelect from "../../../../simplicity-core/components/form/dom-lazy-select.js";
 
 class MetaFilterLazyMultiSelect extends HTMLElement {
 
@@ -62,7 +62,7 @@ class MetaFilterLazyMultiSelect extends HTMLElement {
     }
 
     static get components() {
-        return [MatInputContainer, DomLazyMultiSelect]
+        return [MatInputContainer, DomLazySelect]
     }
 
     static get template() {

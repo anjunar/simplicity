@@ -1,6 +1,7 @@
 import {customComponents} from "../../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../../simplicity-core/processors/loader-processor.js";
 import DomSelect from "../../../../../simplicity-core/directives/dom-select.js";
+import {membraneFactory} from "../../../../../simplicity-core/processors/html-compiler-processor.js";
 
 class ToolbarFont extends HTMLElement {
 
@@ -137,13 +138,16 @@ class ToolbarFont extends HTMLElement {
         }
     }
 
-    inputs = [this.fontName, this.fontSize, this.formatBlock, this.bold, this.italic, this.strikeThrough, this.subScript, this.superScript];
-
     initialize() {
         let handler = (event) => {
-            for (const input of this.inputs) {
-                input.handler(event)
-            }
+            this.fontName.handler(event);
+            this.fontSize.handler(event);
+            this.formatBlock.handler(event);
+            this.bold.handler(event);
+            this.italic.handler(event);
+            this.strikeThrough.handler(event);
+            this.subScript.handler(event);
+            this.superScript.handler(event);
         }
 
         this.contents.addEventListener("click", handler);

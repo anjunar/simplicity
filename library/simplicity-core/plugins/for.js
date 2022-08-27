@@ -63,14 +63,15 @@ function forExpressions(expressions) {
 
 function forStatement(rawAttributes, context, callback, imported = false) {
 
-    let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:for"))
+    let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:for") || attribute.startsWith("read:for"))
+    let bindOnce = attribute.startsWith("read");
     let indexOf = attribute.indexOf("=");
     let expressions = attribute.substr(indexOf + 1)
 
     let data = forExpressions(expressions);
 
     let children = [];
-    let result = evaluation(data.for.source, context);
+    let result = evaluation(data.for.source, context, null, bindOnce);
     let array;
     if (result instanceof Array) {
         array = Array.from(result);
@@ -89,10 +90,12 @@ function forStatement(rawAttributes, context, callback, imported = false) {
     let container = document.createDocumentFragment();
     let comment = document.createComment(data.for.expression);
 
-    activeObjectExpression(data.for.source, context, comment, (result) => {
-        let value = result instanceof Array ? result : Object.entries(result);
-        update(value)
-    });
+    if (! bindOnce) {
+        activeObjectExpression(data.for.source, context, comment, (result) => {
+            let value = result instanceof Array ? result : Object.entries(result);
+            update(value)
+        });
+    }
 
     function generate() {
         array.forEach((item, index) => {
@@ -162,7 +165,7 @@ function forStatement(rawAttributes, context, callback, imported = false) {
 }
 
 export default customPlugins.define({
-    name : "bind:for",
+    name : ["bind:for", "read:for"],
     destination : "Attribute",
     code : function (tagName, node, children, intern, isSvg, tabs, level) {
         return `\n${tabs}forStatement([${rawAttributes(node)}], context, (context) => {return html("${tagName}", [${attributes(node)}], [${children(node, level + 1, isSvg)}\n${tabs}])})`

@@ -2,11 +2,26 @@ import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import DomSelect from "../../../../simplicity-core/directives/dom-select.js";
 import MatInputContainer from "../../form/container/mat-input-container.js";
+import {Membrane} from "../../../../simplicity-core/services/tools.js";
 
 class MetaInputSelect extends HTMLElement {
 
     property;
     schema;
+
+    initialize() {
+        let input = this.querySelector("select");
+        if (this.schema.validators.notBlank || this.schema.validators.notNull) {
+            input.required = true;
+        }
+        Membrane.track(input, {
+            property : "dirty",
+            element : this,
+            handler : (value) => {
+                this.schema.dirty = value;
+            }
+        })
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {

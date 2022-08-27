@@ -27,7 +27,7 @@ function caseStatement(rawAttributes, context, callback, imported = false) {
 }
 
 export default customPlugins.define({
-    name: "case",
+    name: ["case"],
     destination: "Element",
     code: function (tagName, node, children, intern, isSvg, tabs, level) {
         return `\n${tabs}caseStatement([${rawAttributes(node)}], context, function() { return [${intern(node.childNodes, ++level, isSvg)}\n${tabs}]})`;

@@ -1,7 +1,6 @@
 import {customViews} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import {windowManager} from "../../../manager/window-manager.js";
-import DomIf from "../../../../simplicity-core/directives/dom-if.js";
 
 class ContextMenu extends HTMLElement {
 
@@ -101,7 +100,7 @@ class ContextMenu extends HTMLElement {
     }
 
     extension() {
-        windowManager.openWindow("/library/simplicity-material/components/form/mat-editor/dialog/extended-dialog", {
+        windowManager.openWindow("library/simplicity-material/components/form/mat-editor/dialog/extended-dialog.js", {
             data: {
                 path: this.path
             }
@@ -109,7 +108,7 @@ class ContextMenu extends HTMLElement {
     }
 
     static get components() {
-        return [DomIf]
+        return []
     }
 
     static get template() {

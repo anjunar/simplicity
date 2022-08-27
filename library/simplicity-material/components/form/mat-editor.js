@@ -56,7 +56,7 @@ class MatEditor extends mix(HTMLElement).with(Input) {
             newPath.push(segment);
         }
 
-        contextManager.openContext("/library/simplicity-material/components/form/mat-editor/context-menu", {
+        contextManager.openContext("library/simplicity-material/components/form/mat-editor/context-menu.js", {
             pageX : event.pageX,
             pageY : event.pageY,
             data: {

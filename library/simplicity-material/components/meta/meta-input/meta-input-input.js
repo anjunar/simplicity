@@ -2,6 +2,7 @@ import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
 import MatInputContainer from "../../form/container/mat-input-container.js";
 import DomInput from "../../../../simplicity-core/directives/dom-input.js";
+import {Membrane} from "../../../../simplicity-core/services/tools.js";
 
 class MetaInputInput extends HTMLElement {
 
@@ -19,6 +20,14 @@ class MetaInputInput extends HTMLElement {
             input.maxLength = validators.size.max;
             input.minLength = validators.size.min;
         }
+
+        Membrane.track(input, {
+            property : "dirty",
+            element : this,
+            handler : (value) => {
+                this.schema.dirty = value;
+            }
+        })
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

@@ -17,11 +17,19 @@ export const customPlugins = new class CustomPlugins {
     }
 
     find(name, destination) {
-        return pluginRegistry.find(plugin => plugin.name === name && plugin.destination === destination)
+        return pluginRegistry.find(plugin => plugin.name.indexOf(name) > -1 && plugin.destination === destination)
     }
 
     names() {
-        return pluginRegistry.filter(plugin => plugin.name.startsWith("bind")).map(plugin => plugin.name);
+        let names = [];
+        for (const plugin of pluginRegistry) {
+            for (const name of plugin.name) {
+                if (name.startsWith("bind")) {
+                    names.push(name)
+                }
+            }
+        }
+        return names
     }
 
     executors() {
@@ -106,7 +114,7 @@ export function activeObjectExpression(expression, context, element, callback) {
             let segments = identifierToArray(bodyElement);
             let model = context.resolve(segments);
             let lastSegment = segments[segments.length - 1];
-            let descriptor = getPropertyDescriptor(lastSegment, model);
+            let descriptor = getPropertyDescriptor(model, lastSegment);
             if (descriptor.get && descriptor.set === undefined) {
                 let {method, resonator, activator} = evaluation(identifier, context, {}, true);
                 let handler = () => {
@@ -219,121 +227,130 @@ export function membraneFactory(instance, parent = []) {
         return instance;
     }
     if (instance instanceof Object) {
-        let cachedProxy = membraneCache.get(instance);
-        if (cachedProxy) {
-            return cachedProxy;
-        } else {
-            let root = parent[0].proxy;
-            let path = parent.map(object => object.property).join(".");
-            let proxy = new Proxy(instance, {
-                apply(target, thisArg, argArray) {
-                    if (thisArg instanceof DocumentFragment || thisArg instanceof Promise) {
-                        return Reflect.apply(target, thisArg.resolve, argArray);
-                    }
-                    let result = Reflect.apply(target, thisArg, argArray);
-                    if (thisArg instanceof Array && (target.name === "push" || target.name === "splice")) {
-                        if (parent.length > 0) {
-                            let element = parent[0];
-                            element.proxy.$fire = {
-                                proxy: thisArg,
-                                property: element.property
-                            }
-                        }
-                    }
-                    return membraneFactory(result, [...parent, {proxy : target, property : "()"}]);;
-                },
-                has(target, p) {
-                    if (p === "isProxy" || p === "resolve") {
-                        return true;
-                    }
-                    return Reflect.has(target, p);
-                },
-                set(target, p, value, receiver) {
-                    let decimalRegex = /\d+/
-                    if (target instanceof Array && decimalRegex.test(p)) {
-                        let result = Reflect.set(target, p, value, receiver);
-                        if (parent.length > 0) {
-                            let element = parent[parent.length - 1];
-                            element.proxy.$fire = {
-                                proxy: receiver,
-                                property: element.property
-                            }
-                        }
-                        return result;
-                    }
-
-                    if (p === "$fire") {
-                        for (const eventHandler of root.handlers) {
-                            if (path + "." + p === eventHandler.path) {
-                                eventHandler.handler(value.proxy);
-                            }
-                        }
-                        return true;
-                    }
-
-                    let start = performance.now();
-
-                    let result = Reflect.set(target, p, value, receiver);
-
-                    for (const eventHandler of root.handlers) {
-                        if (eventHandler.scoped) {
-                            if (eventHandler.path === (path + "." + p) && (root.passive.indexOf(path + "." + p) === -1 || eventHandler.override)) {
-                                eventHandler.handler(value);
-                            }
-                        } else {
-                            if (eventHandler.path.startsWith(path + "." + p) && (root.passive.indexOf(path + "." + p) === -1 || eventHandler.override)) {
-                                eventHandler.handler(value);
-                            }
-                        }
-                    }
-
-                    if (appManager.mode === "development") {
-                        console.log("latency : " + Math.round(performance.now() - start) + "ms")
-                    }
-
-                    return result;
-                },
-                get(target, p, receiver) {
-                    if (p === "resolve") {
-                        return target;
-                    }
-
-                    if (p === "isProxy") {
-                        return true;
-                    }
-
-                    if (p === "addEventHandler") {
-                        return addEventHandler(parent);
-                    }
-
-                    if (p === "removeEventHandler") {
-                        return removeEventHandler(parent)
-                    }
-
-                    if (p === "fire") {
-                        return fire(root.handlers, path);
-                    }
-
-                    if (p === "passiveProperty") {
-                        return passiveProperty(root.passive, path + "." + p)
-                    }
-
-                    if (typeof p === "symbol" || p === "prototype") {
-                        return Reflect.get(target, p, receiver);
-                    }
-
-                    let result = Reflect.get(target, p, receiver);
-                    if (result && result.isProxy) {
-                        return result;
-                    }
-                    return membraneFactory(result, [...parent, {proxy : receiver, property : p}]);
+        let root = parent[0].proxy;
+        let path = parent.map(object => object.property).join(".");
+        let proxy = new Proxy(instance, {
+            apply(target, thisArg, argArray) {
+                if (thisArg instanceof DocumentFragment || thisArg instanceof Promise) {
+                    return Reflect.apply(target, thisArg.resolve, argArray);
                 }
-            });
+                let result = Reflect.apply(target, thisArg, argArray);
+                if (thisArg instanceof Array && (target.name === "push" || target.name === "splice")) {
+                    if (parent.length > 0) {
+                        let element = parent[0];
+                        element.proxy.$fire = {
+                            proxy: thisArg,
+                            property: element.property
+                        }
+                    }
+                }
+                if (thisArg instanceof Array && target.name === "find") {
+                    return Reflect.apply(target, thisArg, argArray);
+                }
+                return membraneFactory(result, [...parent, {proxy : target, property : "()"}]);;
+            },
+            has(target, p) {
+                if (p === "isProxy" || p === "resolve") {
+                    return true;
+                }
+                return Reflect.has(target, p);
+            },
+            set(target, p, value, receiver) {
+                let decimalRegex = /\d+/
+                if (target instanceof Array && decimalRegex.test(p)) {
+                    let result = Reflect.set(target, p, value, receiver);
+                    if (parent.length > 0) {
+                        let element = parent[parent.length - 1];
+                        element.proxy.$fire = {
+                            proxy: receiver,
+                            property: element.property
+                        }
+                    }
+                    return result;
+                }
 
-            membraneCache.set(instance, proxy);
+                if (p === "$fire") {
+                    for (const eventHandler of root.handlers) {
+                        if (path + "." + p === eventHandler.path) {
+                            eventHandler.handler(value.proxy);
+                        }
+                    }
+                    return true;
+                }
 
-            return proxy
-        }
+                let start = performance.now();
+
+                if (value.isProxy) {
+                    value = value.resolve;
+                }
+
+                let result = Reflect.set(target, p, value, receiver);
+
+                for (const eventHandler of root.handlers) {
+                    if (eventHandler.scoped) {
+                        if (eventHandler.path === (path + "." + p) && (root.passive.indexOf(path + "." + p) === -1 || eventHandler.override)) {
+                            eventHandler.handler(value);
+                        }
+                    } else {
+                        if (eventHandler.path.startsWith(path + "." + p) && (root.passive.indexOf(path + "." + p) === -1 || eventHandler.override)) {
+                            eventHandler.handler(value);
+                        }
+                    }
+                }
+
+                if (appManager.mode === "development") {
+                    console.log("latency : " + Math.round(performance.now() - start) + "ms")
+                }
+
+                return result;
+            },
+            get(target, p, receiver) {
+                if (p === "resolve") {
+                    if (target.isProxy) {
+                        return target.resolve;
+                    }
+                    return target;
+                }
+
+                if (p === "isProxy") {
+                    return true;
+                }
+
+                if (p === "addEventHandler") {
+                    return addEventHandler(parent);
+                }
+
+                if (p === "removeEventHandler") {
+                    return removeEventHandler(parent)
+                }
+
+                if (p === "fire") {
+                    return fire(root.handlers, path);
+                }
+
+                if (p === "passiveProperty") {
+                    return passiveProperty(root.passive, path + "." + p)
+                }
+
+                if (typeof p === "symbol" || p === "prototype") {
+                    return Reflect.get(target, p, receiver);
+                }
+
+                if (target instanceof WebSocket) {
+                    return Reflect.get(target, p, receiver);
+                }
+
+                let result = Reflect.get(target, p, receiver);
+                if (result && result.isProxy) {
+                    return result;
+                }
+                return membraneFactory(result, [...parent, {proxy : receiver, property : p}]);
+            }
+        });
+
+        membraneCache.set(instance, proxy);
+
+        return proxy
     }
     return instance;
 }
@@ -381,7 +398,7 @@ function passiveInterpolationStatement(text, context) {
 
     function evalText() {
         return text.replace(interpolationRegExp, (match, expression) => {
-            let result = evaluation(expression, context);
+            let result = evaluation(expression, context, null, true);
             if (result === undefined || result === null) {
                 return ""
             }
@@ -586,7 +603,7 @@ function bindOnceStatement(name, value, context) {
             }
         },
         import(element) {
-            return bindStatement(name, value, context)
+            return bindOnceStatement(name, value, context)
                 .build(element)
         }
     }
@@ -637,7 +654,7 @@ export function codeGenerator(nodes) {
 
                     let tagName = node.localName;
                     if (node.hasAttribute("is")) {
-                        tagName += ":" + node.getAttribute("is")
+                        tagName += ":" + node.getAttribute("is");
                     }
 
                     for (const attribute of node.attributes) {

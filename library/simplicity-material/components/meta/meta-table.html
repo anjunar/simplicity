@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,25 +8,25 @@
 <template>
     <mat-table-extension>
         <tsearch>
-            <div bind:for="let [key, column] of schema.rows.items.properties">
-                <mat-table-search bind:path="key" bindonce:sortable="column.type === 'string'">
-                    <meta-table-filter let=model bindonce:schema="column" bindonce:model="model" bind:onmodel="search()"></meta-table-filter>
+            <div bind:for="let [key, column] of schema.properties.rows.items.properties">
+                <mat-table-search bind:path="key" read:sortable="column.type === 'string'">
+                    <meta-table-filter let=model read:schema="column" read:model="model" bind:onmodel="search()"></meta-table-filter>
                 </mat-table-search>
             </div>
         </tsearch>
-        <table is="mat-table" bind:items="items">
+        <table is="mat-table" bind:items="items" bind:onmodel="onRowClick($event)">
             <thead>
             <tr>
-                <td bind:for="let [key, column] of schema.rows.items.properties">
+                <td bind:for="let [key, column] of schema.properties.rows.items.properties">
                     <div>{{column.title}}</div>
                 </td>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td bind:for="let [key, column] of schema.rows.items.properties">
+                <td bind:for="let [key, column] of schema.properties.rows.items.properties">
                     <div let="data">
-                        <meta-column bindonce:schema="column" bindonce:model="data.${key}"></meta-column>
+                        <meta-column read:schema="column" read:model="data.${key}"></meta-column>
                     </div>
                 </td>
             </tr>

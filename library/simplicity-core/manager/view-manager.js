@@ -40,8 +40,10 @@ export const viewManager = new class ViewManager {
                     }
 
                     return Promise.all(promises).then((results) => {
+                        view.$guards = [];
                         guardResult.forEach((property, index) => {
                             view[property] = results[index];
+                            view.$guards.push(property);
                         });
                     })
                 }

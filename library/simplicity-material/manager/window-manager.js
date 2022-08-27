@@ -13,6 +13,23 @@ function zIndexSorted() {
 export const windowManager = new class WindowManager {
 
     openWindow(url, options) {
+        if (options?.singleton) {
+            let find = windowsRegistry.find(window => window.url === url);
+            if (find) {
+                this.clickWindow(find);
+                let executor = (resolve, reject) => {
+                    resolve(find);
+                }
+                return new Promise(executor);
+            } else {
+                return this.startWindow(url, options);
+            }
+        } else {
+            return this.startWindow(url, options);
+        }
+    }
+
+    startWindow(url, options) {
         let executor = (resolve, reject) => {
             viewManager.load(url).then((view) => {
                 view.setAttribute("slot", "content");
@@ -27,6 +44,7 @@ export const windowManager = new class WindowManager {
                 }
 
                 let matWindow = new MatWindow();
+                matWindow.url = url;
 
                 contentManager.register(matWindow, [header, view], options?.data);
 
@@ -49,6 +67,7 @@ export const windowManager = new class WindowManager {
                 if (configuration.modal) {
                     matWindow.resizable = false;
                     matWindow.draggable = false;
+                    matWindow.url = url;
                     let modal = new MatModal();
                     contentManager.register(modal, [matWindow]);
                     let viewport = document.querySelector("viewport");
@@ -121,8 +140,8 @@ export const windowManager = new class WindowManager {
     get configurations() {
         return this.windows.map((window) => {
             return {
-                window : window,
-                configuration : get(window.contents.localName)
+                window: window,
+                configuration: get(window.contents.localName)
             }
         })
     }
@@ -163,10 +182,10 @@ export const windowManager = new class WindowManager {
             matWindow.maximized = false;
         } else {
             matWindow.maximized = {
-                left : matWindow.style.left,
-                top : matWindow.style.top,
-                width : matWindow.style.width,
-                height : matWindow.style.height
+                left: matWindow.style.left,
+                top: matWindow.style.top,
+                width: matWindow.style.width,
+                height: matWindow.style.height
             }
 
             matWindow.style.left = "0";

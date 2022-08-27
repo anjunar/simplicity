@@ -53,13 +53,10 @@ class ToolbarColors extends HTMLElement {
         }
     };
 
-    inputs = [this.color, this.backGroundColor];
-
     initialize() {
         let handler = (event) => {
-            for (const input of this.inputs) {
-                input.handler(event)
-            }
+            this.color.handler(event);
+            this.backGroundColor.handler(event);
         }
 
         this.contents.addEventListener("click", handler);

@@ -11,11 +11,14 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
     name;
 
     model = {
-        data : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-        name : ""
+        data: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+        name: ""
     }
 
+    value;
+
     placeholder = ""
+    disabled = false;
 
     initialize() {
         if (this.name) {
@@ -28,23 +31,33 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
         }
     }
 
+    onAreaClick() {
+        if (! this.disabled) {
+            this.input.click()
+        }
+    }
+
     onLoad(event) {
         this.model.data = event.detail.data;
         this.model.lastModified = event.detail.lastModified;
         this.model.name = event.detail.name;
-        this.dispatchEvent(new CustomEvent("model"))
+        this.value = this.model;
+        this.dispatchEvent(new CustomEvent("model"));
+        this.dispatchEvent(new CustomEvent("input"));
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {
-                if (newValue) {
-                    this.model = newValue
-                }
+                this.model = newValue
             }
                 break
             case "placeholder" : {
                 this.placeholder = newValue;
+            }
+                break
+            case "disabled" : {
+                this.disabled = newValue === "true"
             }
                 break
         }

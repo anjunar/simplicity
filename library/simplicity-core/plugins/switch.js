@@ -57,7 +57,7 @@ function switchStatement(rawAttributes, context, cases, imported = false) {
 }
 
 export default customPlugins.define({
-    name: "bind:switch",
+    name: ["bind:switch", "read:switch"],
     destination: "Attribute",
     code: function (tagName, node, children, intern, isSvg, tabs, level) {
         return `\n${tabs}switchStatement([${rawAttributes(node)}], context, [${intern(node.childNodes, ++level, isSvg)}\n${tabs}])`;
