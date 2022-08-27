@@ -13,7 +13,7 @@ export const viewManager = new class ViewManager {
                     })
                 })
                 .catch((result) => {
-                    console.log(result)
+                    reject(result);
                 })
         }
 

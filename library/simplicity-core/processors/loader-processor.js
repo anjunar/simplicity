@@ -1,23 +1,17 @@
 import {appManager} from "../manager/app-manager.js";
 
 export function loader(url) {
-    let result;
     let request = new XMLHttpRequest();
-    request.open("GET", url, false)
-    request.addEventListener("loadend", (event) => {
-        result = event.target.responseText
-    })
-    request.send()
-    return result;
+    let newUrl = "/" + url;
+    request.open("GET", newUrl, false)
+    request.send(null)
+    return request.response;
 }
 
 export function libraryLoader(url) {
-    let result;
     let request = new XMLHttpRequest();
-    request.open("GET", appManager.library + "/" + url, false)
-    request.addEventListener("loadend", (event) => {
-        result = event.target.responseText
-    })
-    request.send()
-    return result;
+    let newUrl = "/" + appManager.library + "/" + url;
+    request.open("GET", newUrl, false)
+    request.send(null)
+    return request.response
 }
