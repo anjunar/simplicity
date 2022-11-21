@@ -4,7 +4,7 @@ import DomForm from "../../../simplicity/directives/dom-form.js";
 import {Input, mix} from "../../../simplicity/util/tools.js";
 import {Membrane} from "../../service/membrane.js";
 import {libraryLoader} from "../../util/loader.js";
-import {contentChildren} from "../../compilers/json-compiler.js";
+import {contentChildren} from "../../interpreters/json-interpreter.js";
 
 class MatTable extends mix(HTMLElement).with(Input) {
 

@@ -1,6 +1,6 @@
 import {customComponents} from "../../../simplicity/simplicity.js";
 import {libraryLoader} from "../../util/loader.js";
-import {contentChildren} from "../../compilers/json-compiler.js";
+import {contentChildren} from "../../interpreters/json-interpreter.js";
 
 class MatTabs extends HTMLElement {
 

@@ -1,5 +1,5 @@
-import {addContext} from "./js-compiler.js";
-import {bind, interpolation, variable} from "./json-compiler.js";
+import {addContext} from "./js-interpreter.js";
+import {bind, interpolation, variable} from "./json-interpreter.js";
 import {generate} from "../../astring/astring.js";
 import {parse} from "../../acorn/index.js";
 import {toCamelCase} from "../util/tools.js";

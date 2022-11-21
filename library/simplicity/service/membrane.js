@@ -1,4 +1,4 @@
-import {collectIdentifiers, evaluation} from "../compilers/js-compiler.js";
+import {collectIdentifiers, evaluation} from "../interpreters/js-interpreter.js";
 import {getPropertyDescriptor} from "../util/tools.js";
 import {generate} from "../../astring/astring.js";
 import {appManager} from "../manager/app-manager.js";

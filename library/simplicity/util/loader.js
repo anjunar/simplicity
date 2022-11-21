@@ -1,6 +1,6 @@
 import {appManager} from "../manager/app-manager.js";
-import {compile} from "../compilers/html-compiler.js";
-import {parse} from "../compilers/css-compiler.js";
+import {compile} from "../interpreters/html-interpreter.js";
+import {parse} from "../interpreters/css-interpreter.js";
 
 const domParser = new DOMParser();
 

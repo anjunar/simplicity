@@ -1,4 +1,4 @@
-import {compileCss, compileHTML, proxyFactory} from "./compilers/json-compiler.js";
+import {compileCss, compileHTML, proxyFactory} from "./interpreters/json-interpreter.js";
 import {generateDomProxy, Membrane} from "./service/membrane.js";
 import {register} from "./manager/view-manager.js";
 

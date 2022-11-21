@@ -1,5 +1,5 @@
 import {activeObjectExpression, membraneFactory} from "../service/membrane.js";
-import {evaluation} from "./js-compiler.js";
+import {evaluation} from "./js-interpreter.js";
 import {getPropertyDescriptor, isEqual, notifyElementRemove, toKebabCase} from "../util/tools.js";
 
 let contentCache = new WeakMap();
