@@ -7,8 +7,8 @@ html {
     --main-blue-color: #a9b7c6;
     --main-selected-color: #a4c35b;
     --main-error-color: #ff463f;
-    --main-yellow-color : #e3bb68;
-    --main-green-color : #6a8759;
+    --main-yellow-color: #e3bb68;
+    --main-green-color: #6a8759;
 }
 
 @font-face {
@@ -106,6 +106,47 @@ button.active {
     color: var(--main-selected-color);
 }
 
+input {
+    border: 0;
+    color: var(--main-font-color);
+    background-color: inherit;
+}
+
+input:focus {
+    outline: 0;
+    color: var(--main-font-color);
+    background-color: inherit;
+}
+
+input[type=checkbox] {
+    appearance: none;
+    font-family: 'Material Icons', fantasy;
+    font-size: medium;
+    margin: 0;
+    outline: 0
+}
+
+input[type=checkbox]::before {
+    content: 'check_box_outline_blank';
+    color: var(--main-font-color);
+}
+
+input[type=checkbox]:checked::before {
+    content: 'check_box';
+    color: var(--main-selected-color);
+}
+
+input[type=checkbox][toggle]::before {
+    content: 'toggle_off';
+    color: var(--main-font-color);
+}
+
+input[type=checkbox][toggle]:checked::before {
+    content: 'toggle_on';
+    color: var(--main-selected-color)
+}
+
+
 body {
     color: var(--main-font-color);
     background-color: var(--main-background-color);
@@ -117,9 +158,9 @@ body {
 hr {
     border: none;
     height: 1px;
-    margin : 0;
+    margin: 0;
     color: var(--main-font-color);
-    background-color:  var(--main-font-color);
+    background-color: var(--main-font-color);
 }
 
 a {
@@ -164,7 +205,76 @@ a:active {
 }
 
 viewport {
-    display : block;
+    display: block;
     position: relative;
     height: calc(100% - 40px);
 }
+
+select {
+    border: 0;
+    border-radius: 0;
+    color: var(--main-font-color);
+    background-color: var(--main-background-color);
+    width: 100%;
+    outline: 0
+}
+
+.hljs {
+    color: #a9b7c6;
+    background: #282b2e;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet {
+    color: #6897BB;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-deletion {
+    color: #cc7832;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link {
+    color: #629755;
+}
+
+.hljs-comment,
+.hljs-quote {
+    color: #808080;
+}
+
+.hljs-meta {
+    color: #bbb529;
+}
+
+.hljs-string,
+.hljs-attribute,
+.hljs-addition {
+    color: #6A8759;
+}
+
+.hljs-section,
+.hljs-title,
+.hljs-type {
+    color: #ffc66d;
+}
+
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+    color: #e8bf6a;
+}
+
+.hljs-emphasis {
+    font-style: italic;
+}
+
+.hljs-strong {
+    font-weight: bold;
+}
+

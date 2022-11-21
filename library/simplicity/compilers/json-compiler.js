@@ -303,7 +303,6 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
 
                 function generate(implicit, index = 0, selector, tag, name, source) {
                     function content(jsonAST, documentFragment, mapping) {
-                        node.ast = null;
                         for (const child of renderedElements) {
                             notifyElementRemove(child);
                             child.remove();
@@ -334,7 +333,6 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                         if (selector || name || tag) {
                             if (query) {
                                 let ast = mapping.get(query);
-                                node.ast = ast;
                                 let fragment = processJsonAST(root, [ast], context, rework, mapping);
                                 for (const child of fragment.children) {
                                     renderedElements.push(child);
@@ -342,7 +340,6 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                                 placeholder.after(fragment);
                             }
                         } else {
-                            node.ast = jsonAST;
                             let fragment = processJsonAST(root, jsonAST, context, rework, mapping);
                             for (const child of fragment.children) {
                                 renderedElements.push(child);
@@ -412,8 +409,6 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                         items = value;
                     }
 
-                    node.ast = [];
-
                     items.forEach((item, index, array) => {
                         let newContext;
                         if (node.item instanceof Array) {
@@ -442,7 +437,6 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                         newContext = proxyFactory({$scope : [...context.$scope, newContext]});
 
                         let ast = node.callback(newContext);
-                        node.ast.push(ast);
 
                         let fragment = processJsonAST(root, [ast], newContext, rework, mapping);
                         for (const child of fragment.childNodes) {
@@ -467,11 +461,9 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                 elements.appendChild(activeElement);
                 let renderedElements = [];
                 function generate(newValue, oldValue) {
-                    node.ast = null;
                     if (newValue) {
                         if (renderedElements.length === 0) {
                             let ast = node.callback();
-                            node.ast = ast;
                             let fragment = processJsonAST(root, [ast], context, rework, mapping);
                             renderedElements.push(...Array.from(fragment.children));
                             activeElement.after(fragment);
@@ -494,7 +486,6 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                 let renderedElements = [];
 
                 function generate(newValue) {
-                    node.ast = null;
                     for (const renderedElement of renderedElements) {
                         notifyElementRemove(renderedElement);
                         renderedElement.remove();
@@ -502,7 +493,6 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                     let caseItem = node.cases.find((caseItem) => caseItem.value === newValue || caseItem.value === "default");
                     if (caseItem) {
                         let ast = caseItem.callback();
-                        node.ast = ast;
                         let fragment = processJsonAST(root, [ast], context, rework, mapping);
                         renderedElements.push(...Array.from(fragment.children))
                         activeElement.after(fragment)
