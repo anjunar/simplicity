@@ -1,12 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Overview Components</title>
     <style>
-        app-basic {
+        app-advanced {
             display: block;
+            height: 100%;
         }
+
+        app-advanced ul {
+            list-style: none;
+        }
+
+        app-advanced ul li .row {
+            display: flex;
+            justify-content: space-between
+        }
+
+
     </style>
     <i18n>
         <translation>
@@ -37,17 +49,13 @@
             <en>Overview</en>
             <de>Übersicht</de>
         </translation>
-        <translation>
-            <en>Overview</en>
-            <de>Übersicht</de>
-        </translation>
     </i18n>
 </head>
 <body>
 <template>
     <mat-toolbar style="z-index: 8000; position:relative;">
         <div slot="left">
-            <button translate="no" class="material-icons" type="button" bind:onclick="open = ! open">menu</button>
+            <button translate="no" class="material-icons" type="button" read:onclick="open = ! open">menu</button>
         </div>
     </mat-toolbar>
 
@@ -197,8 +205,7 @@
         </mat-drawer>
         <mat-drawer-content>
             <viewport style="display: block; position: relative; height: 100%">
-                <dom-router level="1"
-                            style="overflow-y: auto; overflow-x: hidden; height: 100%; scrollbar-gutter: stable;"></dom-router>
+                <dom-router level="1" style="overflow-y: auto; overflow-x: hidden; height: 100%; scrollbar-gutter: stable;"></dom-router>
             </viewport>
         </mat-drawer-content>
     </mat-drawer-container>

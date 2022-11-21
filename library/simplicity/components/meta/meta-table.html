@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <mat-table bind:items="items" read:onmodel="onRowClick($event)">
+        <search>
+            <div bind:for="let [key, column] of schema.properties.rows.items.properties">
+                <mat-table-search read:path="key" read:schema="column" read:visible="column.visible">
+                    <meta-table-filter let=model read:name="key" read:schema="column" read:model="model" read:onmodel="search()"></meta-table-filter>
+                </mat-table-search>
+            </div>
+        </search>
+        <table>
+            <thead>
+            <tr>
+                <td bind:for="let [key, column] of schema.properties.rows.items.properties">
+                    <div>{{{column.title}}}</div>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td bind:for="let [key, column] of schema.properties.rows.items.properties">
+                    <div let="data">
+                        <meta-column read:schema="column" read:model="data[context.key]"></meta-column>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </mat-table>
+</template>
+</body>
+</html>

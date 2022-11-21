@@ -50,7 +50,7 @@
                 elements are carried out semicolon separated.
             </p>
 
-            <button class="thin" type="button" bind:onclick="showDisplay = ! showDisplay">Click me</button>
+            <button class="thin" type="button" read:onclick="showDisplay = ! showDisplay">Click me</button>
 
             <div bind:style="display : showDisplay ? 'block' : 'none'">
                 Show me :-)
@@ -65,7 +65,7 @@
             <code is="dom-code" lang="html5">
                 <template>
                     <iframe>
-                        <button class="thin" type="button" bind:onclick="show = ! show">Click me</button>
+                        <button class="thin" type="button" read:onclick="show = ! show">Click me</button>
 
                         <div bind:style="display : show ? 'block' : 'none'">
                             Show me :-)
@@ -77,7 +77,7 @@
             <code is="dom-code" lang="html5">
                 <template>
                     <iframe>
-                        <button class="thin" type="button" bind:onclick="show = ! show">Click me</button>
+                        <button class="thin" type="button" read:onclick="show = ! show">Click me</button>
 
                         <div bind:class="show ? 'show' : 'hide'">
                             Show me :-)

@@ -96,16 +96,17 @@
             <br/>
 
             <div style="margin: auto;">
-                <mat-radio-container bind:placeholder="i18n('Male')">
-                    <input bind:model="gender" is="dom-input" name="gender" type="radio" value="male">
-                </mat-radio-container>
-                <mat-radio-container bind:placeholder="i18n('Female')">
-                    <input bind:model="gender" is="dom-input" name="gender" type="radio" value="female">
-                </mat-radio-container>
-                <mat-radio-container bind:placeholder="i18n('Other')">
-                    <input bind:model="gender" is="dom-input" name="gender" type="radio" value="other">
-                </mat-radio-container>
-
+                <form>
+                    <mat-radio-container bind:placeholder="i18n('Male')">
+                        <input bind:model="gender" is="dom-input" name="gender" type="radio" value="male">
+                    </mat-radio-container>
+                    <mat-radio-container bind:placeholder="i18n('Female')">
+                        <input bind:model="gender" is="dom-input" name="gender" type="radio" value="female">
+                    </mat-radio-container>
+                    <mat-radio-container bind:placeholder="i18n('Other')">
+                        <input bind:model="gender" is="dom-input" name="gender" type="radio" value="other">
+                    </mat-radio-container>
+                </form>
                 <div style="margin-top: 20px;">{{i18n('Selected Gender')}}: <span>{{gender}}</span></div>
             </div>
 

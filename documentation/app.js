@@ -1,18 +1,26 @@
-import {customComponents} from "../library/simplicity-core/simplicity.js";
-import {loader} from "../library/simplicity-core/processors/loader-processor.js";
-import DomRouter from "../library/simplicity-core/directives/dom-router.js"
-import MatToolbar from "../library/simplicity-material/components/navigation/mat-toolbar.js";
-import MatFooter from "../library/simplicity-material/components/navigation/mat-footer.js";
-import MatLanguage from "../library/simplicity-material/components/system/mat-language.js";
-import MatTaskbar from "../library/simplicity-material/components/system/mat-taskbar.js";
-import MatProgressBar from "../library/simplicity-material/components/indicators/mat-progress-bar.js";
-import {appManager} from "../library/simplicity-core/manager/app-manager.js";
+import {customComponents} from "../library/simplicity/simplicity.js";
+import DomRouter from "../library/simplicity/directives/dom-router.js"
+import MatToolbar from "../library/simplicity/components/navigation/mat-toolbar.js";
+import MatFooter from "../library/simplicity/components/navigation/mat-footer.js";
+import MatLanguage from "../library/simplicity/components/system/mat-language.js";
+import MatTaskbar from "../library/simplicity/components/system/mat-taskbar.js";
+import MatProgressBar from "../library/simplicity/components/indicators/mat-progress-bar.js";
+import {appManager} from "../library/simplicity/manager/app-manager.js";
 import {routes} from "./routes.js";
+import {loader} from "../library/simplicity/util/loader.js";
 
 class DocumentationApp extends HTMLElement {
 
     loading = true;
     timeStamp;
+
+    get app() {
+        return this;
+    }
+
+    initialize() {
+        this.render();
+    }
 
     active(value) {
         let method = () => {

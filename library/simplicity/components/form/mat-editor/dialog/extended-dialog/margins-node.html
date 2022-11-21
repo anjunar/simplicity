@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <template>
+        <div style="display: flex">
+            <mat-input-container placeholder="Margin Left">
+                <input type="number" is="dom-input" bind:model="marginLeft" read:onmodel="marginLeftChange($event)"/>
+            </mat-input-container>
+            <mat-input-container placeholder="Margin Right">
+                <input type="number" is="dom-input" bind:model="marginRight" read:onmodel="marginRightChange($event)"/>
+            </mat-input-container>
+            <mat-input-container placeholder="Margin Top">
+                <input type="number" is="dom-input" bind:model="marginTop" read:onmodel="marginTopChange($event)"/>
+            </mat-input-container>
+            <mat-input-container placeholder="Margin Bottom">
+                <input type="number" is="dom-input" bind:model="marginBottom" read:onmodel="marginBottomChange($event)"/>
+            </mat-input-container>
+        </div>
+    </template>
+</body>
+</html>

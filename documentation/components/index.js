@@ -1,11 +1,10 @@
-import {customViews} from "../../library/simplicity-core/simplicity.js";
-import {loader} from "../../library/simplicity-core/processors/loader-processor.js";
-import DomRouter from "../../library/simplicity-core/directives/dom-router.js";
-import MatToolbar from "../../library/simplicity-material/components/navigation/mat-toolbar.js";
-import MatDrawerContainer from "../../library/simplicity-material/components/navigation/mat-drawer-container.js";
-import MatDrawerContent from "../../library/simplicity-material/components/navigation/mat-drawer-content.js";
-import MatDrawer from "../../library/simplicity-material/components/navigation/mat-drawer.js";
-import MatFooter from "../../library/simplicity-material/components/navigation/mat-footer.js";
+import {customViews} from "../../library/simplicity/simplicity.js";
+import DomRouter from "../../library/simplicity/directives/dom-router.js";
+import MatToolbar from "../../library/simplicity/components/navigation/mat-toolbar.js";
+import MatDrawerContainer from "../../library/simplicity/components/navigation/mat-drawer-container.js";
+import MatDrawerContent from "../../library/simplicity/components/navigation/mat-drawer-content.js";
+import MatDrawer from "../../library/simplicity/components/navigation/mat-drawer.js";
+import {loader} from "../../library/simplicity/util/loader.js";
 
 class Index extends HTMLElement {
 
@@ -13,7 +12,7 @@ class Index extends HTMLElement {
 
     preInitialize() {
         let media = window.matchMedia("(max-width: 800px)")
-        if (! media.matches) {
+        if (!media.matches) {
             this.open = true;
         }
     }
@@ -29,6 +28,6 @@ class Index extends HTMLElement {
 }
 
 export default customViews.define({
-    name : "components-index",
-    class : Index
+    name: "components-index",
+    class: Index
 })

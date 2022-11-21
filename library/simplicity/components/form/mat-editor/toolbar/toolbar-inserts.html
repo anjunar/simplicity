@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        toolbar-inserts {
+            display: block;
+        }
+
+        toolbar-inserts * {
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<template>
+    <div style="display: flex; align-items: center; height: 100%">
+        <button  type="button" class="material-icons" translate="no" title="Link" id="link"
+                 read:onclick="link.click(link.value)">insert_link
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="unLink" id="unLink"
+                 read:onclick="unLink.click()">link_off
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Div FlexBox"
+                 read:onclick="insertDivFlex.click()">table_chart
+        </button>
+        <button type="button" class="material-icons" translate="no" title="Table"
+                read:onclick="insertTable.click()">table_view
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Image"
+                 read:onclick="image.click()">image
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Insert Hr"
+                 read:onclick="horizontalRule.click()">code
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Insert Text"
+                 read:onclick="text.click()">short_text
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Insert Ordered List"
+                 read:onclick="orderedList.click()">format_list_numbered
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Insert Unordered List"
+                 read:onclick="unOrderedList.click()">format_list_bulleted
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Insert Paragraph"
+                 read:onclick="paragraph.click()">notes
+        </button>
+    </div>
+</template>
+</body>
+</html>

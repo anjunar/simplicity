@@ -81,7 +81,7 @@
             </table>
 
             <div style="margin: 20px;">
-                <button class="thin" bind:onclick="show = ! show">Toggle</button>
+                <button class="thin" read:onclick="show = ! show">Toggle</button>
 
                 <div bind:if="show">
                     {{i18n('Toggle me')}}
@@ -102,7 +102,7 @@
                     <code is="dom-code" lang="html5">
                         <template>
                             <iframe>
-                                <button class="thin" bind:onclick="show = ! show">Toggle</button>
+                                <button class="thin" read:onclick="show = ! show">Toggle</button>
 
                                 <div bind:if="show">
                                     Toggle me

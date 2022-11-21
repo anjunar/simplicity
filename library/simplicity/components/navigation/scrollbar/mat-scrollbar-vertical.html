@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    mat-scrollbar-vertial {
+        display: block;
+        height: 100%;
+    }
+
+    mat-scrollbar-vertial .bar {
+        position: relative;
+        height: 100%;
+        width: 16px;
+        background-color: var(--main-dark2-color);
+    }
+
+    mat-scrollbar-vertial .cursor {
+        position: absolute;
+        height: 16px;
+        width: 16px;
+        background-color: var(--main-dark1-color);
+        cursor: move;
+    }
+</style>
+<body>
+    <template>
+        <div class="bar">
+            <div class="cursor" read:onmousedown="sliderVertical($event)"></div>
+        </div>
+    </template>
+</body>
+</html>

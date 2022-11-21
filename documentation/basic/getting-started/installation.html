@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        installation {
+            display: block;
+        }
+    </style>
     <i18n>
         <translation>
             <en>
@@ -20,13 +25,13 @@
         </translation>
         <translation>
             <en>
-                The framework is divided into three parts, simplicity-core contains the basic functionality,
-                simplicity-material mainly contains the components in Material Design and simplicity-parser is
+                The framework is divided into three parts, simplicity contains the basic functionality,
+                simplicity mainly contains the components in Material Design and simplicity-parser is
                 the standalone javascript parser.
             </en>
             <de>
-                Das Framework ist in drei Teile aufgeteilt, simplicity-core enthält die Grund-Funktionalität,
-                simplicity-material enthält hauptsächlich die Komponenten im Material Design und simplicity-parser ist
+                Das Framework ist in drei Teile aufgeteilt, simplicity enthält die Grund-Funktionalität,
+                simplicity enthält hauptsächlich die Komponenten im Material Design und simplicity-parser ist
                 der eigenständige Javascript Parser.
             </de>
         </translation>
@@ -45,16 +50,16 @@
         <translation>
             <en>
                 The "bootstrap" function is there to start the application. It should be noted that there are two
-                functions "bootstrap" exists. Once in the "simplicity-core" directory and once in the directory
-                "simplicity-material". The bootstrap function in the "simplicity-material" directory
-                simultaneously includes the "bootstrap" function from the "simplicity-core" directory. The options object can do the following
+                functions "bootstrap" exists. Once in the "simplicity" directory and once in the directory
+                "simplicity". The bootstrap function in the "simplicity" directory
+                simultaneously includes the "bootstrap" function from the "simplicity" directory. The options object can do the following
                 parameter contain.
             </en>
             <de>
                 Die Funktion "bootstrap" ist dafür da, die Anwendung zu starten. Dabei ist zu beachten, dass es zweimal
-                die Funktion "bootstrap" gibt. Einmal im Verzeichnis "simplicity-core" und einmal im Verzeichnis
-                "simplicity-material". Die Bootstrap funktion im Verzeichnis "simplicity-material" beinhaltet
-                gleichzeitig die "bootstrap" Funktion aus dem Verzeichnis "simplicity-core". Das Options Object kann folgende
+                die Funktion "bootstrap" gibt. Einmal im Verzeichnis "simplicity" und einmal im Verzeichnis
+                "simplicity". Die Bootstrap funktion im Verzeichnis "simplicity" beinhaltet
+                gleichzeitig die "bootstrap" Funktion aus dem Verzeichnis "simplicity". Das Options Object kann folgende
                 Parameter enthalten.
             </de>
         </translation>
@@ -107,8 +112,8 @@
             </p>
 
             <p i18n>
-                The framework is divided into three parts, simplicity-core contains the basic functionality,
-                simplicity-material mainly contains the components in Material Design and simplicity-parser is
+                The framework is divided into three parts, simplicity contains the basic functionality,
+                simplicity mainly contains the components in Material Design and simplicity-parser is
                 the standalone javascript parser.
             </p>
 
@@ -120,9 +125,9 @@
 
             <p i18n>
                 The "bootstrap" function is there to start the application. It should be noted that there are two
-                functions "bootstrap" exists. Once in the "simplicity-core" directory and once in the directory
-                "simplicity-material". The bootstrap function in the "simplicity-material" directory
-                simultaneously includes the "bootstrap" function from the "simplicity-core" directory. The options object can do the following
+                functions "bootstrap" exists. Once in the "simplicity" directory and once in the directory
+                "simplicity". The bootstrap function in the "simplicity" directory
+                simultaneously includes the "bootstrap" function from the "simplicity" directory. The options object can do the following
                 parameter contain.
             </p>
             <p i18n>
@@ -157,7 +162,7 @@
                             <title>Simplicity</title>
                             <link rel="stylesheet" href="styles.css">
                             <script type="module">
-                                import {bootstrap} from "./library/simplicity-material/bootstrap.js";
+                                import {bootstrap} from "./library/simplicity/bootstrap.js";
 
                                 bootstrap({
                                     app: "documentation/app.js",

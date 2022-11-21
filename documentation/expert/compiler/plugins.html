@@ -77,7 +77,7 @@
                 </tr>
                 <tr>
                     <td>Variable</td>
-                    <td>bind:variable</td>
+                    <td>read:variable</td>
                     <td>Attribute</td>
                 </tr>
                 <tr>
@@ -116,7 +116,7 @@
                                 import {attributes, rawAttributes} from "./helper.js";
 
                                 function variableStatement(rawAttributes, context, html) {
-                                    let attribute = rawAttributes.find((attribute) => attribute.startsWith("bind:variable"))
+                                    let attribute = rawAttributes.find((attribute) => attribute.startsWith("read:variable"))
                                     let variable = attribute.split("=")[1];
                                     let element = html.element;
                                     evaluation(variable + " = $value", context, {$value: element})
@@ -124,7 +124,7 @@
                                 }
 
                                 export default customPlugins.define({
-                                    name: "bind:variable",
+                                    name: "read:variable",
                                     destination: "Attribute",
                                     code: function (tagName, node, children, intern, isSvg, tabs, level) {
                                         return "\\n" + tabs + "variableStatement(" +

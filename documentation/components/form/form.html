@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -149,12 +149,12 @@
             </table>
 
             <div style="margin: 20px;">
-                <form is="dom-form" bind:model="person" bind:variable="simpleForm">
+                <form is="dom-form" bind:model="person" read:variable="simpleForm">
                     <mat-input-container bind:placeholder="i18n('First Name')">
                         <input is="dom-input" type="text" name="firstName"/>
                     </mat-input-container>
                     <button type="button" bind:style="display : simpleForm.dirty ? 'inline' : 'none'"
-                            bind:onclick="simpleForm.reset()">Reset
+                            read:onclick="simpleForm.reset()">Reset
                     </button>
                 </form>
             </div>
@@ -173,12 +173,12 @@
                     <code is="dom-code" lang="html5">
                         <template>
                             <iframe>
-                                <form is="dom-form" bind:model="person" bind:variable="form">
+                                <form is="dom-form" bind:model="person" read:variable="form">
                                     <mat-input-container placeholder="First Name">
                                         <input is="dom-input" type="text" name="firstName"/>
                                     </mat-input-container>
                                     <button type="button" bind:style="display : form.dirty ? 'inline' : 'none'"
-                                            bind:onclick="form.reset()">Reset
+                                            read:onclick="form.reset()">Reset
                                     </button>
                                 </form>
                             </iframe>
@@ -333,12 +333,12 @@
                     <code is="dom-code" lang="javascript">
                         <template>
                             <script>
-                                import {customViews} from "../../../library/simplicity-core/simplicity.js";
-                                import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
-                                import DomInput from "../../../library/simplicity-core/directives/dom-input.js";
-                                import DomForm from "../../../library/simplicity-core/directives/dom-form.js";
+                                import {customViews} from "../../../library/simplicity/simplicity.js";
+                                import {loader} from "../../../library/simplicity/util/loader.js";
+                                import DomInput from "../../../library/simplicity/directives/dom-input.js";
+                                import DomForm from "../../../library/simplicity/directives/dom-form.js";
                                 import MatInputContainer
-                                    from "../../../library/simplicity-material/components/form/container/mat-input-container.js";
+                                    from "../../../library/simplicity/components/form/container/mat-input-container.js";
 
                                 class NestedForms extends HTMLElement {
 
@@ -408,7 +408,7 @@
             </table>
 
             <div style="margin: 20px;">
-                <form is="dom-form" bind:model="person" bind:variable="form">
+                <form is="dom-form" bind:model="person" read:variable="form">
                     <mat-input-container bind:placeholder="i18n('First Name')">
                         <input type="text" is="dom-input" name="firstName">
                         <div slot="error" >
@@ -438,7 +438,7 @@
                     <code is="dom-code" lang="html5">
                         <template>
                             <iframe>
-                                <form is="dom-form" bind:model="person" bind:variable="form">
+                                <form is="dom-form" bind:model="person" read:variable="form">
                                     <mat-input-container placeholder="First Name">
                                         <input type="text" is="dom-input" name="firstName">
                                         <div slot="error" >
@@ -463,11 +463,11 @@
                     <code is="dom-code" lang="javascript">
                         <template>
                             <script>
-                                import {customViews} from "../../../library/simplicity-core/simplicity.js";
-                                import DomInput from "../../../library/simplicity-core/directives/dom-input.js";
-                                import DomForm from "../../../library/simplicity-core/directives/dom-form.js";
-                                import MatInputContainer from "../../../library/simplicity-material/components/form/container/mat-input-container.js";
-                                import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
+                                import {customViews} from "../../../library/simplicity/simplicity.js";
+                                import DomInput from "../../../library/simplicity/directives/dom-input.js";
+                                import DomForm from "../../../library/simplicity/directives/dom-form.js";
+                                import MatInputContainer from "../../../library/simplicity/components/form/container/mat-input-container.js";
+                                import {loader} from "../../../library/simplicity/util/loader.js";
 
                                 class ValidationForm extends HTMLElement {
 

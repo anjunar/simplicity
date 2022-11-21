@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Check Box</title>
@@ -84,11 +84,11 @@
 
             <div style="margin: 20px;">
                 <meta-form bind:model="material">
-                    <meta-input property="position"></meta-input>
-                    <meta-input property="name"></meta-input>
-                    <meta-input property="weight"></meta-input>
-                    <meta-input property="symbol"></meta-input>
-                    <button type="button" bind:onclick="send()">save</button>
+                    <meta-input property="position" read:schema="material.$schema.properties.position"></meta-input>
+                    <meta-input property="name" read:schema="material.$schema.properties.name"></meta-input>
+                    <meta-input property="weight" read:schema="material.$schema.properties.weight"></meta-input>
+                    <meta-input property="symbol" read:schema="material.$schema.properties.symbol"></meta-input>
+                    <button type="button" read:onclick="send()">save</button>
                 </meta-form>
             </div>
 
@@ -110,7 +110,7 @@
                                     <meta-input property="name"></meta-input>
                                     <meta-input property="weight"></meta-input>
                                     <meta-input property="symbol"></meta-input>
-                                    <button type="button" bind:onclick="send()">save</button>
+                                    <button type="button" read:onclick="send()">save</button>
                                 </meta-form>
                             </iframe>
                         </template>
@@ -123,11 +123,11 @@
                     <code is="dom-code" lang="javascript">
                         <template>
                             <script>
-                                import {customViews} from "../../../library/simplicity-core/simplicity.js";
-                                import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
-                                import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
-                                import MetaForm from "../../../library/simplicity-material/components/meta/meta-form.js";
-                                import MetaInput from "../../../library/simplicity-material/components/meta/meta-input.js";
+                                import {customViews} from "../../../library/simplicity/simplicity.js";
+                                import {loader} from "../../../library/simplicity/util/loader.js";
+                                import DomCode from "../../../library/simplicity/directives/dom-code.js";
+                                import MetaForm from "../../../library/simplicity/components/meta/meta-form.js";
+                                import MetaInput from "../../../library/simplicity/components/meta/meta-input.js";
 
                                 class Form extends HTMLElement {
 

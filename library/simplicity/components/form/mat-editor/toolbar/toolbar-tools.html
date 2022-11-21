@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        toolbar-tools {
+            display: block;
+        }
+
+        toolbar-tools * {
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<template>
+    <div style="display: flex">
+        <button  type="button" class="material-icons" translate="no" title="Copy"
+                 read:onclick="copy.click()">file_copy
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Cut"
+                 read:onclick="cut.click()">content_cut
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Delete"
+                 read:onclick="delete1.click()">delete
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Select All"
+                 read:onclick="selectAll.click()">select_all
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Undo"
+                 read:onclick="undo.click()">undo
+        </button>
+        <button  type="button" class="material-icons" translate="no" title="Redo"
+                 read:onclick="redo.click()">redo
+        </button>
+    </div>
+</template>
+</body>
+</html>

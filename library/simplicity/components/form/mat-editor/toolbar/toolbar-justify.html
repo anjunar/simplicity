@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        toolbar-justify {
+            display: block;
+        }
+
+
+        toolbar-justify * {
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<template>
+    <div style="display: flex">
+        <button bind:class="justify.active ? 'active' : ''; ''"  class="material-icons" type="button" title="Justify Full"
+                read:onclick="justify.click()">format_align_justify
+        </button>
+        <button bind:class="justifyLeft.active ? 'active' : '';"  class="material-icons" type="button" title="Justify Left"
+                read:onclick="justifyLeft.click()">format_align_left
+        </button>
+        <button bind:class="justifyRight.active ? 'active' : '';"  class="material-icons" type="button" title="Justify Right"
+                read:onclick="justifyRight.click()">format_align_right
+        </button>
+        <button  bind:class="justifyCenter.active ? 'active' : '';" class="material-icons" type="button" title="Justify Center"
+                 read:onclick="justifyCenter.click()">format_align_center
+        </button>
+        <button bind:class="indent.active ? 'active' : '';" class="material-icons"  type="button" title="Indent"
+                read:onclick="indent.click()">format_indent_increase
+        </button>
+        <button bind:class="outdent.active ? 'active' : '';" class="material-icons"  type="button" title="Outdent"
+                read:onclick="outdent.click()">format_indent_decrease
+        </button>
+        <button bind:class="floatLeft.active ? 'active' : '';"  class="material-icons" type="button" title="Float Left"
+                read:onclick="floatLeft.click()">
+            view_sidebar
+        </button>
+        <button bind:class="floatRight.active ? 'active' : '';"  class="material-icons" type="button" title="Float Right"
+                read:onclick="floatRight.click()">
+            vertical_split
+        </button>
+    </div>
+</template>
+</body>
+</html>

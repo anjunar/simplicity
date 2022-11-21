@@ -81,30 +81,32 @@
                 </table>
 
                 <div style="margin: 20px;">
-                    <table style="margin-top: 30px" is="mat-table" bind:items="materials">
-                        <colgroup>
-                            <col path="position">
-                            <col path="name">
-                            <col path="weight">
-                            <col path="symbol">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <td><span>Number</span></td>
-                            <td><span>Name</span></td>
-                            <td><span>Weight</span></td>
-                            <td><span>Symbol</span></td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><span let="material">{{{material.position}}}</span></td>
-                            <td><span let="material">{{{material.name}}}</span></td>
-                            <td><span let="material">{{{material.weight}}}</span></td>
-                            <td><span let="material">{{{material.symbol}}}</span></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <mat-table style="margin-top: 30px" bind:items="materials">
+                        <table>
+                            <colgroup>
+                                <col path="position">
+                                <col path="name">
+                                <col path="weight">
+                                <col path="symbol">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <td><span>Number</span></td>
+                                <td><span>Name</span></td>
+                                <td><span>Weight</span></td>
+                                <td><span>Symbol</span></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span let="material">{{{material.position}}}</span></td>
+                                <td><span let="material">{{{material.name}}}</span></td>
+                                <td><span let="material">{{{material.weight}}}</span></td>
+                                <td><span let="material">{{{material.symbol}}}</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </mat-table>
                 </div>
 
 

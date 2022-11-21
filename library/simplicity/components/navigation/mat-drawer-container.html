@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-drawer-container {
+            display: block;
+            height: 100%;
+        }
+
+        @media only screen and (min-width: 600px) {
+            .nav {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div style="height: 100%; position: relative; display: flex" class="nav">
+        <slot selector="mat-drawer"></slot>
+        <slot selector="mat-drawer-content"></slot>
+    </div>
+</template>
+</body>
+</html>

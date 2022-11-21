@@ -79,7 +79,7 @@
             <div style="margin: 20px;">
                 <button is="dom-button"  class="normal" type="button" action="documentation/components/modals/window/example.js">Show Window</button>
 
-                <button class="normal" type="button" bind:onclick="open()">Show Window</button>
+                <button class="normal" type="button" read:onclick="open()">Show Window</button>
             </div>
 
 
@@ -109,7 +109,7 @@
                                         <iframe>
                                             <button is="dom-button" class="thin" type="button" action="/documentation/basic/modals/window/example">Show Window</button>
 
-                                            <button class="thin" type="button" bind:onclick="open()">Show Window</button>
+                                            <button class="thin" type="button" read:onclick="open()">Show Window</button>
                                         </iframe>
                                     </template>
                                 </code>
@@ -121,9 +121,9 @@
                                 <code is="dom-code" lang="javascript">
                                     <template>
                                         <script>
-                                            import {customViews} from "../../../library/simplicity-core/simplicity.js";
-                                            import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
-                                            import {windowManager} from "../../../library/simplicity-material/manager/window-manager.js";
+                                            import {customViews} from "../../../library/simplicity/simplicity.js";
+                                            import {loader} from "../../../library/simplicity/util/loader.js";
+                                            import {windowManager} from "../../../library/simplicity/manager/window-manager.js";
 
                                             class Window extends HTMLElement {
 

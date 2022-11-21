@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Mat Table Window</title>
+    <style>
+        mat-table-configuration {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <mat-table bind:items="tableColumns">
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <div let="tr">
+                            <slot read:source="table" selector="thead tr td *" read:index="tr.index"></slot>
+                        </div>
+                    </td>
+                    <td read:if="table.extension">
+                        <div let="tr" style="background-color: var(--main-dark1-color)">
+                            <slot read:source="table" selector="search mat-table-search > *" read:implicit="tr" read:index="tr.index"></slot>
+                        </div>
+                    </td>
+                    <td>
+                        <div let="tr">
+                            <input is="dom-input" type="checkbox" bind:model="tr.visible" placeholder="Visible">
+                        </div>
+                    </td>
+                    <td>
+                        <div let="tr">
+                            <button type="button" class="material-icons" translate="no" read:onclick="left($event, tr.rowIndex)" read:disabled="tr.rowIndex === 0">chevron_left</button>
+                            <button type="button" class="material-icons" translate="no" read:onclick="right($event, tr.rowIndex)" read:disabled="tr.rowIndex === tr.rowLength - 1">chevron_right</button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </mat-table>
+    </template>
+</body>
+</html>

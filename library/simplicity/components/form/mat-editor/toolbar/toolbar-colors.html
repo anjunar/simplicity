@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        toolbar-colors {
+            display: block;
+        }
+
+        toolbar-colors * {
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<template>
+    <div style="display: flex">
+        <select bind:model="color.value" is="dom-select" read:onmodel="color.click($event)" style="width: 100px; border: 0; margin: 5px">
+            <option value="none" selected>Color</option>
+            <option value="#dddddd"><span style="color:#dddddd">Font</span></option>
+            <option value="#3c3f41"><span style="color:#3c3f41">Normal</span></option>
+            <option value="#ff463f"><span style="color:#ff463f">Error</span></option>
+            <option value="#aaaaaa"><span style="color:#aaaaaa">Grey</span></option>
+            <option value="#2b2b2b"><span style="color:#2b2b2b">Background</span></option>
+            <option value="#a4c35b"><span style="color:#a4c35b">Selected</span></option>
+        </select>
+        <select bind:model="backGroundColor.value" is="dom-select" read:onmodel="backGroundColor.click($event)"
+                style="width: 100px; border: 0; margin: 5px">
+            <option value="rgba(0, 0, 0, 0)" selected>Background</option>
+            <option value="rgb(221, 221, 221)"><span style="color:#dddddd">Font</span></option>
+            <option value="rgb(60, 63, 65)"><span style="color:#3c3f41">Normal</span></option>
+            <option value="rgb(255, 70, 63)"><span style="color:#ff463f">Error</span></option>
+            <option value="rgb(170, 170, 170)"><span style="color:#aaaaaa">Grey</span></option>
+            <option value="rgb(43, 43, 43)"><span style="color:#2b2b2b">Background</span></option>
+            <option value="rgb(164, 195, 91)"><span style="color:#a4c35b">Selected</span></option>
+        </select>
+    </div>
+</template>
+</body>
+</html>

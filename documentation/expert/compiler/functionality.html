@@ -74,7 +74,7 @@
                                                         html("meta-input", ["property=symbol"], [function (implicit) {
                                                             return []
                                                         }]),
-                                                        html("button", ["type=button", bindStatement("bind:onclick", "send(value)", context)], [
+                                                        html("button", ["type=button", bindStatement("read:onclick", "send(value)", context)], [
                                                             "save"
                                                         ]),
                                                     ]

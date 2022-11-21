@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Overview Components</title>
     <style>
-        app-basic {
+        app-expert {
             display: block;
+            height: 100%;
         }
+
+        app-expert ul {
+            list-style: none;
+        }
+
+        app-expert ul li .row {
+            display: flex;
+            justify-content: space-between
+        }
+
     </style>
     <i18n>
         <translation>
@@ -35,7 +46,7 @@
 <template>
     <mat-toolbar style="z-index: 8000; position:relative;">
         <div slot="left">
-            <button translate="no" class="material-icons" type="button" bind:onclick="open = ! open">menu</button>
+            <button translate="no" class="material-icons" type="button" read:onclick="open = ! open">menu</button>
         </div>
     </mat-toolbar>
 

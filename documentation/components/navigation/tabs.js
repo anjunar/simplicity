@@ -1,10 +1,10 @@
-import {customViews} from "../../../library/simplicity-core/simplicity.js";
-import {loader} from "../../../library/simplicity-core/processors/loader-processor.js";
-import MatTabs from "../../../library/simplicity-material/components/navigation/mat-tabs.js";
-import MatPages from "../../../library/simplicity-material/components/navigation/mat-pages.js";
-import MatTab from "../../../library/simplicity-material/components/navigation/mat-tab.js";
-import MatPage from "../../../library/simplicity-material/components/navigation/mat-page.js";
-import DomCode from "../../../library/simplicity-material/directives/dom-code.js";
+import {customViews} from "../../../library/simplicity/simplicity.js";
+import {loader} from "../../../library/simplicity/util/loader.js";
+import MatTabs from "../../../library/simplicity/components/navigation/mat-tabs.js";
+import MatPages from "../../../library/simplicity/components/navigation/mat-pages.js";
+import MatTab from "../../../library/simplicity/components/navigation/mat-tab.js";
+import MatPage from "../../../library/simplicity/components/navigation/mat-page.js";
+import DomCode from "../../../library/simplicity/directives/dom-code.js";
 
 class Tabs extends HTMLElement {
 

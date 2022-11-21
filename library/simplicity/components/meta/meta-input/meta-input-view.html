@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:read="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        meta-input-view .placeholder {
+            font-size: xx-small;
+            color: var(--main-grey-color);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div class="placeholder">
+            <span>{{schema.title}}</span>
+    </div>
+    <div style="font-size: small; color: var(--main-grey-color)">
+        <div style="min-height: 15px">
+            <switch read:value="schema.type">
+                <case value="image">
+                    <img read:if="model" style="max-width: 160px; max-height: 100px" read:src="model.data"/>
+                </case>
+                <case value="array">
+                    <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">
+                        {{{multiSelect(model, schema)}}}
+                    </div>
+                </case>
+                <case value="object">
+                    <div read:switch="schema.widget">
+                        <case value="image">
+                            <img read:if="model" style="max-width: 160px; max-height: 100px" read:src="model.data">
+                        </case>
+                        <case value="default">
+                            <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">
+                                {{{select(model, schema)}}}
+                            </div>
+                        </case>
+                    </div>
+                </case>
+                <case value="default">
+                    <switch read:value="schema.format">
+                        <case value="date-time">
+                            <div>{{{dateTime(model)}}}</div>
+                        </case>
+                        <case value="date">
+                            <div>{{{date(model)}}}</div>
+                        </case>
+                        <case value="default">
+                            <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{{model}}}</div>
+                        </case>
+                    </switch>
+                </case>
+            </switch>
+        </div>
+    </div>
+    <hr style="color: var(--main-dark1-color); background-color: var(--main-dark1-color)"/>
+    <div style="height: 6px"></div>
+</template>
+</body>
+</html>

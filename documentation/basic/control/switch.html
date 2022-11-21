@@ -90,14 +90,14 @@
             </table>
 
             <div style="margin: 20px;">
-                <div bind:switch="value">
+                <switch bind:value="value">
                     <case value="test1">
                         <div>1</div>
                     </case>
                     <case value="test2">
                         <div>2</div>
                     </case>
-                </div>
+                </switch>
             </div>
 
 
@@ -114,14 +114,14 @@
                     <code is="dom-code" lang="html5">
                         <template>
                             <iframe>
-                                <div bind:switch="value">
+                                <switch bind:value="value">
                                     <case value="test1">
                                         <div>1</div>
                                     </case>
                                     <case value="test2">
                                         <div>2</div>
                                     </case>
-                                </div>
+                                </switch>
                             </iframe>
                         </template>
                     </code>

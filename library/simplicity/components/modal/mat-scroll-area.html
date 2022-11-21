@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-scroll-area {
+            display: block;
+        }
+
+        mat-scroll-area .container {
+            display : flex;
+            height: 100%;
+        }
+
+        mat-scroll-area .content {
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <template>
+        <div class="container">
+            <viewport class="content">
+                <slot></slot>
+            </viewport>
+            <mat-scrollbar-vertical read:onscroll="onScrollY($event)"></mat-scrollbar-vertical>
+        </div>
+        <mat-scrollbar-horizontal style="margin-top: -16px" read:onscroll="onScrollX($event)"></mat-scrollbar-horizontal>
+    </template>
+</body>
+</html>

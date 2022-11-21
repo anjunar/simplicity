@@ -4,18 +4,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+
+
         app-documentation {
             display: block;
             height: 100%;
-        }
-
-        app-documentation ul {
-            list-style: none;
-        }
-
-        app-documentation ul li .row {
-            display: flex;
-            justify-content: space-between
         }
 
         app-documentation h4 {
@@ -33,20 +26,6 @@
         }
 
     </style>
-    <i18n>
-        <translation>
-            <en>Components</en>
-            <de>Komponenten</de>
-        </translation>
-        <translation>
-            <en>Basic</en>
-            <de>Grundlagen</de>
-        </translation>
-        <translation>
-            <en>Expert</en>
-            <de>Experte</de>
-        </translation>
-    </i18n>
 </head>
 <body>
 <template>
@@ -58,18 +37,18 @@
         <div slot="left">
             <div style="display: flex">
                 <a href="home"
-                   bind:class="active('home') ? 'normal active' : 'normal'; 'material-icons'">home</a>
+                   bind:class="active('home') ? 'active' : 'passive';" class="normal material-icons">home</a>
                 <a href="basic/getting-started/installation"
-                   bind:class="active('basic') ? 'normal active' : 'normal'" i18n>Basic</a>
+                   bind:class="active('basic') ? 'active' : 'passive'" class="normal">Basic</a>
                 <a href="components/form/checkbox"
-                   bind:class="active('components') ? 'normal active' : 'normal'" i18n>Components</a>
+                   bind:class="active('components') ? 'active' : 'passive'" class="normal">Components</a>
                 <a href="expert/meta/overview"
-                   bind:class="active('expert') ? 'normal active' : 'normal'" i18n>Expert</a>
+                   bind:class="active('expert') ? 'active' : 'passive'" class="normal">Expert</a>
             </div>
         </div>
         <div slot="right">
             <div class="browsers">
-                <a href="https://www.google.de/chrome" target="_blank  ">
+                <a href="https://www.google.de/chrome" target="_blank">
                     <img src="images/chrome_logo.png"
                          style="height: 32px; width: 32px; margin-right: 5px; vertical-align: bottom"/>
                 </a>
@@ -87,7 +66,7 @@
             </div>
         </div>
     </mat-toolbar>
-    <dom-router level="0" style="height: 100%; width: 100%" bind:onload="load()" bind:onloadend="loadEnd()"></dom-router>
+    <dom-router level="0" style="height: 100%; width: 100%" read:onload="load()" read:onloadend="loadEnd()"></dom-router>
     <mat-footer>
         <div slot="left">
             <mat-taskbar></mat-taskbar>

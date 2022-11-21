@@ -1,13 +1,9 @@
-import {customViews} from "../../../../library/simplicity-core/simplicity.js";
-import {loader} from "../../../../library/simplicity-core/processors/loader-processor.js";
+import {customViews} from "../../../../library/simplicity/simplicity.js";
+import {loader} from "../../../../library/simplicity/util/loader.js";
 
 class Example extends HTMLElement {
 
     material;
-
-    static get components() {
-        return []
-    }
 
     static get template() {
         return loader("documentation/basic/getting-started/view/example.html");

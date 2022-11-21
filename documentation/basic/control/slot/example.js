@@ -1,5 +1,6 @@
-import {loader} from "../../../../library/simplicity-core/processors/loader-processor.js";
-import {customComponents} from "../../../../library/simplicity-core/simplicity.js";
+import {customComponents} from "../../../../library/simplicity/simplicity.js";
+import {loader} from "../../../../library/simplicity/util/loader.js";
+import {isEqual} from "../../../../library/simplicity/util/tools.js";
 
 class CommonExample extends HTMLElement {
 
@@ -8,7 +9,9 @@ class CommonExample extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "items" : {
-                this.items = newValue;
+                if (! isEqual(this.items, newValue)) {
+                    this.items = newValue;
+                }
             } break;
         }
     }

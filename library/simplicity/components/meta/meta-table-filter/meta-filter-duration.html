@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <div style="display: flex; width: 100%">
+        <input is="dom-input" read:type="schema.widget" bind:model="model.search.from" step="1" read:onmodel="onModel()" style="flex: 1" autocomplete="off">
+        <input is="dom-input" read:type="schema.widget" bind:model="model.search.to" step="1" read:onmodel="onModel()" style="flex: 1" autocomplete="off">
+    </div>
+</template>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+
+    toolbar-font {
+      display: block;
+    }
+
+    toolbar-font * {
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+<template>
+  <div style="display: flex;">
+    <select bind:model="fontName.value" read:onmodel="fontName.click($event)" is="dom-select"
+            style="border: 0; margin: 5px; width: 80px">
+      <option value="Georgia, serif">Georgia</option>
+      <option value="Palatino Linotype, serif">Palatino</option>
+      <option value="Times New Roman, serif">Times new Roman</option>
+      <option value="Arial, serif">Arial</option>
+      <option value="Comic Sans MS, serif">Comic Sans MS</option>
+      <option value="Helvetica, serif">Helvetica</option>
+      <option value="Impact, serif">Impact</option>
+      <option value="Lucida, serif">Lucida</option>
+      <option value="Tahoma, serif">Tahoma</option>
+      <option value="Trebuchet MS, serif">Trebuchet</option>
+      <option value="Verdana, serif">Verdana</option>
+      <option value="Courier New, serif">Couria New</option>
+      <option value="Lucida Console, serif">Lucida</option>
+    </select>
+
+    <select bind:model="fontSize.value" is="dom-select" read:onmodel="fontSize.click($event)" style="border: 0;  margin: 5px; width: 80px">
+      <option value="1">x-small</option>
+      <option value="2">small</option>
+      <option value="3">medium</option>
+      <option value="4">large</option>
+      <option value="5">x-large</option>
+      <option value="6">xx-large</option>
+    </select>
+    <select bind:model="formatBlock.value" is="dom-select" read:onmodel="formatBlock.click($event)" style="border: 0;  margin: 5px; width: 80px">
+      <option value="p" selected>Format</option>
+      <option value="H1">H1</option>
+      <option value="H2">H2</option>
+      <option value="H3">H3</option>
+      <option value="H4">H4</option>
+      <option value="H5">H5</option>
+      <option value="H6">H6</option>
+    </select>
+    <div style="display: flex;">
+      <button bind:class="bold.active ? 'active' : '';"  class="material-icons" type="button" title="Bold"
+              read:onclick="bold.click()">format_bold
+      </button>
+      <button bind:class="italic.active ? 'active' : '';" class="material-icons" type="button" title="Italic"
+              read:onclick="italic.click()">format_italic
+      </button>
+      <button bind:class="strikeThrough.active ? 'active' : '';" class="material-icons" type="button" title="Strike Through"
+              read:onclick="strikeThrough.click()">strikethrough_s
+      </button>
+      <button bind:class="subScript.active ? 'active' : '';"  class="material-icons" type="button" title="Subscript"
+              read:onclick="subScript.click()">subscript
+      </button>
+      <button bind:class="superScript.active ? 'active' : '';" class="material-icons" type="button" title="SuperScript"
+              read:onclick="superScript.click()">superscript
+      </button>
+    </div>
+  </div>
+</template>
+</body>
+</html>
