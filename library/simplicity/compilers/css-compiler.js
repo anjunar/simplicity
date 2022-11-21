@@ -23,7 +23,10 @@ function process(cssRules) {
             return prev
         }
         if (cssRule instanceof CSSKeyframesRule) {
-            prev[cssRule.cssText] = process(Array.from(cssRule.cssRules))
+            prev["@keyframe"] = {
+                name : cssRule.name,
+                block : process(Array.from(cssRule.cssRules))
+            }
             return prev;
         }
         if (cssRule instanceof CSSRule) {

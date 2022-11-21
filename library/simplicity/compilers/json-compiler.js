@@ -603,16 +603,17 @@ export function contentChildren(node) {
     return result;
 }
 
-function cssNodeToString(node) {
+function cssNodeToString(node, indent = 0) {
     return Object.entries(node).map(([selector, block]) => {
         switch (selector) {
             case "@import" :
                 return "@import '" + block + "';";
             case "@media" :
-                return ""
+                return `@media ${block.condition} {\n${cssNodeToString(block.block,  1)}\n}`
+            case "@keyframe" :
+                return `@keyframe ${block.name} {\n${cssNodeToString(block.block, 1)}\n}`
             default : {
-                let rendered = Object.entries(block).map(([name, value]) => `  ${toKebabCase(name)} : ${value}`).join(";\n")
-                return `${selector} {\n${rendered}\n}`
+                return `${"\t".repeat(indent)}${selector} {\n${Object.entries(block).map(([name, value]) => `${"\t".repeat(indent + 1)}${toKebabCase(name)} : ${value}`).join(";\n")}\n${"\t".repeat(indent)}}`
             }
         }
     }).join("\n\n")
