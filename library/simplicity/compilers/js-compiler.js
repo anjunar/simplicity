@@ -1,7 +1,6 @@
 import {cachingProxy, evaluator, getPropertyDescriptor} from "../util/tools.js";
-import {generate} from "./astring/astring.js";
-import {parse} from "./acorn/index.js";
-import {proxyFactory} from "./json-compiler.js";
+import {generate} from "../../astring/astring.js";
+import {parse} from "../../acorn/index.js";
 
 export function jsWalker(program, state, parent = []) {
 

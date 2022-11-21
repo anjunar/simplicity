@@ -1,6 +1,6 @@
 import {collectIdentifiers, evaluation} from "../compilers/js-compiler.js";
 import {getPropertyDescriptor} from "../util/tools.js";
-import {generate} from "../compilers/astring/astring.js";
+import {generate} from "../../astring/astring.js";
 import {appManager} from "../manager/app-manager.js";
 
 const data = new WeakMap();

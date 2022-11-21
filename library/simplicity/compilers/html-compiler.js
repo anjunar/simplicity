@@ -1,7 +1,7 @@
 import {addContext} from "./js-compiler.js";
 import {bind, interpolation, variable} from "./json-compiler.js";
-import {generate} from "./astring/astring.js";
-import {parse} from "./acorn/index.js";
+import {generate} from "../../astring/astring.js";
+import {parse} from "../../acorn/index.js";
 import {toCamelCase} from "../util/tools.js";
 
 function isTextNode(node) {
@@ -360,6 +360,7 @@ const i18nAttribute = {
         return /^i18n$/;
     },
     process(attribute, name, previousValue, callback) {
+        previousValue.i18n = `{ context }`
         return previousValue;
     }
 }

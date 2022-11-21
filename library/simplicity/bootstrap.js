@@ -26,6 +26,8 @@ export function mountApp(options) {
                 language : language
             });
 
+            app.render();
+
             document.body.appendChild(app)
 
             if (appManager.preFetch) {
@@ -75,7 +77,6 @@ export function mountApp(options) {
 export function bootstrap(options) {
     appManager.mode = options.mode || "production"
     appManager.library = options.library || "library"
-    appManager.shadowDom = options.shadowDom || false
     appManager.preFetch = options.preFetch || false
     appManager.history = options.history || false;
     mountApp(options)

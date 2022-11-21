@@ -18,10 +18,6 @@ class DocumentationApp extends HTMLElement {
         return this;
     }
 
-    initialize() {
-        this.render();
-    }
-
     active(value) {
         let method = () => {
             let baseElement = document.querySelector("base")

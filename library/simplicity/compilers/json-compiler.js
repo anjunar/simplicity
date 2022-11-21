@@ -79,7 +79,21 @@ function bindingFactory(node, activeElement, rework, generate) {
     }
 }
 
-function processAttributes(node, element, rework) {
+function processLastAttributes(node, element, key, value, rework) {
+    if (node.type === "svg") {
+        element.setAttribute(key, value)
+    } else {
+        if (Reflect.has(element, key)) {
+            bindingFactory(value, element, rework, function (newValue) {
+                element[key] = newValue;
+            })
+        } else {
+            element.setAttribute(key, value)
+        }
+    }
+}
+
+function processAttributes(node, element, rework, context) {
     if (Reflect.has(node, "attributes") && node.attributes instanceof Object) {
         for (const [key, value] of Object.entries(node.attributes)) {
             let router = {
@@ -106,6 +120,15 @@ function processAttributes(node, element, rework) {
                             }
                         })
                     }
+                },
+
+                i18n() {
+                    let {method, resonator} = value.context.i18n(element.innerHTML);
+                    resonator(() => {
+                        element.innerHTML = method();
+                    }, element);
+
+                    element.innerHTML = method();
                 }
             }
 
@@ -130,30 +153,10 @@ function processAttributes(node, element, rework) {
                                 element.attributeChangedCallback(key, oldValue, newValue)
                             })
                         } else {
-                            if (node.type === "svg") {
-                                element.setAttribute(key, value)
-                            } else {
-                                if (Reflect.has(element, key)) {
-                                    bindingFactory(value, element, rework, function (newValue) {
-                                        element[key] = newValue;
-                                    })
-                                } else {
-                                    element.setAttribute(key, value)
-                                }
-                            }
+                            processLastAttributes(node, element, key, value, rework);
                         }
                     } else {
-                        if (node.type === "svg") {
-                            element.setAttribute(key, value)
-                        } else {
-                            if (Reflect.has(element, key)) {
-                                bindingFactory(value, element, rework, function (newValue) {
-                                    element[key] = newValue;
-                                })
-                            } else {
-                                element.setAttribute(key, value)
-                            }
-                        }
+                        processLastAttributes(node, element, key, value, rework);
                     }
                 }
             }
@@ -212,7 +215,7 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                         element.appendChild(documentFragment);
                     }
                 }
-                processAttributes(node, element, rework);
+                processAttributes(node, element, rework, context);
             },
             svg() {
                 let element = document.createElementNS("http://www.w3.org/2000/svg", node.tag);
@@ -224,7 +227,7 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                         element.appendChild(documentFragment);
                     }
                 }
-                processAttributes(node, element, rework);
+                processAttributes(node, element, rework, context);
             },
             dom() {
                 let element = node.dom;
@@ -240,12 +243,12 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                         element.content.appendChild(documentFragment);
                     }
                 }
-                processAttributes(node, element, rework);
+                processAttributes(node, element, rework, context);
             },
             component() {
                 let constructor = customElements.get(node.is || node.tag);
                 let element = new constructor({content : node.content, app : root.app});
-                processAttributes(node, element, rework);
+                processAttributes(node, element, rework, context);
                 element.render();
                 mapping.set(element, node);
                 elements.appendChild(element);
@@ -254,7 +257,7 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
             directive() {
                 let constructor = customElements.get(node.is || node.tag);
                 let element = new constructor({app : root.app});
-                processAttributes(node, element, rework);
+                processAttributes(node, element, rework, context);
                 element.render();
                 mapping.set(element, node);
                 elements.appendChild(element);

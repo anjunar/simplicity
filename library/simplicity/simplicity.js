@@ -1,6 +1,5 @@
 import {compileCss, compileHTML, proxyFactory} from "./compilers/json-compiler.js";
 import {generateDomProxy, Membrane} from "./service/membrane.js";
-import {notifyElementRemove} from "./util/tools.js";
 import {register} from "./manager/view-manager.js";
 
 export const customComponents = new class CustomComponents {
@@ -53,7 +52,7 @@ export const customComponents = new class CustomComponents {
                     if (language === "en") {
                         return text;
                     } else {
-                        let i18nMessage = i18nMessages.find(message => message.en === text)
+                        let i18nMessage = i18nMessages.find(message => message.en === text.trim())
                         if (i18nMessage) {
                             return i18nMessage[language]
                         } else {
@@ -88,7 +87,6 @@ export const customComponents = new class CustomComponents {
                 if (this.destroy) {
                     this.destroy();
                 }
-                notifyElementRemove(this)
             }
 
             static get observedAttributes() {

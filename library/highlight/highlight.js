@@ -1582,10 +1582,10 @@ https://highlightjs.org/
 @typedef {import('./highlight').LanguageFn} LanguageFn
 @typedef {import('./highlight').HighlightedHTMLElement} HighlightedHTMLElement
 @typedef {import('./highlight').BeforeHighlightContext} BeforeHighlightContext
-@typedef {import('library/simplicity/directives/dom-code/highlight.js/private').MatchType} MatchType
-@typedef {import('library/simplicity/directives/dom-code/highlight.js/private').KeywordData} KeywordData
-@typedef {import('library/simplicity/directives/dom-code/highlight.js/private').EnhancedMatch} EnhancedMatch
-@typedef {import('library/simplicity/directives/dom-code/highlight.js/private').AnnotatedError} AnnotatedError
+@typedef {import('library/highlight/highlight.js/private').MatchType} MatchType
+@typedef {import('library/highlight/highlight.js/private').KeywordData} KeywordData
+@typedef {import('library/highlight/highlight.js/private').EnhancedMatch} EnhancedMatch
+@typedef {import('library/highlight/highlight.js/private').AnnotatedError} AnnotatedError
 @typedef {import('./highlight').AutoHighlightResult} AutoHighlightResult
 @typedef {import('./highlight').HighlightOptions} HighlightOptions
 @typedef {import('./highlight').HighlightResult} HighlightResult
