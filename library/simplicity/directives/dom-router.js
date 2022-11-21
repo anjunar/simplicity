@@ -104,7 +104,7 @@ class DomRouter extends HTMLElement {
 
         let file = files[this.level]
 
-        if (file !== this.file) {
+        if (file && (file !== this.file)) {
             this.file = file
             viewManager.load(file, queryParams, this.app)
                 .then((view) => {
