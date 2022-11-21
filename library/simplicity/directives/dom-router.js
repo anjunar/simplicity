@@ -108,6 +108,7 @@ class DomRouter extends HTMLElement {
             this.file = file
             viewManager.load(file, queryParams, this.app)
                 .then((view) => {
+                    view.render();
                     for (const child of Array.from(this.children)) {
                         child.remove();
                     }

@@ -1,7 +1,7 @@
-import {customComponents} from "../../../simplicity/simplicity.js";
+import {customComponents} from "../../simplicity.js";
 import EditorToolbar from "./mat-editor/editor-toolbar.js";
 import DomForm from "../../../simplicity/directives/dom-form.js";
-// import {contextManager} from "../../manager/context-manager.js";
+import {contextManager} from "../../manager/context-manager.js";
 import MatTabs from "../navigation/mat-tabs.js";
 import MatTab from "../navigation/mat-tab.js";
 import MatPages from "../navigation/mat-pages.js";

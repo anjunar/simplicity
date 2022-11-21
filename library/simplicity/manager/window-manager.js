@@ -33,6 +33,8 @@ export const windowManager = new class WindowManager {
             viewManager.load(url, {}, null, options).then((view) => {
                 let configuration = get(view.constructor);
 
+                view.render();
+
                 function content(implicit) {
                     return [
                         {

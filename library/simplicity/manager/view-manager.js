@@ -9,7 +9,7 @@ export const viewManager = new class ViewManager {
                     let view = module.default;
                     this.loadGuards(view, queryParams).then((object) => {
                         view = new view({app : app, ...object, ...options?.data});
-                        view.render();
+                        // view.render();
                         resolve(view);
                     })
                 })
