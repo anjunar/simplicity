@@ -111,6 +111,47 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
         ]
     }
 
+    static get template() {
+        return {
+            css() {
+                return {
+                    "input" : {
+                        border: "0",
+                        color: "var(--main-font-color)",
+                        backgroundColor: "inherit"
+                    },
+                    "input:focus" : {
+                        outline: "0",
+                        color: "var(--main-font-color)",
+                        backgroundColor: "inherit"
+                    },
+                    "input[type=checkbox]" : {
+                        appearance: "none",
+                        fontFamily: "'Material Icons', fantasy",
+                        fontSize: "medium",
+                        margin: "0",
+                        outline: "0"
+                    },
+                    "input[type=checkbox]::before" : {
+                        content: "'check_box_outline_blank'",
+                        color: "var(--main-font-color)"
+                    },
+                    "input[type=checkbox]:checked::before" : {
+                        content: "'check_box'",
+                        color: "var(--main-selected-color)"
+                    },
+                    "input[type=checkbox][toggle]::before" : {
+                        content: "'toggle_off'",
+                        color: "var(--main-font-color)"
+                    },
+                    "input[type=checkbox][toggle]:checked::before" : {
+                        content: "'toggle_on'",
+                        color: "var(--main-selected-color)"
+                    }
+                }
+            }
+        }
+    }
 }
 
 export default customComponents.define("dom-input", DomInput, {extends: "input"})

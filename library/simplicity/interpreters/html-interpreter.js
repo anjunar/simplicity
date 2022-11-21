@@ -476,7 +476,7 @@ function processNode(node, isSvg = false) {
         let objects = [];
         let customElement = customElements.get(elementName);
         if (customElement) {
-            if (Reflect.has(customElement, "template")) {
+            if (customElement.template?.html) {
                 objects.push(`type : "component"`)
                 objects.push(`tag : "${node.localName}"`)
                 let is = node.getAttribute("is");

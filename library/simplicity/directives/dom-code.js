@@ -90,6 +90,55 @@ class DomCode extends HTMLElement {
         this.appendChild(container)
     }
 
+    static get template() {
+        return {
+            css() {
+                return {
+                    ".hljs": {
+                        color: "#a9b7c6",
+                        background: "#282b2e"
+                    },
+                    ".hljs-number, .hljs-literal, .hljs-symbol, .hljs-bullet" : {
+                        color: "#6897BB"
+                    },
+                    ".hljs-keyword, .hljs-selector-tag, .hljs-deletion" : {
+                        color: "#cc7832"
+                    },
+                    ".hljs-variable, .hljs-template-variable, .hljs-link" : {
+                        color: "#629755"
+                    },
+                    ".hljs-comment, .hljs-quote" : {
+                        color: "#808080"
+                    },
+                    ".hljs-meta" : {
+                        color: "#bbb529"
+                    },
+                    ".hljs-attr" : {
+                        color: "var(--main-font-color)"
+                    },
+                    ".hljs-string" : {
+                        color: "var(--main-selected-color)"
+                    },
+                    ".hljs-attribute, .hljs-addition" : {
+                        color: "var(--main-green-color)"
+                    },
+                    ".hljs-section, .hljs-title, .hljs-type" : {
+                        color: "var(--main-yellow-color)"
+                    },
+                    ".hljs-name, .hljs-selector-id, .hljs-selector-class" : {
+                        color: "var(--main-yellow-color)"
+                    },
+                    ".hljs-emphasis" : {
+                        fontStyle: "italic"
+                    },
+                    ".hljs-strong" : {
+                        fontWeight: "bold"
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 export default customComponents.define("dom-code", DomCode, {extends: "code"})
