@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
     <template>
-        <mat-input-container bind:placeholder="schema.title">
-            <input is="dom-input" bind:type="schema.widget" bind:model="model.search" step="1" bind:onmodel="onModel()">
-        </mat-input-container>
+        <input is="dom-input" read:type="schema.widget" bind:model="model.search" bind:onmodel="onModel()" style="width: 100%" autocomplete="off"/>
     </template>
 </body>
 </html>

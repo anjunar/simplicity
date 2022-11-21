@@ -15,6 +15,7 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     open = false;
     label = "name";
 
+    placeholder = "";
     defaultValue = "";
     name;
     disabled = "false";
@@ -45,6 +46,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 this.open = false;
             }
         };
+
+        let input = this.querySelector("input");
+        input.placeholder = this.placeholder;
 
         window.addEventListener("click", listener)
 
@@ -99,14 +103,6 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         }
     }
 
-    get placeholder() {
-        return this.querySelector("input").placeholder
-    }
-
-    set placeholder(value) {
-        this.querySelector("input").placeholder = value;
-    }
-
     inputWidth() {
         let method = () => {
             let input = this.querySelector("input");
@@ -131,12 +127,20 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     onItemClicked(event, item) {
         event.stopPropagation();
         if (this.multiSelect) {
-            let find = this.model.find(model => isEqual(model, item));
+            let find = this.model.find(model => isEqual(model[this.id], item[this.id]));
             if (! find) {
                 this.model.push(item);
+            } else {
+                let indexOf = this.model.indexOf(item);
+                this.model.splice(indexOf, 1);
             }
         } else {
-            this.model = item;
+            if (this.model) {
+                this.model = null;
+            } else {
+                this.model = item;
+            }
+
         }
 
         this.render();
@@ -169,8 +173,11 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         return false;
     }
 
-    checkbox(event) {
+    checkbox(event, item) {
         event.stopPropagation();
+
+        this.onItemClicked(event, item);
+
         return false;
     }
 
@@ -218,6 +225,17 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         return false;
     }
 
+    selected(item) {
+        if (this.multiSelect) {
+            return this.model.some((model) => isEqual(model[this.id], item[this.id]))
+        } else {
+            if (this.model) {
+                return isEqual(this.model[this.id],item[this.id]);
+            }
+            return false;
+        }
+    }
+
     load() {
         if (this.showSelected) {
             this.open = true;
@@ -231,76 +249,32 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 this.size = size;
                 this.open = true;
                 this.showSelected = false;
-                this.window = data.map(item => this.proxyFactory(item, this));
+                this.window = data;
+                let viewport = this.queryUpwards((element) => element.localName === "viewport");
+
+                let height = 14 + 39 + data.length * 42;
+                let selectBoundingClientRect = this.getBoundingClientRect();
+                let viewPortBoundingClientRect = viewport.getBoundingClientRect();
+                let overlay = this.querySelector("div.overlay");
+                if (selectBoundingClientRect.top + height > viewPortBoundingClientRect.top + viewPortBoundingClientRect.height) {
+                    overlay.style.top = "initial"
+                    overlay.style.bottom = "24px"
+                } else {
+                    overlay.style.top = "14px";
+                    overlay.style.bottom = "initial";
+                }
             })
         }
     }
 
-    proxyFactory(item, self) {
-        return new Proxy(item, {
-            get(target, p, receiver) {
-                if (p === "selected") {
-                    if (self.multiSelect) {
-                        return self.model.find(model => target[self.id] === model[self.id])
-                    } else {
-                        if (self.model) {
-                            return self.model[self.id] === target[self.id];
-                        }
-                        return false;
-                    }
-                }
-                return Reflect.get(target, p, receiver);
-            },
-            set(target, p, value, receiver) {
-                if (p === "selected") {
-                    let oldValue = Reflect.get(receiver, p, receiver);
-                    if (oldValue) {
-                        if (self.multiSelect) {
-                            let find = self.model.find(model => isEqual(model, target));
-                            let indexOf = self.model.indexOf(find)
-                            self.model.splice(indexOf, 1)
-                        } else {
-                            self.model = null
-                        }
-                    } else {
-                        if (self.multiSelect) {
-                            self.model.push(receiver);
-                        } else {
-                            self.model = receiver;
-                        }
-                    }
-                    self.window.forEach((item) => item.fire())
-                }
-                return Reflect.set(target, p, value, receiver);
-            },
-            getOwnPropertyDescriptor(target, p) {
-                if (p === "selected") {
-                    let object = {
-                        get selected() {
-                            return false
-                        },
-                        set selected(value) {
-                        }
-                    }
-                    return Reflect.getOwnPropertyDescriptor(object, "selected");
-                }
-                return Reflect.getOwnPropertyDescriptor(target, p);
-            }
-        });
-    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {
-                if (newValue instanceof Array) {
-                    this.model = newValue.map(model => this.proxyFactory(model, this));
-                } else {
-                    this.model = this.proxyFactory(newValue, this);
-                }
+                this.model = newValue;
             } break;
             case "placeholder" : {
-                let input = this.querySelector("input");
-                input.placeholder = newValue;
+                this.placeholder = newValue;
             } break;
             case "items" : {
                 this.items = newValue;

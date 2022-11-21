@@ -49,7 +49,7 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
 
 
     initialize() {
-        let valueChangeHandler = () => {
+        let valueChangeHandler = (event) => {
             if (this.type === "number") {
                 this.model = this.valueAsNumber || "";
             } else {

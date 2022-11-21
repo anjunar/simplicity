@@ -1397,7 +1397,7 @@ export class Parser {
         }
 
         while (token.type === "point") {
-            token = state.next();
+            token = state.next({keyWords : false});
             let temp = node;
             node = {
                 type : "MemberExpression",

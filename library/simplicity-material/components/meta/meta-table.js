@@ -2,7 +2,7 @@ import {customComponents} from "../../../simplicity-core/simplicity.js";
 import MatTable from "../table/mat-table.js";
 import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import MetaColumn from "./meta-column.js";
-import {isEqual, Membrane} from "../../../simplicity-core/services/tools.js";
+import {debounce, isEqual, Membrane} from "../../../simplicity-core/services/tools.js";
 import MatTableExtension from "../table/mat-table-extension.js";
 import MatTableSearch from "../table/mat-table-search.js";
 import MetaTableFilter from "./meta-table-filter.js";
@@ -31,6 +31,14 @@ class MetaTable extends HTMLElement {
     }
 
     initialize() {
+        MetaTable.prototype.search = debounce(() => {
+            let table = this.querySelector("table");
+            table.load();
+        }, 300)
+    }
+
+/*
+    initialize() {
         let table = this.querySelector("table");
         Membrane.track(this, {
             property : "schema",
@@ -57,16 +65,12 @@ class MetaTable extends HTMLElement {
             });
         })
     }
-
-    search() {
-        let table = this.querySelector("table");
-        table.load();
-    }
+*/
 
     items = (query, callback) => {
         this.parent(query, (rows, size, schema) => {
             this.dispatchEvent(new CustomEvent("load", {detail : {rows : rows, size : size, schema : schema}}))
-            if (! isEqual(schema, this.schema)) {
+            if (! isEqual(schema, this.schema.resolve)) {
                 this.schema = schema;
             }
             window.setTimeout(() => {

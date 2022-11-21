@@ -24,9 +24,9 @@
 <body>
     <template>
         <div class="container">
-            <div class="content">
+            <viewport class="content">
                 <slot></slot>
-            </div>
+            </viewport>
             <mat-scrollbar-vertical bind:onscroll="onScrollY($event)"></mat-scrollbar-vertical>
         </div>
         <mat-scrollbar-horizontal style="margin-top: -16px" bind:onscroll="onScrollX($event)"></mat-scrollbar-horizontal>

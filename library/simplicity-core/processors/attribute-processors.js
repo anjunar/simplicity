@@ -197,7 +197,7 @@ class DynamicBindingAttributeProcessor {
             if (find) {
                 this.matched = true;
                 this.binding = find.binding;
-                if (this.binding === "two-way") {
+                if (this.binding === "two-way" && value.indexOf("(") === -1) {
                     this.element.addEventListener(this.name, (event) => {
                         let $value = event.target[this.name]
                         let expression = value + " = " + "$value"
@@ -276,7 +276,9 @@ class DomAttributesProcessor {
                             this.element[this.name] = result === true || result === "true";
                         } break;
                         default : {
-                            this.element[this.name] = result;
+                            if (! isEqual(this.element[this.name], result)) {
+                                this.element[this.name] = result;
+                            }
                         }
                     }
                 })
@@ -293,7 +295,9 @@ class DomAttributesProcessor {
                     this.element[this.name] = result === true || result === "true";
                 } break;
                 default : {
-                    this.element[this.name] = result;
+                    if (! isEqual(this.element[this.name], result)) {
+                        this.element[this.name] = result;
+                    }
                 }
             }
         }

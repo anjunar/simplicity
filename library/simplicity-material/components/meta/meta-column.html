@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -11,7 +11,7 @@
 </head>
 <body>
 <template>
-    <div bind:switch="schema.type">
+    <div read:switch="schema.type">
         <case value="image">
             <img style="max-width: 160px; max-height: 100px" bind:src="model.data"/>
         </case>
@@ -21,9 +21,9 @@
             </div>
         </case>
         <case value="object">
-            <div bind:switch="schema.widget">
+            <div read:switch="schema.widget">
                 <case value="image">
-                    <img style="max-width: 160px; max-height: 100px" bind:src="model.data">
+                    <img style="max-width: 160px; max-height: 100px" read:src="model.data">
                 </case>
                 <case value="default">
                     <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">
@@ -33,10 +33,10 @@
             </div>
         </case>
         <case value="number">
-            <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{model}}</div>
+            <div style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis; max-width: 400px">{{{model}}}</div>
         </case>
         <case value="default">
-            <div bind:switch="schema.widget">
+            <div read:switch="schema.widget">
                 <case value="date-time">
                     <div>{{{dateTime(model)}}}</div>
                 </case>

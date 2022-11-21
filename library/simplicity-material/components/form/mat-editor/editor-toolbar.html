@@ -6,12 +6,10 @@
     <style>
         editor-toolbar {
             display: block;
-            width: 100%;
         }
 
         editor-toolbar .row {
             margin: 2px;
-            border: var(--main-dark1-color) solid 1px;
             align-items: stretch;
             vertical-align: top;
             flex : 1
@@ -21,13 +19,41 @@
 </head>
 <body>
 <template>
-    <div style="display: flex; align-items : stretch; justify-content: flex-start; flex-wrap : wrap; width: 100%">
-        <toolbar-font class="row" bind:contents="contents"></toolbar-font>
-        <toolbar-colors class="row" bind:contents="contents"></toolbar-colors>
-        <toolbar-justify class="row" bind:contents="contents"></toolbar-justify>
-        <toolbar-tools class="row" bind:contents="contents"></toolbar-tools>
-        <toolbar-inserts class="row" bind:contents="contents"></toolbar-inserts>
-        <div class="row" style="flex: 1"></div>
+    <div>
+        <mat-tabs bind:page="page">
+            <mat-tab>
+                <div>Font</div>
+            </mat-tab>
+            <mat-tab>
+                <div>Colors</div>
+            </mat-tab>
+            <mat-tab>
+                <div>Justify</div>
+            </mat-tab>
+            <mat-tab>
+                <div>Tools</div>
+            </mat-tab>
+            <mat-tab>
+                <div>Inserts</div>
+            </mat-tab>
+        </mat-tabs>
+        <mat-pages bind:page="page">
+            <mat-page>
+                <toolbar-font class="row" bind:contents="contents"></toolbar-font>
+            </mat-page>
+            <mat-page>
+                <toolbar-colors class="row" bind:contents="contents"></toolbar-colors>
+            </mat-page>
+            <mat-page>
+                <toolbar-justify class="row" bind:contents="contents"></toolbar-justify>
+            </mat-page>
+            <mat-page>
+                <toolbar-tools class="row" bind:contents="contents"></toolbar-tools>
+            </mat-page>
+            <mat-page>
+                <toolbar-inserts class="row" bind:contents="contents"></toolbar-inserts>
+            </mat-page>
+        </mat-pages>
     </div>
 </template>
 </body>

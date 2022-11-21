@@ -1,11 +1,10 @@
 import {customComponents} from "../../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../../simplicity-core/processors/loader-processor.js";
 import DomSelect from "../../../../../simplicity-core/directives/dom-select.js";
-import {membraneFactory} from "../../../../../simplicity-core/processors/html-compiler-processor.js";
 
 class ToolbarFont extends HTMLElement {
 
-    contents;
+    contents = null;
 
     fontName = {
         value: "Helvetica, serif",
@@ -69,7 +68,7 @@ class ToolbarFont extends HTMLElement {
                     case "h6" :
                         return "H6"
                     default :
-                        return "none";
+                        return "p";
                 }
             }
 
@@ -82,7 +81,10 @@ class ToolbarFont extends HTMLElement {
         click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand('bold', false, null);
-            this.active = true;
+            let selection = document.getSelection();
+            let anchorNode = selection.anchorNode;
+            let computedStyle = window.getComputedStyle(anchorNode.parentElement);
+            this.active = computedStyle.fontWeight === "700";
         },
         handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
@@ -94,7 +96,10 @@ class ToolbarFont extends HTMLElement {
         click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("italic", false, null);
-            this.active = true;
+            let selection = document.getSelection();
+            let anchorNode = selection.anchorNode;
+            let computedStyle = window.getComputedStyle(anchorNode.parentElement);
+            this.active = computedStyle.fontStyle === "italic";
         },
         handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
@@ -106,7 +111,10 @@ class ToolbarFont extends HTMLElement {
         click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("strikethrough", false, null);
-            this.active = true;
+            let selection = document.getSelection();
+            let anchorNode = selection.anchorNode;
+            let computedStyle = window.getComputedStyle(anchorNode.parentElement);
+            this.active = computedStyle.textDecorationLine === "line-through";
         },
         handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
@@ -118,7 +126,10 @@ class ToolbarFont extends HTMLElement {
         click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("subscript", false, null);
-            this.active = true;
+            let selection = document.getSelection();
+            let anchorNode = selection.anchorNode;
+            let computedStyle = window.getComputedStyle(anchorNode.parentElement);
+            this.active = computedStyle.verticalAlign === "sub";
         },
         handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
@@ -130,7 +141,10 @@ class ToolbarFont extends HTMLElement {
         click() {
             document.execCommand("styleWithCSS", false, true);
             document.execCommand("superscript", false, null);
-            this.active = true;
+            let selection = document.getSelection();
+            let anchorNode = selection.anchorNode;
+            let computedStyle = window.getComputedStyle(anchorNode.parentElement);
+            this.active = computedStyle.verticalAlign === "super";
         },
         handler(event) {
             let computedStyle = window.getComputedStyle(event.target);
@@ -138,6 +152,7 @@ class ToolbarFont extends HTMLElement {
         }
     }
 
+/*
     initialize() {
         let handler = (event) => {
             this.fontName.handler(event);
@@ -156,11 +171,29 @@ class ToolbarFont extends HTMLElement {
             this.contents.removeEventListener("click", handler);
         }
     }
+*/
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "contents" : {
-                this.contents = newValue;
+                if (newValue) {
+                    this.contents = newValue;
+                    let handler = (event) => {
+                        this.fontName.handler(event);
+                        this.fontSize.handler(event);
+                        this.formatBlock.handler(event);
+                        this.bold.handler(event);
+                        this.italic.handler(event);
+                        this.strikeThrough.handler(event);
+                        this.subScript.handler(event);
+                        this.superScript.handler(event);
+                    }
+
+                    this.contents.addEventListener("click", handler);
+                    this.contents.addEventListener("removed", () => {
+                        this.contents.removeEventListener("click", handler);
+                    })
+                }
             }
         }
     }

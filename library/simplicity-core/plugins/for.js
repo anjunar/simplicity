@@ -20,16 +20,16 @@ function forExpressions(expressions) {
                     }
                 }
                 if (expression.type === "VariableDeclarator") {
-                    if (expression.id.name === "index") {
+                    if (expression.init.name === "index") {
                         result.index = {
                             expression: jsCodeGenerator(expression, true),
-                            variable: expression.init.name
+                            variable: expression.id.name
                         }
                     }
-                    if (expression.id.name === "length") {
+                    if (expression.init.name === "length") {
                         result.length = {
                             expression: jsCodeGenerator(expression, true),
-                            variable: expression.init.name
+                            variable: expression.id.name
                         }
                     }
                 }

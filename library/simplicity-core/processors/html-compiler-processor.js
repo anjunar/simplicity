@@ -139,7 +139,7 @@ export function activeObjectExpression(expression, context, element, callback) {
                     property : lastSegment,
                     element : element,
                     handler : () => {
-                        callback(evaluation(expression, context));
+                        callback(evaluation(expression, context, {}, true));
                     }
                 })
             }
@@ -172,7 +172,7 @@ function addEventHandler(scope) {
     let handlers = node.handlers;
     return function (options) {
         let name = options.property, handler = options.handler, element = options.element,
-            scoped = options.scoped || false, passive = options.passive || false, override = options.override || false;
+            scoped = options.scoped || false;
         let path = scope.map(object => object.property).join(".") + "." + name;
 
         let result = {
@@ -180,9 +180,7 @@ function addEventHandler(scope) {
             path : path,
             handler: handler,
             element: element,
-            scoped : scoped,
-            passive : passive,
-            override : override
+            scoped : scoped
         };
         handlers.push(result);
 
@@ -216,17 +214,17 @@ function fire(handlers, path) {
     }
 }
 
-function passiveProperty(passive, path) {
-    return function () {
-        passive.push(path);
-    }
-}
-
 export function membraneFactory(instance, parent = []) {
     if (instance instanceof Node) {
         return instance;
     }
     if (instance instanceof Object) {
+/*
+        let newVar = membraneCache.get(instance);
+        if (newVar) {
+            return newVar;
+        }
+*/
         let root = parent[0].proxy;
         let path = parent.map(object => object.property).join(".");
         let proxy = new Proxy(instance, {
@@ -280,7 +278,7 @@ export function membraneFactory(instance, parent = []) {
 
                 let start = performance.now();
 
-                if (value.isProxy) {
+                if (value && value.isProxy) {
                     value = value.resolve;
                 }
 
@@ -288,23 +286,27 @@ export function membraneFactory(instance, parent = []) {
 
                 for (const eventHandler of root.handlers) {
                     if (eventHandler.scoped) {
-                        if (eventHandler.path === (path + "." + p) && (root.passive.indexOf(path + "." + p) === -1 || eventHandler.override)) {
+                        if (eventHandler.path === (path + "." + p)) {
                             eventHandler.handler(value);
                         }
                     } else {
-                        if (eventHandler.path.startsWith(path + "." + p) && (root.passive.indexOf(path + "." + p) === -1 || eventHandler.override)) {
+                        if (eventHandler.path.startsWith(path + "." + p)) {
                             eventHandler.handler(value);
                         }
                     }
                 }
 
                 if (appManager.mode === "development") {
-                    console.log("latency : " + Math.round(performance.now() - start) + "ms")
+                    console.log("latency : " + Math.round(performance.now() - start) + "ms" + " " + path + "." + p)
                 }
 
                 return result;
             },
             get(target, p, receiver) {
+                if (p === "$parent") {
+                    return parent
+                }
+
                 if (p === "resolve") {
                     if (target.isProxy) {
                         return target.resolve;
@@ -326,10 +328,6 @@ export function membraneFactory(instance, parent = []) {
 
                 if (p === "fire") {
                     return fire(root.handlers, path);
-                }
-
-                if (p === "passiveProperty") {
-                    return passiveProperty(root.passive, path + "." + p)
                 }
 
                 if (typeof p === "symbol" || p === "prototype") {

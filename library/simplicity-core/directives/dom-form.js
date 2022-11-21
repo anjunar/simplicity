@@ -32,6 +32,7 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         }
     }
 
+
     register(component) {
         this.components.push(component)
         component.addEventListener("model", () => {
@@ -45,14 +46,17 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         if (this.model) {
             let value = this.model[component.name];
             if (value !== undefined) {
+                // Make a deep copy of value, so the membrane is connected to new object graph
                 component.model = value;
                 component.value = value;
-                component.defaultValue = JSON.parse(JSON.stringify(value));
+                component.defaulValue = JSON.parse(JSON.stringify(value));
+                component.defaultModel = JSON.parse(JSON.stringify(value));
             }
 
             Membrane.track(this.model, {
                 property : component.name,
                 element : this,
+                scoped : true,
                 handler : (value) => {
                     component.model = value;
                     component.value = value;
@@ -88,6 +92,17 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         for (const component of this.components) {
             component.reset();
         }
+    }
+
+    validate() {
+        let result = [];
+        for (const component of this.components) {
+            result.push(component.validate());
+        }
+        if (result.length === 0) {
+            return true;
+        }
+        return result.every(item => item === true)
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

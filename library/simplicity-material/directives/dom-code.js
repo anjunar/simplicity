@@ -101,19 +101,34 @@ class DomCode extends HTMLElement {
         let result;
 
         let templateElement = this.querySelector("template");
+        let content;
+        if (templateElement) {
+            content = templateElement.content;
+        } else {
+            content = this;
+        }
 
         if (this.getAttribute("lang") === "html5") {
-            let htmliFrameElement = templateElement.content.querySelector("iframe");
+            let htmliFrameElement = content.querySelector("iframe");
+            if (htmliFrameElement) {
+                htmliFrameElement = this;
+            }
             let orLanguageName = this.convert(htmliFrameElement.innerHTML);
             result = Highlight.highlight(orLanguageName, {language: 'xml'}).value
         }
         if (this.getAttribute("lang") === "javascript") {
-            let htmlScriptElement = templateElement.content.querySelector("script");
+            let htmlScriptElement = content.querySelector("script");
+            if (htmlScriptElement) {
+                htmlScriptElement = this;
+            }
             let orLanguageName = this.convert(htmlScriptElement.innerHTML);
             result = Highlight.highlight(orLanguageName, {language: 'javascript'}).value
         }
         if (this.getAttribute("lang") === "json") {
-            let htmlScriptElement = templateElement.content.querySelector("script");
+            let htmlScriptElement = content.querySelector("script");
+            if (htmlScriptElement) {
+                htmlScriptElement = this;
+            }
             let orLanguageName = this.convert(htmlScriptElement.innerHTML);
             result = Highlight.highlight(orLanguageName, {language: 'json'}).value
         }

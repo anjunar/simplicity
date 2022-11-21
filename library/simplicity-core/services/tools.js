@@ -255,7 +255,7 @@ export const Input = (superclass) => class InputMixin extends superclass {
 
     get pristine() {
         let method = () => {
-            return isEqual(this.value, this.defaultValue)
+            return isEqual(this.model, this.defaultModel)
         }
         let resonator = (context, element) => {
             this.addEventListener("input", context)
@@ -275,7 +275,18 @@ export const Input = (superclass) => class InputMixin extends superclass {
 
     reset() {
         this.value = this.defaultValue;
+        this.model = this.defaultModel;
         this.dispatchEvent(new Event("input"));
+    }
+
+    validate() {
+        if (this.checkValidity) {
+            if (! this.checkValidity()) {
+                this.dispatchEvent(new Event("input"))
+                return false;
+            }
+        }
+        return true;
     }
 
     addAsyncValidator(value) {
@@ -352,7 +363,6 @@ const data = new WeakMap();
 
 export function generateDomProxy(node) {
     node.handlers = node.handlers || [];
-    node.passive = node.passive || [];
     let dataObject = data.get(node);
     if (! dataObject) {
         dataObject = {}
@@ -384,17 +394,17 @@ export function generateDomProxy(node) {
                 Reflect.set(data, property, value)
                 for (const eventHandler of node.handlers) {
                     if (eventHandler.scoped) {
-                        if (eventHandler.path === property && (node.passive.indexOf(property) === -1 || eventHandler.override)) {
+                        if (eventHandler.path === property) {
                             eventHandler.handler(value);
                         }
                     } else {
-                        if (eventHandler.path.startsWith(property) && (node.passive.indexOf(property) === -1 || eventHandler.override)) {
+                        if (eventHandler.path.startsWith(property)) {
                             eventHandler.handler(value);
                         }
                     }
                 }
                 if (appManager.mode === "development") {
-                    console.log("latency : " + Math.round(performance.now() - start) + "ms")
+                    console.log("latency : " + Math.round(performance.now() - start) + "ms" + " " + property)
                 }
             }
         })
@@ -410,7 +420,7 @@ export function generateDomProxy(node) {
 
     function addEventHandler (options) {
         let name = options.property, handler = options.handler, element = options.element,
-            scoped = options.scoped || false, passive = options.passive || false, override = options.override || false;
+            scoped = options.scoped;
 
         if (node[name] instanceof Object && Reflect.has(node[name], "method") && Reflect.has(node[name], "resonator")) {
             let nodeElement = node[name];
@@ -423,9 +433,7 @@ export function generateDomProxy(node) {
                 path: name,
                 handler: handler,
                 element: element,
-                scoped : scoped,
-                passive : passive,
-                override : override
+                scoped : scoped
             };
             node.handlers.push(result);
 
@@ -446,16 +454,12 @@ export function generateDomProxy(node) {
         node.handlers.splice(indexOf, 1)
     }
 
-    function passiveProperty(name) {
-        node.passive.push(name);
-    }
-
     function setupProxy() {
         let descriptors = Object.getOwnPropertyDescriptors(node);
         for (const [property, descriptor] of Object.entries(descriptors)) {
             let privateGetter = Object.getOwnPropertyDescriptor(dataObject, property)
             if (! privateGetter) {
-                let blackList = ["$fire", "addEventHandler", "removeEventHandler", "initialized", "handlers", "passiveProperty"];
+                let blackList = ["$fire", "addEventHandler", "removeEventHandler", "initialized", "handlers"];
                 let blackListRegex = /\d+/;
                 if (! blackList.includes(property) && ! blackListRegex.test(property)) {
                     generateWrapper(node, property, descriptor, dataObject);
@@ -476,9 +480,6 @@ export function generateDomProxy(node) {
             },
             removeEventHandler : {
                 value : removeEventHandler
-            },
-            passiveProperty : {
-                value : passiveProperty
             }
         })
     }
@@ -497,10 +498,6 @@ export const Membrane = class Membrane {
     }
     static remove(options) {
         options.node.removeEventHandler(options);
-    }
-    static passive(membrane, property) {
-        membrane.passiveProperty(property);
-        return property;
     }
     static fire(membrane) {
         membrane.fire();

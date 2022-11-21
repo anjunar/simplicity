@@ -6,7 +6,17 @@
 </head>
 <body>
     <template>
-        <div read:variable="container"></div>
+        <div style="display: flex; width: 100%">
+            <div read:variable="container" style="flex: 1"></div>
+            <div read:if="schema.visibility" >
+                <mat-input-container placeholder="Visibility">
+                    <dom-lazy-select read:items="category" bind:model="schema.visibility" multiselect="true" style="width: 200px">
+                        <div let="category">{{{category.name}}}</div>
+                    </dom-lazy-select>
+                </mat-input-container>
+            </div>
+        </div>
+
     </template>
 </body>
 </html>

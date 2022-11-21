@@ -25,12 +25,16 @@ class ToolbarTools extends HTMLElement {
 
     delete = {
         click() {
-            document.execCommand("delete")
+            document.execCommand("removeFormat")
         }
     }
 
     selectAll = {
-        click() {
+        click : () => {
+            let range = document.createRange();
+            range.selectNodeContents(this.contents);
+            document.getSelection().removeAllRanges();
+            document.getSelection().addRange(range);
             document.execCommand("selectALl")
         }
     }
@@ -44,7 +48,9 @@ class ToolbarTools extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "contents" : {
-                this.contents = newValue;
+                if (newValue) {
+                    this.contents = newValue;
+                }
             }
         }
     }

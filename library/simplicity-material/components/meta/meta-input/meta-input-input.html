@@ -7,7 +7,7 @@
 <body>
     <template>
         <mat-input-container read:placeholder="schema.title">
-            <input is="dom-input" read:type="schema.widget" read:name="property" read:disabled="schema.readOnly">
+            <input is="dom-input" read:type="schema.widget" read:name="property" read:disabled="schema.readOnly" read:step="schema.type === 'double' ? '0.0000000000001' : schema.type === 'float' ? '0.0000001' : '1'">
             <div slot="error">
                 <div read:for="let [key, validator] of schema.validators">
                     <div read:switch="key">
@@ -20,8 +20,12 @@
                         <case value="size">
                             <span name="tooShort">Must be minimum {{{validator.min}}} characters and a maximum of {{{validator.max}}} characters</span>
                         </case>
+                        <case value="email">
+                            <span name="typeMismatch">This must be a valid Email Address</span>
+                        </case>
                     </div>
                 </div>
+                <span name="stepMismatch">Step miss match</span>
             </div>
         </mat-input-container>
     </template>

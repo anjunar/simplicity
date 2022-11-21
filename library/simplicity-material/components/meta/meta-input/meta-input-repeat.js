@@ -11,16 +11,19 @@ class MetaInputRepeat extends mix(HTMLElement).with(Input) {
     schema;
     name;
     model;
+    dirty = false;
 
     addItem() {
         let chunk = {$schema : this.schema.items};
         this.model.push(chunk)
+        this.dirty = true;
         this.dispatchEvent(new Event("input"))
     }
 
     removeItem(value) {
         let indexOf = this.model.indexOf(value);
         this.model.splice(indexOf);
+        this.dirty = true;
         this.dispatchEvent(new Event("input"))
     }
 

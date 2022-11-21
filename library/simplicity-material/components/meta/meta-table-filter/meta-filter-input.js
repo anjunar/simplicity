@@ -1,6 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
-import MatInputContainer from "../../form/container/mat-input-container.js";
 import DomInput from "../../../../simplicity-core/directives/dom-input.js";
 
 class MetaFilterInput extends HTMLElement {
@@ -30,14 +29,14 @@ class MetaFilterInput extends HTMLElement {
                 name: "schema",
                 binding: "input"
             }, {
-                name : "model",
-                binding : "input"
+                name: "model",
+                binding: "input"
             }
         ]
     }
 
     static get components() {
-        return [MatInputContainer, DomInput]
+        return [DomInput]
     }
 
     static get template() {

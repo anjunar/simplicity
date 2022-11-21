@@ -25,15 +25,18 @@ function switchStatement(rawAttributes, context, cases, imported = false) {
         }
     }
 
-    activeObjectExpression(attributes.switch.value, context, comment, (result) => {
-        for (const element of elements) {
-            element.remove();
-            notifyElementRemove(element)
-        }
-        caseSegment = findCase(value);
-        elements = generate();
-        comment.after(container);
-    });
+    if (attributes.switch.type === "bind") {
+        activeObjectExpression(attributes.switch.value, context, comment, (result) => {
+            for (const element of elements) {
+                element.remove();
+                notifyElementRemove(element)
+            }
+            caseSegment = findCase(value);
+            elements = generate();
+            comment.after(container);
+        });
+    }
+
 
     let caseSegment;
     let value;
@@ -48,6 +51,7 @@ function switchStatement(rawAttributes, context, cases, imported = false) {
             elements = generate();
             parent.appendChild(comment);
             parent.appendChild(container);
+            return elements;
         },
         import(parent) {
             return switchStatement(rawAttributes, context, cases, true)

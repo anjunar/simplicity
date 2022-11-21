@@ -1,6 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
-import MatCheckboxContainer from "../../form/container/mat-checkbox-container.js";
 import DomInput from "../../../../simplicity-core/directives/dom-input.js";
 
 class MetaFilterCheckbox extends HTMLElement {
@@ -30,14 +29,14 @@ class MetaFilterCheckbox extends HTMLElement {
                 name: "schema",
                 binding: "input"
             }, {
-                name : "model",
-                binding : "input"
+                name: "model",
+                binding: "input"
             }
         ]
     }
 
     static get components() {
-        return [MatCheckboxContainer, DomInput]
+        return [DomInput]
     }
 
     static get template() {

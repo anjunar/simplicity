@@ -2,13 +2,15 @@ import {customComponents} from "../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 import MetaFilterCheckbox from "./meta-table-filter/meta-filter-checkbox.js";
 import MetaFilterLazySelect from "./meta-table-filter/meta-filter-lazy-select.js";
-import MetaFilterDatetime from "./meta-table-filter/meta-filter-datetime.js";
+import MetaFilterDuration from "./meta-table-filter/meta-filter-duration.js";
 import MetaFilterInput from "./meta-table-filter/meta-filter-input.js";
+import MetaFilterLazyMultiSelect from "./meta-table-filter/meta-filter-lazy-multi-select.js";
 
 class MetaTableFilter extends HTMLElement {
 
     schema;
     model;
+    name;
 
     container;
 
@@ -18,10 +20,14 @@ class MetaTableFilter extends HTMLElement {
                 return MetaFilterCheckbox
             case "lazy-select" :
                 return MetaFilterLazySelect
+            case "lazy-multi-select" :
+                return MetaFilterLazyMultiSelect
             case "datetime-local" :
-                return MetaFilterDatetime
+                return MetaFilterDuration
             case "date" :
-                return MetaFilterDatetime
+                return MetaFilterDuration
+            case "number" :
+                return MetaFilterDuration
             default :
                 return MetaFilterInput
         }
@@ -32,8 +38,9 @@ class MetaTableFilter extends HTMLElement {
         let component = new result();
         component.schema = this.schema;
         component.model = this.model;
+        component.name = this.name;
         component.addEventListener("model", () => {
-            this.dispatchEvent(new CustomEvent("model"))
+            this.dispatchEvent(new CustomEvent("model"));
         })
         this.container.appendChild(component);
     }
@@ -47,6 +54,11 @@ class MetaTableFilter extends HTMLElement {
             case "model" : {
                 this.model = newValue;
             }
+                break;
+            case "name" : {
+                this.name = newValue;
+            }
+                break;
         }
     }
 
@@ -56,8 +68,11 @@ class MetaTableFilter extends HTMLElement {
                 name: "schema",
                 binding: "input"
             }, {
-                name : "model",
-                binding : "two-way"
+                name: "model",
+                binding: "two-way"
+            }, {
+                name: "name",
+                binding: "input"
             }
         ]
     }

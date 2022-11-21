@@ -9,8 +9,8 @@
     <mat-table-extension>
         <tsearch>
             <div bind:for="let [key, column] of schema.properties.rows.items.properties">
-                <mat-table-search bind:path="key" read:sortable="column.type === 'string'">
-                    <meta-table-filter let=model read:schema="column" read:model="model" bind:onmodel="search()"></meta-table-filter>
+                <mat-table-search read:path="key" read:schema="column" read:visible="column.visible">
+                    <meta-table-filter let=model read:name="key" read:schema="column" read:model="model" bind:onmodel="search()"></meta-table-filter>
                 </mat-table-search>
             </div>
         </tsearch>
@@ -18,7 +18,7 @@
             <thead>
             <tr>
                 <td bind:for="let [key, column] of schema.properties.rows.items.properties">
-                    <div>{{column.title}}</div>
+                    <div>{{{column.title}}}</div>
                 </td>
             </tr>
             </thead>

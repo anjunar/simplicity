@@ -46,7 +46,7 @@ class MatTabs extends HTMLElement {
                 return false;
             })
         }
-        if (children.length > 0) {
+        if (children.length > 0 && this.page > -1) {
             let child = children[this.page];
             let tab = child.querySelector("mat-tab")
             tab.selected = true;

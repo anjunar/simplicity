@@ -23,12 +23,19 @@ class MetaInputLazySelect extends HTMLElement {
         })
     }
 
+    domLazyId(schema) {
+        return Object
+            .entries(schema.properties)
+            .find(([name, item]) => item.id)[0];
+    }
+
     domLazySelect(schema) {
         let link = schema.links.list;
         return (query, callback) => {
-            let url = new URL(link.url, `${window.location.protocol}//${window.location.host}/app/`);
+            let url = new URL(link.url, `${window.location.protocol}//${window.location.host}/`);
             url.searchParams.set("index", query.index);
             url.searchParams.set("limit", query.limit);
+            url.searchParams.set("value", query.value)
 
             fetch(url.toString(), {method : link.method})
                 .then(response => response.json())

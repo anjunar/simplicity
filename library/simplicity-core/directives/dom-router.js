@@ -14,9 +14,17 @@ class DomRouter extends HTMLElement {
         let routes = appElement.constructor.routes;
         let urlSegments;
         if (appManager.history) {
-            urlSegments = window.location.pathname.replace(baseElement.getAttribute("href"), "").split("/");
+            if (window.location.pathname.indexOf("/") > -1) {
+                urlSegments = window.location.pathname.replace(baseElement.getAttribute("href"), "").split("/");
+            } else {
+                urlSegments = ["index"];
+            }
         } else {
-            urlSegments = window.location.hash.split("#")[1].split("/").slice(1)
+            if (window.location.hash.indexOf("#") > -1) {
+                urlSegments = window.location.hash.split("#")[1].split("/").slice(1)
+            } else {
+                urlSegments = ["index"];
+            }
         }
         let files = [];
         let cursor = routes;

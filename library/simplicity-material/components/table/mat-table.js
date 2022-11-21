@@ -24,7 +24,6 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
 
     preInitialize() {
         this.contentTemplate = contentManager.instance(this);
-        Membrane.passive(this, "columns")
 
         let callback = () => {
             this.header = Array.from(this.contentTemplate.querySelectorAll("thead tr td"))
@@ -40,13 +39,40 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                     let tableSearch = tableSearches[i];
                     let colAttribute = tableSearch.path;
                     let sortable = tableSearch.sortable;
-                    columns.push({
+                    let visible = tableSearch.visible;
+                    if (visible === undefined) {
+                        visible = true
+                    }
+                    let column = {
                         index: i,
-                        visible: true,
+                        visible: visible ,
                         sort: sortable ? "none" : null,
                         path: colAttribute,
                         search : ""
-                    });
+                    };
+                    columns.push(column);
+
+                    switch (tableSearch.schema.widget) {
+                        case "lazy-select" : {
+                            column.search = column.search || undefined
+                        } break;
+                        case "lazy-multi-select" : {
+                            column.search = column.search || []
+                        } break;
+                        case "datetime-local" : {
+                            column.search = column.search || {from : "", to : ""}
+                        } break;
+                        case "date" : {
+                            column.search = column.search || {from : "", to : ""}
+                        } break;
+                        case "number" : {
+                            column.search = column.search || {from : "", to : ""}
+                        } break;
+                        default : {
+                            column.search = column.search || "";
+                        }
+                    }
+
                 }
                 this.columns = columns;
             } else {
@@ -83,6 +109,12 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
             }
         }
         this.load();
+    }
+
+    row(row, index, length) {
+        row.resolve.rowIndex = index;
+        row.resolve.rowLength = length;
+        return row;
     }
 
     onRowClick(event, row) {
@@ -133,9 +165,9 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
                     return search.length > 0;
                 }
                 if (search instanceof Object) {
-                    return search.from && search.to
+                    return (search.from && search.to) || search.id
                 }
-                return column.search.length > 0 || Number.isInteger(column.search)
+                return column.search && (column.search.length > 0 || Number.isInteger(column.search))
             })
             .reduce((previous, current) => {
                 let path = current.path;
@@ -169,7 +201,7 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
         })
     }
 
-    configuration(array, all, override) {
+    configuration(array, all) {
         let method = () => {
             if (all) {
                 return array;
@@ -190,7 +222,6 @@ class MatTable extends mix(HTMLTableElement).with(Input) {
             handlers.push(Membrane.track(this, {
                 property: "columns",
                 element: element,
-                override: true,
                 handler: callback
             }))
 

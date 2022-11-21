@@ -5,6 +5,10 @@ import ToolbarFont from "./toolbar/toolbar-font.js";
 import ToolbarInserts from "./toolbar/toolbar-inserts.js";
 import ToolbarJustify from "./toolbar/toolbar-justify.js";
 import ToolbarTools from "./toolbar/toolbar-tools.js";
+import MatTabs from "../../navigation/mat-tabs.js";
+import MatTab from "../../navigation/mat-tab.js";
+import MatPages from "../../navigation/mat-pages.js";
+import MatPage from "../../navigation/mat-page.js";
 
 class EditorToolbar extends HTMLElement {
 
@@ -14,13 +18,15 @@ class EditorToolbar extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "contents" : {
-                this.contents = newValue;
+                if (newValue) {
+                    this.contents = newValue;
+                }
             }
         }
     }
 
     static get components() {
-        return [ToolbarColors, ToolbarFont, ToolbarInserts, ToolbarJustify, ToolbarTools]
+        return [ToolbarColors, ToolbarFont, ToolbarInserts, ToolbarJustify, ToolbarTools, MatTabs, MatTab, MatPages, MatPage]
     }
 
     static get observedAttributes() {

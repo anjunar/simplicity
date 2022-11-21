@@ -1,6 +1,5 @@
 import {customComponents} from "../../../../simplicity-core/simplicity.js";
 import {libraryLoader} from "../../../../simplicity-core/processors/loader-processor.js";
-import MatInputContainer from "../../form/container/mat-input-container.js";
 import DomLazySelect from "../../../../simplicity-core/components/form/dom-lazy-select.js";
 
 class MetaFilterLazyMultiSelect extends HTMLElement {
@@ -15,7 +14,7 @@ class MetaFilterLazyMultiSelect extends HTMLElement {
     domLazySelect(schema) {
         let link = schema.links.list;
         return (query, callback) => {
-            fetch(`${link.url}?index=${query.index}&limit=${query.limit}`, {method : link.method})
+            fetch(`${link.url}?index=${query.index}&limit=${query.limit}`, {method: link.method})
                 .then(response => response.json())
                 .then((response) => {
                     callback(response.rows, response.size)
@@ -34,7 +33,7 @@ class MetaFilterLazyMultiSelect extends HTMLElement {
     domLazySelectLabel(meta) {
         return Object
             .entries(meta.items.properties)
-            .filter(([name,property]) => property.naming)
+            .filter(([name, property]) => property.naming)
             .map(([name, property]) => name)
     }
 
@@ -42,7 +41,8 @@ class MetaFilterLazyMultiSelect extends HTMLElement {
         switch (name) {
             case "schema" : {
                 this.schema = newValue;
-            } break
+            }
+                break
             case "model" : {
                 this.model = newValue;
             }
@@ -55,14 +55,14 @@ class MetaFilterLazyMultiSelect extends HTMLElement {
                 name: "schema",
                 binding: "input"
             }, {
-                name : "model",
-                binding : "input"
+                name: "model",
+                binding: "input"
             }
         ]
     }
 
     static get components() {
-        return [MatInputContainer, DomLazySelect]
+        return [DomLazySelect]
     }
 
     static get template() {

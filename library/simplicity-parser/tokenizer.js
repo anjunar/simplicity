@@ -205,7 +205,7 @@ export const tags = [
     },
     {
         type: "importOperator",
-        regex: /(as|from)/y,
+        regex: /(as|from) /y,
         keyWord: true
     },
     {

@@ -37,6 +37,7 @@ function ifStatement(rawAttributes, context, callback, imported = false) {
     function generate() {
         html = callback(context);
         element = buildStrategie(html, container, imported)
+        return {html, element};
     }
 
     return {
@@ -45,7 +46,9 @@ function ifStatement(rawAttributes, context, callback, imported = false) {
         build(parent) {
             parent.appendChild(comment);
             if (value) {
-                generate();
+                let {html, element} = generate();
+                this.element = element;
+                this.children = [html]
                 parent.appendChild(container);
             }
         },

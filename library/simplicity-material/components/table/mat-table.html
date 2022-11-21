@@ -21,7 +21,7 @@
         }
 
         table[is=mat-table] tbody tr:hover {
-            background-color: var(--main-selected-color);
+            background-color: var(--main-yellow-color);
             color: var(--main-background-color);
         }
 
@@ -38,7 +38,7 @@
             <td bind:for="let td of configuration(columns, false, true); let index = index">
                 <div style="display: flex; align-items: center;">
                     <div bind:onclick="showConfiguration()">
-                        <strong>
+                        <strong style="line-height: 24px">
                             <slot selector="thead tr td *" bind:index="td.index"></slot>
                         </strong>
                     </div>
@@ -52,9 +52,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr bind:for="let tr of window" bind:onclick="onRowClick($event, tr)">
+        <tr bind:for="let tr of window; let index = index; let length = length" bind:onclick="onRowClick($event, tr)">
             <td bind:for="let td of configuration(columns, false, false)">
-                <slot bind:implicit="tr" selector="tbody tr td > *" bind:index="td.index"></slot>
+                <slot read:implicit="row(tr, index, length)" selector="tbody tr td > *" bind:index="td.index"></slot>
             </td>
         </tr>
         </tbody>

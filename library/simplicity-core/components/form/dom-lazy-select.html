@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/XSL/Transform" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -19,6 +19,7 @@
         }
 
         dom-lazy-select div.overlay div.item {
+            color: var(--main-font-color);
             padding: 12px;
             flex: 1;
         }
@@ -32,19 +33,19 @@
 <body>
     <template>
         <div bind:onclick="openOverlay($event)" style="width: 100%;">
-            <input is="dom-input" type="text" bind:disabled="disabled">
+            <input is="dom-input" type="text" bind:disabled="disabled" style="width: 100%">
         </div>
         <div style="position: relative">
-            <div bind:if="open" class="overlay" bind:style="width : inputWidth() + 'px'">
-                <div style="display: flex">
+            <div bind:if="open" class="overlay" style="width: 100%">
+                <div style="display: flex; width: 100%; justify-content: space-between">
                     <input type="text" is="dom-input" placeholder="Search" bind:onclick="searchBox($event)" bind:model="search" style="padding: 12px; margin-left: 4px">
-                    <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none'; width: '100%'" bind:onclick="up($event)">arrow_drop_up</button>
+                    <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none'; width: '100%'; flex : 1" bind:onclick="up($event)">arrow_drop_up</button>
                     <button type="button" class="material-icons" style="margin-right: 4px" bind:onclick="showSelectedClick($event)" bind:style="color : showSelected ? 'var(--main-font-color)' : 'var(--main-dark1-color)'">manage_search</button>
                 </div>
                 <div bind:onwheel="onWheel($event)">
                     <div bind:for="let item of window" bind:onclick="onItemClicked($event, item)">
-                        <div style="display: flex">
-                            <input type="checkbox" is="dom-input" bind:model="item.selected" bind:onclick="checkbox($event)" style="width: 16px; height: 16px; margin: 13px">
+                        <div style="display: flex;">
+                            <input type="checkbox" is="dom-input" read:model="selected(item)" bind:onclick="checkbox($event, item)" style="width: 16px; height: 16px; margin: 13px">
                             <div class="item">
                                 <slot bind:implicit="item"></slot>
                             </div>

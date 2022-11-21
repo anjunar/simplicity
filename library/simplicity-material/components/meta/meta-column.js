@@ -8,28 +8,40 @@ class MetaColumn extends HTMLElement {
     schema;
 
     multiSelect(model, meta) {
-        return model.map((item) => Object
-            .entries(meta.items.properties)
-            .filter(([name, property]) => property.naming)
-            .map(([name, property]) => item[name])
-            .join(" ")
-        ).join(" ")
+        if (model && meta) {
+            return model.map((item) => Object
+                .entries(meta.items.properties)
+                .filter(([name, property]) => property.naming)
+                .map(([name, property]) => item[name])
+                .join(" ")
+            ).join(" ")
+        }
+        return "";
     }
 
     select(model, meta) {
-        return Object
-            .entries(meta.properties)
-            .filter(([name, property]) => property.naming)
-            .map(([name, property]) => model[name])
-            .join(" ")
+        if (model && meta) {
+            return Object
+                .entries(meta.properties)
+                .filter(([name, property]) => property.naming)
+                .map(([name, property]) => model[name])
+                .join(" ")
+        }
+        return "";
     }
 
     dateTime(value, meta) {
-        return dateTimeFormat(value, this.app.language)
+        if (value) {
+            return dateTimeFormat(value, this.app.language)
+        }
+        return "";
     }
 
     date(value, meta) {
-        return dateFormat(value, this.app.language)
+        if (value) {
+            return dateFormat(value, this.app.language)
+        }
+        return "";
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

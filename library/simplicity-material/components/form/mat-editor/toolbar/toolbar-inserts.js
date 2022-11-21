@@ -156,29 +156,28 @@ class ToolbarInserts extends HTMLElement {
         }
     }
 
-    initialize() {
-        let handler = (event) => {
-            this.link.handler(event);
-            this.unLink.handler(event);
-            this.image.handler(event);
-            this.horizontalRule.handler(event);
-            this.text.handler(event);
-            this.orderedList.handler(event);
-            this.unOrderedList.handler(event);
-            this.paragraph.handler(event);
-        }
-
-        this.contents.addEventListener("click", handler);
-
-        ToolbarInserts.prototype.destroy = () => {
-            this.contents.removeEventListener("click", handler);
-        }
-    }
-
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "contents" : {
-                this.contents = newValue;
+                if (newValue) {
+                    this.contents = newValue;
+
+                    let handler = (event) => {
+                        this.link.handler(event);
+                        this.unLink.handler(event);
+                        this.image.handler(event);
+                        this.horizontalRule.handler(event);
+                        this.text.handler(event);
+                        this.orderedList.handler(event);
+                        this.unOrderedList.handler(event);
+                        this.paragraph.handler(event);
+                    }
+
+                    this.contents.addEventListener("click", handler);
+                    this.contents.addEventListener("removed", () => {
+                        this.contents.removeEventListener("click", handler);
+                    });
+                }
             }
         }
     }

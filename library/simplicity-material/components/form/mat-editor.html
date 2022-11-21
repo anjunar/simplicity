@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Mat Editor</title>
@@ -8,10 +8,10 @@
             display: block;
         }
 
-        mat-editor div.content{
+        mat-editor div.content {
             outline: 0 solid transparent;
-            border : var(--main-dark1-color) solid 1px;
-            margin : 2px;
+            border: var(--main-dark1-color) solid 1px;
+            margin: 2px;
             overflow-x: hidden;
             overflow-y: auto;
             height: 300px;
@@ -33,12 +33,32 @@
             content: "\00a0";
         }
 
+        mat-editor a {
+            cursor: pointer;
+            color: var(--main-green-color) !important;
+        }
+
     </style>
 </head>
 <body>
-    <template>
+<template>
+    <div style="display: flex; width: 100%">
+        <mat-tabs bind:page="page" style="flex: 1">
+            <mat-tab><div>Write</div></mat-tab>
+            <mat-tab><div>Preview</div></mat-tab>
+        </mat-tabs>
         <editor-toolbar bind:contents="contents"></editor-toolbar>
-        <div read:variable="contents" class="content" contenteditable="true" bind:oncontextmenu="contextmenuClick($event)"></div>
-    </template>
+    </div>
+    <mat-pages bind:page="page">
+        <mat-page>
+            <div bind:innerHTML="model.html" read:variable="contents" class="content" contenteditable="true"
+                 bind:oninput="onInput($event)"
+                 bind:oncontextmenu="contextmenuClick($event)"></div>
+        </mat-page>
+        <mat-page>
+            <div bind:innerHTML="model.html"></div>
+        </mat-page>
+    </mat-pages>
+</template>
 </body>
 </html>

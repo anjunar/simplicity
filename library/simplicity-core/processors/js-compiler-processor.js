@@ -117,15 +117,19 @@ function proxyFactory(context) {
                 let cursor = target;
 
                 function scope(target) {
+                    if (! target)  {
+                        return undefined;
+                    }
                     if (Reflect.has(target.instance, p)) {
                         let result = Reflect.get(target.instance, p, target.instance);
                         if (result instanceof Function) {
                             return (...args) => result.apply(target.instance, args);
                         }
                         return result;
+                    } else {
+                        cursor = cursor.parent;
+                        return scope(cursor);
                     }
-                    cursor = cursor.parent;
-                    return scope(cursor);
                 }
 
                 return scope(cursor);

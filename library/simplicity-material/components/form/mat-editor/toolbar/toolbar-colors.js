@@ -53,23 +53,21 @@ class ToolbarColors extends HTMLElement {
         }
     };
 
-    initialize() {
-        let handler = (event) => {
-            this.color.handler(event);
-            this.backGroundColor.handler(event);
-        }
-
-        this.contents.addEventListener("click", handler);
-
-        ToolbarColors.prototype.destroy = () => {
-            this.contents.removeEventListener("click", handler);
-        }
-    }
-
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "contents" : {
-                this.contents = newValue;
+                if (newValue) {
+                    this.contents = newValue;
+                    let handler = (event) => {
+                        this.color.handler(event);
+                        this.backGroundColor.handler(event);
+                    }
+
+                    this.contents.addEventListener("click", handler);
+                    this.contents.addEventListener("removed", () => {
+                        this.contents.removeEventListener("click", handler);
+                    })
+                }
             }
         }
     }

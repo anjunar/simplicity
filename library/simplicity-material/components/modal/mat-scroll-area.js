@@ -10,7 +10,7 @@ class MatScrollArea extends HTMLElement {
     scrollY;
 
     checkScrollBars() {
-        let contentDiv = this.querySelector("div.content");
+        let contentDiv = this.querySelector("viewport.content");
         let clientOffsetHeight = this.content.offsetHeight - contentDiv.offsetHeight;
         let clientOffsetWidth = this.content.offsetWidth - contentDiv.offsetWidth;
         let matScrollBarHorizontal = this.querySelector("mat-scrollbar-horizontal");
@@ -40,7 +40,7 @@ class MatScrollArea extends HTMLElement {
     }
 
     initialize() {
-        this.content = this.querySelector("div.content *");
+        this.content = this.querySelector("viewport.content *");
 
         let windowProcess = (element) => {
             this.addEventListener("scroll", (event) => {
@@ -94,7 +94,7 @@ class MatScrollArea extends HTMLElement {
             })
         }
 
-        windowProcess(this.querySelector("div.content"))
+        windowProcess(this.querySelector("viewport.content"))
     }
 
     static get components() {

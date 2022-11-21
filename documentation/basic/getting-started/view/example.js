@@ -5,6 +5,10 @@ class Example extends HTMLElement {
 
     material;
 
+    static get components() {
+        return []
+    }
+
     static get template() {
         return loader("documentation/basic/getting-started/view/example.html");
     }

@@ -4,6 +4,10 @@ import EditorToolbar from "./mat-editor/editor-toolbar.js";
 import DomForm from "../../../simplicity-core/directives/dom-form.js";
 import {contextManager} from "../../manager/context-manager.js";
 import {Input, mix} from "../../../simplicity-core/services/tools.js";
+import MatTabs from "../navigation/mat-tabs.js";
+import MatTab from "../navigation/mat-tab.js";
+import MatPages from "../navigation/mat-pages.js";
+import MatPage from "../navigation/mat-page.js";
 
 class MatEditor extends mix(HTMLElement).with(Input) {
 
@@ -17,13 +21,9 @@ class MatEditor extends mix(HTMLElement).with(Input) {
     contents;
     placeholder;
 
-    initialize() {
-        this.contents.addEventListener("input", () => {
-            this.model.html = this.contents.innerHTML;
-            this.model.text = this.contents.innerText
-            this.dispatchEvent(new Event("model"));
-        });
+    page = 0;
 
+    initialize() {
         if (this.name) {
             let domForm = this.queryUpwards((element) => {
                 return element instanceof DomForm
@@ -32,15 +32,12 @@ class MatEditor extends mix(HTMLElement).with(Input) {
                 domForm.register(this);
             }
         }
+    }
 
-        let element = this.querySelector("div.content");
-        if (this.model.html === undefined || this.model.html === null) {
-            // No Op
-        } else {
-            if (element.innerHTML !== this.model.html) {
-                element.innerHTML = this.model.html;
-            }
-        }
+    onInput(event) {
+        this.model.html = event.target.innerHTML;
+        this.model.text = event.target.innerText
+        this.dispatchEvent(new Event("model"));
     }
 
     contextmenuClick(event) {
@@ -83,7 +80,7 @@ class MatEditor extends mix(HTMLElement).with(Input) {
     }
 
     static get components() {
-        return [EditorToolbar]
+        return [EditorToolbar, MatTabs, MatTab, MatPages, MatPage]
     }
 
     static get observedAttributes() {

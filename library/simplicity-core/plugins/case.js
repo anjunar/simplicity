@@ -14,7 +14,12 @@ function caseStatement(rawAttributes, context, callback, imported = false) {
             children = callback();
             for (const child of children) {
                 if (child instanceof Object) {
-                    elements.push(buildStrategie(child, parent, imported));
+                    let items = buildStrategie(child, parent, imported);
+                    if (items instanceof Array) {
+                        elements.push(...items);
+                    } else {
+                        elements.push(items);
+                    }
                 }
             }
             return elements;

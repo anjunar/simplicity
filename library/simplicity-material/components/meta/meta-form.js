@@ -10,6 +10,11 @@ class MetaForm extends HTMLElement {
         return this.model.$schema.properties[element.property]
     }
 
+    validate() {
+        let element = this.querySelector("form");
+        return element.validate();
+    }
+
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "model" : {

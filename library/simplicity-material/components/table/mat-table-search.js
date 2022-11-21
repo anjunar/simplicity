@@ -1,10 +1,14 @@
 import {customComponents} from "../../../simplicity-core/simplicity.js";
-import {libraryLoader} from "../../../simplicity-core/processors/loader-processor.js";
 
 class MatTableSearch extends HTMLElement {
 
     path
-    sortable;
+    schema;
+    visible = true;
+
+    get sortable() {
+        return this.schema.type === "string"
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
@@ -12,9 +16,14 @@ class MatTableSearch extends HTMLElement {
                 this.path = newValue;
             }
                 break;
-            case "sortable" : {
-                this.sortable = newValue
+            case "schema" : {
+                this.schema = newValue
             }
+                break
+            case "visible" : {
+                this.visible = newValue;
+            }
+
         }
     }
 
@@ -24,7 +33,10 @@ class MatTableSearch extends HTMLElement {
                 name: "path",
                 binding: "input"
             }, {
-                name: "sortable",
+                name: "schema",
+                binding: "input"
+            }, {
+                name: "visible",
                 binding: "input"
             }
         ]
