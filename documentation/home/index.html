@@ -45,7 +45,7 @@
 </head>
 <body>
     <template>
-        <div style="overflow: auto; height: 100%">
+        <div style="overflow-y: auto; overflow-x: hidden; height: 100%">
             <div class="container">
                 <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center">
                     <div>
@@ -54,16 +54,13 @@
                             <hr class="line">
                             <h2>modern Web Framework</h2>
 <!--
-                            <ul>
-                                <li><strong i18n>Easy to use</strong></li>
-                                <li><strong i18n>Events instead of Dirty Checking</strong></li>
-                                <li><strong>Javascript Bindings in HTML</strong></li>
-                                <li><strong i18n>No Build management</strong></li>
-                                <li><strong>HTML Compiler</strong></li>
-                                <li><strong>Performant</strong></li>
-                                <li><strong>Web Components</strong></li>
-                                <li><strong>ES6 Modules</strong></li>
-                                <li><strong i18n>Membranes for tracking Changes</strong></li>
+                            <ul style="list-style: none;">
+                                <li i18n>Events instead of Dirty Checking</li>
+                                <li>Javascript Bindings in HTML</li>
+                                <li i18n>No Build management</li>
+                                <li>Web Components</li>
+                                <li>ES6 Modules</li>
+                                <li i18n>Membranes for tracking Changes</li>
                             </ul>
 -->
                             <div style="width: 100%; text-align: right">
@@ -89,7 +86,6 @@
                                                     app: "documentation/app.js",
                                                     mode : "development",
                                                     library : "library",
-                                                    shadowDom : false, // Experimental
                                                     preFetch : false, // Experimental,
                                                     history : true
                                                 })
