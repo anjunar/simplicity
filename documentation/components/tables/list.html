@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <i18n>
+    <translation>
+      <en>Element</en>
+      <de>Element</de>
+    </translation>
+    <translation>
+      <en>Attribute</en>
+      <de>Attribut</de>
+    </translation>
+    <translation>
+      <en>Description</en>
+      <de>Beschreibung</de>
+    </translation>
+    <translation>
+      <en>An array of items to be displayed</en>
+      <de>Das Array von Elementen das gerendert werden soll</de>
+    </translation>
+    <translation>
+      <en>The property of the model</en>
+      <de>Die Property für die Schleife</de>
+    </translation>
+    <translation>
+      <en>The rest of the HTML file is not displayed</en>
+      <de>Der rest der HTML Datei wird nicht angezeigt</de>
+    </translation>
+  </i18n>
+</head>
+<body>
+<template>
+  <div style="flex-wrap: wrap; display: flex">
+
+    <div style="flex: 1; padding: 20px; min-width : 400px">
+
+      <h2 style="margin-left: 0;">Mat-List</h2>
+      <hr class="line">
+
+      <p>
+        Eine List Implementierung
+      </p>
+
+      <h3>DOM-API</h3>
+      <table style="width: 100%; font-size: small">
+        <thead>
+        <tr>
+          <td><strong i18n>Element</strong></td>
+          <td><strong i18n>Attribute</strong></td>
+          <td><strong i18n>Description</strong></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>mat-list</td>
+          <td>items</td>
+          <td i18n>An array of items to be displayed</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div style="margin: 20px;">
+        <mat-list style="margin-top: 30px" read:items="materials">
+          <div let="material">
+            <div style="display: flex">
+              <div>{{{material.position}}}</div>
+              <div>{{{material.name}}}</div>
+              <div>{{{material.weight}}}</div>
+              <div>{{{material.symbol}}}</div>
+            </div>
+          </div>
+        </mat-list>
+      </div>
+
+
+    </div>
+
+    <div style="flex: 1; padding: 20px; min-width : 400px">
+
+      <h2>Source Code</h2>
+      <hr class="line">
+      <h3>HTML5</h3>
+      <p i18n>The rest of the HTML file is not displayed</p>
+      <div style="margin-top: 20px;">
+        <div>
+          <code is="dom-code" lang="html5">
+            <template>
+              <iframe>
+                <mat-list read:items="materials">
+                  <div let="material">
+                    <div style="display: flex">
+                      <div>{{{material.position}}}</div>
+                      <div>{{{material.name}}}</div>
+                      <div>{{{material.weight}}}</div>
+                      <div>{{{material.symbol}}}</div>
+                    </div>
+                  </div>
+                </mat-list>
+              </iframe>
+            </template>
+          </code>
+        </div>
+      </div>
+      <h3>Javascript</h3>
+      <div>
+        <div>
+          <code is="dom-code" lang="javascript">
+            <template>
+              <script>
+                import {customViews} from "../../library/simplicity/simplicity.js";
+                import {loader} from "../../library/simplicity/processors/loader-processor.js";
+                import MatList from "../../../library/simplicity/components/table/mat-list.js";
+
+                class List extends HTMLElement {
+
+                  materials(query, callback) {
+                    fetch("materials.json")
+                            .then(response => response.json())
+                            .then((response) => {
+                              let filter;
+
+                              if (query.search) {
+                                filter = response.filter(row => String(row[query.search.path]).startsWith(query.search.value));
+                              } else {
+                                filter = response;
+                              }
+
+                              let result = filter.slice(query.index, query.index + query.limit);
+                              callback(result, response.length)
+                            })
+                  }
+
+                  static get components() {
+                    return [MatList]
+                  }
+
+                  static get template() {
+                    return loader("documentation/tables/table.html")
+                  }
+
+                }
+
+                export default customViews.define({
+                  name: "documentation-grid",
+                  class: List
+                })
+              </script>
+            </template>
+          </code>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+</body>
+</html>

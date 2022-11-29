@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-grid {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<template>
+    <div bind:for="let row of window">
+        <slot read:implicit="row"></slot>
+    </div>
+    <div style="display: flex">
+        <div  style="line-height: 42px;">{{index}} - {{index + limit}} of {{size}}</div>
+
+        <button class="material-icons" translate="no"
+                style="color: var(--main-font-color)"
+                read:onclick="skipPrevious()">
+            skip_previous
+        </button>
+
+        <button class="material-icons" translate="no"
+                style="color: var(--main-font-color)"
+                read:onclick="arrowLeft()"
+                bind:disabled="! (index > 0)">
+            keyboard_arrow_left
+        </button>
+
+        <button class="material-icons" translate="no"
+                style="color: var(--main-font-color)"
+                read:onclick="arrowRight()"
+                bind:disabled="! ((index + limit) < size)">
+            keyboard_arrow_right
+        </button>
+
+        <button class="material-icons" translate="no"
+                style="color: var(--main-font-color)"
+                read:onclick="skipNext()">
+            skip_next
+        </button>
+    </div>
+</template>
+</body>
+</html>
