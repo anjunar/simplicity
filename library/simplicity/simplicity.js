@@ -1,6 +1,7 @@
 import {compileCss, compileHTML, proxyFactory} from "./interpreters/json-interpreter.js";
 import {generateDomProxy, Membrane} from "./service/membrane.js";
 import {register} from "./manager/view-manager.js";
+import {loadHTML} from "./util/loader.js";
 
 export const customComponents = new class CustomComponents {
 
@@ -14,6 +15,18 @@ export const customComponents = new class CustomComponents {
         if (template?.i18n) {
             i18nMessages = template.i18n;
         }
+
+        if (template) {
+            if (typeof template === "string") {
+                template = loadHTML(template);
+            }
+            if (template.css) {
+                let styleElement = document.createElement("style");
+                styleElement.innerHTML = compileCss(template.css, this);
+                document.head.appendChild(styleElement);
+            }
+        }
+
 
         let component = class SimplicityComponent extends clazz {
 
@@ -31,12 +44,6 @@ export const customComponents = new class CustomComponents {
 
             render() {
                 if (template) {
-                    if (template.css) {
-                        let styleElement = document.createElement("style");
-                        styleElement.innerHTML = compileCss(template.css, this);
-                        document.head.appendChild(styleElement);
-                    }
-
                     if (template.html) {
                         let context = proxyFactory({$scope : [this]});
                         let ast = template.html(context);

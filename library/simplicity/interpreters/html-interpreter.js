@@ -155,7 +155,7 @@ const forEachStatement = {
             }
         }, {});
 
-        let objects = [`type : "forEach"`];
+        let objects = [`type : "forEach"`, `context : context`];
         if (node.hasAttribute("read:for")) {
             objects.push(`items : ${addContext(forOptions.forEach.items)}`)
         } else {
@@ -167,8 +167,6 @@ const forEachStatement = {
         } else {
             objects.push(`item : "${forOptions.forEach.item}"`)
         }
-
-
 
         if (forOptions.index) {
             objects.push(`index : "${forOptions.index}"`)

@@ -32,15 +32,13 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
     }
 
     onAreaClick() {
-        if (! this.disabled) {
+        if (!this.disabled) {
             this.input.click()
         }
     }
 
     onLoad(event) {
-        this.model.data = event.detail.data;
-        this.model.lastModified = event.detail.lastModified;
-        this.model.name = event.detail.name;
+        this.model = event.detail;
         this.value = this.model;
         this.dispatchEvent(new CustomEvent("model"));
         this.dispatchEvent(new CustomEvent("input"));
@@ -60,6 +58,9 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
                 this.disabled = newValue === "true"
             }
                 break
+            case "name" : {
+                this.name = newValue;
+            }
         }
     }
 
@@ -71,6 +72,14 @@ class MatImageUpload extends mix(HTMLElement).with(Input) {
             },
             {
                 name: "placeholder",
+                binding: "input"
+            },
+            {
+                name : "disabled",
+                binding: "input"
+            },
+            {
+                name: "name",
                 binding: "input"
             }
         ]

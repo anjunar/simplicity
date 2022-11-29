@@ -142,7 +142,7 @@ function processAttributes(node, element, rework, context) {
                     if (observedAttributes?.length > 0) {
                         let attribute = observedAttributes.find(attribute => attribute.name === key);
                         if (attribute) {
-                            if (attribute.binding === "two-way") {
+                            if (attribute.binding === "two-way" && value.expression) {
                                 element.addEventListener(key, (event) => {
                                     let $value = event.target[key]
                                     let expression = value.expression + " = " + "$value"
@@ -313,11 +313,11 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
 
                         let query;
                         if (selector) {
-                            query = documentFragment.querySelectorAll(node.selector)[index];
+                            query = documentFragment.querySelectorAllBreadthFirst(node.selector)[index];
                         }
 
                         if (name) {
-                            query = documentFragment.querySelectorAll(`[slot=${node.name}]`)[index]
+                            query = documentFragment.querySelectorAllBreadthFirst(`[slot=${node.name}]`)[index]
                         }
 
                         if (tag) {
@@ -390,7 +390,7 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                 }
             },
             forEach() {
-                let activeElement = document.createComment("for");
+                let activeElement = document.createComment(`for: items:${node.items.expression} item:${node.item}`);
                 elements.appendChild(activeElement);
                 let renderedElements = [];
 
@@ -437,7 +437,7 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                         let scope = {proxy : {handlers : [], property : ""}};
                         newContext = membraneFactory(newContext, [scope])
 
-                        newContext = proxyFactory({$scope : [...context.$scope, newContext]});
+                        newContext = proxyFactory({$scope : [...node.context.$scope, newContext]});
 
                         let ast = node.callback(newContext);
 
@@ -460,7 +460,11 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
             },
 
             if() {
-                let activeElement = document.createComment("if");
+                let data = `if:`;
+                if (node.predicate?.expression) {
+                    data += `predicate: ${node.predicate.expression}`
+                }
+                let activeElement = document.createComment(data);
                 elements.appendChild(activeElement);
                 let renderedElements = [];
                 function generate(newValue, oldValue) {
