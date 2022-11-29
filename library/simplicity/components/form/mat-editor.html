@@ -44,10 +44,17 @@
 <template>
     <div style="display: flex; width: 100%">
         <mat-tabs bind:page="page" style="flex: 1">
-            <mat-tab><div>Write</div></mat-tab>
-            <mat-tab><div>Preview</div></mat-tab>
+            <mat-tab>Write</mat-tab>
+            <mat-tab>Preview</mat-tab>
         </mat-tabs>
-        <editor-toolbar bind:if="page === 0" bind:contents="contents"></editor-toolbar>
+        <mat-pages bind:page="page">
+            <mat-page>
+                <editor-toolbar bind:contents="contents"></editor-toolbar>
+            </mat-page>
+            <mat-page>
+                <div style="height: 68px"></div>
+            </mat-page>
+        </mat-pages>
     </div>
     <mat-pages bind:page="page">
         <mat-page>

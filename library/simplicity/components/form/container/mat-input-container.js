@@ -10,7 +10,7 @@ class MatInputContainer extends HTMLElement {
     hasErrors = false;
 
     initialize() {
-        let input = this.querySelector("input") || this.querySelector("dom-lazy-select");
+        let input = this.querySelector("dom-lazy-select") || this.querySelector("input");
         if (input) {
             input.placeholder = this.placeholder;
 

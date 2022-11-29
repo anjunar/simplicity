@@ -5,7 +5,7 @@ import {appManager} from "../manager/app-manager.js";
 class DomRouter extends HTMLElement {
 
     level = 0
-    file;
+    location;
 
     handler = (event) => {
         this.dispatchEvent(new CustomEvent("load"))
@@ -104,10 +104,10 @@ class DomRouter extends HTMLElement {
 
         let file = files[this.level]
 
-        if (file && (file !== this.file)) {
-            this.file = file
+        if (file && (window.location.href !== this.location)) {
             viewManager.load(file, queryParams, this.app)
                 .then((view) => {
+                    this.location = window.location.href;
                     view.render();
                     for (const child of Array.from(this.children)) {
                         child.remove();

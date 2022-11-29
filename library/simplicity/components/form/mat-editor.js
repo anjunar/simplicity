@@ -76,6 +76,10 @@ class MatEditor extends mix(HTMLElement).with(Input) {
             case "name" : {
                 this.name = newValue;
             }
+                break
+            case "disabled" : {
+                this.disabled = newValue;
+            }
         }
     }
 
@@ -96,6 +100,9 @@ class MatEditor extends mix(HTMLElement).with(Input) {
             {
                 name : "name",
                 binding : "input"
+            },{
+                name : "disabled",
+                binding: "input"
             }
         ]
     }

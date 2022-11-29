@@ -26,6 +26,12 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
     id = "id";
 
     initialize() {
+        if (this.multiSelect) {
+            this.model = this.model || [];
+        } else {
+            this.model = this.model || null;
+        }
+
         Membrane.track(this, {
             property : "model",
             element : this,
@@ -34,20 +40,11 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
             }
         });
 
-        if (this.multiSelect) {
-            this.model = this.model || [];
-        } else {
-            this.model = this.model || null;
-        }
-
         let listener = () => {
             if (this.open) {
                 this.open = false;
             }
         };
-
-        let input = this.querySelector("input");
-        input.placeholder = this.placeholder;
 
         window.addEventListener("click", listener)
 
@@ -71,6 +68,11 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 domForm.register(this);
             }
         }
+
+        let input = this.querySelector("input");
+        input.placeholder = this.placeholder;
+
+        this.doRender();
     }
 
     doRender() {
@@ -156,7 +158,7 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
 
     openOverlay(event) {
         event.stopPropagation();
-        if (this.disabled === undefined || this.disabled === "false") {
+        if (this.disabled === undefined || this.disabled === null || this.disabled === "false") {
             this.load();
         }
         return false;

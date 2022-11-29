@@ -1,15 +1,6 @@
 import {customComponents} from "../simplicity.js";
 import DomForm from "./dom-form.js";
-import {css, Input, mix} from "../services/tools.js";
-
-css({
-    "textarea" : {
-        width: "100%",
-        border: "0",
-        color: "var(--main-font-color)",
-        backgroundColor: "var(--main-background-color)"
-    }
-})
+import {Input, mix} from "../util/tools.js";
 
 class DomTextarea extends mix(HTMLTextAreaElement).with(Input) {
 
@@ -40,7 +31,8 @@ class DomTextarea extends mix(HTMLTextAreaElement).with(Input) {
             case "model" : {
                 this.model = newValue;
                 this.value = newValue;
-            } break
+            }
+                break
         }
     }
 
@@ -53,7 +45,21 @@ class DomTextarea extends mix(HTMLTextAreaElement).with(Input) {
         ]
     }
 
+    static get template() {
+        return {
+            css() {
+                return [{
+                    "textarea": {
+                        width: "100%",
+                        border: "0",
+                        color: "var(--main-font-color)",
+                        backgroundColor: "var(--main-background-color)"
+                    }
+                }]
+            }
+        }
+    }
 
 }
 
-export default customComponents.define("dom-textarea", DomTextarea, {extends : "textarea"})
+export default customComponents.define("dom-textarea", DomTextarea, {extends: "textarea"})

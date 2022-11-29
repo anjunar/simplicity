@@ -133,29 +133,25 @@ class ToolbarJustify extends HTMLElement {
         }
     }
 
-    initialize() {
-        let handler = (event) => {
-            this.justify.handler(event);
-            this.justifyLeft.handler(event);
-            this.justifyRight.handler(event);
-            this.justifyCenter.handler(event);
-            this.outdent.handler(event);
-            this.indent.handler(event);
-            this.floatLeft.handler(event);
-            this.floatRight.handler(event);
-        }
-
-        this.contents.addEventListener("click", handler);
-        this.contents.addEventListener("removed", () => {
-            this.contents.removeEventListener("click", handler);
-        });
-    }
-
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "contents" : {
                 if (newValue) {
-                    this.contents = newValue;
+                    let handler = (event) => {
+                        this.justify.handler(event);
+                        this.justifyLeft.handler(event);
+                        this.justifyRight.handler(event);
+                        this.justifyCenter.handler(event);
+                        this.outdent.handler(event);
+                        this.indent.handler(event);
+                        this.floatLeft.handler(event);
+                        this.floatRight.handler(event);
+                    }
+
+                    newValue.addEventListener("click", handler);
+                    if (oldValue) {
+                        oldValue.removeEventListener("click", handler);
+                    }
                 }
             }
         }

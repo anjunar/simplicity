@@ -72,6 +72,8 @@ class DomInput extends mix(HTMLInputElement).with(Input) {
         }
 
         this.doRender();
+
+        this.dispatchEvent(new Event("input"));
     }
 
     doRender() {

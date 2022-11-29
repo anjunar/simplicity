@@ -33,7 +33,7 @@
 <body>
     <template>
         <div read:onclick="openOverlay($event)" style="width: 100%;">
-            <input is="dom-input" type="text" bind:disabled="disabled" style="width: 100%">
+            <input type="text" disabled style="width: 100%">
         </div>
         <div style="position: relative">
             <div bind:if="open" class="overlay" style="width: 100%">

@@ -16,21 +16,18 @@ Node.prototype.queryUpwards = function (callback) {
     }
 }
 
-Node.prototype.querySelector = function(selector) {
-    return this.querySelectorAll(selector)[0];
-}
-
-Node.prototype.querySelectorAll = function(selector) {
-    const node = this, nodes = [...node.querySelectorAll(selector)], nodeIterator = document.createNodeIterator(node, Node.ELEMENT_NODE);
-    let currentNode;
-    while (currentNode = nodeIterator.nextNode()) {
-        if(currentNode.shadowRoot) {
-            nodes.push(...currentNode.shadowRoot.querySelectorAll(selector));
+Node.prototype.querySelectorAllBreadthFirst = function (selector) {
+    let nodes = [];
+    for (const child of this.children) {
+        if (child.matches(selector)) {
+            nodes.push(child)
         }
+    }
+    for (const child of this.children) {
+        nodes.push(...child.querySelectorAllBreadthFirst(selector))
     }
     return nodes;
 }
-
 
 export function dateTimeFormat(value, language) {
     let date = new Date(value);

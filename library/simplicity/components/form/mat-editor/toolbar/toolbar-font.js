@@ -152,30 +152,26 @@ class ToolbarFont extends HTMLElement {
         }
     }
 
-    initialize() {
-        let handler = (event) => {
-            this.fontName.handler(event);
-            this.fontSize.handler(event);
-            this.formatBlock.handler(event);
-            this.bold.handler(event);
-            this.italic.handler(event);
-            this.strikeThrough.handler(event);
-            this.subScript.handler(event);
-            this.superScript.handler(event);
-        }
-
-        this.contents.addEventListener("click", handler);
-
-        ToolbarFont.prototype.destroy = () => {
-            this.contents.removeEventListener("click", handler);
-        }
-    }
-
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "contents" : {
                 if (newValue) {
-                    this.contents = newValue;
+                    let handler = (event) => {
+                        this.fontName.handler(event);
+                        this.fontSize.handler(event);
+                        this.formatBlock.handler(event);
+                        this.bold.handler(event);
+                        this.italic.handler(event);
+                        this.strikeThrough.handler(event);
+                        this.subScript.handler(event);
+                        this.superScript.handler(event);
+                    }
+
+                    newValue.addEventListener("click", handler);
+
+                    if (oldValue) {
+                        oldValue.removeEventListener("click", handler);
+                    }
                 }
             }
         }
