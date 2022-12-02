@@ -1,5 +1,5 @@
 import {addContext} from "./js-interpreter.js";
-import {bind, interpolation, variable} from "./json-interpreter.js";
+import {bind, forEach, interpolation, variable, letStatement as letStat, slot} from "./json-interpreter.js";
 import {generate} from "../../astring/astring.js";
 import {parse} from "../../acorn/index.js";
 import {toCamelCase} from "../util/tools.js";
@@ -54,7 +54,7 @@ const slotStatement = {
     name: ["slot"],
     destination: "Element",
     code(node, iterateChildren, processNode, isSvg) {
-        let objects = [`type : "slot"`, `context : context`];
+        let objects = [];
 
         let whiteList = ["implicit", "source", "selector", "tag", "name", "index"];
 
@@ -77,7 +77,7 @@ const slotStatement = {
 
         }
 
-        return `{ ${objects.join(", ")} }`;
+        return `slot(context, { ${objects.join(", ")} })`;
     }
 }
 
@@ -95,7 +95,7 @@ const variableStatement = {
     destination: "Attribute",
     code(node, iterateChildren, processNode, isSvg) {
         let value = node.getAttribute("read:variable");
-        return `{ type : "variable", value : "${value}", context : context, node : ${processNode(node, isSvg)} }`
+        return `variable("${value}", context, ${processNode(node, isSvg)})`
     }
 }
 
@@ -155,7 +155,7 @@ const forEachStatement = {
             }
         }, {});
 
-        let objects = [`type : "forEach"`, `context : context`];
+        let objects = [];
         if (node.hasAttribute("read:for")) {
             objects.push(`items : ${addContext(forOptions.forEach.items)}`)
         } else {
@@ -179,7 +179,7 @@ const forEachStatement = {
         }
 
         objects.push(`callback: function (context) { return ${processNode(node, isSvg)} }`)
-        return "{ " + objects.join(", ") + "}"
+        return "forEach(context, { " + objects.join(", ") + "})"
     }
 };
 
@@ -527,7 +527,7 @@ function iterateChildren(children, isSvg = false) {
 export function compile(template) {
     let children = template.content.childNodes;
     let header = `function (context) { return [${iterateChildren(children)}]; }`
-    let loader = `function main(letStatement, bind, interpolation) {return ${header} }`
+    let loader = `function main(letStatement, bind, interpolation, forEach, variable, slot) {return ${header} }`
     let ast;
     try {
         ast = parse(loader, {ecmaVersion: 2022});
@@ -540,5 +540,5 @@ export function compile(template) {
     let pretty = generate(ast);
     let func = new Function("return " + pretty);
 
-    return func()(variable, bind, interpolation);
+    return func()(letStat, bind, interpolation, forEach, variable, slot);
 }
