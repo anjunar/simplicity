@@ -369,11 +369,11 @@ export function generateDomProxy(node) {
             node.handlers.push(result);
 
             element.addEventListener("removed", () => {
-                let entry = node.handlers.find((entry) => entry.path === name && entry.handler === handler);
-                if (entry) {
-                    let indexOf = node.handlers.indexOf(entry);
-                    node.handlers.splice(indexOf, 1)
-                }
+                Array.from(node.handlers).filter((entry) => entry.path === name && entry.handler === handler)
+                    .forEach(entry => {
+                        let indexOf = node.handlers.indexOf(entry);
+                        node.handlers.splice(indexOf, 1)
+                    })
             })
 
             return result;

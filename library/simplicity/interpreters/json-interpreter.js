@@ -336,6 +336,8 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                             child.remove();
                         }
 
+                        renderedElements = [];
+
                         let query;
                         if (selector) {
                             query = documentFragment.querySelectorAllBreadthFirst(node.selector)[index];
