@@ -49,7 +49,8 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
             if (value !== undefined) {
                 // Make a deep copy of value, so the membrane is connected to new object graph
                 component.model = value;
-                component.value = value;
+                // Don't set value for Input, because Validations are not working then
+                // component.value = value;
                 component.defaultValue = JSON.parse(JSON.stringify(value));
                 component.defaultModel = JSON.parse(JSON.stringify(value));
             }
@@ -60,7 +61,8 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
                 scoped : true,
                 handler : (value) => {
                     component.model = value;
-                    component.value = value;
+                    // Don't set value for Input, because Validations are not working then
+                    // component.value = value;
                     component.dispatchEvent(new CustomEvent("input"));
                     this.asyncValidationHandler();
                 }
