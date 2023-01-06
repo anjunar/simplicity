@@ -5,9 +5,10 @@ import {libraryLoader} from "../../util/loader.js";
 class MetaForm extends HTMLElement {
 
     model = {};
+    schema = {};
 
     register(element) {
-        return this.model.$schema.properties[element.property]
+        return this.schema.properties[element.property]
     }
 
     validate() {
@@ -21,6 +22,10 @@ class MetaForm extends HTMLElement {
                 this.model = newValue;
             }
                 break
+            case "schema" : {
+                this.schema = newValue;
+            }
+                break
         }
     }
 
@@ -29,6 +34,9 @@ class MetaForm extends HTMLElement {
             {
                 name: "model",
                 binding: "input"
+            }, {
+                name : "schema",
+                binding : "input"
             }
         ]
     }

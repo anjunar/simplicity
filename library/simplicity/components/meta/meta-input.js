@@ -12,6 +12,7 @@ import MetaForm from "./meta-form.js";
 import MatImageUpload from "../form/mat-image-upload.js";
 import DomSelect from "../../directives/dom-select.js";
 import DomTextarea from "../../directives/dom-textarea.js";
+import MatLike from "../form/mat-like.js";
 
 class MetaInput extends HTMLElement {
 
@@ -40,6 +41,8 @@ class MetaInput extends HTMLElement {
                 return metaInputLazyMultiSelect;
             case "lazy-select" :
                 return metaInputLazySelect;
+            case "lazy-select-name" :
+                return metaInputLazySelectName;
             case "textarea" :
                 return metaInputTextArea;
             case "repeat" :
@@ -50,12 +53,17 @@ class MetaInput extends HTMLElement {
                 return metaInputJson;
             case "form" :
                 return metaInputForm;
+            case "like" :
+                return metaInputLike;
             default :
                 return metaInputInput;
         }
     }
 
     initialize() {
+        let metaForm = this.queryUpwards((element) => element.localName === "meta-form");
+        this.schema = metaForm.register(this);
+
         let result = this.load();
         let component = new result({schema: this.schema, property: this.property});
         component.render();
@@ -101,6 +109,88 @@ class MetaInput extends HTMLElement {
 }
 
 export default customComponents.define("meta-input", MetaInput);
+
+class MetaInputLike extends HTMLElement {
+
+    property;
+    schema;
+
+    initialize() {
+        let input = this.querySelector("mat-like");
+
+        Membrane.track(input, {
+            property: "dirty",
+            element: this,
+            handler: (value) => {
+                this.schema.dirty = value
+            }
+        })
+    }
+
+    likes(query, callback) {
+        let link = this.schema.links.list;
+        fetch(`${link.url}&index=${query.index}&limit=${query.limit}`)
+            .then(response => response.json())
+            .then(response => {
+                callback(response.rows, response.size);
+            })
+    }
+
+    onLike(event) {
+        if (event.target.model) {
+            fetch(this.schema.links.like.url, { method : "POST" })
+        } else {
+            fetch(this.schema.links.dislike.url, { method : "POST" })
+        }
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        switch (name) {
+            case "schema" : {
+                this.schema = newValue;
+            }
+                break;
+            case "property" : {
+                this.property = newValue;
+            }
+                break;
+        }
+    }
+
+    static get observedAttributes() {
+        return [
+            {
+                name: "schema",
+                binding: "input"
+            }, {
+                name: "property",
+                binding: "input"
+            }
+        ]
+    }
+
+    static get components() {
+        return [MatLike]
+    }
+
+    static get template() {
+        return `<!DOCTYPE html>
+                <html lang="en" xmlns:read="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Title</title>
+                </head>
+                <body>
+                    <template>
+                        <mat-like read:name="property" read:onLike="onLike($event)" read:items="likes"></mat-like>
+                    </template>
+                </body>
+                </html>`
+    }
+}
+
+const metaInputLike = customComponents.define("meta-input-like", MetaInputLike);
+
 
 class MetaInputCheckbox extends HTMLElement {
 
@@ -167,7 +257,6 @@ class MetaInputCheckbox extends HTMLElement {
                 </body>
                 </html>`
     }
-
 }
 
 const metaInputCheckbox = customComponents.define("meta-input-checkbox", MetaInputCheckbox);
@@ -406,6 +495,9 @@ class MetaInputInput extends HTMLElement {
             input.maxLength = validators.size.max;
             input.minLength = validators.size.min;
         }
+        if (validators.pattern) {
+            input.pattern = validators.pattern.regexp
+        }
 
         Membrane.track(input, {
             property: "dirty",
@@ -471,6 +563,9 @@ class MetaInputInput extends HTMLElement {
                                     </case>
                                     <case value="email">
                                         <span name="typeMismatch">This must be a valid Email Address</span>
+                                    </case>
+                                    <case value="pattern"> 
+                                        <span name="patternMismatch">This must be a valid {{{validator.regexp}}}</span>
                                     </case>
                                 </switch>
                             </div>
@@ -753,7 +848,8 @@ class MetaInputLazySelect extends HTMLElement {
                 <body>
                     <template>
                         <mat-input-container read:placeholder="schema.title">
-                            <dom-lazy-select read:items="domLazySelect(schema)" read:label="domLazySelectLabel(schema)" read:name="property" read:disabled="schema.readOnly" read:id="domLazyId(schema)">
+                            <dom-lazy-select read:items="domLazySelect(schema)" read:label="domLazySelectLabel(schema)" 
+                                             read:name="property" read:disabled="schema.readOnly" read:id="domLazyId(schema)">
                                 <div let="data">{{{domLazySelectOption(schema, data)}}}</div>
                             </dom-lazy-select>
                         </mat-input-container>
@@ -765,6 +861,133 @@ class MetaInputLazySelect extends HTMLElement {
 }
 
 const metaInputLazySelect = customComponents.define("meta-input-lazy-select", MetaInputLazySelect);
+
+class MetaInputLazySelectName extends HTMLElement {
+
+    property;
+    schema;
+
+    initialize() {
+        let input = this.querySelector("dom-lazy-select");
+        if (this.schema.validators.notBlank || this.schema.validators.notNull) {
+            input.required = true;
+        }
+        Membrane.track(input, {
+            property: "dirty",
+            element: this,
+            handler: (value) => {
+                this.schema.dirty = value;
+            }
+        })
+    }
+
+    domLazyId(schema) {
+        return Object
+            .entries(schema.properties)
+            .find(([name, item]) => item.id)[0];
+    }
+
+    domLazySelect(schema) {
+        let link = schema.links.list;
+        return (query, callback) => {
+            let url = new URL(link.url, `${window.location.protocol}//${window.location.host}/`);
+            url.searchParams.set("index", query.index);
+            url.searchParams.set("limit", query.limit);
+            url.searchParams.set("value", query.value)
+
+            fetch(url.toString(), {method: link.method})
+                .then(response => response.json())
+                .then((response) => {
+                    callback(response.rows, response.size)
+                })
+        }
+    }
+
+    domLazySelectOption(meta, data) {
+        return Object
+            .entries(meta.properties)
+            .filter(([name, property]) => property.naming)
+            .map(([name, property]) => data[name])
+            .join(" ")
+    }
+
+    domLazySelectLabel(meta) {
+        return Object
+            .entries(meta.properties)
+            .filter(([name, property]) => property.naming)
+            .map(([name, property]) => name)
+    }
+
+    save(event) {
+        let saveLink = this.schema.links.save;
+        let body = JSON.stringify({form : {value : event.detail, property : this.property}});
+        fetch(saveLink.url, {method : "POST", body : body, headers : {'Content-Type': 'application/json'}})
+    }
+
+    onDelete(data) {
+        let deleteLink = data.links.delete;
+        fetch(deleteLink.url, {method : "DELETE"})
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        switch (name) {
+            case "schema" : {
+                this.schema = newValue;
+            }
+                break;
+            case "property" : {
+                this.property = newValue;
+            }
+                break;
+        }
+    }
+
+    static get observedAttributes() {
+        return [
+            {
+                name: "schema",
+                binding: "input"
+            }, {
+                name: "property",
+                binding: "input"
+            }
+        ]
+    }
+
+    static get components() {
+        return [MatInputContainer, DomLazySelect]
+    }
+
+    static get template() {
+        return `<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Title</title>
+                </head>
+                <body>
+                    <template>
+                        <mat-input-container read:placeholder="schema.title">
+                            <dom-lazy-select read:items="domLazySelect(schema)" read:label="domLazySelectLabel(schema)" 
+                                             read:name="property" read:disabled="schema.readOnly" read:id="domLazyId(schema)"
+                                             read:onEnter="save($event)">
+                                <div let="data" style="display: flex; align-items: center">
+                                    <div>{{{domLazySelectOption(schema, data)}}}</div>
+                                    <div style="flex : 1"></div>
+                                    <button read:if="data.links.delete" class="material-icons" read:onclick="onDelete(data)">delete</button>
+                                    <img read:src="data.owner.picture.data" style="max-width: 50px; max-height: 50px">
+                                </div>
+                            </dom-lazy-select>
+                        </mat-input-container>
+                    </template>
+                </body>
+                </html>`
+    }
+
+}
+
+const metaInputLazySelectName = customComponents.define("meta-input-lazy-select-name", MetaInputLazySelectName);
+
 
 class MetaInputRepeat extends mix(HTMLElement).with(Input) {
 

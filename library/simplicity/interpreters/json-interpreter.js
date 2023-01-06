@@ -93,7 +93,11 @@ function bindingFactory(node, activeElement, rework, generate) {
             }
         } else {
             function simpleCallback() {
-                generate(node);
+                if (node instanceof Function) {
+                    generate(node());
+                } else {
+                    generate(node);
+                }
             }
             try {
                 simpleCallback();
@@ -272,7 +276,7 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
             },
             component() {
                 let constructor = customElements.get(node.is || node.tag);
-                let element = new constructor({content : node.content, app : root.app});
+                let element = new constructor({content : node.content, app : root.app, implicit : node.implicit});
                 processAttributes(node, element, rework, context);
                 element.render();
                 mapping.set(element, node);
@@ -329,11 +333,13 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                 let placeholder = document.createComment(data);
                 elements.appendChild(placeholder);
 
+                let oldIndex = 0;
+
                 function generate(implicit, index = 0, selector, tag, name, source) {
                     function content(jsonAST, documentFragment, mapping) {
                         for (const child of renderedElements) {
-                            notifyElementRemove(child);
                             child.remove();
+                            notifyElementRemove(child);
                         }
 
                         renderedElements = [];
@@ -379,6 +385,8 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                     }
 
                     getContent(root, implicit, content, source || node.context, rework);
+
+                    oldIndex = index;
                 }
 
                 let results = {}
@@ -390,7 +398,7 @@ function processJsonAST(root, nodes, context, rework = [], mapping = new Map()) 
                             if (source) {
                                 source = proxyFactory({$scope : [source]})
                             }
-                            generate(results.implicit, results.index, results.selector, results.tag, results.name, source);
+                            generate(results.implicit || value.implicit, results.index, results.selector, results.tag, results.name, source);
                         }
                     })
                 }
@@ -621,9 +629,13 @@ export function compileHTML(root, ast, context) {
     let rework = [];
     let fragment = processJsonAST(root, ast, context, rework);
     for (const callback of rework) {
-        callback();
-    }
-    return fragment;
+        try {
+            callback();
+        } catch (e) {
+            console.log("Rework error " + callback.toString())
+        }
+
+    }return fragment;
 }
 
 export function contentChildren(node) {
@@ -636,17 +648,19 @@ export function contentChildren(node) {
 
 function cssNodeToString(node, indent = 0) {
     return Object.entries(node).map(([selector, block]) => {
-        switch (selector) {
-            case "@import" :
-                return "@import '" + block + "';";
-            case "@media" :
-                return `@media ${block.condition} {\n${cssNodeToString(block.block,  1)}\n}`
-            case "@keyframe" :
-                return `@keyframe ${block.name} {\n${cssNodeToString(block.block, 1)}\n}`
-            default : {
-                return `${"\t".repeat(indent)}${selector} {\n${Object.entries(block).map(([name, value]) => `${"\t".repeat(indent + 1)}${toKebabCase(name)} : ${value}`).join(";\n")}\n${"\t".repeat(indent)}}`
-            }
+        if (selector.startsWith("@import")) {
+            return "@import '" + block + "';";
         }
+
+        if (selector.startsWith("@media")) {
+            return `${selector} {\n${cssNodeToString(block,  1)}\n}`
+        }
+
+        if (selector.startsWith("@keyframes")) {
+            return `${selector} {\n${cssNodeToString(block, 1)}\n}`
+        }
+
+        return `${"\t".repeat(indent)}${selector} {\n${Object.entries(block).map(([name, value]) => `${"\t".repeat(indent + 1)}${toKebabCase(name)} : ${value}`).join(";\n")}\n${"\t".repeat(indent)}}`
     }).join("\n\n")
 }
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:bind="http://www.w3.org/1999/xhtml" xmlns:read="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<template>
+    <div style="position:relative;">
+        <span class="material-icons" bind:style="color : model ? 'var(--main-selected-color)' : 'var(--main-font-color)'"
+              read:onclick="onClick()" read:onmouseover="overlayOpen($event)">
+            recommend
+        </span>
+        <div bind:if="open" style="position:absolute; background-color: var(--main-background-color)">
+            <button class="material-icons" translate="no" type="button" bind:style="display : 0 < index ? 'block' : 'none'; width: '100%'; flex : 1" read:onclick="up($event)">arrow_drop_up</button>
+            <div bind:for="let user of window" style="padding: 5px">
+                <div style="font-size: small">{{{user.name}}}</div>
+            </div>
+            <button class="material-icons" translate="no" type="button" bind:style="display : (index + limit) < size ? 'block' : 'none'; width: '100%'" read:onclick="down($event)">arrow_drop_down</button>
+        </div>
+    </div>
+</template>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:read="http://www.w3.org/1999/xhtml" xmlns:bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        mat-carousel {
+            display: block;
+            overflow: hidden;
+        }
+
+        mat-carousel-item {
+            width: 100%;
+            height: 100%;
+            animation-duration: 0.3s;
+            animation-timing-function: cubic-bezier(0,.77,.5,1);
+        }
+
+        mat-carousel-item.left-added {
+            animation-name: left-added;
+        }
+
+        mat-carousel-item.left-removed {
+            animation-name: left-removed;
+        }
+
+        mat-carousel-item.right-added {
+            animation-name: right-added;
+        }
+
+        mat-carousel-item.right-removed {
+            animation-name: right-removed;
+        }
+
+        @keyframes left-removed {
+            0% {
+                transform: translateX(0)
+            }
+            100% {
+                transform: translateX(100%)
+            }
+        }
+
+        @keyframes left-added {
+            0% {
+                transform: translateX(-100%)
+            }
+            100% {
+                transform: translateX(0)
+            }
+        }
+
+
+        @keyframes right-removed {
+            0% {
+                transform: translateX(0)
+            }
+            100% {
+                transform: translateX(-100%)
+            }
+        }
+
+        @keyframes right-added {
+            0% {
+                transform: translateX(100%)
+            }
+            100% {
+                transform: translateX(0)
+            }
+        }
+
+    </style>
+</head>
+<body>
+  <template>
+      <div style="height: 100%">
+          <div class="container" style="position: relative; height: calc(100% - 24px)" read:onwheel="onWheel($event)">
+
+          </div>
+          <div style="display: flex; justify-content: space-between">
+              <button type="button" read:onclick="index.cursor--" class="material-icons">arrow_left</button>
+              <button type="button" read:onclick="index.cursor++" class="material-icons">arrow_right</button>
+          </div>
+      </div>
+  </template>
+</body>
+</html>

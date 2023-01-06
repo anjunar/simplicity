@@ -127,6 +127,8 @@ class MixinBuilder {
 export const Input = (superclass) => class InputMixin extends superclass {
 
     model = "";
+    defaultModel = "";
+    dirtyLevel = 0;
 
     asyncValidators = [];
     syncValidators = [];
@@ -138,6 +140,14 @@ export const Input = (superclass) => class InputMixin extends superclass {
 
         this.addEventListener("model", debounce(this.asyncValidationHandler, 300));
         this.addEventListener("model", this.syncValidationHandler);
+
+        this.addEventListener("keyup", () => {
+            if (isEqual(this.model, this.defaultModel)) {
+                this.dirtyLevel++;
+                this.dispatchEvent(new Event("input"));
+            }
+        });
+
     }
 
     asyncValidationHandler() {
@@ -189,6 +199,12 @@ export const Input = (superclass) => class InputMixin extends superclass {
                     return true;
                 }
                 if (validity) {
+                    if (isEqual(this.model, this.defaultModel) && this.dirtyLevel === 0) {
+                        if (p === "valid") {
+                            return true;
+                        }
+                        return false;
+                    }
                     return target[p]
                 }
                 return undefined;

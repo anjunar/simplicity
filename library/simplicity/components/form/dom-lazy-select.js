@@ -72,6 +72,12 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         let input = this.querySelector("input");
         input.placeholder = this.placeholder;
 
+        input.addEventListener("keydown", (event) => {
+            if(event.key === 'Enter') {
+                this.dispatchEvent(new CustomEvent("enter", {detail : event.target.value}));
+            }
+        })
+
         this.doRender();
     }
 
@@ -79,7 +85,9 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
         let input = this.querySelector("input");
 
         if (this.model) {
-            input.disabled = true;
+            if (! this.getAttribute("read:onenter")) {
+                // input.disabled = true;
+            }
             if (this.multiSelect) {
                 if (this.label instanceof Array) {
                     input.value = this.model.map(model => this.label.map(label => model[label]).join(" ")).join(", ")
@@ -90,7 +98,12 @@ class DomLazySelect extends mix(HTMLElement).with(Input) {
                 if (this.label instanceof Array) {
                     input.value = this.label.map((label) => this.model[label]).join(" ")
                 } else {
-                    input.value = this.model[this.label]
+                    if (typeof this.model === "string") {
+                        input.value = this.model;
+                    } else {
+                        input.value = this.model[this.label]
+                    }
+
                 }
             }
         } else {

@@ -44,7 +44,7 @@
                 </div>
                 <div read:onwheel="onWheel($event)">
                     <div bind:for="let item of window" read:onclick="onItemClicked($event, item)">
-                        <div style="display: flex;">
+                        <div style="display: flex; align-items: center">
                             <input type="checkbox" is="dom-input" read:model="selected(item)" read:onclick="checkbox($event, item)" style="width: 16px; height: 16px; margin: 13px">
                             <div class="item">
                                 <slot bind:implicit="item"></slot>

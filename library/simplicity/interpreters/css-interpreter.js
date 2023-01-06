@@ -7,10 +7,7 @@ function process(cssRules) {
             return prev;
         }
         if (cssRule instanceof CSSMediaRule) {
-            prev["@media"] = {
-                condition : cssRule.conditionText,
-                block : process(Array.from(cssRule.cssRules))
-            }
+            prev["@media " + cssRule.conditionText] = process(Array.from(cssRule.cssRules));
             return prev;
         }
         if (cssRule instanceof CSSKeyframeRule) {
@@ -23,10 +20,7 @@ function process(cssRules) {
             return prev
         }
         if (cssRule instanceof CSSKeyframesRule) {
-            prev["@keyframe"] = {
-                name : cssRule.name,
-                block : process(Array.from(cssRule.cssRules))
-            }
+            prev["@keyframes " + cssRule.name] = process(Array.from(cssRule.cssRules))
             return prev;
         }
         if (cssRule instanceof CSSRule) {

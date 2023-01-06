@@ -83,11 +83,11 @@
             </table>
 
             <div style="margin: 20px;">
-                <meta-form bind:model="material">
-                    <meta-input property="position" read:schema="material.$schema.properties.position"></meta-input>
-                    <meta-input property="name" read:schema="material.$schema.properties.name"></meta-input>
-                    <meta-input property="weight" read:schema="material.$schema.properties.weight"></meta-input>
-                    <meta-input property="symbol" read:schema="material.$schema.properties.symbol"></meta-input>
+                <meta-form bind:model="material" read:schema="material.$schema">
+                    <meta-input property="position"></meta-input>
+                    <meta-input property="name"></meta-input>
+                    <meta-input property="weight"></meta-input>
+                    <meta-input property="symbol"></meta-input>
                     <button type="button" read:onclick="send()">save</button>
                 </meta-form>
             </div>

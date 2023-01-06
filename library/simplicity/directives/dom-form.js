@@ -19,21 +19,6 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
         }, 300)
     }
 
-    update() {
-        for (const component of this.components) {
-            if (this.model) {
-                let value = this.model[component.name];
-                if (value !== undefined) {
-                    if (component.model !== value) {
-                        component.model = value;
-                        component.value = value;
-                    }
-                }
-            }
-        }
-    }
-
-
     register(component) {
         this.components.push(component)
         component.addEventListener("model", () => {
@@ -51,8 +36,13 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
                 component.model = value;
                 // Don't set value for Input, because Validations are not working then
                 // component.value = value;
-                component.defaultValue = JSON.parse(JSON.stringify(value));
-                component.defaultModel = JSON.parse(JSON.stringify(value));
+                if (value === null) {
+                    component.defaultValue = "";
+                    component.defaultModel = "";
+                } else {
+                    component.defaultValue = JSON.parse(JSON.stringify(value));
+                    component.defaultModel = JSON.parse(JSON.stringify(value));
+                }
             }
 
             Membrane.track(this.model, {
@@ -62,8 +52,8 @@ class DomForm extends mix(HTMLFormElement).with(Input) {
                 handler : (value) => {
                     component.model = value;
                     // Don't set value for Input, because Validations are not working then
-                    // component.value = value;
-                    component.dispatchEvent(new CustomEvent("input"));
+                    component.value = value;
+                    component.dispatchEvent(new CustomEvent("model"));
                     this.asyncValidationHandler();
                 }
             })
